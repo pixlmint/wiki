@@ -53,7 +53,7 @@ class App {
 
   printPage(jsonPage) {
     this.content.querySelector('.js-article-title').innerText = jsonPage.title
-    this.content.querySelector('#article-content').innerHTML = atob(
+    this.content.querySelector('#article-content').innerHTML = decode(
       jsonPage.content,
     )
     document.title = jsonPage.title + ' · Wiki'
