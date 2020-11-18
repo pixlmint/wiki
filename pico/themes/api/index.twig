@@ -1,0 +1,3 @@
+{"content": "{{ content|raw|base64encode }}", "file": "{{ mdfile }}"
+{% for key, value in meta %}, "{{ key }}": "{{ value }}"
+{% endfor %}}
