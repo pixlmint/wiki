@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+    pico:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '85:80'
+        environment:
+            PICO_URL_REWRITING: 1
+        volumes: 
+            - ./:/var/www/html

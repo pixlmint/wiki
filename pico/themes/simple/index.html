@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+		<title>
+			{% if meta.title %}
+				{{ meta.title }}
+				|
+			{% endif %}
+			{{ site_title }}</title>
+		<meta name="description" content="{% if meta.description %}{{ meta.description }}{% else %}Welcome to my personal Wiki{% endif %}">
+
+		<link rel="stylesheet" href="{{ theme_url }}/assets/css/style.css" type="text/css">
+	</head>
+	<body>
+		<header>
+			<a href="/">{{ site_title }}</a>
+		</header>
+		<div class="content">
+			<aside>
+				<nav>
+					<ul>
+						{% for page in pages %}
+							<li {% if page.id == current_page.id %} class="active" {% endif %}>
+								<a href="{{ page.url }}">{{ page.title }}
+									{% if page.id == current_page.id %}
+										&laquo;
+									{% endif %}
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</nav>
+			</aside>
+
+			<article>
+				<h1>{{ meta.title }}</h1>
+				{{ content }}
+			</article>
+		</div>
+
+
+		<footer>
+			<!-- Add a footer -->
+		</footer>
+	</body>
+</html>
