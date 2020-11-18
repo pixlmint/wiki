@@ -4,6 +4,8 @@
   "description": "My personal Knowledgebase",
   "private": true,
   "dependencies": {
+    "jquery": "^3.5.1",
+    "js-base64": "^3.6.0",
     "simplemde": "^1.11.2"
   },
   "devDependencies": {

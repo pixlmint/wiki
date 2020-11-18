@@ -1,4 +1,5 @@
-const $ = require('jquery')
+const $ = require('jquery');
+import { encode, decode } from 'js-base64';
 
 function requestPage(event) {
   event.preventDefault()
