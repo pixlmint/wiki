@@ -1,0 +1,27 @@
+{
+    "remotePath": "/httpdocs/wiki.inzuro-one.ch",
+    "host": "185.142.213.59",
+    "username": "smart-ftp",
+    "password": "0hqv?C65",
+    "port": 21,
+    "secure": false,
+    "protocol": "ftp",
+    "uploadOnSave": false,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "passphrase": null,
+    "agent": null,
+    "allow": [],
+    "ignore": [
+        "\\.vscode",
+        "\\.git",
+        "\\.DS_Store",
+        "node_modules"
+    ],
+    "generatedFiles": {
+        "extensionsToInclude": [
+        ],
+        "path": ""
+    }
+}
