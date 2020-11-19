@@ -11,9 +11,9 @@ if (localStorage.getItem('referer') !== null) {
 }
 
 function toggleNav() {
-  $('#page-menu').slideToggle()
+  $('#page-menu ul').slideToggle()
   window.setTimeout(function () {
-    let display = $('#page-menu').css('display') === 'block'
+    let display = $('#page-menu ul').css('display') === 'block'
     localStorage.setItem('showPageMenu', display)
   }, 1000)
 }
@@ -37,5 +37,5 @@ $(function () {
     display = display === 'true'
   }
 
-  $('#page-menu').css('display', display ? 'block' : 'none')
+  $('#page-menu ul').css('display', display ? 'block' : 'none')
 })
