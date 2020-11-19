@@ -1,10 +1,12 @@
 <?php
+session_start();
+session_regenerate_id();
 if (key_exists('action', $_REQUEST)) {
     $action = $_REQUEST['action'];
 } else {
     $action = null;
-} ?>
-
+}
+?>
 
 <html lang="en">
 <head>
