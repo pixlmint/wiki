@@ -28,6 +28,8 @@ $pico = new Pico(
 
 // override configuration?
 //$pico->setConfig(array());
+session_start();            
+session_regenerate_id();
 
 // run application
 try {

@@ -1,16 +1,15 @@
 <?php
-session_start();
-session_regenerate_id();
 $message = '';
 
+include $_SERVER['DOCUMENT_ROOT'] . '/UserHandler.php';
+
+session_start();
+session_regenerate_id();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    print_r($_REQUEST);
-    $allUsers = json_decode(file_get_contents('users.json'), true);
     $isValid = false;
     $foundUser = null;
-    foreach ($allUsers as $user) {
-        print_r($user);
+    foreach (getUsers() as $user) {
         if (
             $user['username'] === $_REQUEST['username'] &&
             password_verify($_REQUEST['password'], $user['password'])
@@ -25,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'This password/ username is not valid';
         header('HTTP/1.0 400');
     } else {
-        $_SESSION['user'] = json_encode($foundUser);
+        session_start();
+        $_SESSION['user'] = $foundUser;
         header('Location: /');
     }
 }
@@ -40,11 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     
 <form name="login" method="POST" action="/auth.php">
-    <?php
-        echo($message);
-    ?>
+    <?php echo $message; ?>
     <div>
-        <input type="text" name="username" placeholder="Username">
+        <input type="text" autofocus name="username" placeholder="Username">
     </div>
     <div>
         <input type="password" name="password" placeholder="Password">

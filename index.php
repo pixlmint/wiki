@@ -1,6 +1,7 @@
 <?php
-  session_start();
-  session_regenerate_id();
+session_start();
+session_regenerate_id();
+  include('UserHandler.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

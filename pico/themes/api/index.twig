@@ -1,3 +1,4 @@
+{% if not meta.canView %}{% set content = '<p>You are not allowed to view this page</p>' %}{% endif %}
 {"content": "{{ content|raw|base64encode }}", "file": "{{ mdfile }}"
 {% for key, value in meta %}, "{{ key }}": "{{ value }}"
 {% endfor %}}
