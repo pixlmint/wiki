@@ -1,6 +1,12 @@
 <?php
 session_start();
 session_regenerate_id();
+include($_SERVER['DOCUMENT_ROOT'] . '/UserHandler.php');
+if (!isGranted('Editor')) {
+    header('HTTP/1.0 401');
+    header('Location: /auth.php?page=' . $_SERVER['REQUEST_URI']);
+    die();
+}
 if (key_exists('action', $_REQUEST)) {
     $action = $_REQUEST['action'];
 } else {

@@ -37,12 +37,11 @@ function getRoles()
     return ['Super Admin', 'Editor', 'Reader', 'Guest'];
 }
 
-function isGranted(array $user, string $minRight = 'Guest')
+function isGranted(string $minRight = 'Guest', array $user = null)
 {
+    if (!$user) {
+        $user = getCurrentUser();
+    }
+
     return array_search($user['role'], getRoles()) <= array_search($minRight, getRoles());
 }
-
-// function setUser(array $user)
-// {
-
-// }

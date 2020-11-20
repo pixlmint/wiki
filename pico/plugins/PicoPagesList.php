@@ -212,7 +212,7 @@ class PicoPagesList extends AbstractPicoPlugin
     private function output($pages)
     {
         if (!is_array($pages)) return;
-        $html = '<ul>';
+        $html = '<ul id="nav">';
         foreach ($pages as $pageID => $page)
         {
             if (!empty($page['hidden'])) continue;

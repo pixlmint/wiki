@@ -29,6 +29,16 @@ session_regenerate_id();
       </div>
       <nav id="site-nav" class="collapsed">
         <ul id="nav"></ul>
+        <details>
+          <summary><?php echo($_SESSION['user']['username']); ?></summary>
+          <ul>
+            <li><?php if ($_SESSION['user']['username'] !== 'Guest') {
+            echo('<a href="/logout.php">Logout</a>');
+            } else {
+              echo('<a href="/auth.php">Login</a>');
+              }?></li>
+          </ul>
+        </details>
       </nav>
 
       <article>
