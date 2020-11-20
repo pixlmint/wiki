@@ -1,0 +1,457 @@
+{
+  "title:": {
+    "pico/content/API/index.md": 1,
+    "pico/content/API/auth.md": 1,
+    "pico/content/index.md": 1,
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "api": { "pico/content/API/index.md": 2, "pico/content/API/auth.md": 2 },
+  "date:": {
+    "pico/content/API/index.md": 1,
+    "pico/content/API/auth.md": 1,
+    "pico/content/index.md": 1,
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/Klassen/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "min_role:": {
+    "pico/content/API/index.md": 1,
+    "pico/content/index.md": 1,
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/Klassen/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "reader": {
+    "pico/content/API/index.md": 1,
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/Klassen/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "die": {
+    "pico/content/API/index.md": 2,
+    "pico/content/API/auth.md": 2,
+    "pico/content/Development/Dashboard/Klassen/index.md": 1
+  },
+  "dokumentation": { "pico/content/API/index.md": 1 },
+  "f\u00fcr": { "pico/content/API/index.md": 1 },
+  "inzuro": {
+    "pico/content/API/index.md": 1,
+    "pico/content/API/auth.md": 2,
+    "pico/content/index.md": 1,
+    "pico/content/Development/index.md": 2
+  },
+  "authentication": { "pico/content/API/auth.md": 1 },
+  "verwendet": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/Dashboard/Klassen/index.md": 1
+  },
+  "eine": {
+    "pico/content/API/auth.md": 2,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "simple": { "pico/content/API/auth.md": 1 },
+  "public": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 4
+  },
+  "secret": { "pico/content/API/auth.md": 1 },
+  "key": { "pico/content/API/auth.md": 2 },
+  "authentifizierungmethode.": { "pico/content/API/auth.md": 1 },
+  "**wichtig**:": { "pico/content/API/auth.md": 1 },
+  "sollten": { "pico/content/API/auth.md": 1 },
+  "sie": { "pico/content/API/auth.md": 3 },
+  "ihren": { "pico/content/API/auth.md": 2 },
+  "private": { "pico/content/API/auth.md": 1 },
+  "verlieren": { "pico/content/API/auth.md": 1 },
+  "m\u00fcssen": { "pico/content/API/auth.md": 2 },
+  "einen": { "pico/content/API/auth.md": 1 },
+  "neuen": { "pico/content/API/auth.md": 1 },
+  "generieren": { "pico/content/API/auth.md": 1 },
+  "lassen,": { "pico/content/API/auth.md": 1 },
+  "da": { "pico/content/API/auth.md": 1 },
+  "den": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "privaten": { "pico/content/API/auth.md": 1 },
+  "schl\u00fcssel": { "pico/content/API/auth.md": 1 },
+  "nicht": { "pico/content/API/auth.md": 2 },
+  "in": {
+    "pico/content/API/auth.md": 3,
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "rohform": { "pico/content/API/auth.md": 1 },
+  "abspeichert.": { "pico/content/API/auth.md": 1 },
+  "das": {
+    "pico/content/API/auth.md": 2,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "schl\u00fcssel-paar": { "pico/content/API/auth.md": 2 },
+  "kann": { "pico/content/API/auth.md": 1 },
+  "nutzereinstellungen": { "pico/content/API/auth.md": 1 },
+  "der": {
+    "pico/content/API/auth.md": 2,
+    "pico/content/Development/index.md": 2,
+    "pico/content/Development/Dashboard/index.md": 1
+  },
+  "sektion": { "pico/content/API/auth.md": 1 },
+  "neu": { "pico/content/API/auth.md": 1 },
+  "generiert": { "pico/content/API/auth.md": 1 },
+  "werden": {
+    "pico/content/API/auth.md": 2,
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/Klassen/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 2
+  },
+  "(<a": { "pico/content/API/auth.md": 1 },
+  "href=\"https://inzuro-one.ch/podium/user/settings/view#api\">einstellungen</a>)": {
+    "pico/content/API/auth.md": 1
+  },
+  "um": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "sich": { "pico/content/API/auth.md": 1 },
+  "authentifizieren": { "pico/content/API/auth.md": 1 },
+  "k\u00f6nnen": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 2
+  },
+  "header": { "pico/content/API/auth.md": 2 },
+  "mitgegeben": { "pico/content/API/auth.md": 1 },
+  "werden.": { "pico/content/API/auth.md": 1 },
+  "dies": { "pico/content/API/auth.md": 2 },
+  "sollte": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "wie": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/index.md": 2,
+    "pico/content/Development/Dashboard/index.md": 2,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "folgt": { "pico/content/API/auth.md": 1 },
+  "aussehen:": { "pico/content/API/auth.md": 1 },
+  "php-auth-username:": { "pico/content/API/auth.md": 1 },
+  "[publickey]": { "pico/content/API/auth.md": 1 },
+  "php-auth-password:": { "pico/content/API/auth.md": 1 },
+  "[privatekey]": { "pico/content/API/auth.md": 1 },
+  "mehrere": { "pico/content/API/auth.md": 1 },
+  "requests": { "pico/content/API/auth.md": 1 },
+  "nacheinander": { "pico/content/API/auth.md": 1 },
+  "get\u00e4tigt": { "pico/content/API/auth.md": 1 },
+  "ist": {
+    "pico/content/API/auth.md": 2,
+    "pico/content/Development/index.md": 1
+  },
+  "nur": { "pico/content/API/auth.md": 1 },
+  "mit": { "pico/content/API/auth.md": 3 },
+  "dem": { "pico/content/API/auth.md": 1 },
+  "ersten": { "pico/content/API/auth.md": 1 },
+  "anforderung.": { "pico/content/API/auth.md": 1 },
+  "antwort": { "pico/content/API/auth.md": 1 },
+  "enth\u00e4lt": { "pico/content/API/auth.md": 1 },
+  "ein": {
+    "pico/content/API/auth.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "cookie": { "pico/content/API/auth.md": 2 },
+  "`phpsessid`.": { "pico/content/API/auth.md": 1 },
+  "geben": { "pico/content/API/auth.md": 1 },
+  "dieses": { "pico/content/API/auth.md": 1 },
+  "jedem": { "pico/content/API/auth.md": 1 },
+  "request": { "pico/content/API/auth.md": 1 },
+  "als": { "pico/content/API/auth.md": 1 },
+  "ben\u00f6tigt.": { "pico/content/API/auth.md": 1 },
+  "documentation": { "pico/content/index.md": 1 },
+  "date_updated:": { "pico/content/index.md": 1 },
+  "guest": { "pico/content/index.md": 1 },
+  "development": { "pico/content/Development/index.md": 1 },
+  "description:": { "pico/content/Development/index.md": 1 },
+  "an": {
+    "pico/content/Development/index.md": 2,
+    "pico/content/Development/Dashboard/index.md": 1
+  },
+  "plattform": { "pico/content/Development/index.md": 2 },
+  "entwickelt": { "pico/content/Development/index.md": 1 },
+  "wird": { "pico/content/Development/index.md": 1 },
+  "hier": { "pico/content/Development/index.md": 1 },
+  "dokumentiert,": { "pico/content/Development/index.md": 1 },
+  "genau": { "pico/content/Development/index.md": 1 },
+  "\u00e4nderungen": {
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 1
+  },
+  "vorgenommen": {
+    "pico/content/Development/index.md": 1,
+    "pico/content/Development/Dashboard/index.md": 1
+  },
+  "dashboards": { "pico/content/Development/Dashboard/index.md": 2 },
+  "neue": {
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 2
+  },
+  "dashboard": { "pico/content/Development/Dashboard/index.md": 1 },
+  "panels": {
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 2
+  },
+  "erstellt": {
+    "pico/content/Development/Dashboard/index.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "werden,": { "pico/content/Development/Dashboard/index.md": 1 },
+  "funktionsweise": { "pico/content/Development/Dashboard/index.md": 1 },
+  "des": { "pico/content/Development/Dashboard/index.md": 1 },
+  "werden?": { "pico/content/Development/Dashboard/index.md": 1 },
+  "---title:": { "pico/content/Development/Dashboard/Klassen/index.md": 1 },
+  "klassen": { "pico/content/Development/Dashboard/Klassen/index.md": 1 },
+  "erkl\u00e4rungen": {
+    "pico/content/Development/Dashboard/Klassen/index.md": 1
+  },
+  "\u00fcber": { "pico/content/Development/Dashboard/Klassen/index.md": 1 },
+  "unterschiedlichen": {
+    "pico/content/Development/Dashboard/Klassen/index.md": 1
+  },
+  "klassen,": { "pico/content/Development/Dashboard/Klassen/index.md": 1 },
+  "welche": { "pico/content/Development/Dashboard/Klassen/index.md": 1 },
+  "`dashboardbundle`": {
+    "pico/content/Development/Dashboard/Klassen/index.md": 1
+  },
+  "app\\dashboardbundle\\controller\\panelcontroller\\panelinterface": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "class": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "basepanelcontroller": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "implements:": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "app\\dashboardbundle\\controller\\basepanelinterface": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "methods": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "name": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "description": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "|[getdatabasepanel](#panelinterfacegetdatabasepanel)||": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "|[getrenderedpanel](#panelinterfacegetrenderedpanel)|/render-panel|": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "|[index](#panelinterfaceindex)|/|": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "|[loaddata](#panelinterfaceloaddata)|load": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "data|": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "|[reloaddata](#panelinterfacereloaddata)|/load|": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "panelinterface::getdatabasepanel": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "**description**": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 5
+  },
+  "```php": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 5
+  },
+  "getdatabasepanel": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "(void)": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "**parameters**": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 5
+  },
+  "`this": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "function": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 3
+  },
+  "has": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2 },
+  "no": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2 },
+  "parameters.`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "**return": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 5
+  },
+  "values**": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 5
+  },
+  "`void`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "<hr": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 5 },
+  "panelinterface::getrenderedpanel": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "getrenderedpanel": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "(\\request": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 3
+  },
+  "$request)": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 3
+  },
+  "/render-panel": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "render": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "panel.": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "if": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "panel": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "controller": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "extends": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "`basepanelcontroller`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1,
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "it": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "can": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "just": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "call": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2 },
+  "`parent::renderpanel($request)`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "`(\\request)": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 3
+  },
+  "$request`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 3
+  },
+  "`\\jsonresponse`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "panelinterface::index": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "index": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "redirect": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "user": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "to": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2 },
+  "./load": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "`\\redirectresponse`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "panelinterface::loaddata": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "loaddata": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "load": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "data": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "main": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "part": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "of": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "class,": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "all": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "your": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "operations": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "happen": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "this": { "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1 },
+  "`array`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "**throws": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "exceptions**": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "`\\exception`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 2
+  },
+  "panelinterface::reloaddata": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "reloaddata": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "/load": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "loads": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "data.": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "needs": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "`panelinterface::loaddata($request)`": {
+    "pico/content/Development/Dashboard/Klassen/PanelInterface.md": 1
+  },
+  "new": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "neues": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "erstellen": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "dinge": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "ben\u00f6tigt": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "(ausname:": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "auswertungen)": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "controller-klasse": {
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "dashboardbundle": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "(`src/dashboardbundle/controller/panelcontroller`).": {
+    "pico/content/Development/Dashboard/new-panels.md": 1
+  },
+  "diese": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "klasse": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "muss": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "interface": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "`panelinterface`": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "implementieren": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "und": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "es": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "extenden.": { "pico/content/Development/Dashboard/new-panels.md": 1 },
+  "template:": { "pico/content/nav.md": 1 },
+  "nav": { "pico/content/nav.md": 1 }
+}
