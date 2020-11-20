@@ -26,7 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         session_start();
         $_SESSION['user'] = $foundUser;
-        header('Location: /');
+        if (!isset($_REQUEST['required_page'])) {
+            $_REQUEST['required_page'] = '/';
+        }
+        header('Location: ' . $_REQUEST['required_page']);
     }
 }
 ?>
@@ -38,19 +41,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="/dist/style.css">
 </head>
 <body>
-    
-<form name="login" method="POST" action="/auth.php">
-    <?php echo $message; ?>
-    <div>
-        <input type="text" autofocus name="username" placeholder="Username">
-    </div>
-    <div>
-        <input type="password" name="password" placeholder="Password">
-    </div>
-    <input type="hidden" name="required_page" value="<?php echo $_REQUEST[
-        'page'
-    ]; ?>">
-    <button type="submit">Submit</button>
-</form>
+    <main>
+        <article>
+            <form name="login" method="POST" action="/auth.php">
+                <h1>Login</h1>
+                <?php echo $message; ?>
+                <div>
+                    <input type="text" autofocus name="username" placeholder="Username">
+                </div>
+                <div>
+                    <input type="password" name="password" placeholder="Password">
+                </div>
+                <?php if (isset($_REQUEST['page'])) {?>
+                <input type="hidden" name="required_page" value="<?php echo $_REQUEST[
+                    'page'
+                ]; ?>"><?php } ?>
+                <button type="submit">Submit</button>
+            </form>
+        </article>
+    </main>
 </body>
 </html>

@@ -99,8 +99,8 @@ class App {
     fetch('/pico/nav')
       .then((response) => response.text())
       .then(function (data) {
-        document.querySelector('nav').innerHTML = data
-        document.querySelectorAll('nav a').forEach(function (link) {
+        document.querySelector('nav#site-nav ul').outerHTML = data
+        document.querySelectorAll('nav ul#nav a').forEach(function (link) {
           link.onclick = function (event) {
             requestPage(event)
           }

@@ -9,7 +9,7 @@ class Rights extends AbstractPicoPlugin
         if (!key_exists('min_role', $meta)) {
             $canView = true;
         } else {
-            $canView = isGranted(getCurrentUser(), $meta['min_role']);
+            $canView = isGranted($meta['min_role']);
         }
 
         if (!$canView) {

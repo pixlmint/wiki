@@ -215,12 +215,14 @@ nav {
 }
 
 nav#site-nav {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
   position: sticky;
   left: 0;
   top: 0;
   width: 20%;
-  max-height: 100vh;
+  height: 100vh;
 }
 
 nav#page-menu {
