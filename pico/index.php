@@ -34,7 +34,7 @@ session_regenerate_id();
 // run application
 try {
     echo $pico->run();
-} catch (Exception $e) {
+} catch (\Exception $e) {
     header('Content-type: application/json');
     header('HTTP/1.0 ' . $e->getCode());
     echo(json_encode(['code' => $e->getCode(), 'message' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine()]));

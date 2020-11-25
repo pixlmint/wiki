@@ -1,0 +1,42 @@
+[
+    {
+        "route": "/",
+        "controller": "/src/Controllers/HomeController.php",
+        "function": "index"
+    },
+    {
+        "route": "/admin",
+        "controller": "/src/Controllers/AdminController.php",
+        "function": "index"
+    },
+    {
+        "route": "/admin/add",
+        "controller": "/src/Controllers/AdminController.php",
+        "function": "add"
+    },
+    {
+        "route": "/admin/edit",
+        "controller": "/src/Controllers/AdminController.php",
+        "function": "edit"
+    },
+    {
+        "route": "/admin/delete",
+        "controller": "/src/Controllers/AdminController.php",
+        "function": "delete"
+    },
+    {
+        "route": "/register",
+        "controller": "/src/Controllers/AuthenticationController.php",
+        "function": "register"
+    },
+    {
+        "route": "/login",
+        "controller": "/src/Controllers/AuthenticationController.php",
+        "function": "login"
+    },
+    {
+        "route": "/logout",
+        "controller": "/src/Controllers/AuthenticationController.php",
+        "function": "logout"
+    }
+]

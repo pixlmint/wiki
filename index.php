@@ -1,64 +1,96 @@
 <?php
+
 session_start();
 session_regenerate_id();
-  include('UserHandler.php');
-?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="/dist/style.css"
-      type="text/css"
-    />
-    <meta name="description" content="Welcome to my personal Wiki" />
-  </head>
-  <body>
-    <main>
-      <div id="nav-toggler" onclick="toggleMainNav()">
-        <input type="checkbox" id="hamburg" />
-        <label for="hamburg" class="hamburg">
-          <span class="line"></span>
-          <span class="line"></span>
-          <span class="line"></span>
-        </label>
-      </div>
-      <nav id="site-nav" class="collapsed">
-        <ul id="nav"></ul>
-        <details>
-          <summary><?php echo($_SESSION['user']['username']); ?></summary>
-          <ul>
-            <li><?php if ($_SESSION['user']['username'] !== 'Guest') {
-            echo('<a href="/logout.php">Logout</a>');
-            } else {
-              echo('<a href="/auth.php">Login</a>');
-              }?></li>
-          </ul>
-        </details>
-      </nav>
+include $_SERVER['DOCUMENT_ROOT'] . '/src/Security/UserHandler.php';
 
-      <article>
-        <div>
-          <h1 class="js-article-title"></h1>
-          <div
-            id="article-content"
-            data-spy="scroll"
-            data-target="#page-menu"
-            data-offset="0"
-            class="loading"
-          ></div>
-        </div>
-        <footer>
-          <!-- Add a footer -->
-          <a id="edit-link" href="javascript:void(0)">Edit Page</a>
-        </footer>
-      </article>
-      <nav id="page-menu" class="navbar"><ul></ul></nav>
-    </main>
-    <script src="/dist/app.js"></script>
-  </body>
-</html>
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/Helpers/Request.php';
+// require_once $_SERVER['DOCUMENT_ROOT'] . '/src/Helpers/Router.php';
+
+define('VIEWS_DIR', $_SERVER['DOCUMENT_ROOT'] . '/src/Views');
+
+// header('content-type: application/json');
+// echo(json_encode($_SERVER));
+// die();
+
+$request = new Request();
+
+// echo json_encode($routes);
+// die();
+
+function loadClass($file)
+{
+    $fp = fopen($file, 'r');
+    $class = $buffer = '';
+    $i = 0;
+    while (!$class) {
+        if (feof($fp)) {
+            break;
+        }
+
+        $buffer .= fread($fp, 512);
+        $tokens = token_get_all($buffer);
+
+        if (strpos($buffer, '{') === false) {
+            continue;
+        }
+
+        for (; $i < count($tokens); $i++) {
+            if ($tokens[$i][0] === T_CLASS) {
+                for ($j = $i + 1; $j < count($tokens); $j++) {
+                    if ($tokens[$j] === '{') {
+                        $class = $tokens[$i + 2][1];
+                    }
+                }
+            }
+        }
+    }
+
+    return $class;
+}
+
+if (isset($_SERVER['REDIRECT_URL'])) {
+    $path = $_SERVER['REDIRECT_URL'];
+} else {
+    $path = $_SERVER['REQUEST_URI'];
+}
+
+function getRoute($path)
+{
+    $routes = json_decode(
+        file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/config/routes.json'),
+        true
+    );
+    foreach ($routes as $route) {
+        if ($route['route'] === $path) {
+            return $route;
+        }
+    }
+}
+
+function getContent($route)
+{
+    $controllerDir = $_SERVER['DOCUMENT_ROOT'] . $route['controller'];
+    if (!is_file($controllerDir)) {
+        return false;
+    }
+    include_once $controllerDir;
+    $className = loadClass($controllerDir);
+    $cnt = new $className();
+    $function = $route['function'];
+    if (!method_exists($cnt, $function)) {
+        header('Http/1.1 404');
+        echo "${function} does not exist in ${className}";
+    }
+    return $cnt->$function($request);
+}
+
+$route = getRoute($path);
+$content = getContent($route);
+if ($content) {
+    echo $content;
+} else {
+    $route = getRoute('/');
+    $content = getContent($route);
+    echo $content;
+}

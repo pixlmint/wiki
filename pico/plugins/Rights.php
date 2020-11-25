@@ -1,6 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] . '/UserHandler.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/src/Security/UserHandler.php';
 
 class Rights extends AbstractPicoPlugin
 {

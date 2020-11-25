@@ -1,12 +1,12 @@
 {
     "files": [
         {
-            "title": "src/app.js",
+            "title": "assets/app.js",
             "mime": "js",
             "lastChanged": "2020-11-16 11:26:00"
         },
         {
-            "title": "src/style.css",
+            "title": "assets/style.css",
             "mime": "css",
             "lastChanged": "2020-11-16 11:26:00"
         }

@@ -64,11 +64,10 @@ class App {
       .querySelector('#edit-link')
       .setAttribute(
         'href',
-        '/admin?file=' +
+        '/admin/edit?file=' +
           jsonPage.file.substring(1) +
           '&location=' +
-          location.pathname +
-          '&action=edit.php',
+          location.pathname,
       )
     this.printPageNav()
   }

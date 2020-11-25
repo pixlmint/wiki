@@ -17,7 +17,6 @@
         cursor: pointer;
     }
 </style>
-<ul>
 <?php
 $contentDir = $_SERVER['DOCUMENT_ROOT'] . '/pico';
 
@@ -37,7 +36,7 @@ function getDirectoryRecursive($dir, $parentDir)
 {
     echo('<li style="display: flex"><b style="display: block">' . $dir . '</b>');
     $newParent = $parentDir . '/' . $dir;
-    actions(['Delete' => '/admin/delete.php?dir=' . $newParent, 'Add' => '/admin?parent=' . $newParent . '&action=add.php']);
+    actions(['Delete' => '/admin/delete?dir=' . $newParent, 'Add' => '/admin/add?parent=' . $newParent]);
     echo('</li>');
     $ret = [];
     foreach (array_reverse(scandir($newParent)) as $sub) {
@@ -45,9 +44,8 @@ function getDirectoryRecursive($dir, $parentDir)
         if ($sub !== '.' && $sub !== '..' && $sub !== 'nav.md') {
             echo '<li style="display: flex">';
             if (is_file($newParent . '/' . $sub)) {
-                echo '<a href="/admin?fulldir=' .
+                echo '<a href="/admin/edit?fulldir=' .
                     $filedir .
-                    '&action=edit.php' .
                     '&location=/admin">' .
                     $sub .
                     '</a>';
@@ -67,4 +65,3 @@ function getDirectoryRecursive($dir, $parentDir)
 
 getDirectoryRecursive('content', $contentDir);
 ?>
-</ul>
