@@ -1,1 +1,1 @@
-<script src="/dist/app.bundle.js"></script>
+<script src="/dist/frontend.bundle.js"></script>
