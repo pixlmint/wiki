@@ -6,26 +6,31 @@
     },
     {
         "route": "/admin",
+        "min_role": "Editor",
         "controller": "/src/Controllers/AdminController.php",
         "function": "index"
     },
     {
         "route": "/admin/add",
+        "min_role": "Editor",
         "controller": "/src/Controllers/AdminController.php",
         "function": "add"
     },
     {
         "route": "/admin/edit",
+        "min_role": "Editor",
         "controller": "/src/Controllers/AdminController.php",
         "function": "edit"
     },
     {
         "route": "/admin/delete",
+        "min_role": "Editor",
         "controller": "/src/Controllers/AdminController.php",
         "function": "delete"
     },
     {
         "route": "/register",
+        "min_role": "Editor",
         "controller": "/src/Controllers/AuthenticationController.php",
         "function": "register"
     },
@@ -41,6 +46,7 @@
     },
     {
         "route": "/search",
+        "min_role": "Editor",
         "controller": "/src/Controllers/SearchController.php",
         "function": "search"
     }

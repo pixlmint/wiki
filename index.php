@@ -78,6 +78,10 @@ function getRoute($path)
 
 function getContent($route)
 {
+    if (isset($route['min_role']) && !isGranted($route['min_role'])) {
+        header('Http/1.1 401');
+        return 'You are not allowed to view this page';
+    }
     $controllerDir = $_SERVER['DOCUMENT_ROOT'] . $route['controller'];
     if (!is_file($controllerDir)) {
         return false;
