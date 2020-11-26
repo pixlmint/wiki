@@ -4,6 +4,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/src/Controllers/AbstractController.php';
 
 class AdminController extends AbstractController
 {
+    public function __construct()
+    {
+        if (!$this->isGranted('Editor')) {
+            header('Http/1.1 401');
+            echo('You are not allowed to view this part of the page. <a href="/">Return</a>');
+            die();
+        }
+    }
+
     function index($request)
     {
         return $this->render(VIEWS_DIR . '/base.php', [
