@@ -19,6 +19,6 @@
     ]; ?>">
 <button type="button" onclick="save()">Save</button>
 </form>
-
+<button id="toggle-nav-button" type="button" onclick="toggleNav()">^</button>
 <div><a id="referer" href="javascrtip:void(0)">Return</a></div>
 <div id="last-saved"></div>

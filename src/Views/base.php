@@ -50,7 +50,7 @@
       } ?>
         <footer>
             <?php if (isset($args['footer'])) {
-                include $args['footer'];
+                echo $args['footer'];
             } ?>
         </footer>
       </article>

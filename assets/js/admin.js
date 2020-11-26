@@ -116,3 +116,4 @@ $(function () {
 
 global.$ = $;
 window.decode = decode;
+global.toggleNav = toggleNav;
