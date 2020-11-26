@@ -56,6 +56,7 @@
       </article>
       <nav id="page-menu" class="navbar"><ul></ul></nav>
     </main>
+    <script src="/dist/app.bundle.js"></script>
     <?php if (isset($args['js'])) {
         echo $args['js'];
     } ?>

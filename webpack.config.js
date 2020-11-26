@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    // app: './assets/js/app.js',
+    app: './assets/js/app.js',
     frontend: './assets/js/frontend.js',
     admin: './assets/js/admin.js',
   },
