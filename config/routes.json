@@ -38,5 +38,10 @@
         "route": "/logout",
         "controller": "/src/Controllers/AuthenticationController.php",
         "function": "logout"
+    },
+    {
+        "route": "/search",
+        "controller": "/src/Controllers/SearchController.php",
+        "function": "search"
     }
 ]

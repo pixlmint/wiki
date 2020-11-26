@@ -53,6 +53,16 @@ if (isset($_SERVER['REDIRECT_URL'])) {
     $path = $_SERVER['REQUEST_URI'];
 }
 
+function endswith($string, $test)
+{
+    return substr($string, strlen($string) - strlen($test), strlen($string)) ===
+        $test;
+}
+
+if (endswith($path, '/')) {
+    $path = substr($path, 0, strlen($path) - 1);
+}
+
 function getRoute($path)
 {
     $routes = json_decode(
