@@ -37,9 +37,10 @@
             } else {
                 echo '<a href="/login">Login</a>';
             } ?>
-            </li><?php if (
-                isGranted('Editor')
-            ) { ?><li><a href="/admin">Admin</a></li><?php } ?>
+            </li><?php if (isGranted('Editor')) { ?>
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="javascript:void(0)" onclick="reindex()">Reindex</a></li>
+                        <?php } ?>
           </ul>
         </details>
       </nav>
