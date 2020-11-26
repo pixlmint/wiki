@@ -29,14 +29,15 @@ class AuthenticationController extends AbstractController
                 if (!isset($_REQUEST['required_page'])) {
                     $_REQUEST['required_page'] = '/';
                 }
-                header('HTTP/1.0 302');
+                header('HTTP/1.1 302');
                 header('Location: ' . $_REQUEST['required_page']);
             }
         }
 
         return $this->render(VIEWS_DIR . '/base.php', [
             'article' => $this->render(
-                VIEWS_DIR . '/includes/security/login/article.php'
+                VIEWS_DIR . '/includes/security/login/article.php',
+                ['message' => $message]
             ),
         ]);
     }
@@ -82,7 +83,9 @@ class AuthenticationController extends AbstractController
         }
 
         return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => $this->render(VIEWS_DIR . '/includes/security/register/article.php'),
+            'article' => $this->render(
+                VIEWS_DIR . '/includes/security/register/article.php'
+            ),
         ]);
     }
 }

@@ -13,8 +13,6 @@ define('VIEWS_DIR', $_SERVER['DOCUMENT_ROOT'] . '/src/Views');
 // echo(json_encode($_SERVER));
 // die();
 
-$request = new Request();
-
 // echo json_encode($routes);
 // die();
 
@@ -82,6 +80,7 @@ function getContent($route)
         header('Http/1.1 404');
         echo "${function} does not exist in ${className}";
     }
+    $request = new Request();
     return $cnt->$function($request);
 }
 

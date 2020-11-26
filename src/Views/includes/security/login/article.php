@@ -1,6 +1,6 @@
 <form name="login" method="POST" action="/login">
     <h1>Login</h1>
-    <?php echo $message; ?>
+    <?php echo $args['message']; ?>
     <div>
         <input type="text" autofocus name="username" placeholder="Username">
     </div>
