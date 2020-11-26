@@ -49,7 +49,7 @@ function getDirectoryRecursive($dir, $parentDir)
                     '&location=/admin">' .
                     $sub .
                     '</a>';
-                actions(['Delete' => '/admin/delete.php?file=' . $filedir]);
+                actions(['Delete' => '/admin/delete?file=' . $filedir]);
                 array_push($ret, $filedir);
             } else {
                 echo '<ul>';
