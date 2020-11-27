@@ -1,11 +1,14 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] . '/src/Controllers/AbstractController.php';
+namespace Wiki\Controllers;
+
+use DateTime;
 
 class AdminController extends AbstractController
 {
     public function __construct()
     {
+        parent::__construct();
         if (!$this->isGranted('Editor')) {
             header('Http/1.1 401');
             echo 'You are not allowed to view this part of the page. <a href="/">Return</a>';

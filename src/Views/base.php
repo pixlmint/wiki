@@ -37,7 +37,7 @@
             } else {
                 echo '<a href="/login">Login</a>';
             } ?>
-            </li><?php if (isGranted('Editor')) { ?>
+            </li><?php if ($args['wiki']->isGranted('Editor')) { ?>
             <li><a href="/admin">Admin</a></li>
             <li><a href="javascript:void(0)" onclick="reindex()">Reindex</a></li>
                         <?php } ?>

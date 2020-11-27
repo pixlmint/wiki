@@ -1,6 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] . '/src/Controllers/AbstractController.php';
+namespace Wiki\Controllers;
 
 class AuthenticationController extends AbstractController
 {
@@ -9,7 +9,7 @@ class AuthenticationController extends AbstractController
         if (strtolower($request->requestMethod) === 'post') {
             $isValid = false;
             $foundUser = null;
-            foreach (getUsers() as $user) {
+            foreach ($this->userHandler->getUsers() as $user) {
                 if (
                     $user['username'] === $_REQUEST['username'] &&
                     password_verify($_REQUEST['password'], $user['password'])

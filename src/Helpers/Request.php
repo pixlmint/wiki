@@ -1,8 +1,10 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/src/Helpers/IRequest.php';
+namespace Wiki\Helpers;
 
-class Request implements IRequest
+class Request implements RequestInterface
 {
+    protected $requestMethod;
+
     function __construct()
     {
         $this->bootstrapSelf();
@@ -31,13 +33,12 @@ class Request implements IRequest
 
     public function getBody()
     {
-        if ($this->requestMethod === "GET") {
-            return;
+        if (strtolower($this->requestMethod) === "get") {
+            return [];
         }
 
 
-        if ($this->requestMethod == "POST") {
-
+        if (strtolower($this->requestMethod) === "post") {
             $body = array();
             foreach ($_POST as $key => $value) {
                 $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -45,5 +46,7 @@ class Request implements IRequest
 
             return $body;
         }
+
+        return [];
     }
 }

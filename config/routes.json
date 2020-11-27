@@ -1,7 +1,7 @@
 [
     {
         "route": "/",
-        "controller": "/src/Controllers/HomeController.php",
+        "controller": "Wiki\\Controllers\\HomeController",
         "function": "index"
     },
     {

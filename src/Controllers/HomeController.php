@@ -1,6 +1,7 @@
 <?php
+namespace Wiki\Controllers;
 
-require($_SERVER['DOCUMENT_ROOT'] . '/src/Controllers/AbstractController.php');
+use Wiki\Controllers\AbstractController;
 
 class HomeController extends AbstractController
 {

@@ -1,7 +1,8 @@
 <?php
 
+namespace Wiki\Helpers;
+
 require $_SERVER['DOCUMENT_ROOT'] . '/pico/vendor/picocms/pico/lib/Pico.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/src/Helpers/CustomYamlParser.php';
 
 class CustomPico extends Pico
 {
@@ -51,9 +52,7 @@ class CustomPico extends Pico
 
     public function getYamlParser()
     {
-        if (!$this->yamlParser) {
-            $this->yamlParser = new CustomYamlParser();
-        }
+        if (!$this->yamlParser) $this->yamlParser = new CustomYamlParser();
 
         return $this->yamlParser;
     }

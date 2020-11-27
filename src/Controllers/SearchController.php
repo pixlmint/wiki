@@ -1,7 +1,8 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] . '/src/Controllers/AbstractController.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/src/Helpers/CustomPico.php';
+namespace Wiki\Controllers;
+
+use Wiki\Helpers\CustomPico;
 
 class SearchController extends AbstractController
 {

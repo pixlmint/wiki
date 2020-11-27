@@ -1,5 +1,7 @@
 <?php
 
+namespace Wiki\Helpers;
+
 class CustomYamlParser
 {
     public function parse($string)
