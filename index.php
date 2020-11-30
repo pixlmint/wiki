@@ -46,7 +46,7 @@ function getContent($route)
     $request = new Request();
     $userHandler = new JsonUserHandler();
     $wiki = new Wiki($request, $userHandler);
-    if (isset($route['min_role']) && !isGranted($route['min_role'])) {
+    if (isset($route['min_role']) && !$wiki->isGranted($route['min_role'])) {
         header('Http/1.1 401');
         return 'You are not allowed to view this page';
     }
@@ -55,7 +55,7 @@ function getContent($route)
     $function = $route['function'];
     if (!method_exists($cnt, $function)) {
         header('Http/1.1 404');
-        echo "${function} does not exist in ${className}";
+        echo "${function} does not exist in ${controllerDir}";
     }
     $request = new Request();
     return $cnt->$function($request);

@@ -4,6 +4,7 @@ namespace Wiki;
 
 use InvalidArgumentException;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Parser;
 use Wiki\Helpers\Request;
 use Wiki\Helpers\RequestInterface;
 use Wiki\Security\JsonUserHandler;
@@ -14,12 +15,18 @@ class Wiki
     protected $request;
     public $userHandler;
     private $pages;
+    private $metaHeaders;
+    private $yamlParser;
+    private $config;
 
     public function __construct(RequestInterface $request, UserHandlerInterface $userHandler)
     {
         $this->request = $request;
         $this->userHandler = $userHandler;
         $this->pages = [];
+        $this->metaHeaders = [];
+        $this->config = [];
+        $this->yamlParser = null;
     }
 
     public function getRequest()
@@ -30,6 +37,15 @@ class Wiki
     public function getUserHandler()
     {
         return $this->userHandler;
+    }
+
+    public function getPages()
+    {
+        if (!$this->pages) {
+            $this->readPages();
+        }
+
+        return $this->pages;
     }
 
     public function isGranted(string $minRight = 'Guest', ?array $user = null)
@@ -54,7 +70,7 @@ class Wiki
 
                 if (is_dir($directory . '/' . $file)) {
                     // get files recursively
-                    $result = array_merge($result, $this->getFiles($directory . '/' . $file . '.md'));
+                    $result = array_merge($result, $this->getFiles($directory . '/' . $file));
                 } elseif (substr($file, -$fileExtensionLength) === '.md') {
                     $result[] = $directory . '/' . $file;
                 }
@@ -110,14 +126,14 @@ class Wiki
 
         $port = 80;
         if (!empty($_SERVER['HTTP_X_FORWARDED_PORT'])) {
-            $port = (int) $_SERVER['HTTP_X_FORWARDED_PORT'];
+            $port = (int)$_SERVER['HTTP_X_FORWARDED_PORT'];
         } elseif (!empty($_SERVER['SERVER_PORT'])) {
-            $port = (int) $_SERVER['SERVER_PORT'];
+            $port = (int)$_SERVER['SERVER_PORT'];
         }
 
         $hostPortPosition = ($host[0] === '[') ? strpos($host, ':', strrpos($host, ']') ?: 0) : strrpos($host, ':');
         if ($hostPortPosition !== false) {
-            $port = (int) substr($host, $hostPortPosition + 1);
+            $port = (int)substr($host, $hostPortPosition + 1);
             $host = substr($host, 0, $hostPortPosition);
         }
 
@@ -142,7 +158,7 @@ class Wiki
         return $this->config['base_url'];
     }
 
-    protected function readPages()
+    public function readPages()
     {
         $contentDir = $_SERVER['DOCUMENT_ROOT'] . '/content';
 
@@ -161,19 +177,14 @@ class Wiki
             }
 
             $url = $this->getPageUrl($id);
-            if ($file !== $this->requestFile) {
-                $rawContent = $this->loadFileContent($file);
+            $rawContent = $this->loadFileContent($file);
 
-                $headers = $this->getMetaHeaders();
-                try {
-                    $meta = $this->parseFileMeta($rawContent, $headers);
-                } catch (ParseException $e) {
-                    $meta = $this->parseFileMeta('', $headers);
-                    $meta['YAML_ParseError'] = $e->getMessage();
-                }
-            } else {
-                $rawContent = &$this->rawContent;
-                $meta = &$this->meta;
+            $headers = $this->getMetaHeaders();
+            try {
+                $meta = $this->parseFileMeta($rawContent, $headers);
+            } catch (ParseException $e) {
+                $meta = $this->parseFileMeta('', $headers);
+                $meta['YAML_ParseError'] = $e->getMessage();
             }
 
             // build page data
@@ -193,18 +204,114 @@ class Wiki
                 'meta' => &$meta
             );
 
-            if ($file === $this->requestFile) {
-                $page['content'] = &$this->content;
-            }
-
             unset($rawContent, $meta);
-
-            // trigger onSinglePageLoaded event
-            $this->triggerEvent('onSinglePageLoaded', array(&$page));
 
             if ($page !== null) {
                 $this->pages[$id] = $page;
             }
         }
+    }
+
+    public function loadFileContent($file)
+    {
+        return file_get_contents($file);
+    }
+
+    public function getYamlParser()
+    {
+        if ($this->yamlParser === null) {
+            $this->yamlParser = new Parser();
+        }
+
+        return $this->yamlParser;
+    }
+
+    public function parseFileMeta($rawContent, array $headers)
+    {
+        $pattern = "/^(?:\xEF\xBB\xBF)?(\/(\*)|---)[[:blank:]]*(?:\r)?\n"
+            . "(?:(.*?)(?:\r)?\n)?(?(2)\*\/|---)[[:blank:]]*(?:(?:\r)?\n|$)/s";
+        if (preg_match($pattern, $rawContent, $rawMetaMatches) && isset($rawMetaMatches[3])) {
+            $meta = $this->getYamlParser()->parse($rawMetaMatches[3]) ?: array();
+            $meta = is_array($meta) ? $meta : array('title' => $meta);
+
+            foreach ($headers as $name => $key) {
+                if (isset($meta[$name])) {
+                    // rename field (e.g. remove whitespaces)
+                    if ($key != $name) {
+                        $meta[$key] = $meta[$name];
+                        unset($meta[$name]);
+                    }
+                } elseif (!isset($meta[$key])) {
+                    // guarantee array key existence
+                    $meta[$key] = '';
+                }
+            }
+
+            if (!empty($meta['date']) || !empty($meta['time'])) {
+                // workaround for issue #336
+                // Symfony YAML interprets ISO-8601 datetime strings and returns timestamps instead of the string
+                // this behavior conforms to the YAML standard, i.e. this is no bug of Symfony YAML
+                if (is_int($meta['date'])) {
+                    $meta['time'] = $meta['date'];
+                    $meta['date'] = '';
+                }
+
+                if (empty($meta['time'])) {
+                    $meta['time'] = strtotime($meta['date']) ?: '';
+                } elseif (empty($meta['date'])) {
+                    $rawDateFormat = (date('H:i:s', $meta['time']) === '00:00:00') ? 'Y-m-d' : 'Y-m-d H:i:s';
+                    $meta['date'] = date($rawDateFormat, $meta['time']);
+                }
+            } else {
+                $meta['date'] = $meta['time'] = '';
+            }
+
+            if (empty($meta['date_formatted'])) {
+                if ($meta['time']) {
+                    $encodingList = mb_detect_order();
+                    if ($encodingList === array('ASCII', 'UTF-8')) {
+                        $encodingList[] = 'Windows-1252';
+                    }
+
+                    $rawFormattedDate = strftime($this->getConfig('date_format'), $meta['time']);
+                    $meta['date_formatted'] = mb_convert_encoding($rawFormattedDate, 'UTF-8', $encodingList);
+                } else {
+                    $meta['date_formatted'] = '';
+                }
+            }
+        } else {
+            // guarantee array key existance
+            $meta = array_fill_keys($headers, '');
+        }
+
+        return $meta;
+    }
+
+    public function getConfig($configName = null, $default = null)
+    {
+        if ($configName !== null) {
+            return isset($this->config[$configName]) ? $this->config[$configName] : $default;
+        } else {
+            return $this->config;
+        }
+    }
+
+    public function getMetaHeaders()
+    {
+        if ($this->metaHeaders === null) {
+            $this->metaHeaders = array(
+                'Title' => 'title',
+                'Description' => 'description',
+                'Author' => 'author',
+                'Date' => 'date',
+                'Formatted Date' => 'date_formatted',
+                'Time' => 'time',
+                'Robots' => 'robots',
+                'Template' => 'template',
+                'Hidden' => 'hidden'
+            );
+        }
+
+        return $this->metaHeaders;
     }
 }

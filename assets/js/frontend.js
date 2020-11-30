@@ -28,7 +28,7 @@ class App {
     history.pushState({}, '', page)
 
     if (!(page in this.loadedPages)) {
-      fetch('/pico' + page)
+      fetch('/wiki' + page)
         .then((response) => response.text())
         .then(function (data) {
           console.log(data)
@@ -95,7 +95,7 @@ class App {
   }
 
   loadNav() {
-    fetch('/pico/nav')
+    fetch('/wiki/nav')
       .then((response) => response.text())
       .then(function (data) {
         document.querySelector('nav#site-nav ul').outerHTML = data

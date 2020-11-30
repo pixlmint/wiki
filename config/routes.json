@@ -5,49 +5,55 @@
         "function": "index"
     },
     {
+        "route": "/nav",
+        "min_role": "Guest",
+        "controller": "Wiki\\Controllers\\HomeController",
+        "function": "loadNav"
+    },
+    {
         "route": "/admin",
         "min_role": "Editor",
-        "controller": "/src/Controllers/AdminController.php",
+        "controller": "Wiki\\Controllers\\AdminController",
         "function": "index"
     },
     {
         "route": "/admin/add",
         "min_role": "Editor",
-        "controller": "/src/Controllers/AdminController.php",
+        "controller": "Wiki\\Controllers\\AdminController",
         "function": "add"
     },
     {
         "route": "/admin/edit",
         "min_role": "Editor",
-        "controller": "/src/Controllers/AdminController.php",
+        "controller": "Wiki\\Controllers\\AdminController",
         "function": "edit"
     },
     {
         "route": "/admin/delete",
         "min_role": "Editor",
-        "controller": "/src/Controllers/AdminController.php",
+        "controller": "Wiki\\Controllers\\AdminController",
         "function": "delete"
     },
     {
         "route": "/register",
         "min_role": "Editor",
-        "controller": "/src/Controllers/AuthenticationController.php",
+        "controller": "Wiki\\Controllers\\AuthenticationController",
         "function": "register"
     },
     {
         "route": "/login",
-        "controller": "/src/Controllers/AuthenticationController.php",
+        "controller": "Wiki\\Controllers\\AuthenticationController",
         "function": "login"
     },
     {
         "route": "/logout",
-        "controller": "/src/Controllers/AuthenticationController.php",
+        "controller": "Wiki\\Controllers\\AuthenticationController",
         "function": "logout"
     },
     {
         "route": "/search",
         "min_role": "Editor",
-        "controller": "/src/Controllers/SearchController.php",
+        "controller": "Wiki\\Controllers\\AdminController",
         "function": "search"
     }
 ]

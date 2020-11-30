@@ -34,4 +34,10 @@ RUN docker-php-ext-enable apcu
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "echo PHP_EOL;" \
+    && php composer-setup.php --filename=composer \
+    && php -r "unlink('composer-setup.php');" \
+    && mv composer /usr/local/bin/composer
+
 WORKDIR /var/www/html
