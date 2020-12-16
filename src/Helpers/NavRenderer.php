@@ -101,7 +101,7 @@ class NavRenderer
     /**
      * Strip a substring from the end of a string
      *
-     * @param string $str    The input string.
+     * @param string $str The input string.
      * @param string $substr The substring to remove.
      *
      * @return string  The modified string.
@@ -139,8 +139,7 @@ class NavRenderer
                 $children = self::filterPages($page['_childs'], $filteredPaths, $isInclusive, $inclusiveOutput);
                 if ($isInclusive) {
                     $inclusiveOutput = $children;
-                }
-                else {
+                } else {
                     $pages[$i]['_childs'] = $children;
                 }
             }
@@ -189,26 +188,18 @@ class NavRenderer
             $url = isset($page['url']) ? $page['url'] : false;
 
             // use title if the page has one and make a link if the page exists.
-            if (!$url) $item = "<span>$pageID</span>";
-            else {
+            echo($url);
+            if ($url) {
                 $name = !empty($page['title']) ? $page['title'] : $pageID;
                 $item = "<a href=\"$url\">$name</a>";
+            } else {
+                $item = "<span>$pageID</span>";
             }
 
             // add the pageID in class and indicate if it is the current or parent of the current page.
             $class = $pageID;
             $class .= $url ? ' is-page' : ' is-directory';
             if ($childrenOutput) $class .= ' has-childs';
-
-            $currentPage = $this->getPico()->getCurrentPage();
-            if ($currentPage && $currentPage['id']) {
-                if ($currentPage['id'] === $page['id']) {
-                    $class .= ' is-current is-active';
-                } elseif ($page['id'] !== 'index') {
-                    $pagePath = (basename($page['id']) === 'index') ? dirname($page['id']) . '/' : $page['id'] . '/';
-                    if (substr_compare($pagePath, $currentPage['id'], 0, strlen($pagePath)) === 0) $class .= ' is-active';
-                }
-            }
 
             $html .= "<li class=\"$class\">$item$childrenOutput</li>";
         }

@@ -1,5 +1,5 @@
 const $ = require('jquery');
-import { encode, decode } from 'js-base64';
+import { decode } from 'js-base64';
 
 function requestPage(event) {
   event.preventDefault()
@@ -95,7 +95,7 @@ class App {
   }
 
   loadNav() {
-    fetch('/wiki/nav')
+    fetch('/nav')
       .then((response) => response.text())
       .then(function (data) {
         document.querySelector('nav#site-nav ul').outerHTML = data

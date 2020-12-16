@@ -73,7 +73,6 @@ class CustomPico extends Pico
 
             $id = substr($file, strlen($contentDir), -strlen($contentExt));
 
-            // trigger onSinglePageLoading event
             // skip inaccessible pages (e.g. drop "sub.md" if "sub/index.md" exists) by default
             $conflictFile = $contentDir . $id . '/index' . $contentExt;
             $skipFile = in_array($conflictFile, $files, true) ?: null;

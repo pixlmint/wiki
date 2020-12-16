@@ -105,11 +105,12 @@ class Wiki
         if (!$queryData) {
             $queryData = '';
         }
+        echo($page);
 
         if (!$page) {
             return $this->getBaseUrl() . $queryData;
         } else {
-            return $this->getBaseUrl() . implode('/', array_map('rawurlencode', explode('/', $page))) . $queryData;
+            return $this->getBaseUrl() .'wiki' . implode('/', array_map('rawurlencode', explode('/', $page))) . $queryData;
         }
     }
 
@@ -167,7 +168,6 @@ class Wiki
         foreach ($files as $i => $file) {
             $id = substr($file, strlen($contentDir), -3);
 
-            // trigger onSinglePageLoading event
             // skip inaccessible pages (e.g. drop "sub.md" if "sub/index.md" exists) by default
             $conflictFile = $contentDir . $id . '/index.md';
             $skipFile = in_array($conflictFile, $files, true) ?: null;

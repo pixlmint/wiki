@@ -55,7 +55,7 @@ function getContent($route)
     $function = $route['function'];
     if (!method_exists($cnt, $function)) {
         header('Http/1.1 404');
-        echo "${function} does not exist in ${controllerDir}";
+        return "${function} does not exist in ${controllerDir}";
     }
     $request = new Request();
     return $cnt->$function($request);

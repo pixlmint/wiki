@@ -6,7 +6,7 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - '85:80'
+            - '90:80'
         environment:
             PICO_URL_REWRITING: 1
         volumes: 

@@ -1,7 +1,6 @@
 <?php
 namespace Wiki\Controllers;
 
-use Wiki\Controllers\AbstractController;
 use Wiki\Helpers\NavRenderer;
 use Wiki\Wiki;
 
@@ -28,9 +27,8 @@ class HomeController extends AbstractController
     {
         $pages = $this->wiki->getPages();
         $this->navRenderer->onPagesLoaded($pages);
-        print_r($this->navRenderer->getItems());
-        print_r($this->navRenderer->nestedPages($this->wiki->getPages()));
+        echo(json_encode($this->navRenderer->nestedPages($this->wiki->getPages())));
 
-        return '{"foo": "bar"}';
+        return $this->navRenderer->output($this->wiki->getPages());
     }
 }
