@@ -28,7 +28,7 @@ class App {
     history.pushState({}, '', page)
 
     if (!(page in this.loadedPages)) {
-      fetch('/wiki' + page)
+      fetch(page)
         .then((response) => response.text())
         .then(function (data) {
           console.log(data)

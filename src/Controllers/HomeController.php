@@ -27,7 +27,7 @@ class HomeController extends AbstractController
     {
         $pages = $this->wiki->getPages();
         $this->navRenderer->onPagesLoaded($pages);
-        echo(json_encode($this->navRenderer->nestedPages($this->wiki->getPages())));
+//        echo(json_encode($this->navRenderer->nestedPages($this->wiki->getPages())));
 
         return $this->navRenderer->output($this->wiki->getPages());
     }

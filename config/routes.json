@@ -5,6 +5,11 @@
         "function": "index"
     },
     {
+        "route": "/wiki",
+        "controller": "Wiki\\Controllers\\WikiController",
+        "function": "loadEntry"
+    },
+    {
         "route": "/nav",
         "min_role": "Guest",
         "controller": "Wiki\\Controllers\\HomeController",

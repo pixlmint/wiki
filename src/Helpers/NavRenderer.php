@@ -188,7 +188,7 @@ class NavRenderer
             $url = isset($page['url']) ? $page['url'] : false;
 
             // use title if the page has one and make a link if the page exists.
-            echo($url);
+//            echo($url);
             if ($url) {
                 $name = !empty($page['title']) ? $page['title'] : $pageID;
                 $item = "<a href=\"$url\">$name</a>";

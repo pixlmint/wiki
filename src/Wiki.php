@@ -3,6 +3,7 @@
 namespace Wiki;
 
 use InvalidArgumentException;
+use Parsedown;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
 use Wiki\Helpers\Request;
@@ -18,6 +19,7 @@ class Wiki
     private $metaHeaders;
     private $yamlParser;
     private $config;
+    protected Parsedown $mdParser;
 
     public function __construct(RequestInterface $request, UserHandlerInterface $userHandler)
     {
@@ -27,6 +29,7 @@ class Wiki
         $this->metaHeaders = [];
         $this->config = [];
         $this->yamlParser = null;
+        $this->mdParser = new Parsedown();
     }
 
     public function getRequest()
@@ -80,8 +83,36 @@ class Wiki
         return $result;
     }
 
+    public function getPage(string $url)
+    {
+        $pages = $this->getPages();
+        foreach ($pages as $page) {
+            if (!isset($page['url'])) {
+                continue;
+            }
+            if ($page['url'] === $url) {
+                return $page;
+            }
+        }
+
+        return false;
+    }
+
+    public function renderPage(array $page)
+    {
+        if (!isset($page['raw_content'])) {
+            return '';
+        }
+
+        return $this->mdParser->parse($page['raw_content']);
+    }
+
     public function getPageUrl($page, $queryData = null, $dropIndex = true)
     {
+        if (!is_array($queryData)) {
+            $queryData = [];
+        }
+        $queryData['p'] = $page;
         if (is_array($queryData)) {
             $queryData = http_build_query($queryData, '', '&');
         } elseif (($queryData !== null) && !is_string($queryData)) {
@@ -105,12 +136,11 @@ class Wiki
         if (!$queryData) {
             $queryData = '';
         }
-        echo($page);
 
         if (!$page) {
             return $this->getBaseUrl() . $queryData;
         } else {
-            return $this->getBaseUrl() .'wiki' . implode('/', array_map('rawurlencode', explode('/', $page))) . $queryData;
+            return $this->getBaseUrl() .'wiki?' . $queryData;
         }
     }
 
