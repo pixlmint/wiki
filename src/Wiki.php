@@ -104,7 +104,22 @@ class Wiki
             return '';
         }
 
-        return $this->mdParser->parse($page['raw_content']);
+        $content = $this->prepareFileContent($page['raw_content']);
+
+        return $this->mdParser->parse($content);
+    }
+
+    /**
+     * @param string $rawContent
+     *
+     * @return mixed
+     */
+    public function prepareFileContent(string $rawContent)
+    {
+        // remove meta header
+        $metaHeaderPattern = "/^(?:\xEF\xBB\xBF)?(\/(\*)|---)[[:blank:]]*(?:\r)?\n"
+            . "(?:(.*?)(?:\r)?\n)?(?(2)\*\/|---)[[:blank:]]*(?:(?:\r)?\n|$)/s";
+        return preg_replace($metaHeaderPattern, '', $rawContent, 1);
     }
 
     public function getPageUrl($page, $queryData = null, $dropIndex = true)
@@ -140,7 +155,7 @@ class Wiki
         if (!$page) {
             return $this->getBaseUrl() . $queryData;
         } else {
-            return $this->getBaseUrl() .'wiki?' . $queryData;
+            return $this->getBaseUrl() . 'wiki?' . $queryData;
         }
     }
 
@@ -231,7 +246,8 @@ class Wiki
                 'date_formatted' => &$meta['date_formatted'],
                 'hidden' => ($meta['hidden'] || preg_match('/(?:^|\/)_/', $id)),
                 'raw_content' => &$rawContent,
-                'meta' => &$meta
+                'meta' => &$meta,
+                'file' => $file,
             );
 
             unset($rawContent, $meta);

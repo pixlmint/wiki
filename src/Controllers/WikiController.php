@@ -16,6 +16,10 @@ class WikiController extends AbstractController
             header('HTTP/1.1 404');
             die();
         }
-        return $this->wiki->renderPage($page);
+        $content = $this->wiki->renderPage($page);
+        $ret = ['content' => base64_encode($content)];
+        $ret = array_merge($ret, $page);
+
+        return json_encode($ret);
     }
 }
