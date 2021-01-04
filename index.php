@@ -62,6 +62,9 @@ function getContent($route)
 }
 
 $route = getRoute($path);
+if (!$route) {
+    $route = getRoute('/');
+}
 $content = getContent($route);
 if ($content) {
     echo $content;

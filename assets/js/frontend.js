@@ -1,9 +1,9 @@
 const $ = require('jquery');
-import {decode} from 'js-base64';
+import {decode, encode} from 'js-base64';
 
 function requestPage(event) {
     event.preventDefault()
-    app.loadPage(event.target.getAttribute('href'))
+    app.loadPage(event.target.getAttribute('page'))
 
     const links = document.querySelectorAll('#nav a')
     for (let i = 0; i < links.length; i++) {
@@ -28,14 +28,14 @@ class App {
         history.pushState({}, '', page)
 
         if (!(page in this.loadedPages)) {
-            fetch(page)
-                .then((response) => response.text())
+            fetch('/wiki?p=' + page)
+                .then(response => response.text())
                 .then(function (data) {
                     try {
                         data = JSON.parse(data)
                     } catch (e) {
                         console.log(e)
-                        data = {title: '500', content: 'There was an error'}
+                        data = {title: '500', content: encode('There was an error')}
                     }
                     if (data.description === '') {
                         data.description = 'Welcome to my personal wiki'
@@ -117,8 +117,12 @@ function removeLoadingIcon(element) {
 }
 
 const app = new App()
+let startPage = location.pathname
+if (location.pathname === '/') {
+    startPage = '/index';
+}
 app.loadNav()
-app.loadPage(location.pathname)
+app.loadPage(startPage)
 
 window.onscroll = function (event) {
     getHeadingsInView()

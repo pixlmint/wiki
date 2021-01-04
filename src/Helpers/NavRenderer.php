@@ -191,7 +191,7 @@ class NavRenderer
 //            echo($url);
             if ($url) {
                 $name = !empty($page['title']) ? $page['title'] : $pageID;
-                $item = "<a href=\"$url\">$name</a>";
+                $item = "<a page='${pageID}' href=\"$url\">$name</a>";
             } else {
                 $item = "<span>$pageID</span>";
             }

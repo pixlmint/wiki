@@ -10,7 +10,7 @@ class WikiController extends AbstractController
 {
     public function loadEntry()
     {
-        $url = 'http://localhost:90' . $_SERVER['REQUEST_URI'];
+        $url = $_REQUEST['p'];
         $page = $this->wiki->getPage($url);
         if (is_bool($page)) {
             header('HTTP/1.1 404');

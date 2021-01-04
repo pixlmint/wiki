@@ -87,10 +87,10 @@ class Wiki
     {
         $pages = $this->getPages();
         foreach ($pages as $page) {
-            if (!isset($page['url'])) {
+            if (!isset($page['id'])) {
                 continue;
             }
-            if ($page['url'] === $url) {
+            if ($page['id'] === $url) {
                 return $page;
             }
         }
@@ -152,11 +152,7 @@ class Wiki
             $queryData = '';
         }
 
-        if (!$page) {
-            return $this->getBaseUrl() . $queryData;
-        } else {
-            return $this->getBaseUrl() . 'wiki?' . $queryData;
-        }
+        return $this->getBaseUrl() . 'wiki?' . $queryData;
     }
 
     public function getBaseUrl()
