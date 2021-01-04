@@ -95,6 +95,11 @@ class NavRenderer
     private function findChildPages(string $id, array &$parentPage, array $pages)
     {
         foreach ($pages as $childId => $page) {
+            if (isset($page['meta']['min_role'])) {
+                if (!$this->wiki->getUserHandler()->isGranted($page['meta']['min_role'])) {
+                    continue;
+                }
+            }
             if (self::isDirectChild($childId, $id)) {
                 $page = $this->findChildPages($childId, $page, $pages);
                 $parentPage['children'][$childId] = $page;
