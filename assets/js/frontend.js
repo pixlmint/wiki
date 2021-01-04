@@ -119,7 +119,7 @@ function removeLoadingIcon(element) {
 const app = new App()
 let startPage = location.pathname
 if (location.pathname === '/') {
-    startPage = '/index';
+    startPage = '/';
 }
 app.loadNav()
 app.loadPage(startPage)
