@@ -20,8 +20,16 @@ if (isset($_SERVER['REDIRECT_URL'])) {
 
 function endswith($string, $test)
 {
-    return substr($string, strlen($string) - strlen($test), strlen($string)) ===
-        $test;
+    $length = strlen($test);
+    if( !$length ) {
+        return true;
+    }
+    return substr( $string, -$length ) === $test;
+}
+
+function startsWith( $haystack, $needle ) {
+    $length = strlen( $needle );
+    return substr( $haystack, 0, $length ) === $needle;
 }
 
 if (endswith($path, '/') && $path !== '/') {

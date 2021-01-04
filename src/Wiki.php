@@ -217,6 +217,13 @@ class Wiki
                 continue;
             }
 
+            if (endswith($id, '/index')) {
+                $id = substr($id, 0, -6);
+            }
+            if (!$id) {
+                $id = '/';
+            }
+
             $url = $this->getPageUrl($id);
             $rawContent = $this->loadFileContent($file);
 
