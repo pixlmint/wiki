@@ -3,7 +3,7 @@ namespace Wiki\Helpers;
 
 class Request implements RequestInterface
 {
-    protected $requestMethod;
+    public $requestMethod;
 
     function __construct()
     {

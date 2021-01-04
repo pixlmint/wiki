@@ -18,7 +18,7 @@
     }
 </style>
 <?php
-$contentDir = $_SERVER['DOCUMENT_ROOT'] . '/pico';
+$contentDir = $_SERVER['DOCUMENT_ROOT'];
 
 function actions($actions) {
     echo('<details><summary>···</summary><ul>');

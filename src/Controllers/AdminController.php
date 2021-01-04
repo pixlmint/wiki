@@ -3,12 +3,13 @@
 namespace Wiki\Controllers;
 
 use DateTime;
+use Wiki\Wiki;
 
 class AdminController extends AbstractController
 {
-    public function __construct()
+    public function __construct(Wiki $wiki)
     {
-        parent::__construct();
+        parent::__construct($wiki);
         if (!$this->isGranted('Editor')) {
             header('Http/1.1 401');
             echo 'You are not allowed to view this part of the page. <a href="/">Return</a>';
@@ -123,6 +124,9 @@ class AdminController extends AbstractController
         }
 
         if ($request->requestMethod === 'POST') {
+            if (!is_file($_REQUEST['fulldir'])) {
+                echo('this is not a directory');
+            }
             file_put_contents($_REQUEST['fulldir'], $_REQUEST['content']);
             header('content-type: application/json');
             return json_encode(['message' => 'successfully saved content']);
