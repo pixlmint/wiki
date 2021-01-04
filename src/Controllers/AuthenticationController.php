@@ -9,7 +9,7 @@ class AuthenticationController extends AbstractController
         if (strtolower($request->requestMethod) === 'post') {
             $isValid = false;
             $foundUser = null;
-            foreach ($this->userHandler->getUsers() as $user) {
+            foreach ($this->wiki->userHandler->getUsers() as $user) {
                 if (
                     $user['username'] === $_REQUEST['username'] &&
                     password_verify($_REQUEST['password'], $user['password'])

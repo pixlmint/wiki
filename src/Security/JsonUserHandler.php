@@ -7,9 +7,9 @@ class JsonUserHandler implements UserHandlerInterface
 {
     public function __construct()
     {
-        // if (!isset($_SESSION['user'])) {
-        //     $_SESSION['user'] = ['username' => 'Guest', 'password' => null, 'role' => 'Guest'];
-        // }
+         if (!isset($_SESSION['user'])) {
+             $_SESSION['user'] = ['username' => 'Guest', 'password' => null, 'role' => 'Guest'];
+         }
     }
 
     public function getCurrentUser()
