@@ -68,9 +68,10 @@ class AuthenticationController extends AbstractController
             if (!$userExists) {
                 array_push($existingUsers, [
                     'username' => $_REQUEST['username'],
-                    'password' => password_hash($_REQUEST['password']),
+                    'password' => password_hash($_REQUEST['password'], PASSWORD_DEFAULT),
                     'role' => 'Reader',
                 ]);
+                print_r($existingUsers);
                 file_put_contents(
                     $request->documentRoot . 'users.json',
                     json_encode($existingUsers)
