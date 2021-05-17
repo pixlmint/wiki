@@ -2,15 +2,16 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Wiki\Helpers\Request;
-use Wiki\Security\JsonUserHandler;
-use Wiki\Wiki;
+use Nacho\Helpers\Request;
+use Nacho\Security\JsonUserHandler;
+use Nacho\Helpers\Route;
+use Nacho\Nacho;
 
 session_start();
 session_regenerate_id();
 
-define('VIEWS_DIR', $_SERVER['DOCUMENT_ROOT'] . '/src/Views');
 define('FILE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/users.json');
+define('CONTENT_DIR', $_SERVER['DOCUMENT_ROOT'] . '/content');
 
 if (isset($_SERVER['REDIRECT_URL'])) {
     $path = $_SERVER['REDIRECT_URL'];
@@ -21,15 +22,16 @@ if (isset($_SERVER['REDIRECT_URL'])) {
 function endswith($string, $test)
 {
     $length = strlen($test);
-    if( !$length ) {
+    if (!$length) {
         return true;
     }
-    return substr( $string, -$length ) === $test;
+    return substr($string, -$length) === $test;
 }
 
-function startsWith( $haystack, $needle ) {
-    $length = strlen( $needle );
-    return substr( $haystack, 0, $length ) === $needle;
+function startsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+    return substr($haystack, 0, $length) === $needle;
 }
 
 if (endswith($path, '/') && $path !== '/') {
@@ -42,30 +44,36 @@ function getRoute($path)
         file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/config/routes.json'),
         true
     );
+    if ($path !== '/') {
+        $path = substr($path, 1, strlen($path));
+    }
     foreach ($routes as $route) {
-        if ($route['route'] === $path) {
-            return $route;
+        $tmpRoute = new Route($route);
+        if ($tmpRoute->match($path)) {
+            return $tmpRoute;
         }
     }
+    return null;
 }
 
 function getContent($route)
 {
-    $request = new Request();
+    $request = new Request($route);
     $userHandler = new JsonUserHandler();
-    $wiki = new Wiki($request, $userHandler);
-    if (isset($route['min_role']) && !$wiki->isGranted($route['min_role'])) {
-        header('Http/1.1 401');
-        return 'You are not allowed to view this page';
+    $nacho = new Nacho($request, $userHandler);
+    if (!$nacho->isGranted($route->getMinRole())) {
+        header('Http/1.1 302');
+        header('Location: /login?required_page=' . $_SERVER['REDIRECT_URL']);
+        die();
     }
-    $controllerDir = $route['controller'];
-    $cnt = new $controllerDir($wiki);
-    $function = $route['function'];
+    $controllerDir = $route->getController();
+    $cnt = new $controllerDir($nacho);
+    $function = $route->getFunction();
     if (!method_exists($cnt, $function)) {
         header('Http/1.1 404');
         return "${function} does not exist in ${controllerDir}";
     }
-    $request = new Request();
+    $request = new Request($route);
     return $cnt->$function($request);
 }
 

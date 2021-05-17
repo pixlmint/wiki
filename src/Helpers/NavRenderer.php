@@ -2,7 +2,7 @@
 
 namespace Wiki\Helpers;
 
-use Wiki\Wiki;
+use Nacho\Nacho;
 
 class NavRenderer
 {
@@ -13,7 +13,7 @@ class NavRenderer
      *
      * @param Wiki $wiki
      */
-    public function __construct(Wiki $wiki)
+    public function __construct(Nacho $wiki)
     {
         $this->wiki = $wiki;
     }
@@ -92,7 +92,7 @@ class NavRenderer
         return count(explode('/', $path)) - 1 === count(explode('/', $parentPath));
     }
 
-    private function findChildPages(string $id, array &$parentPage, array $pages)
+    public function findChildPages(string $id, array &$parentPage, array $pages)
     {
         foreach ($pages as $childId => $page) {
             if (isset($page['meta']['min_role'])) {

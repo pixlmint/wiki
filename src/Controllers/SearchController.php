@@ -3,6 +3,7 @@
 namespace Wiki\Controllers;
 
 use Wiki\Helpers\CustomPico;
+use Nacho\Controllers\AbstractController;
 
 class SearchController extends AbstractController
 {

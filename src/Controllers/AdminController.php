@@ -3,11 +3,13 @@
 namespace Wiki\Controllers;
 
 use DateTime;
-use Wiki\Wiki;
+use Nacho\Nacho;
+use Nacho\Controllers\AbstractController;
+use Wiki\Helpers\NavRenderer;
 
 class AdminController extends AbstractController
 {
-    public function __construct(Wiki $wiki)
+    public function __construct(Nacho $wiki)
     {
         parent::__construct($wiki);
         if (!$this->isGranted('Editor')) {
@@ -19,12 +21,7 @@ class AdminController extends AbstractController
 
     function index($request)
     {
-        return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => 'Please choose a file to edit',
-            'js' => $this->render(VIEWS_DIR . '/includes/admin/js.php'),
-            'nav' => $this->render(VIEWS_DIR . '/includes/admin/nav.php'),
-            'css' => $this->render(VIEWS_DIR . '/includes/admin/css.php'),
-        ]);
+        return $this->render('admin/admin.twig');
     }
 
     public function delete($request)
@@ -83,19 +80,13 @@ class AdminController extends AbstractController
                 "\ndate: " .
                 $date->format('Y-m-d H:i') .
                 "\n---";
-            $file = $_REQUEST['parent'] . '/' . $_REQUEST['filename'];
+            $file = CONTENT_DIR . '/' . $_REQUEST['filename'];
             $parentDir = explode('/', $_REQUEST['filename']);
             array_pop($parentDir);
-            $createDirs = '';
+            $createdDirs = '';
             foreach ($parentDir as $newDir) {
-                if (
-                    !is_dir(
-                        $_REQUEST['parent'] . '/' . $createDirs . '/' . $newDir
-                    )
-                ) {
-                    mkdir(
-                        $_REQUEST['parent'] . '/' . $createdDirs . '/' . $newDir
-                    );
+                if (!is_dir(CONTENT_DIR . '/' . $createdDirs . '/' . $newDir)) {
+                    mkdir(CONTENT_DIR . '/' . $createdDirs . '/' . $newDir);
                 }
                 if ($createdDirs) {
                     $createdDirs .= '/';
@@ -103,15 +94,11 @@ class AdminController extends AbstractController
                 $createdDirs .= $newDir;
             }
             file_put_contents($file, $content);
-            header('Location: /admin/edit&fulldir=' . $file);
+            header('Location: /admin/edit?fulldir=' . $file);
             header('HTTP/1.1 302');
         }
 
-        return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => $this->render(
-                VIEWS_DIR . '/includes/admin/add/article.php'
-            ),
-        ]);
+        return $this->render('admin/add.twig');
     }
 
     function edit($request)
@@ -125,24 +112,31 @@ class AdminController extends AbstractController
 
         if ($request->requestMethod === 'POST') {
             if (!is_file($_REQUEST['fulldir'])) {
-                echo('this is not a directory');
+                echo ('this is not a directory');
             }
             file_put_contents($_REQUEST['fulldir'], $_REQUEST['content']);
             header('content-type: application/json');
             return json_encode(['message' => 'successfully saved content']);
         }
 
-        return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => $this->render(
-                VIEWS_DIR . '/includes/admin/edit/article.php',
-                ['url' => $url]
-            ),
-            'js' => $this->render(VIEWS_DIR . '/includes/admin/js.php', [
-                'url' => $url,
-            ]),
-            'url' => $url,
-            'nav' => $this->render(VIEWS_DIR . '/includes/admin/nav.php'),
-            'css' => $this->render(VIEWS_DIR . '/includes/admin/css.php'),
+        $content = file_get_contents($url);
+
+        return $this->render('admin/edit.twig', [
+            'content' => base64_encode($content),
+            'fulldir' => $url,
         ]);
+    }
+
+    protected function render(string $file, array $args = [])
+    {
+        $nav = new NavRenderer($this->nacho);
+        $tmp = $this->nacho->getPages();
+        $page = $this->nacho->getPage('/');
+        $pages = ['/' => $nav->findChildPages('/', $page, $tmp)];
+
+        $args['pages'] = $pages;
+        $args['referer'] = $_SERVER['HTTP_REFERER'];
+
+        return parent::render($file, $args);
     }
 }

@@ -1,1 +1,0 @@
-<script src="/dist/frontend.bundle.js"></script>

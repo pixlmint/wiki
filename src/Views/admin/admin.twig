@@ -1,0 +1,84 @@
+{% extends 'base.twig' %}
+
+{% block css %}
+	{{ parent() }}
+	<style>
+		.CodeMirror {
+			height: 70vh !important;
+		}
+
+		#toggle-nav-button {
+			display: block;
+			position: fixed;
+			top: 0;
+			right: 0;
+			z-index: 5;
+		}
+
+		#last-saved {
+			display: block;
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			color: green;
+		}
+
+		@media screen and(max-width: 500px) {
+			article {
+				padding: 0;
+			}
+		}
+	</style>
+{% endblock %}
+
+{% block content %}
+	Please choose a page to edit
+{% endblock %}
+
+{% block nav %}
+	<style>
+		nav summary::marker {
+			display: none;
+			color: transparent;
+		}
+
+		nav details ul {
+			display: block;
+			position: absolute;
+			background-color: white;
+			border-radius: 2px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			padding: 5px;
+		}
+
+		summary:hover {
+			cursor: pointer;
+		}
+	</style>
+
+	{% macro actions(page) %}
+		<details>
+			<summary>...</summary>
+			<ul>
+				<li><a href="#">Delete</a></li>
+				<li><a href="/admin/edit?fulldir={{ page.file }}">Edit</a></li>
+			</ul>
+		</details>
+	{% endmacro %}
+
+	{% macro nav(arrPages, depth = 0, parent = '/') %}
+		{% for page in arrPages %}
+			<li style="display: flex; margin-left: {{ depth * 20 }}px">
+				<b style="display: block" title="{{ page.id }}">{{ page.id|trim(parent, 'left') }}</b>
+				{{ _self.actions(page) }}
+				{% if page.children is defined %}
+					{{ _self.nav(page.children, depth + loop.index, page.id) }}
+				{% endif %}
+			</li>
+		{% endfor %}
+	{% endmacro %}
+
+	{{ _self.nav(pages) }}
+{% endblock %}
+
+

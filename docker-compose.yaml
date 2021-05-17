@@ -2,9 +2,8 @@ version: "3"
 
 services:
     pico:
-        build:
-            context: .
-            dockerfile: Dockerfile
+        image: christiannxtlvl/php-server:7.4
+        container_name: wiki
         ports:
             - '90:80'
         environment:

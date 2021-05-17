@@ -2,13 +2,14 @@
 namespace Wiki\Controllers;
 
 use Wiki\Helpers\NavRenderer;
-use Wiki\Wiki;
+use Nacho\Nacho;
+use Nacho\Controllers\AbstractController;
 
 class HomeController extends AbstractController
 {
     private $navRenderer;
 
-    public function __construct(Wiki $wiki)
+    public function __construct(Nacho $wiki)
     {
         parent::__construct($wiki);
         $this->navRenderer = new NavRenderer($wiki);
@@ -16,10 +17,7 @@ class HomeController extends AbstractController
 
     public function index($request)
     {
-        return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => $this->render(VIEWS_DIR . '/includes/home/article.php'),
-            'footer' => $this->render(VIEWS_DIR . '/includes/home/footer.php'),
-            'js' => $this->render(VIEWS_DIR . '/includes/home/js.php'),
+        return $this->render('wiki.twig', [
         ]);
     }
 

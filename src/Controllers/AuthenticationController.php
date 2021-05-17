@@ -2,6 +2,8 @@
 
 namespace Wiki\Controllers;
 
+use Nacho\Controllers\AbstractController;
+
 class AuthenticationController extends AbstractController
 {
     public function login($request)
@@ -9,7 +11,7 @@ class AuthenticationController extends AbstractController
         if (strtolower($request->requestMethod) === 'post') {
             $isValid = false;
             $foundUser = null;
-            foreach ($this->wiki->userHandler->getUsers() as $user) {
+            foreach ($this->nacho->userHandler->getUsers() as $user) {
                 if (
                     $user['username'] === $_REQUEST['username'] &&
                     password_verify($_REQUEST['password'], $user['password'])
@@ -34,11 +36,9 @@ class AuthenticationController extends AbstractController
             }
         }
 
-        return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => $this->render(
-                VIEWS_DIR . '/includes/security/login/article.php',
-                ['message' => $message]
-            ),
+        return $this->render('security/login.twig', [
+            'page' => $_REQUEST['page'],
+            'message' => $message,
         ]);
     }
 
