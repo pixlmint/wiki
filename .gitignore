@@ -2,3 +2,5 @@ node_modules
 vendor
 /.idea
 /.vscode
+content
+users.json
