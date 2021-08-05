@@ -40,6 +40,18 @@
         "function": "delete"
     },
     {
+        "route": "/admin/users/list",
+        "min_role": "Editor",
+        "controller": "Wiki\\Controllers\\UsersController",
+        "function": "list"
+    },
+    {
+        "route": "/admin/users/add",
+        "min_role": "Editor",
+        "controller": "Wiki\\Controllers\\UsersController",
+        "function": "add"
+    },
+    {
         "route": "/register",
         "min_role": "Editor",
         "controller": "Wiki\\Controllers\\AuthenticationController",
