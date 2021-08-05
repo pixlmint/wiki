@@ -51,7 +51,6 @@ class AdminController extends AbstractController
                 if ($sub !== '.' && $sub !== '..') {
                     $newDir = $dir . '/' . $sub;
                     if (is_file($newDir)) {
-                        echo "deleting ${dir}<br>";
                         unlink($newDir);
                     } elseif (is_dir($newDir)) {
                         rmdirRecursive($newDir);
@@ -62,7 +61,6 @@ class AdminController extends AbstractController
         }
 
         if (is_file($file)) {
-            echo "deleting ${file}<br>";
             unlink($file);
         } elseif (is_dir($file)) {
             rmdirRecursive($file);
