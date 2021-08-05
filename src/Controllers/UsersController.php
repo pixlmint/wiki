@@ -7,6 +7,13 @@ use Nacho\Controllers\AbstractController;
 
 class UsersController extends AbstractController
 {
+	public function index()
+	{
+		header('HTTP/1.0 302');
+		header('Location: /admin/users/list');
+		return '';
+	}
+
     public function list()
     {
         $usersList = $this->nacho->userHandler->getUsers();
