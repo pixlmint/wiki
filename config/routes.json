@@ -68,6 +68,11 @@
         "function": "logout"
     },
     {
+        "route": "/change-password",
+        "controller": "Wiki\\Controllers\\AuthenticationController",
+        "function": "changePassword"
+    },
+    {
         "route": "/search",
         "min_role": "Editor",
         "controller": "Wiki\\Controllers\\AdminController",

@@ -48,4 +48,32 @@ class AuthenticationController extends AbstractController
         header('HTTP/1.1 302');
         header('Location: /');
     }
+
+    public function changePassword($request)
+    {
+        $message = '';
+        if (strtolower($request->requestMethod) === 'post') {
+            if ($_REQUEST['new'] !== $_REQUEST['repeat']) {
+                $message = 'The Passwords don\'t match';
+            }
+            try {
+                $this->nacho->userHandler->changePassword(
+                    $_REQUEST['current'],
+                    $_REQUEST['new']
+                );
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+            }
+            if ($message === '') {
+                if (!isset($_REQUEST['required_page'])) {
+                    $_REQUEST['required_page'] = '/';
+                }
+                header('HTTP/1.1 302');
+                header('Location: ' . $_REQUEST['required_page']);
+            }
+        }
+        return $this->render('security/change_password.twig', [
+            'message' => $message,
+        ]);
+    }
 }
