@@ -28,7 +28,7 @@ class AuthenticationController extends AbstractController
             } else {
                 session_start();
                 $_SESSION['user'] = $foundUser;
-                if (!isset($_REQUEST['required_page'])) {
+                if (!isset($_REQUEST['required_page']) || (isset($_REQUEST['required_page']) && ($_REQUEST['required_page'] === '/login') || !$_REQUEST['required_page'])) {
                     $_REQUEST['required_page'] = '/';
                 }
                 header('HTTP/1.1 302');
