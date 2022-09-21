@@ -18,6 +18,7 @@ if (isset($_SERVER['REDIRECT_URL'])) {
 } else {
     $path = $_SERVER['REQUEST_URI'];
 }
+$path = explode('?', $path)[0];
 
 function endswith($string, $test)
 {

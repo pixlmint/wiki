@@ -71,9 +71,8 @@ class AuthenticationController extends AbstractController
                     'password' => password_hash($_REQUEST['password'], PASSWORD_DEFAULT),
                     'role' => 'Reader',
                 ]);
-                print_r($existingUsers);
                 file_put_contents(
-                    $request->documentRoot . 'users.json',
+                    $request->documentRoot . '/users.json',
                     json_encode($existingUsers)
                 );
 
@@ -83,10 +82,8 @@ class AuthenticationController extends AbstractController
             }
         }
 
-        return $this->render(VIEWS_DIR . '/base.php', [
-            'article' => $this->render(
-                VIEWS_DIR . '/includes/security/register/article.php'
-            ),
+        return $this->render('security/register.twig', [
+            'message' => $message ?? '',
         ]);
     }
 }

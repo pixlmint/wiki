@@ -2,7 +2,7 @@ version: "3"
 
 services:
     pico:
-        image: christiannxtlvl/php-server:7.4
+        image: christiangroeber/php-server:7.4.2
         container_name: wiki
         ports:
             - '90:80'
