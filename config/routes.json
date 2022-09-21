@@ -40,6 +40,24 @@
         "function": "delete"
     },
     {
+        "route": "/admin/users", 
+        "min_role": "Editor",
+        "controller": "Wiki\\Controllers\\UsersController",
+        "function": "index"
+    },
+    {
+        "route": "/admin/users/list",
+        "min_role": "Editor",
+        "controller": "Wiki\\Controllers\\UsersController",
+        "function": "list"
+    },
+    {
+        "route": "/admin/users/add",
+        "min_role": "Editor",
+        "controller": "Wiki\\Controllers\\UsersController",
+        "function": "add"
+    },
+    {
         "route": "/register",
         "min_role": "Editor",
         "controller": "Wiki\\Controllers\\AuthenticationController",
@@ -54,6 +72,11 @@
         "route": "/logout",
         "controller": "Wiki\\Controllers\\AuthenticationController",
         "function": "logout"
+    },
+    {
+        "route": "/change-password",
+        "controller": "Wiki\\Controllers\\AuthenticationController",
+        "function": "changePassword"
     },
     {
         "route": "/search",

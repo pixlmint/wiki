@@ -60,7 +60,7 @@
 		<details>
 			<summary>...</summary>
 			<ul>
-				<li><a href="#">Delete</a></li>
+				<li><a href="/admin/delete?file={{ page.file }}">Delete</a></li>
 				<li><a href="/admin/edit?fulldir={{ page.file }}">Edit</a></li>
 			</ul>
 		</details>
@@ -77,6 +77,8 @@
 			</li>
 		{% endfor %}
 	{% endmacro %}
+
+	<a href="/admin/add">Add</a>
 
 	{{ _self.nav(pages) }}
 {% endblock %}

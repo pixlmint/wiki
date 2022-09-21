@@ -28,7 +28,7 @@ class AuthenticationController extends AbstractController
             } else {
                 session_start();
                 $_SESSION['user'] = $foundUser;
-                if (!isset($_REQUEST['required_page'])) {
+                if (!isset($_REQUEST['required_page']) || (isset($_REQUEST['required_page']) && ($_REQUEST['required_page'] === '/login') || !$_REQUEST['required_page'])) {
                     $_REQUEST['required_page'] = '/';
                 }
                 header('HTTP/1.1 302');
@@ -49,41 +49,31 @@ class AuthenticationController extends AbstractController
         header('Location: /');
     }
 
-    public function register($request)
+    public function changePassword($request)
     {
+        $message = '';
         if (strtolower($request->requestMethod) === 'post') {
-            $existingUsers = json_decode(
-                file_get_contents($request->documentRoot . '/users.json'),
-                true
-            );
-            $userExists = false;
-            foreach ($existingUsers as $user) {
-                if ($user['username'] === $_REQUEST['username']) {
-                    header('HTTP/1.0 409');
-                    $message = 'This username is already taken';
-                    $userExists = true;
-                    break;
-                }
+            if ($_REQUEST['new'] !== $_REQUEST['repeat']) {
+                $message = 'The Passwords don\'t match';
             }
-            if (!$userExists) {
-                array_push($existingUsers, [
-                    'username' => $_REQUEST['username'],
-                    'password' => password_hash($_REQUEST['password'], PASSWORD_DEFAULT),
-                    'role' => 'Reader',
-                ]);
-                file_put_contents(
-                    $request->documentRoot . '/users.json',
-                    json_encode($existingUsers)
+            try {
+                $this->nacho->userHandler->changePassword(
+                    $_REQUEST['current'],
+                    $_REQUEST['new']
                 );
-
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+            }
+            if ($message === '') {
+                if (!isset($_REQUEST['required_page'])) {
+                    $_REQUEST['required_page'] = '/';
+                }
                 header('HTTP/1.1 302');
-                header('Location: /');
-                return '';
+                header('Location: ' . $_REQUEST['required_page']);
             }
         }
-
-        return $this->render('security/register.twig', [
-            'message' => $message ?? '',
+        return $this->render('security/change_password.twig', [
+            'message' => $message,
         ]);
     }
 }

@@ -1,0 +1,29 @@
+{% extends 'base.twig' %}
+
+{% block title %}
+	Add User
+{% endblock %}
+
+{% block content %}
+	<form name="add" method="POST" action="/admin/users/add">
+		<h1>Add User</h1>
+		{{ message }}
+		<div>
+			<input type="text" autofocus name="username" placeholder="Username">
+		</div>
+		<div>
+			<input type="text" name="password" placeholder="Password">
+		</div>
+		<div>
+			<select name="role">
+				<option value="0">Select a Role</option>
+				<option value="Reader" name="Reader">Reader</option>
+				<option value="Editor" name="Editor">Editor</option>
+			</select>
+		</div>
+		{% if page is defined %}
+			<input type="hidden" name="required_page" value="{{ page }}">
+		{% endif %}
+		<button type="submit">Submit</button>
+	</form>
+{% endblock %}
