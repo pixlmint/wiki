@@ -10,8 +10,9 @@
 
 <script>
 import axios from 'axios';
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
     methods: {
         generateBackup: function () {
             axios
@@ -27,5 +28,5 @@ export default {
             this.$router.push('/');
         },
     }
-}
+})
 </script>

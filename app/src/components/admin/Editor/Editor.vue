@@ -1,16 +1,14 @@
 <template>
   <div class="main-content">
     <EditEntry :entry="entry"></EditEntry>
-    <ImageEditor :entry="entry"></ImageEditor>
-    <ImageList :entry="entry"></ImageList>
   </div>
 </template>
 
 <script>
 import EditEntry from "./EditEntry.vue";
-import ImageEditor from "./Images/ImageEditor.vue";
-import ImageList from "./Images/ImageList.vue";
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   props: ["entry"],
   data: function () {
     return {
@@ -30,8 +28,6 @@ export default {
   },
   components: {
     EditEntry,
-    ImageEditor,
-    ImageList,
   },
-};
+})
 </script>

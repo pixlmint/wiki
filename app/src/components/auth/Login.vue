@@ -16,32 +16,36 @@
     </form>
   </div>
 </template>
+
 <script>
-export default {
+import {defineComponent} from "vue";
+import {useAuthStore} from "@/src/stores/auth";
+import {useMainStore} from "@/src/stores/main";
+import {useRouter} from "vue-router";
+
+export default defineComponent({
   data: () => {
     return {
       username: "",
       password: "",
-      title: "Login",
+      router: useRouter(),
     };
   },
   created() {
-    this.$store.dispatch('setTitle', this.title);
+    useMainStore().setTitle('Login');
   },
   methods: {
     login() {
-      this.$store
-        .dispatch("login", {
-          username: this.username,
-          password: this.password,
-        })
-        .then(() => {
-          this.$router.push("/");
-        });
+      useAuthStore().login({
+        username: this.username,
+        password: this.password,
+      }).then(() => {
+        this.router.push('/');
+      })
     },
     auth() {
-      this.$router.push("/auth");
+      this.router.push('/auth')
     }
   },
-};
+})
 </script>

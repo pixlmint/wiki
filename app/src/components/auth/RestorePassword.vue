@@ -23,7 +23,12 @@
 </template>
 
 <script>
-export default {
+import {defineComponent} from "vue";
+import {useMainStore} from "@/src/stores/main";
+import {useAuthStore} from "@/src/stores/auth";
+import {useRouter} from "vue-router";
+
+export default defineComponent({
   data: () => {
     return {
       username: "",
@@ -32,21 +37,21 @@ export default {
     };
   },  
   created() {
-    this.$store.dispatch('toolBar', {pateTitle: 'Restore password · 2022'});
+    useMainStore().setTitle('Restore Password - Wiki')
   },
   methods: {
     submit() {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      this.$store.dispatch("restorePassword", {
+      useAuthStore().restorePassword({
         username: this.username,
         password1: this.password1,
         password2: this.password2,
         token: urlParams.get('token'),
       }).then(() => {
-        this.$router.push('/');
+        useRouter().push('/');
       });
     },
   },
-};
+})
 </script>

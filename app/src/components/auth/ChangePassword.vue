@@ -32,8 +32,9 @@
 <script>
 import {useAuthStore} from "../../stores/auth"
 import {useRouter} from 'vue-router'
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   data: () => {
     return {
       username: "",
@@ -56,5 +57,5 @@ export default {
       });
     },
   },
-};
+})
 </script>

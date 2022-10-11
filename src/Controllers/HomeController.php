@@ -17,7 +17,7 @@ class HomeController extends AbstractController
 
     public function index($request)
     {
-        return file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/index.html');
+        return file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/dist/index.html');
     }
 
     public function loadNav($request)

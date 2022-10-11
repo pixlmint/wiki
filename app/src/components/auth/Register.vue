@@ -26,7 +26,9 @@
 </template>
 
 <script>
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   data: () => {
     return {
       username: "",
@@ -40,5 +42,5 @@ export default {
       console.log(this.username, this.email, this.password1, this.password2);
     },
   },
-};
+})
 </script>

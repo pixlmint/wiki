@@ -17,7 +17,9 @@
 </template>
 
 <script>
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   props: ["entry"],
   data: function () {
     return {
@@ -69,5 +71,5 @@ export default {
       this.$router.push('/');
     }
   },
-};
+})
 </script>

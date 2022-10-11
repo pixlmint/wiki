@@ -1,18 +1,22 @@
 <template>
-    <div>
-        Redirecting...
-    </div>
+  <div>
+    Redirecting...
+  </div>
 </template>
 
 <script>
-export default {
-    created() {
-        const token = this.$store.getters.token;
-        if (token === null) {
-            this.$router.push('/auth/login');
-        } else {
-            this.$router.push('/');
-        }
+import {defineComponent} from "vue";
+import {useRouter} from "vue-router";
+import {useAuthStore} from "@/src/stores/auth";
+
+export default defineComponent({
+  created() {
+    const token = useAuthStore().token;
+    if (token === null) {
+      useRouter().push('/auth/login');
+    } else {
+      useRouter().push('/');
     }
-}
+  }
+})
 </script>

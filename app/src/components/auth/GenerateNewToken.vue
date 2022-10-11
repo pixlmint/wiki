@@ -14,7 +14,10 @@
 </template>
 
 <script>
-export default {
+import {defineComponent} from "vue";
+import {useAuthStore} from "@/src/stores/auth";
+
+export default defineComponent({
   data: () => {
     return {
       username: "",
@@ -22,11 +25,12 @@ export default {
   },
   methods: {
     submit() {
-      this.$store.dispatch("generateNewToken", {
+      const authStore = useAuthStore();
+      authStore.generateNewToken({
         username: this.username,
-        token: this.$store.getters.getToken,
-      });
+        token: authStore.token,
+      })
     },
   },
-};
+})
 </script>

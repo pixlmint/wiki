@@ -13,56 +13,58 @@
 import Loading from './src/components/Loading';
 import SpecificEntryPopup from './src/components/Modals/SpecificEntryPopup';
 import axios from 'axios';
+import {defineComponent} from "vue";
+import {useMainStore} from "@/src/stores/main";
+import {useAuthStore} from "@/src/stores/auth";
+import {useRouter} from "vue-router";
 
-export default {
+export default defineComponent({
   name: "App",
   components: {
     Loading,
     SpecificEntryPopup,
   },
+  data: () => {
+    return {
+      mainStore: useMainStore(),
+    }
+  },
   computed: {
     isLoading: function () {
-      console.log('hello world');
-      return this.$store.getters.loading;
+      return this.mainStore.loading;
     },
     pageTitle() {
-      return this.$store.getters.pageTitle;
+      return this.mainStore.pageTitle;
     },
   },
   created() {
-    this.$store.dispatch("getToken");
-    this.$store.dispatch("getEntries");
+    useAuthStore().getToken();
     this.axios.interceptors.request.use(
       (config) => {
-        this.$store.commit("LOADING", true);
+        this.mainStore.setIsLoading(true);
         return config;
       },
       (error) => {
-        this.$store.commit("LOADING", false);
+        this.mainStore.setIsLoading(false);
         return Promise.reject(error);
       }
     );
     this.axios.interceptors.response.use(
       (response) => {
-        this.$store.commit("LOADING", false);
+        this.mainStore.setIsLoading(true);
         return response;
       },
       (error) => {
-        this.$store.commit("LOADING", false);
+        this.mainStore.setIsLoading(false);
         return Promise.reject(error);
       }
     );
     axios.get('/api/auth/admin-created').then((response) => {
       const adminCreated = response.data.adminCreated;
       if (!adminCreated) {
-        this.$router.push('/auth/create-admin');
+        useRouter().push('/auth/create-admin');
       }
     })
   },
-  methods: {
-    reload() {
-      this.$store.dispatch("getEntries");
-    },
-  },
-};
+})
 </script>

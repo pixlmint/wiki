@@ -1,7 +1,5 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-
-Vue.use(VueRouter);
+import {RouteRecordRaw, createRouter, createWebHashHistory} from 'vue-router';
 
 import MonthList from "./components/home/MonthList";
 import Login from "./components/auth/Login";
@@ -86,7 +84,9 @@ const routes = [
     }
 ];
 
-export const router = new VueRouter({
-    mode: 'history',
+const router = createRouter({
+    history: createWebHashHistory(),
     routes,
 })
+
+export default router;

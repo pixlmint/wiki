@@ -10,8 +10,9 @@
 <script>
 import Month from "./Month";
 import AdminBar from "../admin/AdminBar";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: "MonthList",
   components: {
     Month,
@@ -33,5 +34,5 @@ export default {
       return this.$store.getters.token !== null;
     },
   },
-};
+})
 </script>

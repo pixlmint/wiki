@@ -6,104 +6,115 @@ interface State {
     token: string | null,
 }
 
-const mutations = {
-    UPDATE_TOKEN(state, payload) {
-        localStorage.setItem('token', payload);
-        state.token = payload;
-    },
+interface ChangePasswordForm {
+    username: string,
+    currentPassword: string,
+    newPassword1: string,
+    newPassword2: string,
 }
 
-const actions = {
-    register({commit}, payload) {
-        return axios({
-            method: 'POST',
-            url: '/api/auth/register',
-            data: queryFormatter(payload),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-        }).then((response) => {
-            commit('UPDATE_TOKEN', response.data.token);
-        });
-    },
-    changePassword(payload) {
-        return axios({
-            method: 'POST',
-            url: '/api/auth/change-password',
-            data: queryFormatter(payload),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-        }).then((response) => {
-            commit('UPDATE_TOKEN', response.data.token);
-        });
-    },
-    requestNewPassword({commit}, payload) {
-        return axios({
-            method: 'POST',
-            url: '/api/auth/request-new-password',
-            data: queryFormatter(payload),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-        });
-    },
-    restorePassword({commit}, payload) {
-        return axios({
-            method: 'POST',
-            url: '/api/auth/restore-password',
-            data: queryFormatter(payload),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-        }).then((response) => {
-            commit('UPDATE_TOKEN', response.data.token);
-        });
-    },
-    generateNewToken({commit}, payload) {
-        return axios({
-            method: 'POST',
-            url: '/api/auth/generate-new-token',
-            data: queryFormatter(payload),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-        }).then((response) => {
-            commit('UPDATE_TOKEN', response.data.token);
-        });
-    },
-    login({commit}, payload) {
-        return axios({
-            method: 'POST',
-            url: '/api/login',
-            data: queryFormatter(payload),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-        }).then((response) => {
-            commit('UPDATE_TOKEN', response.data.token);
-        });
-    },
-    getToken({commit}) {
-        const token = localStorage.getItem('token');
-        if (token) {
-            commit('UPDATE_TOKEN', token);
-        }
-    },
-    logout({commit}) {
-        commit('UPDATE_TOKEN', null);
-        localStorage.removeItem('token');
-    },
+interface RestorePasswordForm {
+    username: string,
+    newPassword1: string,
+    newPassword2: string,
+    token: string,
 }
 
-const getters = {
-    token: state => state.token,
+interface GenerateNewTokenForm {
+    username: string,
+    token: string,
+}
+
+interface LoginForm {
+    username: string,
+    password: string,
 }
 
 export const useAuthStore = defineStore('authStore', {
     state: (): State => ({
         token: null,
     }),
-    getters: getters,
-    actions: actions,
+    getters: {
+        token: (state) => state.token,
+    },
+    actions: {
+        changePassword(payload: ChangePasswordForm) {
+            return axios({
+                method: 'POST',
+                url: '/api/auth/change-password',
+                data: queryFormatter(payload),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            }).then((response) => {
+                this.$state.token = response.data.token;
+            });
+        },
+        requestNewPassword(username: string) {
+            return axios({
+                method: 'POST',
+                url: '/api/auth/request-new-password',
+                data: queryFormatter({username: username}),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            });
+        },
+        restorePassword(payload: RestorePasswordForm) {
+            return axios({
+                method: 'POST',
+                url: '/api/auth/restore-password',
+                data: queryFormatter(payload),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            }).then((response) => {
+                this.$state.token = response.data.token;
+            });
+        },
+        generateNewToken(payload: GenerateNewTokenForm) {
+            return axios({
+                method: 'POST',
+                url: '/api/auth/generate-new-token',
+                data: queryFormatter(payload),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            }).then((response) => {
+                this.$state.token = response.data.token;
+            });
+        },
+        login(loginForm: LoginForm) {
+            return axios({
+                method: 'POST',
+                url: '/api/login',
+                data: queryFormatter(loginForm),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            }).then((response) => {
+                this.$state.token = response.data.token;
+            });
+        },
+        getToken() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                this.$state.token = token;
+            }
+        },
+        logout() {
+            this.$state.token = null;
+            localStorage.removeItem('token');
+        },
+        createAdmin(userForm: LoginForm) {
+            return axios({
+                method: "POST",
+                url: '/api/auth/create-admin',
+                data: queryFormatter(userForm),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            })
+        },
+    },
 })

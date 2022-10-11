@@ -11,12 +11,13 @@
 
 <script>
 import Day from "./Day";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: "Month",
   props: ["month"],
   components: {
     Day,
   },
-};
+})
 </script>

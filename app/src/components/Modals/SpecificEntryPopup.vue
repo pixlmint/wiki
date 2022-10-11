@@ -18,8 +18,9 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   data: function () {
     return {
       dateEntry: moment().format("yyyy-MM-DD"),
@@ -53,5 +54,5 @@ export default {
         });
     },
   },
-};
+})
 </script>

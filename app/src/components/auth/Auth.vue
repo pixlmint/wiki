@@ -13,20 +13,20 @@
 </template>
 
 <script>
-export default {
-  data: function () {
-    return {
-      pageTitle: 'Auth',
-    }
-  },
+import {defineComponent} from "vue";
+import {useMainStore} from "@/src/stores/main";
+import {useAuthStore} from "@/src/stores/auth";
+import {useRouter} from "vue-router";
+
+export default defineComponent({
   created() {
-    this.$store.dispatch('setTitle', this.pageTitle);
+    useMainStore().setTitle('Auth');
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout");
-      this.$router.push("/");
+      useAuthStore().logout();
+      useRouter().push('/')
     }
   },
-};
+})
 </script>
