@@ -22,6 +22,7 @@ export default {
   },
   computed: {
     isLoading: function () {
+      console.log('hello world');
       return this.$store.getters.loading;
     },
     pageTitle() {

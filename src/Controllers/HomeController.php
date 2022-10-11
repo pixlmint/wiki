@@ -17,8 +17,7 @@ class HomeController extends AbstractController
 
     public function index($request)
     {
-        return $this->render('wiki.twig', [
-        ]);
+        return file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/index.html');
     }
 
     public function loadNav($request)
