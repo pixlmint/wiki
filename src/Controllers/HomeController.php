@@ -22,6 +22,6 @@ class HomeController extends AbstractController
 
     public function loadNav($request)
     {
-        return $this->navRenderer->output();
+        return $this->json($this->navRenderer->output());
     }
 }

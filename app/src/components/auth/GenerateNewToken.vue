@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 import {useAuthStore} from "@/src/stores/auth";
 
@@ -26,10 +26,7 @@ export default defineComponent({
   methods: {
     submit() {
       const authStore = useAuthStore();
-      authStore.generateNewToken({
-        username: this.username,
-        token: authStore.token,
-      })
+      authStore.generateNewToken(this.username, authStore.token)
     },
   },
 })

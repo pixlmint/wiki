@@ -78,6 +78,10 @@ function getContent($route)
     return $cnt->$function($request);
 }
 
+if (!startsWith($path, '/api')) {
+    echo file_get_contents('dist/index.html');
+    return '';
+}
 $route = getRoute($path);
 if (!$route) {
     $route = getRoute('/');

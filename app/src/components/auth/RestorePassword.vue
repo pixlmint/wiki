@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
@@ -43,12 +43,7 @@ export default defineComponent({
     submit() {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      useAuthStore().restorePassword({
-        username: this.username,
-        password1: this.password1,
-        password2: this.password2,
-        token: urlParams.get('token'),
-      }).then(() => {
+      useAuthStore().restorePassword(this.username, this.password1, this.password2, urlParams.get('token')).then(() => {
         useRouter().push('/');
       });
     },

@@ -5,12 +5,12 @@
         "function": "index"
     },
     {
-        "route": "/wiki",
+        "route": "/api/wiki",
         "controller": "Wiki\\Controllers\\WikiController",
         "function": "loadEntry"
     },
     {
-        "route": "/nav",
+        "route": "/api/nav",
         "min_role": "Guest",
         "controller": "Wiki\\Controllers\\HomeController",
         "function": "loadNav"

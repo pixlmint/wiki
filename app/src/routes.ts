@@ -1,8 +1,7 @@
-import Vue from 'vue';
-import {RouteRecordRaw, createRouter, createWebHashHistory} from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 
-import MonthList from "./components/home/MonthList";
-import Login from "./components/auth/Login";
+import MonthList from "@/src/components/home/MonthList.vue";
+import Login from "./components/auth/Login.vue";
 import LoginRedirector from "./components/auth/LoginRedirector";
 import RestorePassword from "./components/auth/RestorePassword";
 import RequestNewPassword from "./components/auth/RequestNewPassword";
@@ -21,12 +20,12 @@ const routes = [
         name: "Home",
         component: MonthList,
     },
-    {
-        path: '/edit',
-        name: "Edit",
-        props: route => ({ entry: route.query.entry }),
-        component: Editor,
-    },
+    // {
+    //     path: '/edit',
+    //     name: "Edit",
+    //     props: route => ({ entry: route.query.entry }),
+    //     component: Editor,
+    // },
     {
         path: '/auth',
         name: "Auth",
@@ -77,15 +76,10 @@ const routes = [
         name: "More Tools",
         component: AdminTools,
     },
-    {
-        path: "*",
-        name: "notFound",
-        component: NotFound,
-    }
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 })
 

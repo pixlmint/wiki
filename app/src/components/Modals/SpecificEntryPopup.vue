@@ -8,17 +8,19 @@
       </div>
       <div slot="footer">
         <div class="uk-text-right">
-          <vk-button class="btn btn-primary" @click="editSpecificEntry">Submit</vk-button>
+          <vk-button class="btn btn-primary" @click="editSpecificEntry"
+            >Submit</vk-button
+          >
         </div>
       </div>
     </vk-modal>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
 import moment from "moment";
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   data: function () {
@@ -29,30 +31,16 @@ export default defineComponent({
   computed: {
     show: {
       get() {
-        return this.$store.getters.showEditSpecificPopup;
+        return false;
       },
       set(newValue) {
-        this.$store.commit("EDIT_SPECIFIC_POPUP", newValue);
+        console.log(newValue);
       },
     },
   },
   methods: {
-    hidePopup() {
-      this.$store.commit("EDIT_SPECIFIC_POPUP", false);
-    },
-    editSpecificEntry() {
-      axios
-        .get(
-          "/api/admin/entry/create?token=" +
-          this.$store.getters.token +
-          "&entry=" +
-          this.dateEntry
-        )
-        .then((response) => {
-          this.$store.commit("EDIT_SPECIFIC_POPUP", false);
-          this.$router.push("/edit?entry=" + response.data.entryId);
-        });
-    },
+    hidePopup() {},
+    editSpecificEntry() {},
   },
-})
+});
 </script>

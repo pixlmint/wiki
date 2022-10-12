@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/src/stores/auth";

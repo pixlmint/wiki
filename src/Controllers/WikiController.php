@@ -19,9 +19,9 @@ class WikiController extends AbstractController
             die();
         }
         $content = $this->nacho->renderPage($page);
-        $ret = ['content' => base64_encode($content)];
+        $ret = ['content' => $content];
         $ret = array_merge($ret, $page);
 
-        return json_encode($ret);
+        return $this->json($ret);
     }
 }

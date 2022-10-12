@@ -16,25 +16,35 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
+import {useWikiStore} from '@/src/stores/wiki'
+import {useAuthStore} from '@/src/stores/auth'
+import {useRouter} from 'vue-router'
 
 export default defineComponent({
   props: ["entry"],
   data: function () {
     return {
       unsavedChanges: false,
+      wikiStore: useWikiStore(),
     }
   },
   computed: {
     markdown() {
-      return this.$store.getters.editingEntry.raw_content;
+      if (this.wikiStore.currentEntry === null) {
+        return '';
+      }
+      return this.wikiStore.currentEntry.raw_content;
     },
   },
   methods: {
     updateContent() {
       this.unsavedChanges = true;
-      const newContentField = document.getElementById('edit-entry');
+      const newContentField = (<HTMLInputElement> document.getElementById('edit-entry'));
+      if (newContentField === null) {
+        throw new Error('Unable to find field edit-entry')
+      }
       let newContent = newContentField.value;
       newContent = newContent.replace(/…/g, '...');
       newContent = newContent.replace(/’/g, '\'');
@@ -42,20 +52,16 @@ export default defineComponent({
       newContent = newContent.replace(/”/g, '"');
       newContent = newContent.replace(/„/g, '"');
       newContentField.value = newContent;
-      console.log(newContent);
-      const entry = this.$store.getters.editingEntry;
+      const entry = this.wikiStore.currentEntry;
+      if (entry === null) {
+        throw new Error('Entry is not defined');
+      }
       entry.raw_content = newContent;
-      this.$store.dispatch("updateEntry", {
-        entry: entry,
-      });
-
-      this.$store.dispatch("updateEntry", {
-        entry: entry,
-      });
+      this.wikiStore.updateEntry(entry);
     },
     save() {
       this.unsavedChanges = false;
-      return this.$store.dispatch("saveEntry", this.$store.getters.token);
+      return this.wikiStore.saveEntry(useAuthStore().token)
     },
     checkGoHome() {
       if (this.unsavedChanges && confirm('You\'ve go unsaved changes. Save first?')) {
@@ -67,8 +73,7 @@ export default defineComponent({
       }
     },
     doGoHome() {
-      this.$store.dispatch("getEntries");
-      this.$router.push('/');
+      useRouter().push('/');
     }
   },
 })

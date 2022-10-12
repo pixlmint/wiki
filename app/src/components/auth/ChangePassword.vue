@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {useAuthStore} from "../../stores/auth"
 import {useRouter} from 'vue-router'
 import {defineComponent} from "vue";

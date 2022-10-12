@@ -9,8 +9,8 @@
   </div>
 </template>
 
-<script>
-import Day from "./Day";
+<script lang="ts">
+import Day from "@/src/components/home/Day.vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({

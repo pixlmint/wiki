@@ -4,9 +4,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import EditEntry from "./EditEntry.vue";
 import {defineComponent} from "vue";
+import {useAuthStore} from '@/src/stores/auth'
 
 export default defineComponent({
   props: ["entry"],
@@ -16,15 +17,17 @@ export default defineComponent({
     }
   },
   created() {
-    this.$store
-      .dispatch("getEntry", {
-        entry: this.entry,
-        token: this.$store.getters.token,
-      })
-      .then(() => {
-        this.$store.dispatch('setTitle', "Edit " + this.$store.getters.editingEntry.meta.title);
-        this.$store.dispatch("loadImagesForEntry", { entry: this.entry });
-      });
+    const token = useAuthStore().token;
+    if (token === null) {
+      throw new Error('You are not allowed to edit entries');
+    }
+
+    console.log(this.entry);
+    // useWikiStore().getEntry(this.entry, token)
+    //   .then(() => {
+    //     const title = useWikiStore().editingEntry.meta.title;
+    //     useMainStore().setTitle("Edit " + useWikiStore().editingEntry.meta.title);
+    //   })
   },
   components: {
     EditEntry,

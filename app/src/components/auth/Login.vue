@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 import {useAuthStore} from "@/src/stores/auth";
 import {useMainStore} from "@/src/stores/main";
@@ -36,10 +36,7 @@ export default defineComponent({
   },
   methods: {
     login() {
-      useAuthStore().login({
-        username: this.username,
-        password: this.password,
-      }).then(() => {
+      useAuthStore().login(this.username, this.password).then(() => {
         this.router.push('/');
       })
     },

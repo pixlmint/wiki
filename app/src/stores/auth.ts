@@ -13,23 +13,6 @@ interface ChangePasswordForm {
     newPassword2: string,
 }
 
-interface RestorePasswordForm {
-    username: string,
-    newPassword1: string,
-    newPassword2: string,
-    token: string,
-}
-
-interface GenerateNewTokenForm {
-    username: string,
-    token: string,
-}
-
-interface LoginForm {
-    username: string,
-    password: string,
-}
-
 export const useAuthStore = defineStore('authStore', {
     state: (): State => ({
         token: null,
@@ -60,11 +43,19 @@ export const useAuthStore = defineStore('authStore', {
                 },
             });
         },
-        restorePassword(payload: RestorePasswordForm) {
+        restorePassword(username: string, password1: string, password2: string, token: string | null) {
+            if (token === null) {
+                throw new Error('invalid token');
+            }
             return axios({
                 method: 'POST',
                 url: '/api/auth/restore-password',
-                data: queryFormatter(payload),
+                data: queryFormatter({
+                    username: username,
+                    password1: password1,
+                    password2: password2,
+                    token: token,
+                }),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -72,11 +63,14 @@ export const useAuthStore = defineStore('authStore', {
                 this.$state.token = response.data.token;
             });
         },
-        generateNewToken(payload: GenerateNewTokenForm) {
+        generateNewToken(username: string, token: string | null) {
+            if (token === null) {
+                throw new Error('invalid token');
+            }
             return axios({
                 method: 'POST',
                 url: '/api/auth/generate-new-token',
-                data: queryFormatter(payload),
+                data: queryFormatter({username: username, token: token}),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -84,11 +78,14 @@ export const useAuthStore = defineStore('authStore', {
                 this.$state.token = response.data.token;
             });
         },
-        login(loginForm: LoginForm) {
+        login(username: string, password: string) {
             return axios({
                 method: 'POST',
                 url: '/api/login',
-                data: queryFormatter(loginForm),
+                data: queryFormatter({
+                    username: username,
+                    password: password,
+                }),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -106,11 +103,14 @@ export const useAuthStore = defineStore('authStore', {
             this.$state.token = null;
             localStorage.removeItem('token');
         },
-        createAdmin(userForm: LoginForm) {
+        createAdmin(username: string, password: string) {
             return axios({
                 method: "POST",
                 url: '/api/auth/create-admin',
-                data: queryFormatter(userForm),
+                data: queryFormatter({
+                    username: username,
+                    password: password,
+                }),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

@@ -17,7 +17,7 @@ export const useMainStore = defineStore('main', {
     },
     actions: {
         setIsLoading(isLoading: boolean) {
-            state.isLoading = isLoading
+            this.$state.isLoading = isLoading
         },
         setTitle(title: string) {
             if (title === '2022') {
@@ -25,7 +25,7 @@ export const useMainStore = defineStore('main', {
             } else {
                 document.title = title + ' · 2022';
             }
-            state.pageTitle = title;
+            this.$state.pageTitle = title;
         },
         buildCache(token: string) {
             axios.post('/api/admin/build-cache?token=' + token);

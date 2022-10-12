@@ -2,7 +2,7 @@
   <i v-bind:class="`fa fa-fw fa-${icon}`"/>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 
 export default defineComponent({

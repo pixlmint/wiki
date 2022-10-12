@@ -7,10 +7,11 @@
   </div>
 </template>
 
-<script>
-import Month from "./Month";
-import AdminBar from "../admin/AdminBar";
-import {defineComponent} from "vue";
+<script lang="ts">
+import Month from "@/src/components/home/Month.vue";
+import AdminBar from "@/src/components/admin/AdminBar.vue";
+import { defineComponent } from "vue";
+import {useMainStore} from '@/src/stores/main'
 
 export default defineComponent({
   name: "MonthList",
@@ -18,21 +19,16 @@ export default defineComponent({
     Month,
     AdminBar,
   },
-  data: function() {
-    return {
-      title: '2022'
-    }
-  },
   created() {
-    this.$store.dispatch('setTitle', this.title);
+    useMainStore().setTitle('Wiki')
   },
   computed: {
-    months() {
-      return this.$store.getters.entries;
+    months: function() {
+      return [];
     },
-    canEdit() {
-      return this.$store.getters.token !== null;
-    },
+    canEdit: function() {
+      return true;
+    }
   },
-})
+});
 </script>

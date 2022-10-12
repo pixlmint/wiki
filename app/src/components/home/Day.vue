@@ -20,8 +20,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
+import {useAuthStore} from '@/src/stores/auth'
+import {useWikiStore} from '@/src/stores/wiki'
 
 export default defineComponent({
   name: "Day",
@@ -34,7 +36,7 @@ export default defineComponent({
       return this.day.content;
     },
     canEdit() {
-      return this.$store.getters.token !== null;
+      return useAuthStore().token !== null;
     },
     query() {
       const q = { entry: this.day.id };
@@ -50,11 +52,9 @@ export default defineComponent({
       if (doDelete) {
         const data = {
           entry: this.day.id,
-          token: this.$store.getters.token,
+          token: useAuthStore().token,
         }
-        this.$store.dispatch("deleteEntry", data).then((response) => {
-          this.$store.dispatch("getEntries");
-        });
+        useWikiStore().deleteEntry(this.day.id, useAuthStore().token);
       }
     },
   },

@@ -45,35 +45,27 @@ class NavRenderer
             $page = $this->wiki->getPage('/');
             $pages = ['/' => $this->findChildPages('/', $page, $tmp)];
         }
-        $html = '<ul id="nav">';
+        $ret = [];
         foreach ($pages as $pageID => $page) {
+            // echo($pageID . '<br>');
             if (!empty($page['hidden'])) continue;
 
-            $childrenOutput = '';
+            $childrenOutput = [];
             if (isset($page['children'])) {
                 $childrenOutput = $this->output($page['children']);
             }
 
             $url = isset($page['url']) ? $page['url'] : false;
-
-            // use title if the page has one and make a link if the page exists.
-//            echo($url);
-            if ($url) {
-                $name = !empty($page['title']) ? $page['title'] : $pageID;
-                $item = "<a page='${pageID}' href=\"$url\">$name</a>";
-            } else {
-                $item = "<span>$pageID</span>";
-            }
-
-            // add the pageID in class and indicate if it is the current or parent of the current page.
-            $class = $pageID;
-            $class .= $url ? ' is-page' : ' is-directory';
-            if ($childrenOutput) $class .= ' has-childs';
-
-            $html .= "<li class=\"$class\">$item$childrenOutput</li>";
+            $title = $page['title'] ?: $pageID;
+            
+            $ret[] = [
+                'id' => $page['id'],
+                'title' => $title,
+                'url' => $url,
+                'children' => $childrenOutput,
+            ];
         }
-        $html .= '</ul>';
-        return $html;
+        return $ret;
     }
 
     private static function isDirectChild(string $path, string $parentPath)

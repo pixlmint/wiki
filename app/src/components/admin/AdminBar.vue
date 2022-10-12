@@ -15,9 +15,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
 import {defineComponent} from "vue";
+import {useRouter} from 'vue-router'
+
+interface NavItem {
+  label: string,
+  func: null | Function,
+  page: null | string,
+}
 
 export default defineComponent({
   name: "AdminBar",
@@ -25,44 +32,28 @@ export default defineComponent({
     return {
       nav: [
         {
-          label: "Today",
-          func: this.editCurrent,
-        },
-        {
-          label: "Edit Specific",
-          func: this.toggleEditSpecificPopup,
-        },
-        {
           label: "Auth",
           page: "/auth",
+          func: null,
         },
         {
           label: "More",
           page: "/admin/tools",
+          func: null,
         },
       ],
     };
   },
   methods: {
-    handleClick(itemId) {
-      const item = this.nav[itemId];
-      if ("func" in item) {
+    handleClick(itemId: number) {
+      const item = (<NavItem> this.nav[itemId]);
+      if (item.func !== null) {
         item.func();
-      } else if ("page" in item) {
-        this.$router.push(item.page);
+      } else if (item.page !== null) {
+        useRouter().push(item.page);
       } else {
         console.error('I don\'t know what to do with item #' + itemId);
       }
-    },
-    toggleEditSpecificPopup() {
-      this.$store.commit('EDIT_SPECIFIC_POPUP', true);
-    },
-    editCurrent() {
-      axios
-        .get("/api/admin/entry/edit/current?token=" + this.$store.getters.token)
-        .then((response) => {
-          this.$router.push("/edit?entry=" + response.data.entryId);
-        });
     },
   },
 })
