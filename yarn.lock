@@ -1577,16 +1577,6 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.40.tgz#e57799da2a930b975321981fcee3d1e90ed257ae"
   integrity sha512-0PLQ6RUtZM0vO3teRfzGi4ltLUO5aO+kLgwh4Um3THSR03rpQWLTuRCkuO5A41ITzwdWeKdPHtSARuPkoo5pCQ==
 
-"@vuikit/icons@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@vuikit/icons/-/icons-0.8.1.tgz#b53725e3b137ba7fc20fce792b95e957bef9410c"
-  integrity sha512-DiwUbbN8b3AyPxiW5llL0VZDOyM5P+U8YEnP+CLGzOL7KJ/bqrpPhskCDUOoDUy7+fBEYxsO7+oC0dYCXNYLRw==
-
-"@vuikit/theme@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@vuikit/theme/-/theme-0.8.1.tgz#d77f4c593cd5dc0c8bdb71c4f6b3ee95c8ffa9ea"
-  integrity sha512-L7ZceIkp8XTrctBSlCDjG3MTRhogOcis+6QSE6jqLerdKHFm+EwxOtLgYRY4XaBzfh+VfNpDu9l+9mGDf+u5pw==
-
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.11.1.tgz#2bfd767eae1a6996f432ff7e8d7fc75679c0b6a7"

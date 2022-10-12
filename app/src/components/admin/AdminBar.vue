@@ -1,22 +1,20 @@
 <template>
   <div class="admin-bar">
     <h3>Welcome Admin</h3>
-    <vk-navbar>
-      <vk-navbar-nav>
-        <vk-navbar-nav-item
+    <div class="navbar">
+      <div class="navbar-nav">
+        <div class="navbar-nav-item"
           v-for="(item, index) in nav"
           :key="index"
           @click="handleClick(index)"
           :title="item.label"
-        ></vk-navbar-nav-item>
-        <vk-navbar-item></vk-navbar-item>
-      </vk-navbar-nav>
-    </vk-navbar>
+        ></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import axios from "axios";
 import {defineComponent} from "vue";
 import {useRouter} from 'vue-router'
 

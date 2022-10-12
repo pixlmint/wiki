@@ -3,7 +3,7 @@
     <form>
       <input class="uk-input" type="text" v-model="username" placeholder="Admin Username">
       <input class="uk-input" type="text" v-model="password" placeholder="Admin Password">
-      <vk-button class="btn btn-primary" @click="submit">Submit</vk-button>
+      <button class="btn btn-primary" @click="submit">Submit</button>
     </form>
   </div>
 </template>

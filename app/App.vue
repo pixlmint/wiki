@@ -2,16 +2,14 @@
   <div>
     <Loading v-if="isLoading"></Loading>
     <div class="header">
-      <h1 @click="reload" class="reloadable">{{ pageTitle }}</h1>
+      <h1>{{ pageTitle }}</h1>
     </div>
     <router-view></router-view>
-    <specific-entry-popup></specific-entry-popup>
   </div>
 </template>
 
 <script>
 import Loading from './src/components/Loading';
-import SpecificEntryPopup from './src/components/Modals/SpecificEntryPopup';
 import axios from 'axios';
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
@@ -22,7 +20,6 @@ export default defineComponent({
   name: "App",
   components: {
     Loading,
-    SpecificEntryPopup,
   },
   data: () => {
     return {

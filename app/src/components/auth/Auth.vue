@@ -7,7 +7,7 @@
       <router-link class="btn btn-primary" to="/auth/change-password">Change Password</router-link>
       <router-link class="btn btn-primary" to="/auth/generate-new-token">Generate New Token</router-link>
       <router-link class="btn btn-primary" to="/auth/request-new-password">Request New Password</router-link>
-      <vk-button class="btn btn-primary" @click="logout">Logout</vk-button>
+      <button class="btn btn-primary" @click="logout">Logout</button>
     </div>
   </div>
 </template>

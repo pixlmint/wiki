@@ -1,16 +1,16 @@
 <template>
   <div class="main-content">
     <div>
-      <vk-button class="btn btn-icon btn-primary" @click="checkGoHome">
+      <button class="btn btn-icon btn-primary" @click="checkGoHome">
         <fa icon="arrow-left"></fa>
-      </vk-button>
+      </button>
     </div>
     <div class="container">
       <textarea @change="updateContent" id="edit-entry" ref="editEntry" class="edit-entry" :value="markdown"></textarea>
       <div class="actions">
-        <vk-button class="btn btn-icon btn-primary" @click="save">
+        <button class="btn btn-icon btn-primary" @click="save">
           <fa icon="floppy-o"></fa>
-        </vk-button>
+        </button>
       </div>
     </div>
   </div>
@@ -21,9 +21,13 @@ import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from '@/src/stores/auth'
 import {useRouter} from 'vue-router'
+import fa from '@/src/components/fa.vue'
 
 export default defineComponent({
   props: ["entry"],
+  components: {
+    fa,
+  },
   data: function () {
     return {
       unsavedChanges: false,

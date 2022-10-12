@@ -1,31 +1,19 @@
 import {createRouter, createWebHistory} from 'vue-router';
 
-import MonthList from "@/src/components/home/MonthList.vue";
+import WikiEntry from "@/src/components/home/WikiEntry.vue";
 import Login from "./components/auth/Login.vue";
-import LoginRedirector from "./components/auth/LoginRedirector";
-import RestorePassword from "./components/auth/RestorePassword";
-import RequestNewPassword from "./components/auth/RequestNewPassword";
-import ChangePassword from "./components/auth/ChangePassword";
-import Register from "./components/auth/Register";
-import GenerateNewToken from "./components/auth/GenerateNewToken";
-import CreateAdmin from "./components/auth/CreateAdmin";
-import Auth from "./components/auth/Auth";
-import Editor from "./components/admin/Editor/Editor";
-import NotFound from './components/error/NotFound';
-import AdminTools from './components/admin/Tools/index';
+import LoginRedirector from "./components/auth/LoginRedirector.vue";
+import RestorePassword from "./components/auth/RestorePassword.vue";
+import RequestNewPassword from "./components/auth/RequestNewPassword.vue";
+import ChangePassword from "./components/auth/ChangePassword.vue";
+import Register from "./components/auth/Register.vue";
+import GenerateNewToken from "./components/auth/GenerateNewToken.vue";
+import CreateAdmin from "./components/auth/CreateAdmin.vue";
+import Auth from "./components/auth/Auth.vue";
+import Editor from "./components/admin/Editor/Editor.vue";
+import AdminTools from './components/admin/Tools/index.vue';
 
 const routes = [
-    {
-        path: '/',
-        name: "Home",
-        component: MonthList,
-    },
-    // {
-    //     path: '/edit',
-    //     name: "Edit",
-    //     props: route => ({ entry: route.query.entry }),
-    //     component: Editor,
-    // },
     {
         path: '/auth',
         name: "Auth",
@@ -75,6 +63,11 @@ const routes = [
         path: "/admin/tools",
         name: "More Tools",
         component: AdminTools,
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: "Home",
+        component: WikiEntry,
     },
 ];
 

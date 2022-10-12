@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <i v-bind:class="`fa fa-fw fa-${icon}`"/>
 </template>
 

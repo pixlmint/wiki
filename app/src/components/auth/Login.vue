@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div>
-      <vk-button class="btn btn-primary" @click="auth">Return</vk-button>
+      <button class="btn btn-primary" @click="auth">Return</button>
     </div>
     <form @submit.prevent="login">
       <fieldset class="uk-fieldset">
@@ -12,7 +12,7 @@
           <input class="uk-input" @keyup.enter="login" v-model="password" placeholder="password" type="password" />
         </div>
       </fieldset>
-      <vk-button class="btn btn-primary" @click="login">Login</vk-button>
+      <button class="btn btn-primary" @click="login">Login</button>
     </form>
   </div>
 </template>
