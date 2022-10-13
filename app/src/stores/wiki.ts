@@ -99,5 +99,12 @@ export const useWikiStore = defineStore('wikiStore', {
     renameEntry(oldName: string, newName : string, token: string) {
       return axios.post('/api/admin/entry/rename?' + queryFormatter({oldName: oldName, newName: newName, token: token}))
     },
+    loadNav() {
+      return axios.get('/api/nav')
+        .then((response) => {
+          console.log(response.data);
+          this.$state.nav = response.data;
+        })
+    },
   }
 })

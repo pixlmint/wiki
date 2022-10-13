@@ -4,22 +4,25 @@
     <div class="header">
       <h1>{{ pageTitle }}</h1>
     </div>
+    <Nav></Nav>
     <router-view></router-view>
   </div>
 </template>
 
-<script>
-import Loading from './src/components/Loading';
+<script lang="ts">
+import Loading from './src/components/Loading.vue';
 import axios from 'axios';
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useRouter} from "vue-router";
+import Nav from '@/src/components/nav/Nav.vue';
 
 export default defineComponent({
   name: "App",
   components: {
     Loading,
+    Nav,
   },
   data: () => {
     return {
@@ -28,7 +31,8 @@ export default defineComponent({
   },
   computed: {
     isLoading: function () {
-      return this.mainStore.loading;
+      return false;
+      // return this.mainStore.loading;
     },
     pageTitle() {
       return this.mainStore.pageTitle;
