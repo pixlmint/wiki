@@ -1,7 +1,11 @@
 <template>
   <div>
-    <span>{{ el.title }}</span>
-    <NavElement v-for="(subEl, index) in el.children" :key="index" :el="subEl"></NavElement>
+    <ul>
+      <li>
+        <a class="nav-item" :href="el.url">{{ el.title }}</a>
+        <NavElement v-show="el.showing" class="nav-child-nav" v-for="(subEl, index) in el.children" :key="index" :el="subEl"></NavElement>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -11,8 +15,5 @@ import {defineComponent} from 'vue';
 export default defineComponent({
   name: 'NavElement',
   props: ['el'],
-  created: () => {
-    console.log(this.el);
-  }
 })
 </script>

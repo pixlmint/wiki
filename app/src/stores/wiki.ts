@@ -27,28 +27,31 @@ interface EntryMeta {
   author: string | null,
 }
 
-interface Nav extends Array<NavElement> {}
+interface Nav extends Array<NavElement> {
+}
 
 interface NavElement {
   title: string,
   id: string,
   url: string,
+  showing: boolean,
   children: Nav,
 }
 
-interface WikiEntryList extends Array<WikiEntry> {}
+interface WikiEntryList extends Array<WikiEntry> {
+}
 
 interface State {
   loadedEntries: WikiEntryList,
   currentEntry: WikiEntry | null,
-  nav: Nav,
+  nav: Nav | null,
 }
 
 export const useWikiStore = defineStore('wikiStore', {
   state: (): State => ({
     loadedEntries: [],
     currentEntry: null,
-    nav: [],
+    nav: null,
   }),
   getters: {
     loadedEntries: (state) => state.loadedEntries,
@@ -96,14 +99,37 @@ export const useWikiStore = defineStore('wikiStore', {
       }
       return axios.delete('/api/admin/entry/delete?' + queryFormatter({entry: entry, token: token}))
     },
-    renameEntry(oldName: string, newName : string, token: string) {
+    renameEntry(oldName: string, newName: string, token: string) {
       return axios.post('/api/admin/entry/rename?' + queryFormatter({oldName: oldName, newName: newName, token: token}))
     },
     loadNav() {
+      this.nav = [{
+        id: '/',
+        title: 'Home',
+        url: 'localhost:90/',
+        showing: true,
+        children: [
+          {
+            id: '/a',
+            title: 'A',
+            url: 'localhost:90/a',
+            children: [],
+            showing: false,
+          },
+          {
+            id: '/b',
+            title: 'B',
+            url: 'localhost:90/b',
+            children: [],
+            showing: false,
+          },
+        ],
+      }];
+      // return null;
       return axios.get('/api/nav')
         .then((response) => {
           console.log(response.data);
-          this.$state.nav = response.data;
+          this.nav = response.data;
         })
     },
   }

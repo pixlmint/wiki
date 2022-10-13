@@ -36,9 +36,9 @@ class NavRenderer
      *
      * @param array|null $pages a nested pages array
      *
-     * @return string the html list
+     * @return array the nav
      */
-    public function output(?array $pages = null)
+    public function output(?array $pages = null): array
     {
         if (!$pages) {
             $tmp = $this->wiki->getPages();
@@ -47,7 +47,6 @@ class NavRenderer
         }
         $ret = [];
         foreach ($pages as $pageID => $page) {
-            // echo($pageID . '<br>');
             if (!empty($page['hidden'])) continue;
 
             $childrenOutput = [];
@@ -56,7 +55,7 @@ class NavRenderer
             }
 
             $url = isset($page['url']) ? $page['url'] : false;
-            $title = $page['title'] ?: $pageID;
+            $title = $page['meta']['title'];
             
             $ret[] = [
                 'id' => $page['id'],

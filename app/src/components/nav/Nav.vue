@@ -1,11 +1,11 @@
 <template>
-  <div>
-	<NavElement v-for="(el, index) in nav" v-key="index" :key="index" :el="el"></NavElement>
+  <div id="nav">
+	<NavElement v-for="(el, index) in nav" :key="index" :el="el"></NavElement>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent, toRaw} from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import NavElement from "./NavElement.vue";
 
@@ -19,7 +19,12 @@ export default defineComponent({
   },
   computed: {
     nav() {
-      return useWikiStore().nav;
+      const wikiStore = useWikiStore()
+      if (wikiStore.nav === null) {
+        return {}
+      }
+      console.log(toRaw(wikiStore.nav));
+      return toRaw(wikiStore.nav);
     },
   },
 });

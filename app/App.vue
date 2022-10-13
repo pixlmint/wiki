@@ -4,8 +4,10 @@
     <div class="header">
       <h1>{{ pageTitle }}</h1>
     </div>
-    <Nav></Nav>
-    <router-view></router-view>
+    <div style="display: flex; flex-direction: column">
+      <Nav></Nav>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -41,24 +43,24 @@ export default defineComponent({
   created() {
     useAuthStore().getToken();
     this.axios.interceptors.request.use(
-      (config) => {
-        this.mainStore.setIsLoading(true);
-        return config;
-      },
-      (error) => {
-        this.mainStore.setIsLoading(false);
-        return Promise.reject(error);
-      }
+        (config) => {
+          this.mainStore.setIsLoading(true);
+          return config;
+        },
+        (error) => {
+          this.mainStore.setIsLoading(false);
+          return Promise.reject(error);
+        }
     );
     this.axios.interceptors.response.use(
-      (response) => {
-        this.mainStore.setIsLoading(true);
-        return response;
-      },
-      (error) => {
-        this.mainStore.setIsLoading(false);
-        return Promise.reject(error);
-      }
+        (response) => {
+          this.mainStore.setIsLoading(true);
+          return response;
+        },
+        (error) => {
+          this.mainStore.setIsLoading(false);
+          return Promise.reject(error);
+        }
     );
     //axios.get('/api/auth/admin-created').then((response) => {
     //  const adminCreated = response.data.adminCreated;
