@@ -38,24 +38,24 @@ export default defineComponent({
   },
   computed: {
     title() {
-      return this.entry.meta.title;
+      // return this.entry.meta.title;
     },
     content() {
-      return this.entry.content;
+      // return this.entry.content;
     },
     canEdit() {
       return useAuthStore().token !== null;
     },
     query() {
-      const q = { entry: this.entry.id };
-      return queryFormatter(q);
+      // const q = { entry: this.entry.id };
+      // return queryFormatter(q);
     },
   },
   methods: {
     deleteEntry() {
       const doDelete = confirm("Are you sure you want to delete this entry");
       if (doDelete) {
-        useWikiStore().deleteEntry(this.entry.id, useAuthStore().token);
+        // useWikiStore().deleteEntry(this.entry.id, useAuthStore().token);
       }
     },
   },

@@ -15,7 +15,6 @@ export default defineComponent({
     NavElement,
   },
   created: () => {
-    const self = this;
     useWikiStore().loadNav();
   },
   computed: {

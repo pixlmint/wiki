@@ -60,12 +60,12 @@ export default defineComponent({
         return Promise.reject(error);
       }
     );
-    axios.get('/api/auth/admin-created').then((response) => {
-      const adminCreated = response.data.adminCreated;
-      if (!adminCreated) {
-        useRouter().push('/auth/create-admin');
-      }
-    })
+    //axios.get('/api/auth/admin-created').then((response) => {
+    //  const adminCreated = response.data.adminCreated;
+    //  if (!adminCreated) {
+    //    useRouter().push('/auth/create-admin');
+    //  }
+    //})
   },
 })
 </script>
