@@ -90,24 +90,11 @@ a {
     }
 }
 
-.admin-bar {
-    .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2px;
-    }
-}
-
-.month>div>h2.month {
-    margin: 0 5px 1.5rem 5px;
-}
-
 .main-content {
     background-color: white;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
-
 
 .article-head {
     margin: 5px;

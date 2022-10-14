@@ -1,11 +1,8 @@
 <template>
   <div>
-    <Loading v-if="isLoading"></Loading>
-    <div class="header">
-      <h1>{{ pageTitle }}</h1>
-    </div>
-    <div style="display: flex; flex-direction: column">
-      <Nav></Nav>
+    <!--    <Loading v-if="isLoading"></Loading>-->
+    <Nav></Nav>
+    <div class="main-content">
       <router-view></router-view>
     </div>
   </div>
@@ -13,17 +10,15 @@
 
 <script lang="ts">
 import Loading from './src/components/Loading.vue';
-import axios from 'axios';
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
-import {useRouter} from "vue-router";
 import Nav from '@/src/components/nav/Nav.vue';
 
 export default defineComponent({
   name: "App",
   components: {
-    Loading,
+    // Loading,
     Nav,
   },
   data: () => {
@@ -33,32 +28,29 @@ export default defineComponent({
   },
   computed: {
     isLoading: function () {
-      return false;
-      // return this.mainStore.loading;
-    },
-    pageTitle() {
-      return this.mainStore.pageTitle;
+      return this.mainStore.getIsLoading;
     },
   },
   created() {
-    useAuthStore().getToken();
+    useAuthStore().loadToken();
+    const mainStore = this.mainStore;
     this.axios.interceptors.request.use(
-        (config) => {
-          this.mainStore.setIsLoading(true);
+        function (config) {
+          mainStore.setIsLoading(true);
           return config;
         },
-        (error) => {
-          this.mainStore.setIsLoading(false);
+        function (error) {
+          mainStore.setIsLoading(false);
           return Promise.reject(error);
         }
     );
     this.axios.interceptors.response.use(
-        (response) => {
-          this.mainStore.setIsLoading(true);
+        function (response) {
+          mainStore.setIsLoading(false);
           return response;
         },
-        (error) => {
-          this.mainStore.setIsLoading(false);
+        function (error) {
+          mainStore.setIsLoading(false);
           return Promise.reject(error);
         }
     );

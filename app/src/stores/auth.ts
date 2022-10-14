@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('authStore', {
         token: null,
     }),
     getters: {
-        token: (state) => state.token,
+        getToken: (state) => state.token,
     },
     actions: {
         changePassword(payload: ChangePasswordForm) {
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('authStore', {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
             }).then((response) => {
-                this.$state.token = response.data.token;
+                this.token = response.data.token;
             });
         },
         requestNewPassword(username: string) {
@@ -60,7 +60,7 @@ export const useAuthStore = defineStore('authStore', {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
             }).then((response) => {
-                this.$state.token = response.data.token;
+                this.token = response.data.token;
             });
         },
         generateNewToken(username: string, token: string | null) {
@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('authStore', {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
             }).then((response) => {
-                this.$state.token = response.data.token;
+                this.token = response.data.token;
             });
         },
         login(username: string, password: string) {
@@ -90,17 +90,17 @@ export const useAuthStore = defineStore('authStore', {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
             }).then((response) => {
-                this.$state.token = response.data.token;
+                this.token = response.data.token;
             });
         },
-        getToken() {
+        loadToken() {
             const token = localStorage.getItem('token');
             if (token) {
-                this.$state.token = token;
+                this.token = token;
             }
         },
         logout() {
-            this.$state.token = null;
+            this.token = null;
             localStorage.removeItem('token');
         },
         createAdmin(username: string, password: string) {

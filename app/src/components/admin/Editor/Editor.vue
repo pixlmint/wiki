@@ -8,26 +8,25 @@
 import EditEntry from "./EditEntry.vue";
 import {defineComponent} from "vue";
 import {useAuthStore} from '@/src/stores/auth'
+import {useWikiStore} from "@/src/stores/wiki";
 
 export default defineComponent({
-  props: ["entry"],
   data: function () {
     return {
       title: "Edit " + this.entry,
+      entry: '',
     }
   },
   created() {
-    const token = useAuthStore().token;
+    const token = useAuthStore().getToken;
     if (token === null) {
-      throw new Error('You are not allowed to edit entries');
+      // throw new Error('You are not allowed to edit entries');
     }
-
-    console.log(this.entry);
-    // useWikiStore().getEntry(this.entry, token)
-    //   .then(() => {
-    //     const title = useWikiStore().editingEntry.meta.title;
-    //     useMainStore().setTitle("Edit " + useWikiStore().editingEntry.meta.title);
-    //   })
+    const entry = new URLSearchParams(location.search).get('p');
+    if (entry != null) {
+      this.entry = entry;
+    }
+    useWikiStore().fetchEntry(this.entry);
   },
   components: {
     EditEntry,

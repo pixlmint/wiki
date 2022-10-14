@@ -20,11 +20,10 @@ export default defineComponent({
   computed: {
     nav() {
       const wikiStore = useWikiStore()
-      if (wikiStore.nav === null) {
+      if (wikiStore.getNav === null) {
         return {}
       }
-      console.log(toRaw(wikiStore.nav));
-      return toRaw(wikiStore.nav);
+      return toRaw(wikiStore.getNav);
     },
   },
 });

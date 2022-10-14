@@ -10,6 +10,7 @@
       <div class="actions">
         <button class="btn btn-icon btn-primary" @click="save">
           <fa icon="floppy-o"></fa>
+          Save
         </button>
       </div>
     </div>

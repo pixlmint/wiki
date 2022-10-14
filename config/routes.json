@@ -5,7 +5,7 @@
         "function": "index"
     },
     {
-        "route": "/api/wiki",
+        "route": "/api/entry/view",
         "controller": "Wiki\\Controllers\\WikiController",
         "function": "loadEntry"
     },

@@ -7,8 +7,8 @@
           <fa icon="ellipsis-v"></fa>
         </button>
         <div class="dropdown">
-            <a class="dropdown-item" @click="deleteEntry" title="Delete">Delete</a>
-            <a class="dropdown-item" :href="'/edit?' + query" title="Edit">Edit</a>
+          <a class="dropdown-item" @click="deleteEntry" title="Delete">Delete</a>
+          <a class="dropdown-item" :href="'/admin/edit?p=' + entry" title="Edit">Edit</a>
         </div>
       </div>
     </div>
@@ -22,8 +22,8 @@
 import {defineComponent} from "vue";
 import {useAuthStore} from '@/src/stores/auth'
 import {useWikiStore} from '@/src/stores/wiki'
+import {useMainStore} from "@/src/stores/main";
 import fa from '@/src/components/fa.vue'
-import {queryFormatter} from "@/src/helpers/queryFormatter";
 import {useRoute} from "vue-router";
 
 export default defineComponent({
@@ -31,24 +31,26 @@ export default defineComponent({
   data: () => {
     return {
       entry: useRoute().path,
+      wikiStore: useWikiStore(),
     }
   },
   components: {
     fa,
   },
+  created: function() {
+    this.wikiStore.fetchEntry(this.entry).then(function() {
+      useMainStore().setTitle(useWikiStore().currentEntry.meta.title);
+    });
+  },
   computed: {
     title() {
-      // return this.entry.meta.title;
+      return this.wikiStore.currentEntry?.meta.title;
     },
     content() {
-      // return this.entry.content;
+      return this.wikiStore.currentEntry?.content;
     },
     canEdit() {
       return useAuthStore().token !== null;
-    },
-    query() {
-      // const q = { entry: this.entry.id };
-      // return queryFormatter(q);
     },
   },
   methods: {

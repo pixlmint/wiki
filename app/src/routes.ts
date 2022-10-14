@@ -65,8 +65,18 @@ const routes = [
         component: AdminTools,
     },
     {
-        path: '/:pathMatch(.*)*',
+        path: "/admin/edit",
+        name: "Edit",
+        component: Editor,
+    },
+    {
+        path: '/',
         name: "Home",
+        component: WikiEntry,
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: "WikiEntry",
         component: WikiEntry,
     },
 ];

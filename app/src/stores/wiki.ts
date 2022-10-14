@@ -7,12 +7,6 @@ interface WikiEntry {
   content: string,
   id: string,
   url: string,
-  title: string,
-  description: string | null,
-  author: string | null,
-  time: number,
-  date: string,
-  date_formatted: string,
   hidden: boolean,
   meta: EntryMeta,
   file: string,
@@ -54,12 +48,13 @@ export const useWikiStore = defineStore('wikiStore', {
     nav: null,
   }),
   getters: {
-    loadedEntries: (state) => state.loadedEntries,
-    currentEntry: (state) => state.currentEntry,
+    getLoadedEntries: (state) => state.loadedEntries,
+    getCurrentEntry: (state) => state.currentEntry,
+    getNav: state => state.nav,
   },
   actions: {
     updateEntry(payload: WikiEntry) {
-      this.$state.currentEntry = payload;
+      this.currentEntry = payload;
     },
     saveEntry(token: string | null) {
       if (this.$state.currentEntry === null) {
@@ -84,14 +79,11 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     fetchEntry(entry: string) {
       return axios
-        .get('/api/entry/view?entry=' + entry)
+        .get('/api/entry/view?p=' + entry)
         .then((response) => {
-          this.$state.currentEntry = response.data;
-          this.$state.loadedEntries.push(response.data);
+          this.currentEntry = response.data;
+          this.loadedEntries.push(response.data);
         })
-    },
-    getEntry(entry: string) {
-
     },
     deleteEntry(entry: string, token: string | null) {
       if (token === null) {
@@ -103,32 +95,8 @@ export const useWikiStore = defineStore('wikiStore', {
       return axios.post('/api/admin/entry/rename?' + queryFormatter({oldName: oldName, newName: newName, token: token}))
     },
     loadNav() {
-      this.nav = [{
-        id: '/',
-        title: 'Home',
-        url: 'localhost:90/',
-        showing: true,
-        children: [
-          {
-            id: '/a',
-            title: 'A',
-            url: 'localhost:90/a',
-            children: [],
-            showing: false,
-          },
-          {
-            id: '/b',
-            title: 'B',
-            url: 'localhost:90/b',
-            children: [],
-            showing: false,
-          },
-        ],
-      }];
-      // return null;
       return axios.get('/api/nav')
         .then((response) => {
-          console.log(response.data);
           this.nav = response.data;
         })
     },

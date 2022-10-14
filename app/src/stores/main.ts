@@ -9,21 +9,21 @@ interface State {
 export const useMainStore = defineStore('main', {
     state: (): State => ({
         isLoading: false,
-        pageTitle: '2022',
+        pageTitle: 'Wiki',
     }),
     getters: {
-        loading: (state) => state.isLoading,
-        pageTitle: (state) => state.pageTitle,
+        getIsLoading: (state) => state.isLoading,
+        getPageTitle: (state) => state.pageTitle,
     },
     actions: {
         setIsLoading(isLoading: boolean) {
-            this.$state.isLoading = isLoading
+            this.isLoading = isLoading
         },
         setTitle(title: string) {
-            if (title === '2022') {
-                document.title = '2022';
+            if (title === 'Wiki') {
+                document.title = 'Wiki';
             } else {
-                document.title = title + ' · 2022';
+                document.title = title + ' · Wiki';
             }
             this.$state.pageTitle = title;
         },
