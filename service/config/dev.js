@@ -21,11 +21,11 @@ module.exports = merge(baseWebpackConfig, cssWebpackConfig, {
         open: false,
         host: '0.0.0.0',
         port: config.dev.port,
-        liveReload: false,
+        liveReload: true,
         proxy: {
             '/api': {
-                target: 'http://localhost:82',
-                pathRewrite: {'^/api': ''}
+                target: 'http://192.168.1.170:90',
+                pathRewrite: {'^/api': '/api'}
             }
         },
     },
