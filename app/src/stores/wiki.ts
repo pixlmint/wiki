@@ -58,15 +58,18 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     saveEntry(token: string | null) {
       if (this.$state.currentEntry === null) {
-        throw new Error('Not editing any entry');
+        // TODO: uncomment
+        //throw new Error('Not editing any entry');
       }
       if (token === null) {
-        throw new Error('token cannot be null');
+        token = '';
+        // TODO: uncomment
+        //throw new Error('token cannot be null');
       }
       const data = {
         token: token,
-        content: this.$state.currentEntry.raw_content,
-        entry: this.$state.currentEntry.id,
+        content: this.currentEntry?.raw_content,
+        entry: this.currentEntry?.id,
       }
       return axios({
         method: 'POST',
@@ -91,8 +94,16 @@ export const useWikiStore = defineStore('wikiStore', {
       }
       return axios.delete('/api/admin/entry/delete?' + queryFormatter({entry: entry, token: token}))
     },
-    renameEntry(oldName: string, newName: string, token: string) {
-      return axios.post('/api/admin/entry/rename?' + queryFormatter({oldName: oldName, newName: newName, token: token}))
+    renameEntry(entry: string, newName: string, token: string) {
+      const data = {entry: entry, newName: newName, token: token};
+      return axios({
+        method: "POST",
+        url: '/api/admin/entry/rename',
+        data: queryFormatter(data),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
     },
     loadNav() {
       return axios.get('/api/nav')

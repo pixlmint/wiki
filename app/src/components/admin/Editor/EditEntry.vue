@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div class="editor-header">
-      <button class="btn btn-icon btn-primary" @click="checkGoHome">
-        <fa icon="arrow-left"></fa>
-      </button>
-    </div>
     <div class="container">
-      <!-- <textarea @change="updateContent" id="edit-entry" ref="editEntry" class="edit-entry" :value="markdown"></textarea> -->
       <v-md-editor @save="save" v-model="markdown" :height="wHeight + 'px'"></v-md-editor>
     </div>
   </div>
@@ -17,13 +11,9 @@ import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from '@/src/stores/auth'
 import {useRouter} from 'vue-router'
-import fa from '@/src/components/fa.vue'
 
 export default defineComponent({
   props: ["entry"],
-  components: {
-    fa,
-  },
   data: function () {
     return {
       unsavedChanges: false,
@@ -39,7 +29,7 @@ export default defineComponent({
     },
     wHeight() {
       return window.innerHeight-150;
-    }
+    },
   },
   methods: {
     updateContent(md: string) {

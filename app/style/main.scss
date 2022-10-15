@@ -30,6 +30,10 @@ a {
     color: $primary;
 }
 
+h1 {
+    font-size: 2.5rem;
+}
+
 .main-content {
     background-color: white;
     border-bottom-left-radius: 2px;
@@ -49,6 +53,12 @@ a {
     align-items: center;
     justify-content: space-between;
     padding-right: 1rem;
+}
+
+.title-editor {
+    @extend h1;
+    outline: none;
+    border: none;
 }
 
 .article-body {
