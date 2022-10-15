@@ -2,7 +2,8 @@
     "name": "christiangroeber/wiki",
     "description": "Your very own Wiki, powered by Markdown",
     "require": {
-        "christiangroeber/nacho": "^0.15.0"
+        "ext-json":  "*",
+        "christiangroeber/nacho": "^0.17"
     },
     "autoload": {
         "psr-4": {

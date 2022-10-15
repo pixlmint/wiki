@@ -3,9 +3,10 @@
 namespace Wiki\Controllers;
 
 use DateTime;
+use Nacho\Models\HttpMethod;
+use Nacho\Models\HttpResponseCode;
 use Nacho\Nacho;
 use Nacho\Controllers\AbstractController;
-use Wiki\Helpers\NavRenderer;
 
 class AdminController extends AbstractController
 {
@@ -13,7 +14,7 @@ class AdminController extends AbstractController
     {
         parent::__construct($wiki);
         if (!$this->isGranted('Editor')) {
-            header('Http/1.1 401');
+            header('Http/1.1 ' . HttpResponseCode::UNAUTHORIZED);
             echo 'You are not allowed to view this part of the page. <a href="/">Return</a>';
             die();
         }
@@ -26,24 +27,20 @@ class AdminController extends AbstractController
 
     public function delete($request)
     {
-        function returnHome()
-        {
-            header('Location: /admin');
-            header('HTTP/1.1 302');
+        if (HttpMethod::DELETE !== strtoupper($_SERVER['REQUEST_METHOD'])) {
+            return $this->json(['message' => 'Only DELETE allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
         }
         if (key_exists('file', $_REQUEST)) {
             $file = $_REQUEST['file'];
         } elseif (key_exists('dir', $_REQUEST)) {
             $file = $_REQUEST['dir'];
         } else {
-            returnHome();
+            $file = '';
         }
-        if (
-            substr($file, 0, strlen($_SERVER['DOCUMENT_ROOT'])) !==
-            $_SERVER['DOCUMENT_ROOT']
-        ) {
-            returnHome();
-        }
+        // What does this do?
+        // if (substr($file, 0, strlen($_SERVER['DOCUMENT_ROOT'])) !== $_SERVER['DOCUMENT_ROOT']) {
+        //     returnHome();
+        // }
 
         function rmdirRecursive($dir)
         {
@@ -65,11 +62,15 @@ class AdminController extends AbstractController
         } elseif (is_dir($file)) {
             rmdirRecursive($file);
         }
-        returnHome();
+
+        return $this->json(['message' => 'Successfully Deleted File']);
     }
 
     public function add($request)
     {
+        if (HttpMethod::POST !== strtoupper($_SERVER['REQUEST_METHOD'])) {
+            return $this->json(['message' => 'Only POST allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
+        }
         if (strtolower($request->requestMethod) === 'post') {
             $date = new DateTime();
             $content =
@@ -92,49 +93,26 @@ class AdminController extends AbstractController
                 $createdDirs .= $newDir;
             }
             file_put_contents($file, $content);
-            header('Location: /admin/edit?fulldir=' . $file);
-            header('HTTP/1.1 302');
         }
 
-        return $this->render('admin/add.twig');
+        return $this->json([], HttpResponseCode::CREATED);
     }
 
     function edit($request)
     {
-        if (key_exists('file', $_REQUEST)) {
-            $url =
-                $_SERVER['DOCUMENT_ROOT'] . '/' . urldecode($_REQUEST['file']);
-        } elseif (key_exists('fulldir', $_REQUEST)) {
-            $url = urldecode($_REQUEST['fulldir']);
+        if (!key_exists('url', $_REQUEST) || !key_exists('newContent', $_REQUEST) || !key_exists('newMeta', $_REQUEST)) {
+            return $this->json(['message' => 'Please define url, newContent, and newMeta'], HttpResponseCode::BAD_REQUEST);
         }
 
-        if ($request->requestMethod === 'POST') {
-            if (!is_file($_REQUEST['fulldir'])) {
-                echo ('this is not a directory');
-            }
-            file_put_contents($_REQUEST['fulldir'], $_REQUEST['content']);
-            header('content-type: application/json');
-            return json_encode(['message' => 'successfully saved content']);
+        if (strtoupper($request->requestMethod) !== HttpMethod::PUT) {
+            return $this->json(['message' => 'Only PUT allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
         }
+        $page = $this->nacho->getMarkdownHelper()->getPage($_REQUEST['url']);
+        $success = $this->nacho->getMarkdownHelper()->editPage($page->file, $_REQUEST['newContent'], $_REQUEST['newMeta']);
 
-        $content = file_get_contents($url);
-
-        return $this->render('admin/edit.twig', [
-            'content' => base64_encode($content),
-            'fulldir' => $url,
-        ]);
-    }
-
-    protected function render(string $file, array $args = [])
-    {
-        $nav = new NavRenderer($this->nacho);
-        $tmp = $this->nacho->getPages();
-        $page = $this->nacho->getPage('/');
-        $pages = ['/' => $nav->findChildPages('/', $page, $tmp)];
-
-        $args['pages'] = $pages;
-        $args['referer'] = $_SERVER['HTTP_REFERER'];
-
-        return parent::render($file, $args);
+        if (!$success) {
+            return $this->json(['message' => 'Error Saving Content'], HttpResponseCode::INTERNAL_SERVER_ERROR);
+        }
+        return $this->json(['message' => 'successfully saved content']);
     }
 }

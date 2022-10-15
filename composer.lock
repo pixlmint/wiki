@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f806bee20c18e385cb26118aebc1d31f",
+    "content-hash": "38147a225fac56aa7550e938145b5d49",
     "packages": [
         {
             "name": "christiangroeber/nacho",
-            "version": "0.15",
+            "version": "0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristianGroeber/Nacho.git",
-                "reference": "e12b08438ca03855f2a19d28cd3d6408d05aa650"
+                "reference": "61d094931fef311099b0cf112134b75c93028f99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristianGroeber/Nacho/zipball/e12b08438ca03855f2a19d28cd3d6408d05aa650",
-                "reference": "e12b08438ca03855f2a19d28cd3d6408d05aa650",
+                "url": "https://api.github.com/repos/ChristianGroeber/Nacho/zipball/61d094931fef311099b0cf112134b75c93028f99",
+                "reference": "61d094931fef311099b0cf112134b75c93028f99",
                 "shasum": ""
             },
             "require": {
@@ -45,9 +45,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/ChristianGroeber/Nacho/issues",
-                "source": "https://github.com/ChristianGroeber/Nacho/tree/0.15"
+                "source": "https://github.com/ChristianGroeber/Nacho/tree/0.17"
             },
-            "time": "2022-05-15T10:05:13+00:00"
+            "time": "2022-10-15T16:44:00+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -250,16 +250,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.4.12",
+            "version": "v5.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "7a3aa21ac8ab1a96cc6de5bbcab4bc9fc943b18c"
+                "reference": "e83fe9a72011f07c662da46a05603d66deeeb487"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/7a3aa21ac8ab1a96cc6de5bbcab4bc9fc943b18c",
-                "reference": "7a3aa21ac8ab1a96cc6de5bbcab4bc9fc943b18c",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e83fe9a72011f07c662da46a05603d66deeeb487",
+                "reference": "e83fe9a72011f07c662da46a05603d66deeeb487",
                 "shasum": ""
             },
             "require": {
@@ -305,7 +305,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.4.12"
+                "source": "https://github.com/symfony/yaml/tree/v5.4.14"
             },
             "funding": [
                 {
@@ -321,20 +321,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-02T15:52:22+00:00"
+            "time": "2022-10-03T15:15:50+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v1.44.6",
+            "version": "v1.44.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ae39480f010ef88adc7938503c9b02d3baf2f3b3"
+                "reference": "0887422319889e442458e48e2f3d9add1a172ad5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae39480f010ef88adc7938503c9b02d3baf2f3b3",
-                "reference": "ae39480f010ef88adc7938503c9b02d3baf2f3b3",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/0887422319889e442458e48e2f3d9add1a172ad5",
+                "reference": "0887422319889e442458e48e2f3d9add1a172ad5",
                 "shasum": ""
             },
             "require": {
@@ -387,7 +387,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v1.44.6"
+                "source": "https://github.com/twigphp/Twig/tree/v1.44.7"
             },
             "funding": [
                 {
@@ -399,7 +399,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-25T13:31:46+00:00"
+            "time": "2022-09-28T08:38:36+00:00"
         }
     ],
     "packages-dev": [],
@@ -408,7 +408,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }
