@@ -3,7 +3,7 @@
     <ul>
       <li>
         <a class="nav-item" :href="el.id">{{ el.title }}</a>
-        <NavElement v-show="el.showing" class="nav-child-nav" v-for="(subEl, index) in el.children" :key="index"
+        <NavElement class="nav-child-nav" v-for="(subEl, index) in el.children" :key="index"
                     :el="subEl"></NavElement>
       </li>
     </ul>
