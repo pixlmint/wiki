@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <div id="main-nav">
 	<NavElement v-for="(el, index) in nav" :key="index" :el="el"></NavElement>
   </div>
 </template>

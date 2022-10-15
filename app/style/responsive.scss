@@ -1,13 +1,13 @@
 @media screen and (min-width: 500px) {
-    .header {
-        h1 {
-            font-size: 10rem;
-        }
+    .wiki {
+        display: flex;
     }
 
     .main-content {
         margin: 0 auto;
         max-width: 1000px;
+        width: 80% !important;
+        min-width: unset !important;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 
         .article-body {

@@ -1,7 +1,7 @@
 <template>
   <div class="article">
     <div class="article-head">
-      <h3>{{ title }}</h3>
+      <h1>{{ title }}</h1>
       <div v-if="canEdit">
         <button class="btn btn-icon btn-rounded">
           <fa icon="ellipsis-v"></fa>
@@ -50,7 +50,8 @@ export default defineComponent({
       return this.wikiStore.currentEntry?.content;
     },
     canEdit() {
-      return useAuthStore().token !== null;
+      return true;
+      // return useAuthStore().token !== null;
     },
   },
   methods: {

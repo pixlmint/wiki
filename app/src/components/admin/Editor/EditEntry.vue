@@ -1,18 +1,13 @@
 <template>
-  <div class="main-content">
-    <div>
+  <div>
+    <div class="editor-header">
       <button class="btn btn-icon btn-primary" @click="checkGoHome">
         <fa icon="arrow-left"></fa>
       </button>
     </div>
     <div class="container">
-      <textarea @change="updateContent" id="edit-entry" ref="editEntry" class="edit-entry" :value="markdown"></textarea>
-      <div class="actions">
-        <button class="btn btn-icon btn-primary" @click="save">
-          <fa icon="floppy-o"></fa>
-          Save
-        </button>
-      </div>
+      <!-- <textarea @change="updateContent" id="edit-entry" ref="editEntry" class="edit-entry" :value="markdown"></textarea> -->
+      <v-md-editor @save="save" v-model="markdown" :height="wHeight + 'px'"></v-md-editor>
     </div>
   </div>
 </template>
@@ -42,26 +37,18 @@ export default defineComponent({
       }
       return this.wikiStore.currentEntry.raw_content;
     },
+    wHeight() {
+      return window.innerHeight-150;
+    }
   },
   methods: {
-    updateContent() {
+    updateContent(md: string) {
       this.unsavedChanges = true;
-      const newContentField = (<HTMLInputElement> document.getElementById('edit-entry'));
-      if (newContentField === null) {
-        throw new Error('Unable to find field edit-entry')
-      }
-      let newContent = newContentField.value;
-      newContent = newContent.replace(/…/g, '...');
-      newContent = newContent.replace(/’/g, '\'');
-      newContent = newContent.replace(/“/g, '"');
-      newContent = newContent.replace(/”/g, '"');
-      newContent = newContent.replace(/„/g, '"');
-      newContentField.value = newContent;
       const entry = this.wikiStore.currentEntry;
       if (entry === null) {
         throw new Error('Entry is not defined');
       }
-      entry.raw_content = newContent;
+      entry.raw_content = md;
       this.wikiStore.updateEntry(entry);
     },
     save() {

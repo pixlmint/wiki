@@ -2,9 +2,8 @@
 @import 'fonts';
 @import 'responsive';
 @import 'font-awesome';
-
-@import '../../node_modules/@vuikit/theme/dist/vuikit';
-
+@import 'flex.scss';
+@import 'buttons';
 
 html,
 body {
@@ -27,73 +26,20 @@ body {
     background-color: rgb(243, 243, 243);
 }
 
-.btn {
-    background-color: white;
-    padding: 0.25rem 0.5rem;
-    text-decoration: none;
-    border-width: 2px;
-    border-radius: 2px;
-    border-style: solid;
-    font-size: 14px;
-    line-height: 38px;
-    text-align: center;
-    text-transform: uppercase;
-
-    &:hover {
-        text-decoration: none;
-    }
-}
-
-.btn-icon {
-    height: 3rem;
-    width: 3rem;
-}
-
-.btn-primary {
-    color: $primary;
-    border-color: $primary;
-
-    &:hover {
-        background-color: $primary;
-        color: white;
-        border-color: $primary;
-    }
-}
-
-.btn-rounded {
-    border-radius: 50%;
-}
-
-.btn-danger {
-    color: $danger;
-    border-color: $danger;
-
-    &:hover {
-        background-color: $danger;
-        border-color: $danger;
-        color: white;
-    }
-}
-
 a {
     color: $primary;
-}
-
-.header {
-    background-color: white;
-    position: relative;
-
-    h1 {
-        display: block;
-        font-size: 5rem;
-        margin: unset;
-    }
 }
 
 .main-content {
     background-color: white;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
+    min-width: 100%;
+    min-height: 100vh;
+}
+
+.editor-header {
+    min-height: 150px;
 }
 
 .article-head {
@@ -113,51 +59,6 @@ a {
         width: 100vw;
         margin-left: -5px;
     }
-}
-
-.d-flex {
-    display: flex;
-    flex-wrap: wrap;
-
-    &.gap-1 {
-        gap: 1px;
-    }
-}
-
-.jc_space-between {
-    justify-content: space-between;
-}
-
-.jc_space-around {
-    justify-content: space-around;
-}
-
-.jc_space-evenly {
-    justify-content: space-evenly;
-}
-
-.js_center {
-    justify-content: center;
-}
-
-.js_end {
-    justify-content: end;
-}
-
-.ai_center {
-    align-items: center;
-}
-
-.ai_baseline {
-    align-items: baseline;
-}
-
-.ai_flex-end {
-    align-items: flex-end;
-}
-
-.ai_flex-start {
-    align-items: flex-start;
 }
 
 label {

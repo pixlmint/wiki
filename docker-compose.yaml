@@ -5,7 +5,7 @@ services:
         image: christiangroeber/php-server:7.4.2
         container_name: wiki
         ports:
-            - '90:80'
+            - '91:80'
         environment:
             PICO_URL_REWRITING: 1
         volumes: 

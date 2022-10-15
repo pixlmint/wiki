@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="wiki">
     <!--    <Loading v-if="isLoading"></Loading>-->
-    <Nav></Nav>
+    <Nav class="nav"></Nav>
     <div class="main-content">
       <router-view></router-view>
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import Loading from './src/components/Loading.vue';
+// import Loading from './src/components/Loading.vue';
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
@@ -63,3 +63,7 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@import './style/main.scss';
+</style>
