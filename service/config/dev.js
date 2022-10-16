@@ -24,7 +24,7 @@ module.exports = merge(baseWebpackConfig, cssWebpackConfig, {
         liveReload: true,
         proxy: {
             '/api': {
-                target: 'http://192.168.1.170:90',
+                target: 'http://192.168.1.170:91',
                 pathRewrite: {'^/api': '/api'}
             }
         },

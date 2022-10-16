@@ -3,7 +3,7 @@
     "description": "Your very own Wiki, powered by Markdown",
     "require": {
         "ext-json":  "*",
-        "christiangroeber/nacho": "^0.17"
+        "christiangroeber/nacho": "^0.18"
     },
     "autoload": {
         "psr-4": {

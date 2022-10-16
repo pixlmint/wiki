@@ -2,9 +2,9 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Nacho\Helpers\Request;
+use Nacho\Models\Request;
 use Nacho\Security\JsonUserHandler;
-use Nacho\Helpers\Route;
+use Nacho\Models\Route;
 use Nacho\Nacho;
 
 session_start();
