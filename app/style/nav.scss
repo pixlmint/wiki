@@ -7,14 +7,18 @@
         padding: 10px 0 10px 1rem;
     }
      
-    a {
+    .nav-item {
+        background-color: white;
+        border: none;
         color: black;
         padding: 10px 20px 10px 5px;
-        text-decoration: none;
         border-radius: 3px;
     }
-
-    a:hover {
+    .nav-item-link {
+        color: black;
+        text-decoration: none;
+    }
+    .nav-item:hover {
         background-color: rgba(0, 0, 0, 0.1);
     }
 }

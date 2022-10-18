@@ -88,6 +88,34 @@ export const useWikiStore = defineStore('wikiStore', {
           this.loadedEntries.push(response.data);
         })
     },
+    addEntry(parentFolder : string, token: string | null) {
+      if (token === null) {
+        // TODO: uncomment
+        //throw new Error('token cannot be null');
+      }
+      return axios({
+        method: "POST",
+        url: '/api/admin/entry/add',
+        data: queryFormatter({'parent-folder': parentFolder, token: token}),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    },
+    addFolder(parentFolder : string, token: string | null) {
+      if (token === null) {
+        // TODO: uncomment
+        //throw new Error('token cannot be null');
+      }
+      return axios({
+        method: "POST",
+        url: '/api/admin/folder/add',
+        data: queryFormatter({parentFolder: parentFolder, token: token}),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+    },
     deleteEntry(entry: string, token: string | null) {
       if (token === null) {
         throw new Error('invalid token');
