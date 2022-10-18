@@ -1,7 +1,7 @@
 <template>
   <div>
     <EditorHead/>
-    <EditEntry :entry="entry"></EditEntry>
+    <EditEntry></EditEntry>
   </div>
 </template>
 
@@ -17,7 +17,6 @@ export default defineComponent({
   data: function () {
     return {
       title: "Edit " + this.entry,
-      entry: '',
     }
   },
   created() {
@@ -26,11 +25,11 @@ export default defineComponent({
       // TODO: uncomment
       // throw new Error('You are not allowed to edit entries');
     }
-    const entry = new URLSearchParams(location.search).get('p');
-    if (entry != null) {
-      this.entry = entry;
+    let entry = new URLSearchParams(location.search).get('p');
+    if (entry === null) {
+      entry = '';
     }
-    useWikiStore().fetchEntry(this.entry).then(() => {
+    useWikiStore().fetchEntry(entry).then(() => {
       this.title = "Edit " + useWikiStore().currentEntry?.meta.title;
       useMainStore().setTitle(this.title)
     });

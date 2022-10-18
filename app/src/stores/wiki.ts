@@ -53,13 +53,9 @@ export const useWikiStore = defineStore('wikiStore', {
     getNav: state => state.nav,
   },
   actions: {
-    updateEntry(payload: WikiEntry) {
-      this.currentEntry = payload;
-    },
     saveEntry(token: string | null) {
-      if (this.$state.currentEntry === null) {
-        // TODO: uncomment
-        //throw new Error('Not editing any entry');
+      if (this.currentEntry === null) {
+        throw new Error('Not editing any entry');
       }
       if (token === null) {
         token = '';
@@ -72,9 +68,9 @@ export const useWikiStore = defineStore('wikiStore', {
         entry: this.currentEntry?.id,
       }
       return axios({
-        method: 'POST',
+        method: 'PUT',
         url: '/api/admin/entry/edit',
-        data: queryFormatter(data),
+        data:  queryFormatter(data),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },

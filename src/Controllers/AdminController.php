@@ -5,6 +5,7 @@ namespace Wiki\Controllers;
 use Nacho\Models\HttpMethod;
 use Nacho\Models\HttpResponseCode;
 use Nacho\Controllers\AbstractController;
+use Nacho\Models\Request;
 use Wiki\Actions\AddFileAction;
 
 class AdminController extends AbstractController
@@ -27,16 +28,15 @@ class AdminController extends AbstractController
         return $this->json([], HttpResponseCode::CREATED);
     }
 
-    function edit($request)
+    function edit(Request $request)
     {
-        if (!key_exists('entry', $_REQUEST) || !key_exists('content', $_REQUEST)) {
+        if (!key_exists('entry', $request->getBody()) || !key_exists('content', $request->getBody())) {
             return $this->json(['message' => 'Please define entry and content'], HttpResponseCode::BAD_REQUEST);
         }
-
         if (strtoupper($request->requestMethod) !== HttpMethod::PUT) {
             return $this->json(['message' => 'Only PUT allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
         }
-        $success = $this->nacho->getMarkdownHelper()->editPage($_REQUEST['entry'], $_REQUEST['content'], null);
+        $success = $this->nacho->getMarkdownHelper()->editPage($request->getBody()['entry'], $request->getBody()['content'], []);
 
         if (!$success) {
             return $this->json(['message' => 'Error Saving Content'], HttpResponseCode::INTERNAL_SERVER_ERROR);

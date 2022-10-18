@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "805f20a89efdafec767488fac9528ae2",
+    "content-hash": "c8b4a11db67e9624858394bba7f08545",
     "packages": [
         {
             "name": "christiangroeber/nacho",
-            "version": "0.18",
+            "version": "0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristianGroeber/Nacho.git",
-                "reference": "8addc95809b6e2feddce9d52e30a06efde09f6f7"
+                "reference": "409ba94efdbffe235903f617138cc96d2466b3af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristianGroeber/Nacho/zipball/8addc95809b6e2feddce9d52e30a06efde09f6f7",
-                "reference": "8addc95809b6e2feddce9d52e30a06efde09f6f7",
+                "url": "https://api.github.com/repos/ChristianGroeber/Nacho/zipball/409ba94efdbffe235903f617138cc96d2466b3af",
+                "reference": "409ba94efdbffe235903f617138cc96d2466b3af",
                 "shasum": ""
             },
             "require": {
@@ -45,9 +45,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/ChristianGroeber/Nacho/issues",
-                "source": "https://github.com/ChristianGroeber/Nacho/tree/0.18"
+                "source": "https://github.com/ChristianGroeber/Nacho/tree/0.21"
             },
-            "time": "2022-10-16T09:02:21+00:00"
+            "time": "2022-10-18T18:54:08+00:00"
         },
         {
             "name": "erusev/parsedown",

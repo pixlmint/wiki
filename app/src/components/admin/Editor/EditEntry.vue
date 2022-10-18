@@ -1,19 +1,18 @@
 <template>
   <div>
     <div class="container">
-      <v-md-editor @save="save" v-model="markdown" :height="wHeight + 'px'"></v-md-editor>
+      <v-md-editor @change="updateContent" @save="save" v-model="markdown" :height="wHeight + 'px'"></v-md-editor>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, toRaw} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from '@/src/stores/auth'
 import {useRouter} from 'vue-router'
 
 export default defineComponent({
-  props: ["entry"],
   data: function () {
     return {
       unsavedChanges: false,
@@ -32,14 +31,16 @@ export default defineComponent({
     },
   },
   methods: {
-    updateContent(md: string) {
-      this.unsavedChanges = true;
-      const entry = this.wikiStore.currentEntry;
-      if (entry === null) {
-        throw new Error('Entry is not defined');
+    updateContent() {
+      if (!this.wikiStore.currentEntry) {
+        return;
       }
-      entry.raw_content = md;
-      this.wikiStore.updateEntry(entry);
+      this.unsavedChanges = true;
+      const area = document.getElementsByTagName('textarea').item(0);
+      if (area === null) {
+        return;
+      }
+      this.wikiStore.currentEntry.raw_content = area.value;
     },
     save() {
       this.unsavedChanges = false;
