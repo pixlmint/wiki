@@ -15,6 +15,11 @@
         "function": "loadNav"
     },
     {
+        "route": "/api/admin/entry/rename",
+        "function": "rename",
+        "controller": "Wiki\\Controllers\\AdminController"
+    },
+    {
         "route": "/api/admin/entry/add",
         "controller": "Wiki\\Controllers\\AdminController",
         "function": "add"
