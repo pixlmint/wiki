@@ -11703,6 +11703,11 @@ watchpack@^2.4.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
+wave-ui@^2.43.0:
+  version "2.43.0"
+  resolved "https://registry.yarnpkg.com/wave-ui/-/wave-ui-2.43.0.tgz#e91937b5903078277ad2fc6ca38f77f558968178"
+  integrity sha512-r1VcYFbCRvDMu7O31NuowUH37c4GPXfUIJIeLGEdbIYlUdTE64cD7RePAh2UqBU0EE4AUrbhD7WSZKMl+Elcuw==
+
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/wbuf/-/wbuf-1.7.3.tgz#c1d8d149316d3ea852848895cb6a0bfe887b87df"

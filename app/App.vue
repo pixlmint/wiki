@@ -1,11 +1,11 @@
 <template>
-  <div class="wiki">
+  <w-app class="wiki">
     <!--    <Loading v-if="isLoading"></Loading>-->
     <Nav class="nav"></Nav>
     <div class="main-content">
       <router-view></router-view>
     </div>
-  </div>
+  </w-app>
 </template>
 
 <script lang="ts">
