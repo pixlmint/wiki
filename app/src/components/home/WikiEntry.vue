@@ -3,13 +3,8 @@
     <div class="article-head">
       <h1>{{ title }}</h1>
       <div v-if="canEdit">
-        <button class="btn btn-icon btn-rounded">
-          <fa icon="ellipsis-v"></fa>
-        </button>
-        <div class="dropdown">
-          <a class="dropdown-item" @click="deleteEntry" title="Delete">Delete</a>
-          <a class="dropdown-item" :href="'/admin/edit?p=' + entry" title="Edit">Edit</a>
-        </div>
+        <a class="dropdown-item" @click="deleteEntry" title="Delete">Delete</a>
+        <a class="dropdown-item" :href="'/admin/edit?p=' + entry" title="Edit">Edit</a>
       </div>
     </div>
     <div class="article-body">
@@ -20,7 +15,6 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore} from '@/src/stores/auth'
 import {useWikiStore} from '@/src/stores/wiki'
 import {useMainStore} from "@/src/stores/main";
 import fa from '@/src/components/fa.vue'
@@ -37,8 +31,8 @@ export default defineComponent({
   components: {
     fa,
   },
-  created: function() {
-    this.wikiStore.fetchEntry(this.entry).then(function() {
+  created: function () {
+    this.wikiStore.fetchEntry(this.entry).then(function () {
       useMainStore().setTitle(useWikiStore().currentEntry.meta.title);
     });
   },

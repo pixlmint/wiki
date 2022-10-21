@@ -16,6 +16,9 @@
               <li>
                 <button class="nav-item" @click="addEntry">Add Entry</button>
               </li>
+              <li>
+                <button class="nav-item" @click="deleteEntry">Delete Entry</button>
+              </li>
             </ul>
           </div>
         </span>
@@ -54,9 +57,11 @@ export default defineComponent({
       console.log(this.el);
     },
     addEntry() {
-      console.log(this.el);
       useWikiStore().addEntry(this.el.id, useAuthStore().getToken);
     },
+    deleteEntry() {
+      useWikiStore().deleteEntry(this.el.id, useAuthStore().token);
+    }
   },
 })
 </script>

@@ -7,6 +7,7 @@ use Nacho\Models\HttpResponseCode;
 use Nacho\Controllers\AbstractController;
 use Nacho\Models\Request;
 use Wiki\Actions\AddFileAction;
+use Wiki\Actions\DeleteAction;
 use Wiki\Helpers\TokenHelper;
 
 class AdminController extends AbstractController
@@ -46,42 +47,19 @@ class AdminController extends AbstractController
         return $this->json(['message' => 'successfully saved content']);
     }
 
-    public function delete($request)
+    public function delete(Request $request)
     {
-        if (HttpMethod::DELETE !== strtoupper($_SERVER['REQUEST_METHOD'])) {
+        if (HttpMethod::DELETE !== strtoupper($request->requestMethod)) {
             return $this->json(['message' => 'Only DELETE allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
         }
-        if (key_exists('file', $_REQUEST)) {
-            $file = $_REQUEST['file'];
-        } elseif (key_exists('dir', $_REQUEST)) {
-            $file = $_REQUEST['dir'];
-        } else {
-            $file = '';
-        }
-        // What does this do?
-        // if (substr($file, 0, strlen($_SERVER['DOCUMENT_ROOT'])) !== $_SERVER['DOCUMENT_ROOT']) {
-        //     returnHome();
-        // }
 
-        function rmdirRecursive($dir)
-        {
-            foreach (scandir($dir) as $sub) {
-                if ($sub !== '.' && $sub !== '..') {
-                    $newDir = $dir . '/' . $sub;
-                    if (is_file($newDir)) {
-                        unlink($newDir);
-                    } elseif (is_dir($newDir)) {
-                        rmdirRecursive($newDir);
-                    }
-                }
-            }
-            rmdir($dir);
-        }
+        // TODO: Check Token
 
-        if (is_file($file)) {
-            unlink($file);
-        } elseif (is_dir($file)) {
-            rmdirRecursive($file);
+        DeleteAction::$mdHelper = $this->nacho->getMarkdownHelper();
+        $success = DeleteAction::run(['page' => $request->getBody()['entry']]);
+
+        if (!$success) {
+            return $this->json(['message' => 'Error Deleting File'], HttpResponseCode::INTERNAL_SERVER_ERROR);
         }
 
         return $this->json(['message' => 'Successfully Deleted File']);

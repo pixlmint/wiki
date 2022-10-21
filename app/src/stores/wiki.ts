@@ -115,9 +115,17 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     deleteEntry(entry: string, token: string | null) {
       if (token === null) {
-        throw new Error('invalid token');
+        // TODO: uncomment
+        // throw new Error('invalid token');
       }
-      return axios.delete('/api/admin/entry/delete?' + queryFormatter({entry: entry, token: token}))
+      return axios({
+        method: 'DELETE',
+        url: '/api/admin/entry/delete',
+        data: queryFormatter({entry: entry, token: token}),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
     },
     renameEntry(newName: string, token: string | null) {
       if (this.currentEntry === null) {
