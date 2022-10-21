@@ -1,7 +1,16 @@
-function queryFormatter(data: any) {
-    return Object.keys(data)
-        .map((key) => key + '=' + data[key])
-        .join('&')
+function queryFormatter(obj: any, prefix?: any): string {
+  var str = [],
+    p;
+  for (p in obj) {
+    if (obj.hasOwnProperty(p)) {
+      var k = prefix ? prefix + "[" + p + "]" : p,
+        v = obj[p];
+      str.push((v !== null && typeof v === "object") ?
+        queryFormatter(v, k) :
+        encodeURIComponent(k) + "=" + encodeURIComponent(v));
+    }
+  }
+  return str.join("&");
 }
 
 export {queryFormatter}

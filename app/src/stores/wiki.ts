@@ -65,6 +65,7 @@ export const useWikiStore = defineStore('wikiStore', {
       const data = {
         token: token,
         content: this.currentEntry?.raw_content,
+        meta: this.currentEntry?.meta,
         entry: this.currentEntry?.id,
       }
       return axios({
@@ -118,16 +119,12 @@ export const useWikiStore = defineStore('wikiStore', {
       }
       return axios.delete('/api/admin/entry/delete?' + queryFormatter({entry: entry, token: token}))
     },
-    renameEntry(entry: string, newName: string, token: string) {
-      const data = {entry: entry, newName: newName, token: token};
-      return axios({
-        method: "POST",
-        url: '/api/admin/entry/rename',
-        data: queryFormatter(data),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+    renameEntry(newName: string, token: string | null) {
+      if (this.currentEntry === null) {
+        return;
+      }
+      this.currentEntry.meta.title = newName;
+      return this.saveEntry(token)
     },
     loadNav() {
       return axios.get('/api/nav')

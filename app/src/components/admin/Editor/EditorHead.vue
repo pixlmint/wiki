@@ -29,7 +29,7 @@ export default defineComponent({
       if (newTitle === null) {
         return;
       }
-      useWikiStore().renameEntry(useWikiStore().currentEntry?.id, newTitle, useAuthStore().token)
+      useWikiStore().renameEntry(newTitle, useAuthStore().token)
     }
   },
   components: {

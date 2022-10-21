@@ -32,32 +32,18 @@ class AdminController extends AbstractController
 
     function edit(Request $request)
     {
-        if (!key_exists('entry', $request->getBody()) || !key_exists('content', $request->getBody())) {
+        if (!key_exists('entry', $request->getBody()) || !key_exists('content', $request->getBody()) || !key_exists('meta', $request->getBody())) {
             return $this->json(['message' => 'Please define entry and content'], HttpResponseCode::BAD_REQUEST);
         }
         if (strtoupper($request->requestMethod) !== HttpMethod::PUT) {
             return $this->json(['message' => 'Only PUT allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
         }
-        $success = $this->nacho->getMarkdownHelper()->editPage($request->getBody()['entry'], $request->getBody()['content'], []);
+        $success = $this->nacho->getMarkdownHelper()->editPage($request->getBody()['entry'], $request->getBody()['content'], $request->getBody()['meta']);
 
         if (!$success) {
             return $this->json(['message' => 'Error Saving Content'], HttpResponseCode::INTERNAL_SERVER_ERROR);
         }
         return $this->json(['message' => 'successfully saved content']);
-    }
-
-    public function rename(Request $request)
-    {
-        if (!key_exists('entry', $request->getBody()) || !key_exists('newName', $request->getBody()) || !key_exists('token', $request->getBody())) {
-            return $this->json(['message' => 'Please define entry and content'], HttpResponseCode::BAD_REQUEST);
-        }
-        if (strtoupper($request->requestMethod) !== HttpMethod::POST) {
-            return $this->json(['message' => 'Only POST allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
-        }
-        // TODO: Uncomment
-        // $this->verifyToken();
-
-        // $this->nacho->getMarkdownHelper()->editPage()
     }
 
     public function delete($request)
