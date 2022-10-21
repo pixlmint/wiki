@@ -7,7 +7,12 @@ use Wiki\Contracts\ActionInterface;
 
 class DeleteAction implements ActionInterface
 {
-    public static MarkdownHelper $mdHelper;
+    private static MarkdownHelper $mdHelper;
+
+    public static function setMarkdownHelper(MarkdownHelper $markdownHelper)
+    {
+        self::$mdHelper = $markdownHelper;
+    }
 
     public static function run(array $arguments): bool
     {

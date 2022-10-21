@@ -55,7 +55,7 @@ class AdminController extends AbstractController
 
         // TODO: Check Token
 
-        DeleteAction::$mdHelper = $this->nacho->getMarkdownHelper();
+        DeleteAction::setMarkdownHelper($this->nacho->getMarkdownHelper());
         $success = DeleteAction::run(['page' => $request->getBody()['entry']]);
 
         if (!$success) {
