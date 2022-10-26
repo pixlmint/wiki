@@ -132,7 +132,19 @@ export const useWikiStore = defineStore('wikiStore', {
         return;
       }
       this.currentEntry.meta.title = newName;
-      return this.saveEntry(token)
+      const data = {
+        'new-title': newName,
+        entry: this.currentEntry.id,
+        token: token,
+      }
+      return axios({
+        method: "PUT",
+        url: "/api/admin/entry/rename",
+        data: queryFormatter(data),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
     },
     loadNav() {
       return axios.get('/api/nav')

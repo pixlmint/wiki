@@ -25,6 +25,7 @@ class AddFileAction implements ActionInterface
             throw new Exception('Unable to find this page');
         }
         $newPage = new PicoPage();
+        $newPage->raw_content = 'Write Some Content';
         $meta = new PicoMeta();
         $meta->title = 'New Entry';
         $meta->date = date('Y-m-d');
@@ -35,8 +36,11 @@ class AddFileAction implements ActionInterface
         $fileName = FileNameHelper::generateFileNameFromTitle($meta->title);
         $file = CONTENT_DIR . $parentDir . $fileName;
 
+        $newPage->id = $parentDir . FileNameHelper::slugify($meta->title);
         $newPage->file = $file;
 
-        return is_int(self::$markdownHelper->storePage($page)) ? true : false;
+        // print_r($newPage);
+
+        return self::$markdownHelper->storePage($newPage);
     }
 }

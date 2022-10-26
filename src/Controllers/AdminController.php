@@ -8,6 +8,7 @@ use Nacho\Controllers\AbstractController;
 use Nacho\Models\Request;
 use Wiki\Actions\AddFileAction;
 use Wiki\Actions\DeleteAction;
+use Wiki\Actions\RenameAction;
 use Wiki\Helpers\TokenHelper;
 
 class AdminController extends AbstractController
@@ -20,15 +21,13 @@ class AdminController extends AbstractController
         if (!key_exists('parent-folder', $_REQUEST) || !key_exists('token', $_REQUEST)) {
             return $this->json(['message' => 'Please define title, parent-page, and token'], HttpResponseCode::BAD_REQUEST);
         }
-        $this->verifyToken();
-
-        // TODO: check token
+        // $this->verifyToken();
 
         AddFileAction::setMarkdownHelper($this->nacho->getMarkdownHelper());
-        AddFileAction::run($_REQUEST);
+        $success = AddFileAction::run($_REQUEST);
 
 
-        return $this->json([], HttpResponseCode::CREATED);
+        return $this->json(['success' => $success], HttpResponseCode::CREATED);
     }
 
     function edit(Request $request)
@@ -45,6 +44,19 @@ class AdminController extends AbstractController
             return $this->json(['message' => 'Error Saving Content'], HttpResponseCode::INTERNAL_SERVER_ERROR);
         }
         return $this->json(['message' => 'successfully saved content']);
+    }
+
+    function rename(Request $request)
+    {
+        if (!key_exists('entry', $request->getBody()) || !key_exists('new-title', $request->getBody()) || !key_exists('token', $request->getBody())) {
+            return $this->json(['message' => 'Please define entry and content'], HttpResponseCode::BAD_REQUEST);
+        }
+        if (strtoupper($request->requestMethod) !== HttpMethod::PUT) {
+            return $this->json(['message' => 'Only PUT allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
+        }
+
+        RenameAction::setMarkdownHelper($this->nacho->getMarkdownHelper());
+        RenameAction::run($request->getBody());
     }
 
     public function delete(Request $request)
