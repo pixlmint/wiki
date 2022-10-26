@@ -10,10 +10,13 @@ import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import Prism from 'prismjs';
 import enUS from '@kangc/v-md-editor/lib/lang/en-US';
+import WaveUI from 'wave-ui'
+import 'wave-ui/dist/wave-ui.css'
 
 VueMarkdownEditor.use(vuepressTheme, {
     Prism,
 })
 VueMarkdownEditor.lang.use('en-US', enUS)
 
-createApp(App).use(VueMarkdownEditor).use(VueAxios, axios).use(createPinia()).use(router).mount('#app')
+const app = createApp(App).use(VueMarkdownEditor).use(VueAxios, axios).use(createPinia()).use(router).mount('#app')
+new WaveUI(app, {});
