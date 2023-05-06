@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Helpers\AdminHelper;
-use App\Helpers\JournalConfiguration;
+use App\Helpers\WikiConfiguration;
 use App\Helpers\TokenHelper;
 use Nacho\Controllers\AbstractController;
 
@@ -17,13 +17,13 @@ class InitController extends AbstractController
     {
         $isTokenValid = $this->isTokenValid();
 
-        $year = JournalConfiguration::year();
+        $year = WikiConfiguration::title();
 
         $isAdminCreated = AdminHelper::isAdminCreated();
 
-        $version = JournalConfiguration::version();
+        $version = WikiConfiguration::version();
 
-        return $this->json(['is_token_valid' => $isTokenValid, 'journalYear' => $year, 'version' => $version, 'adminCreated' => $isAdminCreated]);
+        return $this->json(['is_token_valid' => $isTokenValid, 'title' => $year, 'version' => $version, 'adminCreated' => $isAdminCreated]);
     }
 
     private function isTokenValid(): string

@@ -3,6 +3,7 @@
 use App\Controllers\AdminController;
 use App\Controllers\AuthenticationController;
 use App\Controllers\HomeController;
+use App\Controllers\InitController;
 use App\Controllers\UsersController;
 use App\Controllers\WikiController;
 
@@ -63,5 +64,15 @@ return [
         "route" => "/api/change-password",
         "controller" => AuthenticationController::class,
         "function" => "changePassword"
+    ],
+    [
+        "route" => "/api/auth/create-admin",
+        "controller" => AuthenticationController::class,
+        "function" => 'createAdmin',
+    ],
+    [
+        "route" => "/api/init",
+        "controller" => InitController::class,
+        "function" => "init",
     ],
 ];

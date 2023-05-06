@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use Nacho\Helpers\ConfigurationHelper;
 
-class JournalConfiguration
+class WikiConfiguration
 {
     public static function mediaDir(): string
     {
@@ -16,9 +16,9 @@ class JournalConfiguration
         return self::getConfigValue('mediaBaseUrl');
     }
 
-    public static function year(): string|int
+    public static function title(): string
     {
-        return self::getConfigValue('year');
+        return self::getConfigValue('title');
     }
 
     public static function version(): string|int
@@ -28,6 +28,6 @@ class JournalConfiguration
 
     private static function getConfigValue(string $confName): mixed
     {
-        return ConfigurationHelper::getInstance()->getCustomConfig('journal')[$confName];
+        return ConfigurationHelper::getInstance()->getCustomConfig('wiki')[$confName];
     }
 }

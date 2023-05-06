@@ -3,7 +3,7 @@
 namespace App\Helpers\Media;
 
 use App\Contracts\MediaProcessor;
-use App\Helpers\JournalConfiguration;
+use App\Helpers\WikiConfiguration;
 use App\Models\Media;
 use App\Models\MediaDirectory;
 use App\Models\ScaledMedia;

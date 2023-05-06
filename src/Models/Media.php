@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\JournalConfiguration;
+use App\Helpers\WikiConfiguration;
 use Nacho\Contracts\ArrayableInterface;
 use Nacho\ORM\AbstractModel;
 use Nacho\ORM\ModelInterface;
@@ -78,9 +78,9 @@ class Media extends AbstractModel implements ArrayableInterface, ModelInterface
     public function getMediaPath(?string $size = null): string
     {
         if ($size) {
-            return implode(DIRECTORY_SEPARATOR, [JournalConfiguration::mediaBaseUrl(), $this->month, $this->day, $size, $this->name . '.' . $this->getScaled($size)->getFileExtension()]);
+            return implode(DIRECTORY_SEPARATOR, [WikiConfiguration::mediaBaseUrl(), $this->month, $this->day, $size, $this->name . '.' . $this->getScaled($size)->getFileExtension()]);
         }
-        return implode(DIRECTORY_SEPARATOR, [JournalConfiguration::mediaBaseUrl(), $this->month, $this->day, $this->name]);
+        return implode(DIRECTORY_SEPARATOR, [WikiConfiguration::mediaBaseUrl(), $this->month, $this->day, $this->name]);
     }
 
     /**
@@ -97,9 +97,9 @@ class Media extends AbstractModel implements ArrayableInterface, ModelInterface
     public function getDirectory(?string $size = null): string
     {
         if ($size) {
-            return implode(DIRECTORY_SEPARATOR, [JournalConfiguration::mediaBaseUrl(), $this->month, $this->day, $size]);
+            return implode(DIRECTORY_SEPARATOR, [WikiConfiguration::mediaBaseUrl(), $this->month, $this->day, $size]);
         }
-        return implode(DIRECTORY_SEPARATOR, [JournalConfiguration::mediaBaseUrl(), $this->month, $this->day]);
+        return implode(DIRECTORY_SEPARATOR, [WikiConfiguration::mediaBaseUrl(), $this->month, $this->day]);
     }
 
     /**

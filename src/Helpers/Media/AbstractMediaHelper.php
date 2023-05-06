@@ -2,7 +2,7 @@
 
 namespace App\Helpers\Media;
 
-use App\Helpers\JournalConfiguration;
+use App\Helpers\WikiConfiguration;
 use App\Models\Media;
 use App\Models\MediaDirectory;
 use App\Models\Mime;
@@ -45,7 +45,7 @@ abstract class AbstractMediaHelper
 
     public function loadMedia(MediaDirectory $directory): array
     {
-        $mediaDir = JournalConfiguration::mediaDir();
+        $mediaDir = WikiConfiguration::mediaDir();
         $media = [];
         $dir = $directory->printDirectory();
         foreach (scandir("${mediaDir}/${dir}") as $file) {

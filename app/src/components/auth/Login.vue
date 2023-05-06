@@ -1,48 +1,58 @@
 <template>
-  <div class="main-content">
-    <div>
-      <button class="btn btn-primary" @click="auth">Return</button>
-    </div>
-    <form @submit.prevent="login">
-      <fieldset class="uk-fieldset">
-        <div class="form-row">
-          <input class="uk-input" @keyup.enter="login" v-model="username" placeholder="username" />
-        </div>
-        <div class="form-row">
-          <input class="uk-input" @keyup.enter="login" v-model="password" placeholder="password" type="password" />
-        </div>
-      </fieldset>
-      <button class="btn btn-primary" @click="login">Login</button>
-    </form>
-  </div>
+    <el-dialog title="Login" v-model="isShowing">
+        <el-form :model="loginForm" @submit.prevent="login">
+            <el-form-item label="Username">
+                <el-input v-model="loginForm.username"/>
+            </el-form-item>
+            <el-form-item label="Password">
+                <el-input type="password" v-model="loginForm.password"></el-input>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+              <span class="dialog-footer">
+        <el-button @click="submitLoginForm">Login</el-button>
+      </span>
+        </template>
+    </el-dialog>
 </template>
 
-<script lang="ts">
+<script>
 import {defineComponent} from "vue";
-import {useAuthStore} from "@/src/stores/auth";
 import {useMainStore} from "@/src/stores/main";
-import {useRouter} from "vue-router";
+import {useAuthStore} from "@/src/stores/auth";
+import {useDialogStore} from "@/src/stores/dialog";
+
+const route = '/auth/login';
 
 export default defineComponent({
-  data: () => {
-    return {
-      username: "",
-      password: "",
-      router: useRouter(),
-    };
-  },
-  created() {
-    useMainStore().setTitle('Login');
-  },
-  methods: {
-    login() {
-      useAuthStore().login(this.username, this.password).then(() => {
-        this.router.push('/');
-      })
+    name: "LoginModal",
+    data() {
+        return {
+            loginForm: {
+                username: '',
+                password: '',
+            },
+            authStore: useAuthStore(),
+            mainStore: useMainStore(),
+            dialogStore: useDialogStore(),
+        }
     },
-    auth() {
-      this.router.push('/auth')
-    }
-  },
+    methods: {
+        submitLoginForm() {
+            this.authStore.login(this.loginForm).then(() => {
+                this.dialogStore.clearShowingDialog();
+            })
+        },
+    },
+    computed: {
+        isShowing: {
+            get() {
+                return route === this.dialogStore.getShowingDialog;
+            },
+            set() {
+                this.dialogStore.clearShowingDialog();
+            }
+        }
+    },
 })
 </script>

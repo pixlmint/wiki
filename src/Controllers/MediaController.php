@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Contracts\MediaProcessor;
-use App\Helpers\JournalConfiguration;
+use App\Helpers\WikiConfiguration;
 use App\Helpers\Media\EntryMediaLoader;
 use App\Helpers\Media\ImageMediaType;
 use App\Helpers\Media\MediaFactory;
@@ -46,7 +46,7 @@ class MediaController extends AbstractController
             return $this->json(['message' => 'Please define the Entry'], 400);
         }
 
-        $mediaDir = JournalConfiguration::mediaDir();
+        $mediaDir = WikiConfiguration::mediaDir();
         $entry = $_REQUEST['entry'];
         $month = explode('/', $entry)[1];
         $day = explode('/', $entry)[2];

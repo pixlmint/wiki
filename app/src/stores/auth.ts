@@ -22,10 +22,14 @@ export const useAuthStore = defineStore('authStore', {
         getToken: (state) => state.token,
     },
     actions: {
+        setToken(token: string) {
+            this.token = token;
+            localStorage.setItem('token', token);
+        },
         changePassword(payload: ChangePasswordForm) {
             const request = buildRequest('/api/auth/change-password', payload, 'POST');
             return send(request).then(response => {
-                this.token = response.data.token;
+                this.setToken(response.data.token);
             })
         },
         requestNewPassword(username: string) {
@@ -44,7 +48,7 @@ export const useAuthStore = defineStore('authStore', {
             };
             const request = buildRequest('/api/auth/restore-password', data, 'POST');
             return send(request).then(response => {
-                this.token = response.data.token;
+                this.setToken(response.data.token);
             })
         },
         generateNewToken(username: string, token: string | null) {
@@ -57,17 +61,13 @@ export const useAuthStore = defineStore('authStore', {
             };
             const request = buildRequest('/api/auth/generate-new-token', data, 'POST');
             return send(request).then(response => {
-                this.token = response.data.token;
+                this.setToken(response.data.token);
             });
         },
-        login(username: string, password: string) {
-            const data = {
-                username: username,
-                password: password,
-            };
+        login(data: object) {
             const request = buildRequest('/api/login', data, 'POST');
             return send(request).then(response => {
-                this.token = response.data.token;
+                this.setToken(response.data.token);
             });
         },
         loadToken() {
@@ -80,11 +80,7 @@ export const useAuthStore = defineStore('authStore', {
             this.token = null;
             localStorage.removeItem('token');
         },
-        createAdmin(username: string, password: string) {
-            const data = {
-                username: username,
-                password: password,
-            };
+        createAdmin(data: object) {
             const request = buildRequest('/api/auth/create-admin', data, 'POST');
             return send(request);
         },

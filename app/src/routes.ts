@@ -15,61 +15,6 @@ import AdminTools from './components/admin/Tools/index.vue';
 
 const routes = [
     {
-        path: '/auth',
-        name: "Auth",
-        component: Auth,
-    },
-    {
-        path: '/auth/login',
-        name: "Login",
-        component: Login,
-    },
-    {
-        path: '/auth/login-if-not-logged-in',
-        name: 'Login if not logged in',
-        component: LoginRedirector,
-    },
-    {
-        path: '/auth/register',
-        name: "Register",
-        component: Register,
-    },
-    {
-        path: '/auth/restore-password',
-        name: "Restore Password",
-        component: RestorePassword,
-    },
-    {
-        path: '/auth/request-new-password',
-        name: "Request New Password",
-        component: RequestNewPassword,
-    },
-    {
-        path: '/auth/change-password',
-        name: "Change Password",
-        component: ChangePassword,
-    },
-    {
-        path: '/auth/generate-new-token',
-        name: "Generate New Token",
-        component: GenerateNewToken,
-    },
-    {
-        path: '/auth/create-admin',
-        name: "Create Admin User",
-        component: CreateAdmin,
-    },
-    {
-        path: "/admin/tools",
-        name: "More Tools",
-        component: AdminTools,
-    },
-    {
-        path: "/admin/edit",
-        name: "Edit",
-        component: Editor,
-    },
-    {
         path: '/',
         name: "Home",
         component: WikiEntry,
