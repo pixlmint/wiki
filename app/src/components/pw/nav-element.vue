@@ -15,7 +15,12 @@
         </template>
         <template v-else>
             <el-menu-item :index="element.id">
-                {{ element.title }}
+                <div @click="loadPage">
+                    {{ element.title }}
+                </div>
+                <el-dropdown>
+                    <el-button circle><el-icon><MoreFilled/></el-icon></el-button>
+                </el-dropdown>
             </el-menu-item>
         </template>
     </div>
@@ -23,17 +28,39 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import {MoreFilled} from "@element-plus/icons-vue";
+import {useWikiStore} from "@/src/stores/wiki";
+import {useMainStore} from "@/src/stores/main";
 
 export default defineComponent({
-  name: 'PWNavElement',
-  props: ['element', 'index', 'parentIndex'],
-  computed: {
-    hasChildren() {
-      return 'children' in this.element && this.element.children.length > 0;
+    name: 'PWNavElement',
+    props: ['element', 'index', 'parentIndex'],
+    components: {
+      MoreFilled,
     },
-    childIndex() {
-      return this.parentIndex + '-' + this.index;
+    computed: {
+        MoreFilled() {
+            return MoreFilled
+        },
+        hasChildren() {
+            return 'children' in this.element && this.element.children.length > 0;
+        },
+        childIndex() {
+            return this.parentIndex + '-' + this.index;
+        }
+    },
+    methods: {
+        loadPage() {
+            console.log(document.location.pathname);
+            const entry = document.location.pathname;
+            useWikiStore().fetchEntry(entry).then(function () {
+                const currentEntry = useWikiStore().currentEntry;
+                if (currentEntry === null) {
+                    throw 'currentEntry is null';
+                }
+                useMainStore().setTitle(currentEntry.meta.title);
+            });
+        },
     }
-  }
 });
 </script>
