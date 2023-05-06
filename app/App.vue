@@ -1,65 +1,39 @@
 <template>
-  <w-app class="wiki">
-    <!--    <Loading v-if="isLoading"></Loading>-->
-    <Nav class="nav"></Nav>
+  <div class="wiki">
+    <pw-loading></pw-loading>
+    <pw-nav></pw-nav>
     <div class="main-content">
       <router-view></router-view>
     </div>
-  </w-app>
+  </div>
 </template>
 
 <script lang="ts">
-// import Loading from './src/components/Loading.vue';
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
-import Nav from '@/src/components/nav/Nav.vue';
+import {useWikiStore} from "@/src/stores/wiki";
 
 export default defineComponent({
   name: "App",
   components: {
-    // Loading,
-    Nav,
   },
   data: () => {
     return {
       mainStore: useMainStore(),
+      wikiStore: useWikiStore(),
     }
-  },
-  computed: {
-    isLoading: function () {
-      return this.mainStore.getIsLoading;
-    },
   },
   created() {
     useAuthStore().loadToken();
-    const mainStore = this.mainStore;
-    this.axios.interceptors.request.use(
-        function (config) {
-          mainStore.setIsLoading(true);
-          return config;
-        },
-        function (error) {
-          mainStore.setIsLoading(false);
-          return Promise.reject(error);
-        }
-    );
-    this.axios.interceptors.response.use(
-        function (response) {
-          mainStore.setIsLoading(false);
-          return response;
-        },
-        function (error) {
-          mainStore.setIsLoading(false);
-          return Promise.reject(error);
-        }
-    );
-    //axios.get('/api/auth/admin-created').then((response) => {
-    //  const adminCreated = response.data.adminCreated;
-    //  if (!adminCreated) {
-    //    useRouter().push('/auth/create-admin');
-    //  }
-    //})
+    const entry = document.location.pathname;
+    this.wikiStore.fetchEntry(entry).then(function () {
+      const currentEntry = useWikiStore().currentEntry;
+      if (currentEntry === null) {
+        throw 'currentEntry is null';
+      }
+      useMainStore().setTitle(currentEntry.meta.title);
+    });
   },
 })
 </script>

@@ -1,9 +1,9 @@
 <?php
 
-namespace Wiki\Actions;
+namespace App\Actions;
 
 use Nacho\Helpers\MarkdownHelper;
-use Wiki\Contracts\ActionInterface;
+use App\Contracts\ActionInterface;
 
 class DeleteAction implements ActionInterface
 {

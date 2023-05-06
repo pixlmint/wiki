@@ -1,58 +1,51 @@
 <?php
 
-namespace Wiki\Helpers;
+namespace App\Helpers;
 
-use Nacho\Security\JsonUserHandler;
-use Nacho\Contracts\UserHandlerInterface;
+use App\Models\TokenUser;
+use Nacho\Exceptions\UserDoesNotExistException;
+use Nacho\ORM\ModelInterface;
+use Nacho\ORM\TemporaryModel;
+use Nacho\Security\UserInterface;
 
 class TokenHelper
 {
-    private UserHandlerInterface $userHandler;
-
-    public function __construct()
+    public function getToken($user): string
     {
-        $this->userHandler = new JsonUserHandler();
-    }
-
-    function getToken($username): string
-    {
-        $secret = self::getSecret();
-
-        return md5($username . $this->userHandler->findUser($username)['tokenStamp'] . $secret);
-    }
-
-    function isTokenValid($token, $users)
-    {
-        foreach ($users as $user) {
-            if ($token === $this->getToken($user['username'])) {
-                return $user;
-            }
+        if ($user instanceof TokenUser) {
+            $user = $user->toArray();
         }
+        $secret = SecretHelper::getSecret();
+        $tokenStamp = $user['tokenStamp'];
 
+        return md5($tokenStamp . $secret);
+    }
+
+    public function isTokenValid($token, $users): bool
+    {
+        try {
+            $this->getUserByToken($token, $users);
+            return true;
+        } catch (UserDoesNotExistException $e) {
+        }
         return false;
     }
 
-    // Generate a fresh token
-    public function generateToken($username): string
+    public function getUserByToken(string $token, array $users): UserInterface|ModelInterface
     {
-        $tokenStamp = md5(random_bytes(100));
-        $this->userHandler->modifyUser($username, 'tokenStamp', $tokenStamp);
+        foreach ($users as $user) {
+            if ($token === $this->getToken($user)) {
+                return TokenUser::init(new TemporaryModel($user), 0);
+            }
+        }
 
-        return $this->getToken($username);
+        throw new UserDoesNotExistException('This User does not exist or the provided token is invalid');
     }
 
-    public function getSecret()
+    public function generateNewTokenStamp(TokenUser &$user): void
     {
-        if (is_file('.secret')) {
-            return file_get_contents('.secret');
-        }
+        $strTokenStamp = random_bytes(100) . time();
 
-        $secretVar = getenv('SECRET');
-
-        if (!$secretVar) {
-            throw new \Exception('SECRET is not defined');
-        }
-
-        return $secretVar;
+        $user->setTokenStamp(sha1($strTokenStamp));
     }
 }

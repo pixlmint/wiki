@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiki\Helpers;
+namespace App\Helpers;
 
 use Exception;
 

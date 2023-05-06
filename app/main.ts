@@ -10,13 +10,24 @@ import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import Prism from 'prismjs';
 import enUS from '@kangc/v-md-editor/lib/lang/en-US';
-import WaveUI from 'wave-ui'
-import 'wave-ui/dist/wave-ui.css'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import PWNav from '@/src/components/pw/nav.vue';
+import PWLoading from '@/src/components/pw/loading.vue';
 
 VueMarkdownEditor.use(vuepressTheme, {
-    Prism,
+  Prism,
 })
 VueMarkdownEditor.lang.use('en-US', enUS)
 
-const app = createApp(App).use(VueMarkdownEditor).use(VueAxios, axios).use(createPinia()).use(router).mount('#app')
-new WaveUI(app, {});
+const app = createApp(App)
+app.use(VueMarkdownEditor)
+app.use(VueAxios, axios)
+app.use(createPinia())
+app.use(router)
+app.use(ElementPlus)
+
+app.component('pw-nav', PWNav);
+app.component('pw-loading', PWLoading);
+
+app.mount('#app')

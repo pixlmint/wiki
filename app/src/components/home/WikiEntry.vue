@@ -32,9 +32,7 @@ export default defineComponent({
     fa,
   },
   created: function () {
-    this.wikiStore.fetchEntry(this.entry).then(function () {
-      useMainStore().setTitle(useWikiStore().currentEntry.meta.title);
-    });
+    console.log(this.entry);
   },
   computed: {
     title() {

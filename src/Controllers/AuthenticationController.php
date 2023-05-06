@@ -1,79 +1,172 @@
 <?php
 
-namespace Wiki\Controllers;
+namespace App\Controllers;
 
+use App\Helpers\AdminHelper;
+use App\Models\TokenUser;
 use Nacho\Controllers\AbstractController;
+use App\Helpers\TokenHelper;
+use Nacho\Models\Request;
+use Nacho\ORM\RepositoryManager;
+use Nacho\Security\UserRepository;
 
 class AuthenticationController extends AbstractController
 {
     public function login($request)
     {
+        $tokenHelper = new TokenHelper();
+        $username = $_REQUEST['username'];
+        $password = $_REQUEST['password'];
         if (strtolower($request->requestMethod) === 'post') {
-            $isValid = false;
-            $foundUser = null;
-            foreach ($this->nacho->userHandler->getUsers() as $user) {
-                if (
-                    $user['username'] === $_REQUEST['username'] &&
-                    password_verify($_REQUEST['password'], $user['password'])
-                ) {
-                    $isValid = true;
-                    $foundUser = $user;
-                    break;
-                }
-            }
-
-            if (!$isValid) {
-                $message = 'This password/ username is not valid';
-                header('HTTP/1.0 400');
+            $user = $this->nacho->userHandler->findUser($username);
+            if ($this->nacho->userHandler->passwordVerify($user, $password)) {
+                $token = $tokenHelper->getToken($user);
+                return $this->json(['token' => $token]);
             } else {
-                session_start();
-                $_SESSION['user'] = $foundUser;
-                if (!isset($_REQUEST['required_page']) || (isset($_REQUEST['required_page']) && ($_REQUEST['required_page'] === '/login') || !$_REQUEST['required_page'])) {
-                    $_REQUEST['required_page'] = '/';
-                }
-                header('HTTP/1.1 302');
-                header('Location: ' . $_REQUEST['required_page']);
+                return $this->json(['message' => 'This password/ username is not valid'], 400);
             }
         }
 
-        return $this->render('security/login.twig', [
-            'page' => $_REQUEST['page'],
-            'message' => $message,
-        ]);
+        return $this->json([], 405);
     }
 
-    public function logout($request)
+    public function requestNewPassword($request)
     {
-        session_destroy();
-        header('HTTP/1.1 302');
-        header('Location: /');
+        if (strtolower($request->requestMethod) !== 'post') {
+            return $this->json([], 405);
+        }
+        $username = $_REQUEST['username'];
+        $resetLink = md5(random_bytes(100));
+
+        /** @var TokenUser $user */
+        $user = $this->nacho->userHandler->findUser($username);
+
+        if (!$user) {
+            return $this->json([], 400);
+        }
+
+        $user->setResetLink($resetLink);
+        RepositoryManager::getInstance()->getRepository(UserRepository::class)->set($user);
+
+        if (!$user->getEmail()) {
+            return $this->json(['This user has no E-Mail Address'], 400);
+        }
+
+        $message = "Click <a href='" . $_SERVER['SERVER_NAME'] . '/auth/restore-password?token=' . $resetLink . "'>here</a> to set a new Password";
+
+        $success = mail($user->getEmail(), 'Reset Password', $message);
+
+        return $this->json(['success' => $success]);
+    }
+
+    public function restorePassword($request)
+    {
+        if (strtolower($request->requestMethod) !== 'post') {
+            return $this->json([], 405);
+        }
+
+        $username = $_REQUEST['username'];
+        $token = $_REQUEST['token'];
+        $password1 = $_REQUEST['password1'];
+        $password2 = $_REQUEST['password2'];
+
+        /** @var TokenUser $user */
+        $user = $this->nacho->userHandler->findUser($username);
+
+        if ($password1 !== $password2 || !$user || $token !== $user->getResetLink() || $user->getResetLink() === '') {
+            return $this->json([], 400);
+        }
+
+        /** @var TokenUser $user */
+        $user = $this->nacho->userHandler->setPasswordForUser($user, $password1);
+        $tokenHelper = new TokenHelper();
+
+        $tokenHelper->generateNewTokenStamp($user);
+        $user->setResetLink('');
+        $token = $tokenHelper->getToken($user);
+        RepositoryManager::getInstance()->getRepository(UserRepository::class)->set($user);
+
+        return $this->json(['token' => $token]);
+    }
+
+    public function generateNewToken($request)
+    {
+        if (strtolower($request->requestMethod) !== 'post') {
+            return $this->json([], 405);
+        }
+        $username = $_REQUEST['username'];
+        $token = $_REQUEST['token'];
+        if (!$username || !$token) {
+            return $this->json(['message' => 'Define Token and Username'], 400);
+        }
+        $tokenHelper = new TokenHelper();
+        if (!$tokenHelper->isTokenValid($token, $this->nacho->userHandler->getUsers())) {
+            return $this->json([], 400);
+        }
+
+        /** @var TokenUser $user */
+        $user = $this->nacho->userHandler->findUser($username);
+
+        $tokenHelper->generateNewTokenStamp($user);
+        $newToken = $tokenHelper->getToken($user);
+        RepositoryManager::getInstance()->getRepository(UserRepository::class)->set($user);
+
+        return $this->json(['token' => $newToken]);
     }
 
     public function changePassword($request)
     {
-        $message = '';
-        if (strtolower($request->requestMethod) === 'post') {
-            if ($_REQUEST['new'] !== $_REQUEST['repeat']) {
-                $message = 'The Passwords don\'t match';
-            }
-            try {
-                $this->nacho->userHandler->changePassword(
-                    $_REQUEST['current'],
-                    $_REQUEST['new']
-                );
-            } catch (Exception $e) {
-                $message = $e->getMessage();
-            }
-            if ($message === '') {
-                if (!isset($_REQUEST['required_page'])) {
-                    $_REQUEST['required_page'] = '/';
-                }
-                header('HTTP/1.1 302');
-                header('Location: ' . $_REQUEST['required_page']);
-            }
+        if (strtolower($request->requestMethod) !== 'post') {
+            return $this->json([], 405);
         }
-        return $this->render('security/change_password.twig', [
-            'message' => $message,
-        ]);
+
+        /** @var TokenUser $user */
+        $user = $this->nacho->userHandler->findUser($_REQUEST['username']);
+
+        if (!password_verify($_REQUEST['currentPassword'], $user->getPassword())) {
+            return $this->json(['message' => 'Invalid Password'], 400);
+        }
+
+        if ($_REQUEST['newPassword1'] !== $_REQUEST['newPassword2']) {
+            return $this->json(['message' => 'The Passwords have to match'], 400);
+        } else {
+            $this->nacho->userHandler->changePassword($user['username'], $_REQUEST['currentPassword'], $_REQUEST['newPassword1']);
+        }
+
+        $tokenHelper = new TokenHelper();
+        $tokenHelper->generateNewTokenStamp($user);
+        $newToken = $tokenHelper->getToken($user);
+
+        RepositoryManager::getInstance()->getRepository(UserRepository::class)->set($user);
+
+        return $this->json(['token' => $newToken]);
+    }
+
+    public function createAdmin(Request $request)
+    {
+        if (AdminHelper::isAdminCreated()) {
+            return $this->json(['message' => 'An Admin already exists'], 400);
+        }
+
+        if (strtolower($request->requestMethod) === 'get') {
+            return $this->json(['message' => 'Create your admin']);
+        }
+
+        $username = $_REQUEST['username'];
+        $password = $_REQUEST['password'];
+
+        $user = new TokenUser(0, $username, 'Editor', null, null, null, null);
+        $guest = new TokenUser(0, 'Guest', 'Guest', null, null, null, null);
+
+        $tokenHelper = new TokenHelper();
+
+        $tokenHelper->generateNewTokenStamp($user);
+
+        RepositoryManager::getInstance()->getRepository(UserRepository::class)->set($user);
+        RepositoryManager::getInstance()->getRepository(UserRepository::class)->set($guest);
+
+        $this->nacho->userHandler->setPassword($username, $password);
+
+        return $this->json(['adminCreated' => true]);
     }
 }

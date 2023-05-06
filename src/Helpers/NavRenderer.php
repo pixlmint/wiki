@@ -1,18 +1,18 @@
 <?php
 
-namespace Wiki\Helpers;
+namespace App\Helpers;
 
 use Nacho\Models\PicoPage;
 use Nacho\Nacho;
 
 class NavRenderer
 {
-    private $wiki;
+    private Nacho $wiki;
 
     /**
      * NavRenderer constructor.
      *
-     * @param Wiki $wiki
+     * @param Nacho $wiki
      */
     public function __construct(Nacho $wiki)
     {
@@ -29,7 +29,7 @@ class NavRenderer
      */
     public static function isSubPath(string $path, string $parentPath)
     {
-        return startsWith($path, $parentPath) && $path !== $parentPath;
+        return str_starts_with($path, $parentPath) && $path !== $parentPath;
     }
 
     /**

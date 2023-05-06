@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiki\Actions;
+namespace App\Actions;
 
 use Exception;
 use Nacho\Helpers\MarkdownHelper;

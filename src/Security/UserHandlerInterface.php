@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Wiki\Security;
+namespace App\Security;
 
 
 interface UserHandlerInterface

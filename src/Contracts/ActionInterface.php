@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiki\Contracts;
+namespace App\Contracts;
 
 interface ActionInterface
 {

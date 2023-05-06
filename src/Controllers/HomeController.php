@@ -1,7 +1,7 @@
 <?php
-namespace Wiki\Controllers;
+namespace App\Controllers;
 
-use Wiki\Helpers\NavRenderer;
+use App\Helpers\NavRenderer;
 use Nacho\Nacho;
 use Nacho\Controllers\AbstractController;
 

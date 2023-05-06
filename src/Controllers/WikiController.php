@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Wiki\Controllers;
+namespace App\Controllers;
 
 use Nacho\Controllers\AbstractController;
 use Nacho\Models\HttpResponseCode;
@@ -11,6 +11,7 @@ use Nacho\Models\HttpResponseCode;
  */
 class WikiController extends AbstractController
 {
+    // /api/entry/view
     public function loadEntry()
     {
         $url = $_REQUEST['p'];

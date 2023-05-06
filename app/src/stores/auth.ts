@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {defineStore} from "pinia"
 import {queryFormatter} from '../helpers/queryFormatter';
+import {buildRequest, send} from "@/src/helpers/xhr";
 
 interface State {
     token: string | null,
@@ -22,74 +23,50 @@ export const useAuthStore = defineStore('authStore', {
     },
     actions: {
         changePassword(payload: ChangePasswordForm) {
-            return axios({
-                method: 'POST',
-                url: '/api/auth/change-password',
-                data: queryFormatter(payload),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            }).then((response) => {
+            const request = buildRequest('/api/auth/change-password', payload, 'POST');
+            return send(request).then(response => {
                 this.token = response.data.token;
-            });
+            })
         },
         requestNewPassword(username: string) {
-            return axios({
-                method: 'POST',
-                url: '/api/auth/request-new-password',
-                data: queryFormatter({username: username}),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            });
+            const request = buildRequest('/api/auth/request-new-password', {username: username}, 'POST');
+            return send(request);
         },
         restorePassword(username: string, password1: string, password2: string, token: string | null) {
             if (token === null) {
                 throw new Error('invalid token');
             }
-            return axios({
-                method: 'POST',
-                url: '/api/auth/restore-password',
-                data: queryFormatter({
-                    username: username,
-                    password1: password1,
-                    password2: password2,
-                    token: token,
-                }),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            }).then((response) => {
+            const data = {
+                username: username,
+                password1: password1,
+                password2: password2,
+                token: token,
+            };
+            const request = buildRequest('/api/auth/restore-password', data, 'POST');
+            return send(request).then(response => {
                 this.token = response.data.token;
-            });
+            })
         },
         generateNewToken(username: string, token: string | null) {
             if (token === null) {
                 throw new Error('invalid token');
             }
-            return axios({
-                method: 'POST',
-                url: '/api/auth/generate-new-token',
-                data: queryFormatter({username: username, token: token}),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            }).then((response) => {
+            const data = {
+                username: username,
+                token: token,
+            };
+            const request = buildRequest('/api/auth/generate-new-token', data, 'POST');
+            return send(request).then(response => {
                 this.token = response.data.token;
             });
         },
         login(username: string, password: string) {
-            return axios({
-                method: 'POST',
-                url: '/api/login',
-                data: queryFormatter({
-                    username: username,
-                    password: password,
-                }),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            }).then((response) => {
+            const data = {
+                username: username,
+                password: password,
+            };
+            const request = buildRequest('/api/login', data, 'POST');
+            return send(request).then(response => {
                 this.token = response.data.token;
             });
         },
@@ -104,17 +81,12 @@ export const useAuthStore = defineStore('authStore', {
             localStorage.removeItem('token');
         },
         createAdmin(username: string, password: string) {
-            return axios({
-                method: "POST",
-                url: '/api/auth/create-admin',
-                data: queryFormatter({
-                    username: username,
-                    password: password,
-                }),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            })
+            const data = {
+                username: username,
+                password: password,
+            };
+            const request = buildRequest('/api/auth/create-admin', data, 'POST');
+            return send(request);
         },
     },
 })

@@ -1,6 +1,6 @@
 <?php
 
-namespace Wiki\Security;
+namespace App\Security;
 
 
 class JsonUserHandler implements UserHandlerInterface

@@ -1,8 +1,8 @@
 <?php
 
-namespace Wiki\Actions;
+namespace App\Actions;
 
-use Wiki\Contracts\ActionInterface;
+use App\Contracts\ActionInterface;
 
 class AddFolderAction implements ActionInterface
 {

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {queryFormatter} from '@/src/helpers/queryFormatter'
 import {defineStore} from 'pinia'
+import {buildRequest, send} from "@/src/helpers/xhr";
 
 interface WikiEntry {
   raw_content: string,
@@ -54,8 +55,9 @@ export const useWikiStore = defineStore('wikiStore', {
   },
   actions: {
     saveEntry(token: string | null) {
-      if (this.currentEntry === null) {
-        throw new Error('Not editing any entry');
+      const currentEntry = this.currentEntry;
+      if (currentEntry === null) {
+        throw 'Not editing any entry';
       }
       if (token === null) {
         token = '';
@@ -64,68 +66,55 @@ export const useWikiStore = defineStore('wikiStore', {
       }
       const data = {
         token: token,
-        content: this.currentEntry?.raw_content,
-        meta: this.currentEntry?.meta,
-        entry: this.currentEntry?.id,
+        content: currentEntry.raw_content,
+        meta: currentEntry.meta,
+        entry: currentEntry.id,
       }
-      return axios({
-        method: 'PUT',
-        url: '/api/admin/entry/edit',
-        data:  queryFormatter(data),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      })
+      const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
+      return send(request);
     },
     fetchEntry(entry: string) {
-      return axios
-        .get('/api/entry/view?p=' + entry)
-        .then((response) => {
-          this.currentEntry = response.data;
-          this.loadedEntries.push(response.data);
-        })
+      const request = buildRequest('/api/entry/view', {p: entry});
+      return send(request).then(response => {
+        this.currentEntry = response.data;
+        this.loadedEntries.push(response.data);
+      });
     },
     addEntry(parentFolder : string, token: string | null) {
       if (token === null) {
         // TODO: uncomment
         //throw new Error('token cannot be null');
       }
-      return axios({
-        method: "POST",
-        url: '/api/admin/entry/add',
-        data: queryFormatter({'parent-folder': parentFolder, token: token}),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      const data = {
+        parentFolder: parentFolder,
+        token: token,
+      };
+      const request = buildRequest('/api/admin/entry/add', data, 'POST');
+      return send(request);
     },
     addFolder(parentFolder : string, token: string | null) {
       if (token === null) {
         // TODO: uncomment
         //throw new Error('token cannot be null');
       }
-      return axios({
-        method: "POST",
-        url: '/api/admin/folder/add',
-        data: queryFormatter({parentFolder: parentFolder, token: token}),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      })
+      const data = {
+        parentFolder: parentFolder,
+        token: token,
+      };
+      const request = buildRequest('/api/admin/folder/add', data, 'POST');
+      return send(request);
     },
     deleteEntry(entry: string, token: string | null) {
       if (token === null) {
         // TODO: uncomment
         // throw new Error('invalid token');
       }
-      return axios({
-        method: 'DELETE',
-        url: '/api/admin/entry/delete',
-        data: queryFormatter({entry: entry, token: token}),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      })
+      const data = {
+        entry: entry,
+        token: token,
+      };
+      const request = buildRequest('/api/admin/entry/delete', data, 'DELETE');
+      return send(request);
     },
     renameEntry(newName: string, token: string | null) {
       if (this.currentEntry === null) {
@@ -137,20 +126,14 @@ export const useWikiStore = defineStore('wikiStore', {
         entry: this.currentEntry.id,
         token: token,
       }
-      return axios({
-        method: "PUT",
-        url: "/api/admin/entry/rename",
-        data: queryFormatter(data),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      })
+      const request = buildRequest('/api/admin/entry/rename', data, 'PUT');
+      return send(request);
     },
     loadNav() {
-      return axios.get('/api/nav')
-        .then((response) => {
-          this.nav = response.data;
-        })
+      const request = buildRequest('/api/nav');
+      return send(request).then(response => {
+        this.nav = response.data[0];
+      });
     },
   }
 })

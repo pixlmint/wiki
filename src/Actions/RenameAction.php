@@ -1,10 +1,10 @@
 <?php
 
-namespace Wiki\Actions;
+namespace App\Actions;
 
 use Nacho\Helpers\MarkdownHelper;
 use Nacho\Models\PicoPage;
-use Wiki\Contracts\ActionInterface;
+use App\Contracts\ActionInterface;
 
 class RenameAction implements ActionInterface
 {
