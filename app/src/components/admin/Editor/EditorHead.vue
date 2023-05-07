@@ -1,9 +1,9 @@
 <template>
     <div class="d-flex gap-1 editor-header ai_center">
-      <button class="btn btn-icon btn-primary" @click="checkGoHome">
-        <fa icon="arrow-left"></fa>
-      </button>
-      <input class="title-editor" @change="rename" :value="title"/>
+        <el-button circle @click="checkGoHome">
+            <el-icon><arrow-left/></el-icon>
+        </el-button>
+        <input class="title-editor" @change="rename" :value="title"/>
     </div>
 </template>
 
@@ -11,29 +11,41 @@
 import {defineComponent} from 'vue'
 import {useWikiStore} from '@/src/stores/wiki';
 import {useAuthStore} from '@/src/stores/auth';
-import fa from '@/src/components/fa.vue'
+import {ArrowLeft} from "@element-plus/icons-vue";
 
 export default defineComponent({
-  name: "EditorHead",
-  computed: {
-    title() {
-      return useWikiStore().currentEntry?.meta.title;
+    name: "EditorHead",
+    components: {
+        ArrowLeft,
     },
-  },
-  methods: {
-    save() {
-      return useWikiStore().saveEntry(useAuthStore().token)
+    computed: {
+        title() {
+            return useWikiStore().currentEntry?.meta.title;
+        },
     },
-    rename(e: InputEvent) {
-      const newTitle = e.target?.value;
-      if (newTitle === null) {
-        return;
-      }
-      useWikiStore().renameEntry(newTitle, useAuthStore().token)
-    }
-  },
-  components: {
-    fa,
-  },
+    methods: {
+        save() {
+            return useWikiStore().saveEntry(useAuthStore().token)
+        },
+        rename(e: InputEvent) {
+            const newTitle = e.target?.value;
+            if (newTitle === null || newTitle === undefined) {
+                return;
+            }
+            useWikiStore().renameEntry(newTitle, useAuthStore().token).then(() => {
+                this.$router.push(useWikiStore().currentEntry.id);
+                useWikiStore().loadNav();
+            })
+        },
+        checkGoHome() {
+
+        }
+    },
 })
 </script>
+
+<style lang="scss" scoped>
+.editor-header {
+    padding: 0 1rem;
+}
+</style>

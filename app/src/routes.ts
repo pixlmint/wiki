@@ -20,6 +20,11 @@ const routes = [
         component: WikiEntry,
     },
     {
+        path: '/admin/edit',
+        name: 'Edit',
+        component: Editor,
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: "WikiEntry",
         component: WikiEntry,

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="nav">
-            <el-menu :router="true" class="main-nav">
+            <el-menu @click="loadPage" :router="true" class="main-nav">
                 <PWNavElement v-for="(childElement, myIndex) in nav.children"
                               parentIndex="0"
                               :key="myIndex"
@@ -24,7 +24,10 @@
             </div>
         </div>
         <div class="nav-user-dropdown" v-show="userDropdownShowing">
-            <div v-for="action in userActions" @click="action.action" class="nav-user-dropdown-button">{{ action.title }}</div>
+            <div v-for="action in userActions" @click="action.action" class="nav-user-dropdown-button">{{
+                action.title
+                }}
+            </div>
         </div>
     </div>
 </template>
@@ -64,12 +67,23 @@ export default defineComponent({
         wikiStore.loadNav();
     },
     methods: {
+        loadPage() {
+            console.log(document.location.pathname);
+            const entry = document.location.pathname;
+            useWikiStore().fetchEntry(entry).then(function () {
+                const currentEntry = useWikiStore().currentEntry;
+                if (currentEntry === null) {
+                    throw 'currentEntry is null';
+                }
+                useMainStore().setTitle(currentEntry.meta.title);
+            });
+        },
         triggerUserDropdown() {
             this.userDropdownShowing = !this.userDropdownShowing;
         },
         logout() {
-          useAuthStore().logout();
-          this.triggerUserDropdown();
+            useAuthStore().logout();
+            this.triggerUserDropdown();
         },
         login() {
             this.dialogStore.showDialog('/auth/login');
@@ -92,63 +106,64 @@ export default defineComponent({
 
 <style scoped lang="scss">
 #nav {
-  background-color: white;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: fixed;
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    width: 250px;
 }
 
 .user-button {
-  width: 100%;
-  height: 3rem;
-  border-radius: 5px;
-  margin: 2px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 5px;
+    width: 100%;
+    height: 3rem;
+    border-radius: 5px;
+    margin: 2px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5px;
 
-  &:hover {
-    background-color: #f6f6f6;
-  }
+    &:hover {
+        background-color: #f6f6f6;
+    }
 }
 
 .nav-user-dropdown {
-  position: fixed;
-  bottom: 3rem;
-  left: 3rem;
-  background-color: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  min-width: 10%;
-  border-radius: 10px;
-  border: 1px solid #e9e9e9;
-
-  .nav-user-dropdown-button {
-    width: 100%;
-    display: block;
+    position: fixed;
+    bottom: 3rem;
+    left: 3rem;
     background-color: white;
-    outline: none;
-    border: none;
-    text-align: center;
-    padding: 10px 0;
-    cursor: pointer;
-    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    min-width: 10%;
+    border-radius: 10px;
+    border: 1px solid #e9e9e9;
 
-    &:first-of-type {
-      border-top-right-radius: 10px;
-      border-top-left-radius: 10px;
-    }
+    .nav-user-dropdown-button {
+        width: 100%;
+        display: block;
+        background-color: white;
+        outline: none;
+        border: none;
+        text-align: center;
+        padding: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
 
-    &:last-of-type {
-      border-bottom-right-radius: 10px;
-      border-bottom-left-radius: 10px;
-    }
+        &:first-of-type {
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+        }
 
-    &:hover {
-      background-color: #f6f6f6;
+        &:last-of-type {
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        &:hover {
+            background-color: #f6f6f6;
+        }
     }
-  }
 }
 </style>
