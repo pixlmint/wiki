@@ -26,6 +26,11 @@ class WikiConfiguration
         return self::getConfigValue('version');
     }
 
+    public static function contentDir(): string
+    {
+        return self::getConfigValue('contentDir');
+    }
+
     private static function getConfigValue(string $confName): mixed
     {
         return ConfigurationHelper::getInstance()->getCustomConfig('wiki')[$confName];

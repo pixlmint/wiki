@@ -13,6 +13,7 @@ interface Meta {
 interface State {
     pageTitle: string,
     meta: Meta,
+    editingUnsavedChanges: boolean,
 }
 
 export const useMainStore = defineStore('main', {
@@ -24,6 +25,7 @@ export const useMainStore = defineStore('main', {
             adminCreated: false,
             is_token_valid: 'token_not_set',
         },
+        editingUnsavedChanges: false,
     }),
     getters: {
         getPageTitle: (state) => state.pageTitle,
@@ -40,6 +42,9 @@ export const useMainStore = defineStore('main', {
 
                 return response;
             });
+        },
+        setHasUnsavedChanges(hasUnsavedChanges: boolean) {
+            this.editingUnsavedChanges = hasUnsavedChanges;
         },
         setTitle(title: string) {
             if (title === 'Wiki') {

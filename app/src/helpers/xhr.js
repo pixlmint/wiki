@@ -18,7 +18,7 @@ export function buildRequest(url, data = {}, method = 'GET') {
         url: url,
         method: method,
     }
-    if (method === 'GET' || method === 'DELETE') {
+    if (method === 'GET' || method === 'DELETE' || method === 'PUT') {
         request.url = url + '?' + queryFormatter(data);
     } else {
         if (data instanceof FormData) {
@@ -77,7 +77,7 @@ export function send(request) {
         })
         .catch((reason) => {
             let message = 'Error Sending Request to ' + request.url;
-            if ('message' in reason.response.data) {
+            if (reason.response.data.message !== undefined) {
                 message = reason.response.data.message;
             }
             ElNotification({

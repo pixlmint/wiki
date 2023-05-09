@@ -68,8 +68,11 @@ export default defineComponent({
     },
     methods: {
         loadPage() {
-            console.log(document.location.pathname);
             const entry = document.location.pathname;
+            console.log(entry);
+            if (entry === '/admin/edit') {
+                return '';
+            }
             useWikiStore().fetchEntry(entry).then(function () {
                 const currentEntry = useWikiStore().currentEntry;
                 if (currentEntry === null) {

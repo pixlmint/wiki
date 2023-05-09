@@ -2,14 +2,16 @@
 
 namespace App\Controllers;
 
+use App\Actions\AddFileAction;
+use App\Actions\RenameAction;
 use App\Helpers\Media\ImageMediaType;
 use DateTime;
 use App\Helpers\TokenHelper;
 use App\Helpers\BackupHelper;
 use App\Helpers\CacheHelper;
-use App\Models\RaceReport;
 use Nacho\Controllers\AbstractController;
 use Nacho\Models\HttpMethod;
+use Nacho\Models\HttpResponseCode;
 use Nacho\Models\Request;
 
 class AdminController extends AbstractController
@@ -20,24 +22,24 @@ class AdminController extends AbstractController
      */
     function edit(Request $request)
     {
-        if (!key_exists('token', $_REQUEST)) {
+        if (!key_exists('token', $_GET)) {
             return $this->json(['message' => 'You need to be authenticated'], 401);
         }
         $tokenHelper = new TokenHelper();
-        $token = $_REQUEST['token'];
+        $token = $_GET['token'];
         $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
         if (!$user) {
             return $this->json(['message' => 'The provided Token is invalid'], 401);
         }
-        $strPage = $_REQUEST['entry'];
+        $strPage = $_GET['entry'];
         $page = $this->nacho->getMarkdownHelper()->getPage($strPage);
 
         if (!$page || !is_file($page->file)) {
             return $this->json(['message' => 'Unable to find this file']);
         }
 
-        if (strtoupper($request->requestMethod) === HttpMethod::POST) {
-            $this->nacho->getMarkdownHelper()->editPage($page->id, $request->getBody()['content'], []);
+        if (strtoupper($request->requestMethod) === HttpMethod::PUT) {
+            $this->nacho->getMarkdownHelper()->editPage($page->id, $_GET['content'], []);
             $cacheHelper = new CacheHelper($this->nacho);
             $cacheHelper->build();
 
@@ -47,32 +49,33 @@ class AdminController extends AbstractController
         return $this->json((array) $page);
     }
 
-    public function uploadRaceReport(Request $request)
+    function add()
     {
-        if (!key_exists('token', $request->getBody()) || !key_exists('raceReport', $request->getBody()) || !key_exists('entry', $request->getBody())) {
-            return $this->json(['message' => 'You need to provide a token, raceReport and the entry'], 400);
-        }
-        $tokenHelper = new TokenHelper();
-        $token = $request->getBody()['token'];
-        $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
-        if (!$user) {
-            return $this->json(['message' => 'The provided Token is invalid'], 401);
-        }
-        $raceReport = new RaceReport($request->getBody()['raceReport']);
-        $entry = $this->nacho->getMarkdownHelper()->getPage($request->getBody()['entry']);
-        if (!$entry) {
-            $this->createSpecific();
-        }
-        $this->nacho->getMarkdownHelper()->editPage($entry->id, '', ['raceReport' => (array) $raceReport]);
+        $token = $_REQUEST['token'];
+        $title = $_REQUEST['title'];
+        $parentFolder = $_REQUEST['parentFolder'];
+        // TODO: token check?
 
-        return $this->json(['message' => 'Successfully stored Race Report']);
+        $action = new AddFileAction();
+        $action::setMarkdownHelper($this->nacho->getMarkdownHelper());
+        $success = $action::run(['title' => $title, 'parent-folder' => $parentFolder]);
+
+        return $this->json(['success' => $success]);
     }
 
-    function createSpecific()
+    function rename(Request $request)
     {
-        $dateFile = $_REQUEST['entry'];
-        $entryId = $this->createFileIfNotExists(new DateTime($dateFile));
-        return $this->json(['entryId' => $entryId]);
+        if (!key_exists('entry', $_GET) || !key_exists('new-title', $_GET) || !key_exists('token', $_GET)) {
+            return $this->json(['message' => 'Please define entry and content'], HttpResponseCode::BAD_REQUEST);
+        }
+        if (strtoupper($request->requestMethod) !== HttpMethod::PUT) {
+            return $this->json(['message' => 'Only PUT allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
+        }
+
+        RenameAction::setMarkdownHelper($this->nacho->getMarkdownHelper());
+        $success = RenameAction::run($_GET);
+
+        return $this->json(['success' => $success]);
     }
 
     public function delete($request)

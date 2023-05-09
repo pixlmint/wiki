@@ -17,7 +17,7 @@ class RenameAction implements ActionInterface
 
     public static function run(array $arguments): bool
     {
-        $newName = $arguments['new-name'];
+        $newName = $arguments['new-title'];
         $entry = $arguments['entry'];
 
         self::$markdownHelper->editPage($entry, '', ['title' => $newName]);

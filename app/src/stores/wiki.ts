@@ -80,7 +80,7 @@ export const useWikiStore = defineStore('wikiStore', {
         this.loadedEntries.push(response.data);
       });
     },
-    addEntry(parentFolder : string, token: string | null) {
+    addEntry(parentFolder : string, title: string, token: string | null) {
       if (token === null) {
         // TODO: uncomment
         //throw new Error('token cannot be null');
@@ -88,6 +88,7 @@ export const useWikiStore = defineStore('wikiStore', {
       const data = {
         parentFolder: parentFolder,
         token: token,
+        title: title,
       };
       const request = buildRequest('/api/admin/entry/add', data, 'POST');
       return send(request);
@@ -118,7 +119,7 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     renameEntry(newName: string, token: string | null) {
       if (this.currentEntry === null) {
-        return;
+        throw 'Current Entry is not defined';
       }
       this.currentEntry.meta.title = newName;
       const data = {

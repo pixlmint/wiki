@@ -51,13 +51,13 @@ export default defineComponent({
                 this.dialogStore.showDialog('/auth/create-admin');
             }
         })
-        this.wikiStore.fetchEntry(entry).then(function () {
-            const currentEntry = useWikiStore().currentEntry;
-            if (currentEntry === null) {
-                throw 'currentEntry is null';
-            }
-            useMainStore().setTitle(currentEntry.meta.title);
-        });
+        // this.wikiStore.fetchEntry(entry).then(function () {
+        //     const currentEntry = useWikiStore().currentEntry;
+        //     if (currentEntry === null) {
+        //         throw 'currentEntry is null';
+        //     }
+        //     useMainStore().setTitle(currentEntry.meta.title);
+        // });
     },
 })
 </script>

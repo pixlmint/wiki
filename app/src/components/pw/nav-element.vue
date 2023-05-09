@@ -11,9 +11,9 @@
                             </el-icon>
                         </el-button>
                         <template #dropdown>
-                            <el-dropdown-item @click="addPage">Add Page</el-dropdown-item>
-                            <el-dropdown-item @click="addSubfolder">Add Subfolder</el-dropdown-item>
-                            <el-dropdown-item @click="deleteFolder">Delete</el-dropdown-item>
+                            <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
+                            <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="deleteFolder"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
                         </template>
                     </el-dropdown>
                 </template>
@@ -37,9 +37,9 @@
                         </el-icon>
                     </el-button>
                     <template #dropdown>
-                        <el-dropdown-item @click="edit">Edit</el-dropdown-item>
-                        <el-dropdown-item @click="rename">Rename</el-dropdown-item>
-                        <el-dropdown-item @click="deletePage">Delete</el-dropdown-item>
+                        <el-dropdown-item @click="edit"><el-icon><Edit/></el-icon>Edit</el-dropdown-item>
+                        <el-dropdown-item @click="rename"><el-icon><EditPen/></el-icon>Rename</el-dropdown-item>
+                        <el-dropdown-item @click="deletePage"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
                     </template>
                 </el-dropdown>
             </el-menu-item>
@@ -49,7 +49,8 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {MoreFilled} from "@element-plus/icons-vue";
+import {useRouter} from "vue-router";
+import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen} from "@element-plus/icons-vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore} from "@/src/stores/auth";
@@ -60,11 +61,17 @@ export default defineComponent({
     data() {
         return {
             wikiStore: useWikiStore(),
+            router: useRouter(),
             token: useAuthStore().getToken,
         }
     },
     components: {
         MoreFilled,
+        FolderAdd,
+        DocumentAdd,
+        Delete,
+        Edit,
+        EditPen,
     },
     computed: {
         MoreFilled() {
@@ -79,7 +86,7 @@ export default defineComponent({
     },
     methods: {
         edit() {
-            console.log(this.element);
+            this.router.push('/admin/edit?p=' + this.element.id);
         },
         rename() {
             ElMessageBox.prompt('Pick a new Name', 'Rename', {
@@ -87,7 +94,9 @@ export default defineComponent({
                 cancelButtonText: 'Cancel',
                 inputValue: this.element.title,
             }).then(name => {
-                this.wikiStore.renameEntry(name.value, this.token);
+                this.wikiStore.renameEntry(name.value, this.token).then(response => {
+                    this.wikiStore.loadNav();
+                });
             })
         },
         deletePage() {
@@ -114,7 +123,9 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addEntry(this.element.id, this.token);
+                this.wikiStore.addEntry(this.element.id, name.value, this.token).then(response => {
+                    this.wikiStore.loadNav();
+                });
             })
         },
         addSubfolder() {
