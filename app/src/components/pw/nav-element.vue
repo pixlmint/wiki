@@ -54,6 +54,7 @@ import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen} from "@elemen
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore} from "@/src/stores/auth";
+import {useMainStore} from "@/src/stores/main";
 
 export default defineComponent({
     name: 'PWNavElement',
@@ -86,7 +87,14 @@ export default defineComponent({
     },
     methods: {
         edit() {
+            const currentRoute = location.pathname;
             this.router.push('/admin/edit?p=' + this.element.id);
+            if (currentRoute === '/admin/edit') {
+                useWikiStore().fetchEntry(this.element.id).then(() => {
+                    this.title = "Edit " + useWikiStore().currentEntry?.meta.title;
+                    useMainStore().setTitle(this.title)
+                });
+            }
         },
         rename() {
             ElMessageBox.prompt('Pick a new Name', 'Rename', {
