@@ -1,14 +1,21 @@
 <template>
     <div>
-        <div id="nav">
-            <el-menu @click="loadPage" :router="true" class="main-nav">
-                <PWNavElement v-for="(childElement, myIndex) in nav.children"
-                              parentIndex="0"
-                              :key="myIndex"
-                              :element="childElement"
-                              :index="myIndex">
-                </PWNavElement>
-            </el-menu>
+        <div id="nav" v-show="mainNavShowing">
+            <div>
+                <div @click="hideMainNav" class="nav-toggle">
+                    <el-icon>
+                        <CaretLeft/>
+                    </el-icon>
+                </div>
+                <el-menu @click="loadPage" :router="true" class="main-nav">
+                    <PWNavElement v-for="(childElement, myIndex) in nav.children"
+                                  parentIndex="0"
+                                  :key="myIndex"
+                                  :element="childElement"
+                                  :index="myIndex">
+                    </PWNavElement>
+                </el-menu>
+            </div>
             <div class="user-nav">
                 <template v-if="!isLoggedIn">
                     <el-button @click="login">Login</el-button>
@@ -29,6 +36,14 @@
                 }}
             </div>
         </div>
+        <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
+            <el-icon class="nav-toggle-small">
+                <CaretRight/>
+            </el-icon>
+            <el-breadcrumb separator="/" class="breadcrumbs">
+                <el-breadcrumb-item v-for="item in currentTitleArray">{{ item }}</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
     </div>
 </template>
 
@@ -41,19 +56,23 @@ import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useRouter} from "vue-router";
 import {useDialogStore} from "@/src/stores/dialog";
-import {Avatar} from "@element-plus/icons-vue";
+import {Avatar, CaretRight, CaretLeft} from "@element-plus/icons-vue";
 
 export default defineComponent({
     name: 'PWNav',
     components: {
         PWNavElement,
         Avatar,
+        CaretRight,
+        CaretLeft,
     },
     data() {
         return {
             router: useRouter(),
             dialogStore: useDialogStore(),
             userDropdownShowing: false,
+            wikiStore: useWikiStore(),
+            mainStore: useMainStore(),
             userActions: [
                 {
                     title: "Logout",
@@ -63,10 +82,15 @@ export default defineComponent({
         }
     },
     created: () => {
-        const wikiStore = useWikiStore();
-        wikiStore.loadNav();
+        useWikiStore().loadNav();
     },
     methods: {
+        hideMainNav() {
+            this.mainStore.toggleLargeNavShowing(false);
+        },
+        showMainNav() {
+            this.mainStore.toggleLargeNavShowing(true);
+        },
         loadPage() {
             const entry = document.location.pathname;
             console.log(entry);
@@ -93,6 +117,19 @@ export default defineComponent({
         },
     },
     computed: {
+        CaretRight() {
+            return CaretRight
+        },
+        currentTitleArray() {
+            const id = this.wikiStore.currentEntry?.id;
+            if (!id) {
+                return [];
+            }
+            return id.split('/');
+        },
+        mainNavShowing() {
+          return this.mainStore.isLargeNavShowing;
+        },
         isLoggedIn() {
             return useAuthStore().getToken !== null;
         },
@@ -108,14 +145,21 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+@import '@/style/variables.scss';
 #nav {
     background-color: white;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
-    width: 250px;
+    width: $navWidth;
+}
+
+@media screen and (max-width: $mobileBreakpoint) {
+    #nav {
+        width: 100%;
+    }
 }
 
 .user-button {
@@ -127,9 +171,41 @@ export default defineComponent({
     justify-content: space-around;
     align-items: center;
     gap: 5px;
+    cursor: pointer;
 
     &:hover {
-        background-color: #f6f6f6;
+        background-color: var(--el-menu-hover-bg-color);
+    }
+}
+
+#mobile-nav {
+    display: block;
+    position: fixed;
+    left: 0;
+    background-color: white;
+    min-height: 100vh;
+    bottom: 0;
+    width: 1.5rem;
+    cursor: pointer;
+
+    .nav-toggle-small {
+        padding-top: 20px;
+    }
+
+    .breadcrumbs {
+        transform: rotate(270deg) translate(-100%, 0);
+        width: 100vh;
+        transform-origin: top left;
+    }
+}
+
+.nav-toggle {
+    width: calc(100% - 40px);
+    padding: 20px 20px 20px 20px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--el-menu-hover-bg-color);
     }
 }
 

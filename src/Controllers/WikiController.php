@@ -17,8 +17,7 @@ class WikiController extends AbstractController
         $url = $_REQUEST['p'];
         $page = $this->nacho->getMarkdownHelper()->getPage($url);
         if (is_null($page)) {
-            header('HTTP/1.1 ' . HttpResponseCode::NOT_FOUND);
-            die();
+            return $this->json(['message' => 'Unable to find Entry ' . $url], HttpResponseCode::NOT_FOUND);
         }
         $content = $this->nacho->getMarkdownHelper()->renderPage($page);
         $ret = ['content' => $content];

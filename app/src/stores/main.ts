@@ -14,6 +14,7 @@ interface State {
     pageTitle: string,
     meta: Meta,
     editingUnsavedChanges: boolean,
+    isLargeNavShowing: boolean,
 }
 
 export const useMainStore = defineStore('main', {
@@ -26,6 +27,7 @@ export const useMainStore = defineStore('main', {
             is_token_valid: 'token_not_set',
         },
         editingUnsavedChanges: false,
+        isLargeNavShowing: true,
     }),
     getters: {
         getPageTitle: (state) => state.pageTitle,
@@ -53,6 +55,9 @@ export const useMainStore = defineStore('main', {
                 document.title = title + ' · Wiki';
             }
             this.$state.pageTitle = title;
+        },
+        toggleLargeNavShowing(isLargeNavShowing: boolean) {
+            this.isLargeNavShowing = isLargeNavShowing;
         },
     },
 })

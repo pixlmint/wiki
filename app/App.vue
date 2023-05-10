@@ -2,7 +2,7 @@
     <div class="wiki">
         <pw-loading></pw-loading>
         <pw-nav></pw-nav>
-        <div class="main-content">
+        <div :class="mainContentClasses">
             <router-view></router-view>
         </div>
         <Modals/>
@@ -31,6 +31,15 @@ export default defineComponent({
             dialogStore: useDialogStore(),
         }
     },
+    computed: {
+      mainContentClasses() {
+          if (this.mainStore.isLargeNavShowing) {
+              return 'main-content large-nav';
+          } else {
+              return 'main-content small-nav';
+          }
+      }
+    },
     created() {
         const mainStore = useMainStore();
         const authStore = useAuthStore();
@@ -51,17 +60,54 @@ export default defineComponent({
                 this.dialogStore.showDialog('/auth/create-admin');
             }
         })
-        // this.wikiStore.fetchEntry(entry).then(function () {
-        //     const currentEntry = useWikiStore().currentEntry;
-        //     if (currentEntry === null) {
-        //         throw 'currentEntry is null';
-        //     }
-        //     useMainStore().setTitle(currentEntry.meta.title);
-        // });
     },
 })
 </script>
 
 <style lang="scss">
 @import './style/main.scss';
+.main-content {
+    background-color: white;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    min-width: 100%;
+    min-height: 100vh;
+
+    &.small-nav {
+        margin: 0 auto 0 1rem;
+    }
+}
+
+@media screen and (min-width: $mobileBreakpoint) {
+    .main-content {
+        &.large-nav {
+            margin: 0 0 0 $navWidth;
+        }
+
+        .article-body {
+            padding: 0;
+
+            img {
+                max-width: 1000px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    .main-content {
+        width: 80%;
+        min-width: unset !important;
+        max-width: 1000px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+
+        &.large-nav {
+            margin: 0 0 0 calc($navWidth + 5%);
+        }
+
+        &.small-nav {
+            margin: 0 auto 0 auto;
+        }
+    }
+}
 </style>
