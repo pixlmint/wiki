@@ -67,23 +67,23 @@ export default defineComponent({
 
 <style lang="scss">
 .v-md-editor, .vuepress-markdown-body {
-    background-color: transparent;
-    color: var(--el-text-color)
+    background-color: transparent !important;
+    color: var(--el-text-color) !important;
 }
 
 .v-md-editor__toolbar-item {
-    color: var(--el-text-color)
+    color: var(--el-text-color) !important;
 }
 
 .v-md-textarea-editor textarea {
-    color: var(--el-text-color);
+    color: var(--el-text-color) !important;
 }
 
 li.v-md-editor__toolbar-item {
-    background-color: var(--el-menu-bg-color);
+    background-color: var(--el-menu-bg-color) !important;
 
     &:hover {
-       background-color: var(--el-menu-hover-bg-color);
+       background-color: var(--el-menu-hover-bg-color) !important;
     }
 }
 
