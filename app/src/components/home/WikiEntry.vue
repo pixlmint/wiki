@@ -11,7 +11,7 @@
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-item @click="editEntry" title="Edit"><el-icon><edit/></el-icon>Edit</el-dropdown-item>
-                        <el-dropdown-item @click="deleteEntry" title="Delete"><el-icon><delete/></el-icon>Delete</el-dropdown-item>
+                        <el-dropdown-item class="danger" @click="deleteEntry" title="Delete"><el-icon><delete/></el-icon>Delete</el-dropdown-item>
                     </template>
                 </el-dropdown>
             </div>

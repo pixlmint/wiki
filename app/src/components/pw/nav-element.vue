@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="hasChildren">
-            <el-sub-menu :index="index">
+            <el-sub-menu data-is-entry="false" :index="index">
                 <template #title>
                     {{ element.title }}
                     <el-dropdown>
@@ -26,7 +26,7 @@
             </el-sub-menu>
         </template>
         <template v-else>
-            <el-menu-item class="pw-menu-item" :index="element.id">
+            <el-menu-item class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <div>
                     {{ element.title }}
                 </div>
@@ -39,7 +39,7 @@
                     <template #dropdown>
                         <el-dropdown-item @click="edit"><el-icon><Edit/></el-icon>Edit</el-dropdown-item>
                         <el-dropdown-item @click="rename"><el-icon><EditPen/></el-icon>Rename</el-dropdown-item>
-                        <el-dropdown-item @click="deletePage"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
+                        <el-dropdown-item class="danger" @click="deletePage"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
                     </template>
                 </el-dropdown>
             </el-menu-item>

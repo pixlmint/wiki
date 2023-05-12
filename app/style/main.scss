@@ -35,6 +35,10 @@ h1 {
     font-size: 2.5rem;
 }
 
+.danger {
+    color: var(--el-color-danger) !important;
+}
+
 .editor-header {
     min-height: 150px;
 }

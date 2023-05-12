@@ -72,6 +72,7 @@ export default defineComponent({
     border-bottom-right-radius: 2px;
     min-width: 100%;
     min-height: 100vh;
+    padding: 5px;
 
     &.small-nav {
         margin: 0 auto 0 1rem;

@@ -57,6 +57,26 @@ import {useAuthStore} from "@/src/stores/auth";
 import {useRouter} from "vue-router";
 import {useDialogStore} from "@/src/stores/dialog";
 import {Avatar, CaretRight, CaretLeft} from "@element-plus/icons-vue";
+import {isMobile} from "@/src/helpers/mobile-detector";
+
+const findListElement = (target) => {
+    if (target.nodeName === 'LI') {
+        return target;
+    }
+    if (target.parentElement.nodeName === 'LI') {
+        return target.parentElement;
+    }
+}
+
+const navElementIsFolder = (target) => {
+    const listElement = findListElement(target);
+    if (listElement.classList.contains('el-sub-menu')) {
+        return true;
+    }
+    if (listElement.classList.contains('el-menu-item')) {
+        return false;
+    }
+}
 
 export default defineComponent({
     name: 'PWNav',
@@ -73,6 +93,7 @@ export default defineComponent({
             userDropdownShowing: false,
             wikiStore: useWikiStore(),
             mainStore: useMainStore(),
+            currentlyActiveRoute: '/',
             userActions: [
                 {
                     title: "Logout",
@@ -82,6 +103,9 @@ export default defineComponent({
         }
     },
     created: () => {
+        if (isMobile()) {
+            useMainStore().toggleLargeNavShowing(false);
+        }
         useWikiStore().loadNav();
     },
     methods: {
@@ -91,13 +115,17 @@ export default defineComponent({
         showMainNav() {
             this.mainStore.toggleLargeNavShowing(true);
         },
-        loadPage() {
+        loadPage(event) {
+            const isFolder = navElementIsFolder(event.target);
             const entry = document.location.pathname;
             console.log(entry);
-            if (entry === '/admin/edit') {
+            if (entry === '/admin/edit' || isFolder) {
                 return '';
             }
             useWikiStore().fetchEntry(entry).then(function () {
+                if (!isFolder && isMobile()) {
+                    useMainStore().toggleLargeNavShowing(false);
+                }
                 const currentEntry = useWikiStore().currentEntry;
                 if (currentEntry === null) {
                     throw 'currentEntry is null';
