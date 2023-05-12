@@ -1,3 +1,4 @@
+@import 'theme';
 @import 'variables';
 @import 'fonts';
 @import 'responsive';
@@ -24,11 +25,11 @@ body {
 body {
     margin: 0;
     min-height: 100vh;
-    background-color: rgb(243, 243, 243);
+    background-color: var(--el-bg-secondary);
 }
 
 a {
-    color: $primary;
+    color: var(--wiki-accent-color);
 }
 
 h1 {

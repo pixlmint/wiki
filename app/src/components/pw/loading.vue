@@ -23,7 +23,7 @@ export default defineComponent({
     height: 3px;
     width: 0;
     top: 0;
-    background-color: blue;
+    background-color: var(--wiki-accent-color);
     z-index: 100;
     border-top-right-radius: 1px;
     border-top-left-radius: 1px;

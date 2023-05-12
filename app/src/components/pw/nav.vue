@@ -35,6 +35,10 @@
                 action.title
                 }}
             </div>
+            <div @click="switchTheme" class="nav-user-dropdown-button">
+                <el-icon v-if="isLightTheme"><Sunny/></el-icon>
+                <el-icon v-else><Moon/></el-icon>
+            </div>
         </div>
         <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
             <el-icon class="nav-toggle-small">
@@ -56,7 +60,7 @@ import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useRouter} from "vue-router";
 import {useDialogStore} from "@/src/stores/dialog";
-import {Avatar, CaretRight, CaretLeft} from "@element-plus/icons-vue";
+import {Avatar, CaretRight, CaretLeft, Sunny, Moon} from "@element-plus/icons-vue";
 import {isMobile} from "@/src/helpers/mobile-detector";
 
 const findListElement = (target) => {
@@ -85,6 +89,8 @@ export default defineComponent({
         Avatar,
         CaretRight,
         CaretLeft,
+        Sunny,
+        Moon,
     },
     data() {
         return {
@@ -98,7 +104,7 @@ export default defineComponent({
                 {
                     title: "Logout",
                     action: this.logout,
-                }
+                },
             ]
         }
     },
@@ -109,6 +115,14 @@ export default defineComponent({
         useWikiStore().loadNav();
     },
     methods: {
+        switchTheme() {
+            const currentTheme = this.mainStore.getTheme;
+            if (currentTheme === 'light') {
+                this.mainStore.setTheme('dark');
+            } else {
+                this.mainStore.setTheme('light');
+            }
+        },
         hideMainNav() {
             this.mainStore.toggleLargeNavShowing(false);
         },
@@ -148,6 +162,9 @@ export default defineComponent({
         CaretRight() {
             return CaretRight
         },
+        isLightTheme() {
+            return this.mainStore.getTheme === 'light';
+        },
         currentTitleArray() {
             const id = this.wikiStore.currentEntry?.id;
             if (!id) {
@@ -175,7 +192,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @import '@/style/variables.scss';
 #nav {
-    background-color: white;
+    background-color: var(--el-bg-color);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -196,9 +213,9 @@ export default defineComponent({
     border-radius: 5px;
     margin: 2px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 1rem;
     cursor: pointer;
 
     &:hover {
@@ -210,7 +227,7 @@ export default defineComponent({
     display: block;
     position: fixed;
     left: 0;
-    background-color: white;
+    background-color: var(--el-bg-color);
     min-height: 100vh;
     bottom: 0;
     width: 1.5rem;
@@ -241,16 +258,14 @@ export default defineComponent({
     position: fixed;
     bottom: 3rem;
     left: 3rem;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     min-width: 10%;
     border-radius: 10px;
-    border: 1px solid #e9e9e9;
 
     .nav-user-dropdown-button {
         width: 100%;
         display: block;
-        background-color: white;
+        // background-color: white;
         outline: none;
         border: none;
         text-align: center;
@@ -269,7 +284,7 @@ export default defineComponent({
         }
 
         &:hover {
-            background-color: #f6f6f6;
+            background-color: var(--el-menu-hover-bg-color);
         }
     }
 }

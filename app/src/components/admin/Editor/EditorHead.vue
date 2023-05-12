@@ -68,4 +68,8 @@ export default defineComponent({
 .editor-header {
     padding: 0 1rem;
 }
+
+.title-editor {
+    background-color: transparent;
+}
 </style>

@@ -41,6 +41,7 @@ export default defineComponent({
       }
     },
     created() {
+        this.mainStore.loadTheme();
         const mainStore = useMainStore();
         const authStore = useAuthStore();
         authStore.loadToken();
@@ -67,7 +68,7 @@ export default defineComponent({
 <style lang="scss">
 @import './style/main.scss';
 .main-content {
-    background-color: white;
+    background-color: var(--el-bg-color);
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     min-width: 100%;
@@ -100,7 +101,7 @@ export default defineComponent({
         width: 80%;
         min-width: unset !important;
         max-width: 1000px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+        box-shadow: var(--box-shadow);
 
         &.large-nav {
             margin: 0 0 0 calc($navWidth + 5%);

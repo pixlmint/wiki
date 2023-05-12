@@ -64,3 +64,27 @@ export default defineComponent({
     },
 })
 </script>
+
+<style lang="scss">
+.v-md-editor, .vuepress-markdown-body {
+    background-color: transparent;
+    color: var(--el-text-color)
+}
+
+.v-md-editor__toolbar-item {
+    color: var(--el-text-color)
+}
+
+.v-md-textarea-editor textarea {
+    color: var(--el-text-color);
+}
+
+li.v-md-editor__toolbar-item {
+    background-color: var(--el-menu-bg-color);
+
+    &:hover {
+       background-color: var(--el-menu-hover-bg-color);
+    }
+}
+
+</style>
