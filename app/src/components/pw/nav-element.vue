@@ -123,7 +123,9 @@ export default defineComponent({
                 cancelButtonText: 'No',
                 type: 'warning',
             }).then(() => {
-                console.log('todo: delete folder');
+                this.wikiStore.deleteFolder(this.element.id, this.token).then(() => {
+                    this.wikiStore.loadNav();
+                });
             });
         },
         addPage() {
@@ -141,7 +143,7 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addFolder(this.element.id, this.token);
+                this.wikiStore.addFolder(this.element.id, name.value, this.token);
             })
         },
     }

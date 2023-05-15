@@ -49,6 +49,15 @@ class AdminController extends AbstractController
         return $this->json((array) $page);
     }
 
+    public function addFolder()
+    {
+        $token = $_REQUEST['token'];
+        $parentFolder = $_REQUEST['parentFolder'];
+        $folderName = $_REQUEST['folderName'];
+        // TODO: Token check
+
+    }
+
     function add()
     {
         $token = $_REQUEST['token'];
@@ -122,13 +131,6 @@ class AdminController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-    public function editCurrent($request)
-    {
-        $file = $this->getCurrentFile();
-
-        return $this->json(['entryId' => rtrim($file, '.md')]);
-    }
-
     public function publishStatus($request)
     {
         if (strtoupper($request->requestMethod) !== 'POST') {
@@ -143,25 +145,6 @@ class AdminController extends AbstractController
         file_put_contents("${contentDir}/${fileName}", $content);
 
         return $this->json(['message' => 'Successfully added status']);
-    }
-
-    public function appendImage($request)
-    {
-        if (strtoupper($request->requestMethod) !== 'POST') {
-            return $this->json(['post requests only'], 405);
-        }
-
-        $image = $_FILES['image'];
-        $imageHelper = new ImageMediaType();
-        $generated = $imageHelper->storeEntryImage($image['tmp_name']);
-
-        $contentDir = $_SERVER['DOCUMENT_ROOT'] . '/content';
-        $file = $this->getCurrentFile();
-        $content = file_get_contents("${contentDir}${file}");
-        $content .= "![image](" . $generated[1] . ")\n\n";
-        file_put_contents("${contentDir}${file}", $content);
-
-        return $this->json(['message' => 'Successfully appended Image']);
     }
 
     public function generateBackup()
@@ -201,34 +184,5 @@ class AdminController extends AbstractController
         $cacheHelper->build();
 
         return $this->json(['success' => $success]);
-    }
-
-    private function getCurrentFile()
-    {
-        $now = new \DateTime();
-        return $this->createFileIfNotExists($now);
-    }
-
-    private function createFileIfNotExists(DateTime $dateEntry)
-    {
-        $title = $dateEntry->format('Y-m-d') . '.md';
-        $month = $dateEntry->format('F');
-        $folderDir = $_SERVER['DOCUMENT_ROOT'] . "/content/${month}";
-        $fileDir = "${folderDir}/${title}";
-        // check if file exists, if not create it
-        $content =
-            "---\ntitle: " .
-            rtrim($title, '.md') .
-            "\ndate: " .
-            $dateEntry->format('Y-m-d H:i') .
-            "\n---\n";
-        if (!is_dir($folderDir)) {
-            mkdir($folderDir);
-        }
-        if (!is_file($fileDir)) {
-            file_put_contents($fileDir, $content);
-        }
-
-        return "/${month}/" . rtrim($title, '.md');
     }
 }

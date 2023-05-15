@@ -34,6 +34,16 @@ return [
         "function" => "add"
     ],
     [
+        "route" => "/api/admin/folder/add",
+        "controller" => AdminController::class,
+        "function" => "addFolder"
+    ],
+    [
+        "route" => "/api/admin/folder/delete",
+        "controller" => AdminController::class,
+        "function" => "deleteFolder"
+    ],
+    [
         "route" => "/api/admin/entry/edit",
         "controller" => AdminController::class,
         "function" => "edit"

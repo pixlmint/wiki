@@ -93,16 +93,31 @@ export const useWikiStore = defineStore('wikiStore', {
       const request = buildRequest('/api/admin/entry/add', data, 'POST');
       return send(request);
     },
-    addFolder(parentFolder : string, token: string | null) {
+    addFolder(parentFolder: string, folderName: any, token: string | null) {
+      console.log(folderName);
       if (token === null) {
         // TODO: uncomment
         //throw new Error('token cannot be null');
       }
       const data = {
         parentFolder: parentFolder,
+        folderName: folderName,
         token: token,
       };
       const request = buildRequest('/api/admin/folder/add', data, 'POST');
+      return send(request);
+    },
+    deleteFolder(folderName: string, token: string | null) {
+      if (token === null) {
+        // TODO: uncomment
+        // throw 'Token cannot be null';
+      }
+
+      const data = {
+        folder: folderName,
+        token: token,
+      };
+      const request = buildRequest('/api/admin/folder/delete', data, 'DELETE');
       return send(request);
     },
     deleteEntry(entry: string, token: string | null) {
