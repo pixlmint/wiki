@@ -129,7 +129,7 @@ export default defineComponent({
         showMainNav() {
             this.mainStore.toggleLargeNavShowing(true);
         },
-        loadPage(event) {
+        loadPage(event: any) {
             const isFolder = navElementIsFolder(event.target);
             const entry = document.location.pathname;
             console.log(entry);
@@ -159,9 +159,6 @@ export default defineComponent({
         },
     },
     computed: {
-        CaretRight() {
-            return CaretRight
-        },
         isLightTheme() {
             return this.mainStore.getTheme === 'light';
         },
@@ -205,11 +202,6 @@ export default defineComponent({
     #nav {
         width: 100%;
     }
-}
-
-button.is-circle {
-    height: 2rem;
-    width: 2rem;
 }
 
 .user-button {
@@ -292,5 +284,12 @@ button.is-circle {
             background-color: var(--el-menu-hover-bg-color);
         }
     }
+}
+</style>
+
+<style lang="scss">
+button.is-circle, .el-button.is-circle {
+    height: 2rem;
+    width: 2rem;
 }
 </style>

@@ -96,6 +96,14 @@ export default defineComponent({
     }
 }
 
+@media screen and (min-width: 1500px) {
+    .main-content {
+        &.large-nav {
+            margin: 0 auto 0 auto !important;
+        }
+    }
+}
+
 @media screen and (min-width: 1300px) {
     .main-content {
         width: 80%;
@@ -104,7 +112,7 @@ export default defineComponent({
         box-shadow: var(--box-shadow);
 
         &.large-nav {
-            margin: 0 0 0 calc($navWidth + 5%);
+            margin: 0 auto 0 $navWidth;
         }
 
         &.small-nav {

@@ -13,7 +13,7 @@
                         <template #dropdown>
                             <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
                             <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
-                            <el-dropdown-item @click="deleteFolder"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
+                            <el-dropdown-item class="danger" @click="deleteFolder"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
                         </template>
                     </el-dropdown>
                 </template>
