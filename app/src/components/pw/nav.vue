@@ -207,6 +207,11 @@ export default defineComponent({
     }
 }
 
+button.is-circle {
+    height: 2rem;
+    width: 2rem;
+}
+
 .user-button {
     width: 100%;
     height: 3rem;
