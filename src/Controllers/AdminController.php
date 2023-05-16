@@ -2,10 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Actions\AddFileAction;
 use App\Actions\RenameAction;
-use App\Helpers\Media\ImageMediaType;
-use DateTime;
+use App\Helpers\ContentHelper;
 use App\Helpers\TokenHelper;
 use App\Helpers\BackupHelper;
 use App\Helpers\CacheHelper;
@@ -13,9 +11,18 @@ use Nacho\Controllers\AbstractController;
 use Nacho\Models\HttpMethod;
 use Nacho\Models\HttpResponseCode;
 use Nacho\Models\Request;
+use Nacho\Nacho;
 
 class AdminController extends AbstractController
 {
+    private ContentHelper $contentHelper;
+
+    public function __construct(Nacho $nacho)
+    {
+        parent::__construct($nacho);
+        $this->contentHelper = new ContentHelper($nacho->getMarkdownHelper());
+    }
+
     /**
      * GET:  fetch the markdown for a file
      * POST: save edited file
@@ -49,13 +56,19 @@ class AdminController extends AbstractController
         return $this->json((array) $page);
     }
 
-    public function addFolder()
+    public function addFolder(Request $request): string
     {
         $token = $_REQUEST['token'];
         $parentFolder = $_REQUEST['parentFolder'];
         $folderName = $_REQUEST['folderName'];
         // TODO: Token check
 
+        return '';
+    }
+
+    public function deleteFolder(Request $request): string
+    {
+        return $this->delete($request);
     }
 
     function add()
@@ -65,9 +78,7 @@ class AdminController extends AbstractController
         $parentFolder = $_REQUEST['parentFolder'];
         // TODO: token check?
 
-        $action = new AddFileAction();
-        $action::setMarkdownHelper($this->nacho->getMarkdownHelper());
-        $success = $action::run(['title' => $title, 'parent-folder' => $parentFolder]);
+        $success = $this->contentHelper->create($parentFolder, $title);
 
         return $this->json(['success' => $success]);
     }
@@ -102,17 +113,15 @@ class AdminController extends AbstractController
             return $this->json($_GET, 400);
         }
 
-        $file = $_SERVER['DOCUMENT_ROOT'] . '/content' . $_GET['entry'] . '.md';
+        $entry = $_GET['entry'];
 
-        if (is_file($file)) {
-            unlink($file);
+        $success = $this->contentHelper->delete($entry);
+
+        if ($success) {
+            return $this->json(['message' => "successfully deleted ${entry}"]);
         } else {
-            return $this->json(['file' => $file], 404);
+            return $this->json(['message' => "error deleting ${entry}"], 404);
         }
-        $cacheHelper = new CacheHelper($this->nacho);
-        $cacheHelper->build();
-
-        return $this->json(['message' => "successfully deleted ${file}"]);
     }
 
     public function buildCache()
