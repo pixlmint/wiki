@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="hasChildren">
+        <template v-if="isFolder">
             <el-sub-menu data-is-entry="false" :index="index">
                 <template #title>
                     {{ element.title }}
@@ -78,7 +78,7 @@ export default defineComponent({
         MoreFilled() {
             return MoreFilled
         },
-        hasChildren() {
+        isFolder() {
             return 'children' in this.element && this.element.children.length > 0;
         },
         childIndex() {

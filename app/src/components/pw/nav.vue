@@ -15,11 +15,20 @@
                                   :index="myIndex">
                     </PWNavElement>
                 </el-menu>
-                <el-button @click="addSubFolder">
-                    <el-icon>
-                        <CirclePlus/>
-                    </el-icon>
-                </el-button>
+                <!-- TODO: only show button if user is allowed to add pages/folders -->
+                <el-dropdown>
+                    <el-button>
+                        <el-icon>
+                            <CirclePlus/>
+                        </el-icon>
+                    </el-button>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item @click="addSubFolder"><el-icon><FolderAdd/></el-icon> Folder</el-dropdown-item>
+                            <el-dropdown-item @click="addSubEntry"><el-icon><DocumentAdd/></el-icon> Entry</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
             <div class="user-nav">
                 <template v-if="!isLoggedIn">
@@ -69,7 +78,16 @@ import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useRouter} from "vue-router";
 import {useDialogStore} from "@/src/stores/dialog";
-import {Avatar, CaretRight, CaretLeft, Sunny, Moon, CirclePlus} from "@element-plus/icons-vue";
+import {
+    Avatar,
+    CaretRight,
+    CaretLeft,
+    Sunny,
+    Moon,
+    CirclePlus,
+    FolderAdd,
+    DocumentAdd,
+} from "@element-plus/icons-vue";
 import {isMobile} from "@/src/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
 
@@ -95,6 +113,8 @@ const navElementIsFolder = (target: any) => {
 export default defineComponent({
     name: 'PWNav',
     components: {
+        DocumentAdd,
+        FolderAdd,
         PWNavElement,
         Avatar,
         CaretRight,
@@ -134,6 +154,16 @@ export default defineComponent({
                 cancelButtonText: 'Cancel',
             }).then(name => {
                 this.wikiStore.addFolder('/', name.value, this.token).then(() => {
+                    this.wikiStore.loadNav();
+                });
+            })
+        },
+        addSubEntry() {
+            ElMessageBox.prompt('New Page Title', 'Add Page', {
+                confirmButtonText: 'Ok',
+                cancelButtonText: 'Cancel',
+            }).then(name => {
+                this.wikiStore.addEntry('/', name.value, this.token).then(response => {
                     this.wikiStore.loadNav();
                 });
             })
