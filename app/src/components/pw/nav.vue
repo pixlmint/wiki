@@ -16,8 +16,8 @@
                     </PWNavElement>
                 </el-menu>
                 <!-- TODO: only show button if user is allowed to add pages/folders -->
-                <el-dropdown>
-                    <el-button>
+                <el-dropdown class="full-width">
+                    <el-button class="full-width">
                         <el-icon>
                             <CirclePlus/>
                         </el-icon>

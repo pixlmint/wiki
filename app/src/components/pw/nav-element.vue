@@ -114,7 +114,9 @@ export default defineComponent({
                 cancelButtonText: 'No',
                 type: 'warning',
             }).then(() => {
-                this.wikiStore.deleteEntry(this.element.id, this.token);
+                this.wikiStore.deleteEntry(this.element.id, this.token).then(() => {
+                    this.wikiStore.loadNav();
+                });
             });
         },
         deleteFolder() {
