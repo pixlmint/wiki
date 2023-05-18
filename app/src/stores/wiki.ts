@@ -114,7 +114,7 @@ export const useWikiStore = defineStore('wikiStore', {
       }
 
       const data = {
-        folder: folderName,
+        entry: folderName,
         token: token,
       };
       const request = buildRequest('/api/admin/folder/delete', data, 'DELETE');

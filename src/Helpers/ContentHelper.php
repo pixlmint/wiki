@@ -16,7 +16,7 @@ class ContentHelper
         $this->markdownHelper = $markdownHelper;
     }
 
-    public function create(string $parentFolder, string $title): bool
+    public function create(string $parentFolder, string $title, bool $isFolder = false): bool
     {
         $page = $this->markdownHelper->getPage($parentFolder);
 
@@ -35,10 +35,18 @@ class ContentHelper
         $contentDir = WikiConfiguration::contentDir();
 
         $parentDir = preg_replace('/index.md$/', '', $parentFolder);
-        $fileName = FileNameHelper::generateFileNameFromTitle($meta->title);
-        $file = $contentDir . $parentDir . DIRECTORY_SEPARATOR . $fileName;
+        if ($isFolder) {
+            // TODO: Folder names that contain a space don't work
+            $directory = $contentDir . $parentDir . DIRECTORY_SEPARATOR . $title;
+            mkdir($directory);
+            $file = $directory . DIRECTORY_SEPARATOR . 'index.md';
+            $newPage->id = $parentDir . $title;
+        } else {
+            $fileName = FileNameHelper::generateFileNameFromTitle($meta->title);
+            $file = $contentDir . $parentDir . DIRECTORY_SEPARATOR . $fileName;
+            $newPage->id = $parentDir . $fileName;
+        }
 
-        $newPage->id = $parentDir . FileNameHelper::slugify($meta->title);
         $newPage->file = $file;
 
         return $this->markdownHelper->storePage($newPage);
@@ -54,8 +62,6 @@ class ContentHelper
         $file = WikiConfiguration::contentDir() . $entry . '.md';
         if (is_file($file)) {
             unlink($file);
-        } else {
-            return false;
         }
         $page = $this->markdownHelper->getPage($entry);
         $filename = $page->file;

@@ -56,14 +56,16 @@ class AdminController extends AbstractController
         return $this->json((array) $page);
     }
 
-    public function addFolder(Request $request): string
+    public function addFolder(): string
     {
         $token = $_REQUEST['token'];
         $parentFolder = $_REQUEST['parentFolder'];
         $folderName = $_REQUEST['folderName'];
         // TODO: Token check
 
-        return '';
+        $success = $this->contentHelper->create($parentFolder, $folderName, true);
+
+        return $this->json(['success' => $success]);
     }
 
     public function deleteFolder(Request $request): string
@@ -98,7 +100,7 @@ class AdminController extends AbstractController
         return $this->json(['success' => $success]);
     }
 
-    public function delete($request)
+    public function delete(): string
     {
         if (!key_exists('token', $_REQUEST)) {
             return $this->json(['message' => 'You need to be authenticated'], 401);
