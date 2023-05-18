@@ -142,22 +142,6 @@ class AdminController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-    public function publishStatus($request)
-    {
-        if (strtoupper($request->requestMethod) !== 'POST') {
-            return $this->json(['post requests only'], 405);
-        }
-        $contentDir = $_SERVER['DOCUMENT_ROOT'] . '/content';
-        $fileName = $this->getCurrentFile();
-
-        $content = file_get_contents("${contentDir}/${fileName}");
-
-        $content .= $_REQUEST['status'] . "\n\n";
-        file_put_contents("${contentDir}/${fileName}", $content);
-
-        return $this->json(['message' => 'Successfully added status']);
-    }
-
     public function generateBackup()
     {
         if (!key_exists('token', $_REQUEST)) {
