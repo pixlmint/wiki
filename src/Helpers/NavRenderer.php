@@ -33,7 +33,7 @@ class NavRenderer
     }
 
     /**
-     * Return an html nested list based on a nested pages array.
+     * Return an array based on a nested pages array.
      *
      * @param array|PicoPage[]|null $pages a nested pages array
      *
@@ -57,12 +57,13 @@ class NavRenderer
 
             $url = $page->url ?? false;
             $title = $page->meta->title;
-            
+
             $ret[] = [
                 'id' => $page->id,
                 'title' => $title,
                 'url' => $url,
                 'children' => $childrenOutput,
+                'isFolder' => str_ends_with($page->file, 'index.md'),
             ];
         }
         return $ret;

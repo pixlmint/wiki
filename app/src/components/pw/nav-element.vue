@@ -79,7 +79,7 @@ export default defineComponent({
             return MoreFilled
         },
         isFolder() {
-            return 'children' in this.element && this.element.children.length > 0;
+            return this.element && this.element.isFolder;
         },
         childIndex() {
             return this.parentIndex + '-' + this.index;
