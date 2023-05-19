@@ -3,7 +3,7 @@
 :root {
     --el-bg-secondary: rgb(243, 243, 243);
     --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    --wiki-accent-color: #6de3d5;
+    --wiki-accent-color: #09b5a7;
     --el-menu-active-color: var(--wiki-accent-color);
 }
 
@@ -12,4 +12,5 @@ html.dark {
     --el-menu-active-color: var(--wiki-accent-color);
     --box-shadow: 0 0 50px rgba(255, 255, 255, 0.03);
     --el-text-color: #e1e1e1;
+    --wiki-accent-color: #6de3d5;
 }

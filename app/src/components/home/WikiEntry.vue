@@ -75,3 +75,9 @@ export default defineComponent({
     },
 })
 </script>
+
+<style lang="scss">
+h2, h3, h4, h5, h6 {
+    border-bottom: 1px solid var(--el-border-color);
+}
+</style>

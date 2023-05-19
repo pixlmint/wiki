@@ -15,6 +15,7 @@ class WikiController extends AbstractController
     public function loadEntry()
     {
         $url = $_REQUEST['p'];
+        $url = str_replace('%20', ' ', $url);
         $page = $this->nacho->getMarkdownHelper()->getPage($url);
         if (is_null($page)) {
             return $this->json(['message' => 'Unable to find Entry ' . $url], HttpResponseCode::NOT_FOUND);

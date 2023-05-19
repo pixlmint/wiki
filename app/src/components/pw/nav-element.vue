@@ -145,7 +145,9 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addFolder(this.element.id, name.value, this.token);
+                this.wikiStore.addFolder(this.element.id, name.value, this.token).then(() => {
+                    this.wikiStore.loadNav();
+                })
             })
         },
     }
