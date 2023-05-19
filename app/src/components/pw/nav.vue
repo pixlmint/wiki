@@ -24,8 +24,18 @@
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item @click="addSubFolder"><el-icon><FolderAdd/></el-icon> Folder</el-dropdown-item>
-                            <el-dropdown-item @click="addSubEntry"><el-icon><DocumentAdd/></el-icon> Entry</el-dropdown-item>
+                            <el-dropdown-item @click="addSubFolder">
+                                <el-icon>
+                                    <FolderAdd/>
+                                </el-icon>
+                                Folder
+                            </el-dropdown-item>
+                            <el-dropdown-item @click="addSubEntry">
+                                <el-icon>
+                                    <DocumentAdd/>
+                                </el-icon>
+                                Entry
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -48,14 +58,6 @@
             <div v-for="action in userActions" @click="action.action" class="nav-user-dropdown-button">{{
                 action.title
                 }}
-            </div>
-            <div @click="switchTheme" class="nav-user-dropdown-button">
-                <el-icon v-if="isLightTheme">
-                    <Sunny/>
-                </el-icon>
-                <el-icon v-else>
-                    <Moon/>
-                </el-icon>
             </div>
         </div>
         <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
@@ -82,8 +84,6 @@ import {
     Avatar,
     CaretRight,
     CaretLeft,
-    Sunny,
-    Moon,
     CirclePlus,
     FolderAdd,
     DocumentAdd,
@@ -119,8 +119,6 @@ export default defineComponent({
         Avatar,
         CaretRight,
         CaretLeft,
-        Sunny,
-        Moon,
         CirclePlus,
     },
     data() {
@@ -137,6 +135,10 @@ export default defineComponent({
                     title: "Logout",
                     action: this.logout,
                 },
+                {
+                    title: "Settings",
+                    action: this.settings,
+                }
             ],
             token: useAuthStore().getToken,
         }
@@ -148,6 +150,9 @@ export default defineComponent({
         useWikiStore().loadNav();
     },
     methods: {
+        settings() {
+            this.dialogStore.showDialog('/settings');
+        },
         addSubFolder() {
             ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
                 confirmButtonText: 'Ok',
@@ -167,14 +172,6 @@ export default defineComponent({
                     this.wikiStore.loadNav();
                 });
             })
-        },
-        switchTheme() {
-            const currentTheme = this.mainStore.getTheme;
-            if (currentTheme === 'light') {
-                this.mainStore.setTheme('dark');
-            } else {
-                this.mainStore.setTheme('light');
-            }
         },
         hideMainNav() {
             this.mainStore.toggleLargeNavShowing(false);
@@ -212,9 +209,6 @@ export default defineComponent({
         },
     },
     computed: {
-        isLightTheme() {
-            return this.mainStore.getTheme === 'light';
-        },
         currentTitleArray() {
             const id = this.wikiStore.currentEntry?.id;
             if (!id) {
@@ -316,7 +310,6 @@ export default defineComponent({
   .nav-user-dropdown-button {
     width: 100%;
     display: block;
-    // background-color: white;
     outline: none;
     border: none;
     text-align: center;

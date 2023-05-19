@@ -14,6 +14,7 @@ import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useWikiStore} from "@/src/stores/wiki";
+import {useUserSettings} from "@/src/stores/user-settings";
 import {AxiosResponse} from "axios";
 import {ElNotification} from "element-plus";
 import Modals from "@/src/components/modals.vue";
@@ -41,12 +42,12 @@ export default defineComponent({
       }
     },
     created() {
-        this.mainStore.loadTheme();
         const mainStore = useMainStore();
         const authStore = useAuthStore();
         authStore.loadToken();
-        const entry = document.location.pathname;
         const token = authStore.getToken;
+        const settings = useUserSettings().loadUserSettings();
+        useUserSettings().setCurrentTheme(settings.theme);
         mainStore.init(token).then((response: AxiosResponse) => {
             if (response.data.is_token_valid === 'token_invalid') {
                 this.dialogStore.showDialog('/auth/login');

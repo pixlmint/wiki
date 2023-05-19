@@ -29,6 +29,10 @@ body {
     color: var(--el-text-color);
 }
 
+.el-switch {
+    --el-switch-on-color: var(--wiki-accent-color) !important;
+}
+
 a {
     color: var(--wiki-accent-color);
 }

@@ -15,7 +15,6 @@ interface State {
     meta: Meta,
     editingUnsavedChanges: boolean,
     isLargeNavShowing: boolean,
-    theme: string,
 }
 
 export const useMainStore = defineStore('main', {
@@ -29,26 +28,12 @@ export const useMainStore = defineStore('main', {
         },
         editingUnsavedChanges: false,
         isLargeNavShowing: true,
-        theme: '',
     }),
     getters: {
         getPageTitle: (state) => state.pageTitle,
         getMeta: state => state.meta,
-        getTheme: state => state.theme,
     },
     actions: {
-        loadTheme() {
-            const deviceTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            const storedTheme = localStorage.getItem('theme');
-
-            if (storedTheme !== null && storedTheme !== undefined ) {
-                this.theme = storedTheme;
-            } else {
-                this.theme = deviceTheme;
-            }
-
-            document.documentElement.classList.add(this.theme);
-        },
         init(token: string | null) {
             const request = buildRequest('/api/init', {token: token}, 'POST');
             return send(request).then((response: AxiosResponse) => {
@@ -59,17 +44,6 @@ export const useMainStore = defineStore('main', {
 
                 return response;
             });
-        },
-        setTheme(theme: string) {
-            if (theme !== 'light' && theme !== 'dark') {
-                throw 'The selected theme is not supported';
-            }
-
-            document.documentElement.classList.remove(this.getTheme);
-            document.documentElement.classList.add(theme);
-            this.theme = theme;
-
-            localStorage.setItem('theme', theme);
         },
         setHasUnsavedChanges(hasUnsavedChanges: boolean) {
             this.editingUnsavedChanges = hasUnsavedChanges;
