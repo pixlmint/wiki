@@ -58,6 +58,9 @@ export default defineComponent({
                     this.router.push(id);
                 }).catch(() => {
                 })
+            } else {
+                const id = useWikiStore().currentEntry?.id;
+                this.router.push(id);
             }
         },
     },
