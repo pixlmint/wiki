@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container">
-            <v-md-editor @change="updateContent" @save="save" v-model="markdown" :height="wHeight + 'px'"></v-md-editor>
+            <v-md-editor mode="edit" @change="updateContent" @save="save" v-model="markdown" :height="wHeight + 'px'"></v-md-editor>
         </div>
     </div>
 </template>
@@ -12,12 +12,16 @@ import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from '@/src/stores/auth'
 import {useRouter} from 'vue-router'
 import {useMainStore} from "@/src/stores/main";
+import {useUserSettings} from "@/src/stores/user-settings";
+
+let saveInterval = null;
 
 export default defineComponent({
     data: function () {
         return {
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
+            userSettings: useUserSettings(),
         }
     },
     computed: {
@@ -44,6 +48,12 @@ export default defineComponent({
                 return '';
             }
             this.wikiStore.currentEntry.raw_content = area.value;
+
+            if (this.userSettings.getSettings.autoSave) {
+                saveInterval = window.setTimeout(() => {
+                    this.save();
+                }, 300);
+            }
         },
         save() {
             this.mainStore.setHasUnsavedChanges(false);
