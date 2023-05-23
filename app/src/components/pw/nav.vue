@@ -42,15 +42,23 @@
             </div>
             <div class="user-nav">
                 <template v-if="!isLoggedIn">
-                    <el-button @click="login">Login</el-button>
+                    <el-button @click="login" class="user-button">Login</el-button>
                 </template>
                 <template v-else>
-                    <div @click="triggerUserDropdown" class="user-button">
-                        <el-icon class="icon">
-                            <Avatar></Avatar>
-                        </el-icon>
-                        <span class="text">Admin</span>
-                    </div>
+                    <el-dropdown>
+                        <el-button class="user-button">
+                            <el-icon class="icon">
+                                <Avatar></Avatar>
+                            </el-icon>
+                            <span class="text">Admin</span>
+                        </el-button>
+                        <template #dropdown>
+                            <el-dropdown-item v-for="action in userActions" @click="action.action">{{
+                                action.title
+                                }}
+                            </el-dropdown-item>
+                        </template>
+                    </el-dropdown>
                 </template>
             </div>
         </div>
@@ -197,12 +205,8 @@ export default defineComponent({
                 useMainStore().setTitle(currentEntry.meta.title);
             });
         },
-        triggerUserDropdown() {
-            this.userDropdownShowing = !this.userDropdownShowing;
-        },
         logout() {
             useAuthStore().logout();
-            this.triggerUserDropdown();
         },
         login() {
             this.dialogStore.showDialog('/auth/login');
@@ -237,106 +241,114 @@ export default defineComponent({
 @import '@/style/variables.scss';
 
 #nav {
-  background-color: var(--el-bg-color);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: fixed;
-  width: $navWidth;
+    background-color: var(--el-bg-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    width: $navWidth;
 }
 
 @media screen and (max-width: $mobileBreakpoint) {
-  #nav {
+    #nav {
+        width: 100%;
+    }
+}
+
+.user-nav .el-dropdown {
     width: 100%;
-  }
 }
 
 .user-button {
-  width: 100%;
-  height: 3rem;
-  border-radius: 5px;
-  margin: 2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
+    width: 100%;
+    height: 3rem;
+    border-radius: 5px;
+    margin: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    font-family: "JetBrains-Mono Regular", sans-serif;
+    outline: none !important;
+    border: none !important;
+    font-size: 1.1rem;
 
-  &:hover {
-    background-color: var(--el-menu-hover-bg-color);
-  }
+    &:hover {
+        background-color: var(--el-menu-hover-bg-color);
+    }
 }
 
 #mobile-nav {
-  display: block;
-  position: fixed;
-  left: 0;
-  background-color: var(--el-bg-color);
-  min-height: 100vh;
-  bottom: 0;
-  width: 1.5rem;
-  cursor: pointer;
+    display: block;
+    position: fixed;
+    left: 0;
+    background-color: var(--el-bg-color);
+    min-height: 100vh;
+    bottom: 0;
+    width: 1.5rem;
+    cursor: pointer;
 
-  .nav-toggle-small {
-    padding-top: 20px;
-  }
+    .nav-toggle-small {
+        padding-top: 20px;
+    }
 
-  .breadcrumbs {
-    transform: rotate(270deg) translate(-100%, 0);
-    width: 100vh;
-    transform-origin: top left;
-  }
+    .breadcrumbs {
+        transform: rotate(270deg) translate(-100%, 0);
+        width: 100vh;
+        transform-origin: top left;
+    }
 }
 
 .nav-toggle {
-  width: calc(100% - 40px);
-  padding: 20px 20px 20px 20px;
-  cursor: pointer;
+    width: calc(100% - 40px);
+    padding: 20px 20px 20px 20px;
+    cursor: pointer;
 
-  &:hover {
-    background-color: var(--el-menu-hover-bg-color);
-  }
+    &:hover {
+        background-color: var(--el-menu-hover-bg-color);
+    }
 }
 
 .nav-user-dropdown {
-  position: fixed;
-  bottom: 3rem;
-  left: 3rem;
-  box-shadow: var(--box-shadow);
-  min-width: 10%;
-  border-radius: 10px;
+    position: fixed;
+    bottom: 3rem;
+    left: 3rem;
+    box-shadow: var(--box-shadow);
+    min-width: 10%;
+    border-radius: 10px;
 
-  .nav-user-dropdown-button {
-    width: 100%;
-    display: block;
-    outline: none;
-    border: none;
-    text-align: center;
-    padding: 10px 0;
-    cursor: pointer;
-    border-radius: 5px;
+    .nav-user-dropdown-button {
+        width: 100%;
+        display: block;
+        outline: none;
+        border: none;
+        text-align: center;
+        padding: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
 
-    &:first-of-type {
-      border-top-right-radius: 10px;
-      border-top-left-radius: 10px;
+        &:first-of-type {
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+        }
+
+        &:last-of-type {
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        &:hover {
+            background-color: var(--el-menu-hover-bg-color);
+        }
     }
-
-    &:last-of-type {
-      border-bottom-right-radius: 10px;
-      border-bottom-left-radius: 10px;
-    }
-
-    &:hover {
-      background-color: var(--el-menu-hover-bg-color);
-    }
-  }
 }
 </style>
 
 <style lang="scss">
 button.is-circle, .el-button.is-circle {
-  height: 2rem;
-  width: 2rem;
+    height: 2rem;
+    width: 2rem;
 }
 </style>
