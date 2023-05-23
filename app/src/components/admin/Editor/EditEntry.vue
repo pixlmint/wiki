@@ -14,7 +14,11 @@ import {useRouter} from 'vue-router'
 import {useMainStore} from "@/src/stores/main";
 import {useUserSettings} from "@/src/stores/user-settings";
 
-let saveInterval = null;
+let saveTimeout: number|null = null;
+
+const isTimeoutSet = () => {
+    return saveTimeout !== null;
+}
 
 export default defineComponent({
     data: function () {
@@ -49,10 +53,11 @@ export default defineComponent({
             }
             this.wikiStore.currentEntry.raw_content = area.value;
 
-            if (this.userSettings.getSettings.autoSave) {
-                saveInterval = window.setTimeout(() => {
+            if (this.userSettings.getSettings.autoSave && !isTimeoutSet()) {
+                saveTimeout = window.setTimeout(() => {
                     this.save();
-                }, 300);
+                    saveTimeout = null;
+                }, 5000);
             }
         },
         save() {

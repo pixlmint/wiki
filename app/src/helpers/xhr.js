@@ -4,6 +4,11 @@ import {useLoadingStore} from "../stores/loading";
 import LoadingHelper from "./LoadingHelper";
 import {ElNotification} from "element-plus";
 
+// Routes where the loading bar won't be triggered
+const ignoredRoutes = [
+    '/api/admin/entry/edit',
+]
+
 const updateSpeed = 10;
 
 let loadingBarInterval = null;
@@ -56,9 +61,15 @@ function updateLoadingProgress() {
     }
 }
 
+function isRouteIgnored(route) {
+    route = route.split('?');
+    return ignoredRoutes.includes(route[0]);
+}
+
 export function send(request) {
+    const ignoreRoute = isRouteIgnored(request.url);
     const startTime = new Date();
-    if (store !== null) {
+    if (store !== null && !ignoreRoute) {
         store.increaseLoadingCount();
         store.increaseLoadingTime(LoadingHelper.getAverageLoadingTime(request.url));
         if (loadingBarInterval === null) {
@@ -67,7 +78,7 @@ export function send(request) {
     }
     return axios(request)
         .then((response) => {
-            if (store !== null) {
+            if (store !== null && !ignoreRoute) {
                 store.decreaseLoadingCount();
             }
             const endTime = new Date();
@@ -85,7 +96,7 @@ export function send(request) {
                 message: message,
                 type: 'warning',
             });
-            if (store !== null) {
+            if (store !== null && !ignoreRoute) {
                 store.decreaseLoadingCount();
                 if (store.getLoadingTime === 0) {
                     window.clearInterval(loadingBarInterval);
