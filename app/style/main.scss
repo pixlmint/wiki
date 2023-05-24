@@ -1,0 +1,92 @@
+@import 'theme';
+@import 'variables';
+@import 'fonts';
+@import 'responsive';
+@import 'font-awesome';
+@import 'flex.scss';
+@import 'buttons';
+@import 'nav';
+
+html,
+body {
+    overflow-x: hidden;
+    width: 100vw;
+}
+
+* {
+    transition: all 0.1s ease;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--el-bg-secondary);
+    color: var(--el-text-color);
+}
+
+.el-switch {
+    --el-switch-on-color: var(--wiki-accent-color) !important;
+}
+
+a {
+    color: var(--wiki-accent-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+.danger {
+    color: var(--el-color-danger) !important;
+}
+
+.editor-header {
+    min-height: 150px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.article-head {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
+.title-editor {
+    @extend h1;
+    outline: none;
+    border: none;
+}
+
+label {
+    display: block;
+}
+
+.mt-1 {
+    margin-top: 1px;
+}
+
+.form-row {
+    margin-bottom: 1rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+}
+
+p {
+    line-height: 1.6;
+    margin: 22px 0;
+    letter-spacing: 0.2px;
+}

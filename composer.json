@@ -1,12 +1,13 @@
 {
     "name": "christiangroeber/wiki",
-    "description": "Your very own Wiki, powered by Markdown",
+    "description": "Your very own Wiki, powered by Markdown, Vue and Nachos",
     "require": {
-        "christiangroeber/nacho": "^0.6.0"
+        "ext-json":  "*",
+        "christiangroeber/nacho": "*"
     },
     "autoload": {
         "psr-4": {
-            "Wiki\\": "src/"
+            "App\\": "src/"
         }
     }
 }

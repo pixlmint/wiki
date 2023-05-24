@@ -1,17 +1,18 @@
 <?php
 
-namespace Wiki\Helpers;
+namespace App\Helpers;
 
+use Nacho\Models\PicoPage;
 use Nacho\Nacho;
 
 class NavRenderer
 {
-    private $wiki;
+    private Nacho $wiki;
 
     /**
      * NavRenderer constructor.
      *
-     * @param Wiki $wiki
+     * @param Nacho $wiki
      */
     public function __construct(Nacho $wiki)
     {
@@ -28,55 +29,47 @@ class NavRenderer
      */
     public static function isSubPath(string $path, string $parentPath)
     {
-        return startsWith($path, $parentPath) && $path !== $parentPath;
+        return str_starts_with($path, $parentPath) && $path !== $parentPath;
     }
 
     /**
-     * Return an html nested list based on a nested pages array.
+     * Return an array based on a nested pages array.
      *
-     * @param array|null $pages a nested pages array
+     * @param array|PicoPage[]|null $pages a nested pages array
      *
-     * @return string the html list
+     * @return array the nav
      */
-    public function output(?array $pages = null)
+    public function output(?array $pages = null): array
     {
         if (!$pages) {
-            $tmp = $this->wiki->getPages();
-            $page = $this->wiki->getPage('/');
+            $tmp = $this->wiki->getMarkdownHelper()->getPages();
+            $page = $this->wiki->getMarkdownHelper()->getPage('/');
             $pages = ['/' => $this->findChildPages('/', $page, $tmp)];
         }
-        $html = '<ul id="nav">';
+        $ret = [];
         foreach ($pages as $pageID => $page) {
-            if (!empty($page['hidden'])) continue;
+            if (!empty($page->hidden)) continue;
 
-            $childrenOutput = '';
-            if (isset($page['children'])) {
-                $childrenOutput = $this->output($page['children']);
+            $childrenOutput = [];
+            if (isset($page->children)) {
+                $childrenOutput = $this->output($page->children);
             }
 
-            $url = isset($page['url']) ? $page['url'] : false;
+            $url = $page->url ?? false;
+            $title = $page->meta->title;
 
-            // use title if the page has one and make a link if the page exists.
-//            echo($url);
-            if ($url) {
-                $name = !empty($page['title']) ? $page['title'] : $pageID;
-                $item = "<a page='${pageID}' href=\"$url\">$name</a>";
-            } else {
-                $item = "<span>$pageID</span>";
-            }
-
-            // add the pageID in class and indicate if it is the current or parent of the current page.
-            $class = $pageID;
-            $class .= $url ? ' is-page' : ' is-directory';
-            if ($childrenOutput) $class .= ' has-childs';
-
-            $html .= "<li class=\"$class\">$item$childrenOutput</li>";
+            $ret[] = [
+                'id' => $page->id,
+                'title' => $title,
+                'url' => $url,
+                'children' => $childrenOutput,
+                'isFolder' => str_ends_with($page->file, 'index.md'),
+            ];
         }
-        $html .= '</ul>';
-        return $html;
+        return $ret;
     }
 
-    private static function isDirectChild(string $path, string $parentPath)
+    private static function isDirectChild(string $path, string $parentPath): bool
     {
         if (!self::isSubPath($path, $parentPath)) {
             return false;
@@ -92,17 +85,23 @@ class NavRenderer
         return count(explode('/', $path)) - 1 === count(explode('/', $parentPath));
     }
 
-    public function findChildPages(string $id, array &$parentPage, array $pages)
+    /**
+     * @param string $id
+     * @param PicoPage $parentPage
+     * @param array|PicoPage[] $pages
+     * @return PicoPage
+     */
+    public function findChildPages(string $id, PicoPage &$parentPage, array $pages): PicoPage
     {
         foreach ($pages as $childId => $page) {
-            if (isset($page['meta']['min_role'])) {
-                if (!$this->wiki->getUserHandler()->isGranted($page['meta']['min_role'])) {
+            if (isset($page->meta->min_role)) {
+                if (!$this->wiki->getUserHandler()->isGranted($page->meta->min_role)) {
                     continue;
                 }
             }
             if (self::isDirectChild($childId, $id)) {
                 $page = $this->findChildPages($childId, $page, $pages);
-                $parentPage['children'][$childId] = $page;
+                $parentPage->children[$childId] = $page;
             }
         }
 

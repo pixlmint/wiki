@@ -1,0 +1,51 @@
+button {
+    cursor: pointer;
+}
+
+.btn {
+    background-color: white;
+    padding: 0.25rem 0.5rem;
+    text-decoration: none;
+    border-width: 2px;
+    border-radius: 2px;
+    border-style: solid;
+    font-size: 14px;
+    line-height: 38px;
+    text-align: center;
+    text-transform: uppercase;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+.btn-icon {
+    height: 3rem;
+    width: 3rem;
+}
+
+.btn-primary {
+    color: $primary;
+    border-color: $primary;
+
+    &:hover {
+        background-color: $primary;
+        color: white;
+        border-color: $primary;
+    }
+}
+
+.btn-rounded {
+    border-radius: 50%;
+}
+
+.btn-danger {
+    color: $danger;
+    border-color: $danger;
+
+    &:hover {
+        background-color: $danger;
+        border-color: $danger;
+        color: white;
+    }
+}

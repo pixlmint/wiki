@@ -1,7 +1,7 @@
 <?php
-namespace Wiki\Controllers;
+namespace App\Controllers;
 
-use Wiki\Helpers\NavRenderer;
+use App\Helpers\NavRenderer;
 use Nacho\Nacho;
 use Nacho\Controllers\AbstractController;
 
@@ -17,12 +17,11 @@ class HomeController extends AbstractController
 
     public function index($request)
     {
-        return $this->render('wiki.twig', [
-        ]);
+        return file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/dist/index.html');
     }
 
     public function loadNav($request)
     {
-        return $this->navRenderer->output();
+        return $this->json($this->navRenderer->output());
     }
 }

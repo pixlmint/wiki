@@ -1,12 +1,10 @@
 version: "3"
 
 services:
-    pico:
-        image: christiannxtlvl/php-server:7.4
+    wiki:
+        image: christiangroeber/php-server:8.1.2
         container_name: wiki
         ports:
-            - '90:80'
-        environment:
-            PICO_URL_REWRITING: 1
-        volumes: 
+            - '91:80'
+        volumes:
             - ./:/var/www/html

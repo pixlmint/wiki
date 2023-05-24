@@ -1,8 +1,7 @@
 <?php
 
-namespace Wiki\Controllers;
+namespace App\Controllers;
 
-use Nacho\Nacho;
 use Nacho\Controllers\AbstractController;
 
 class UsersController extends AbstractController

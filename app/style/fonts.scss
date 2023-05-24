@@ -1,0 +1,37 @@
+body {
+    font-family: "Roboto", serif;
+}
+
+pre, code {
+    font-family: "JetBrains-Mono Light", serif;
+    font-weight: 100;
+    font-size: 0.8rem;
+}
+
+#nav {
+    font-family: "JetBrains-Mono Regular", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .el-dialog__header {
+    font-family: "JetBrains-Mono Bold", sans-serif;
+}
+
+@font-face {
+    font-family: "JetBrains-Mono Regular";
+    src: url('@/style/fonts/JetBrainsMono-Regular.woff2');
+}
+
+@font-face {
+    font-family: "JetBrains-Mono Bold";
+    src: url('@/style/fonts/JetBrainsMono-Bold.woff2');
+}
+
+@font-face {
+    font-family: "JetBrains-Mono Light";
+    src: url('@/style/fonts/JetBrainsMono-Light.woff2');
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url('@/style/fonts/Roboto-Regular.ttf');
+}

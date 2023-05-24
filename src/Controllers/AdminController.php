@@ -1,140 +1,186 @@
 <?php
 
-namespace Wiki\Controllers;
+namespace App\Controllers;
 
-use DateTime;
-use Nacho\Nacho;
+use App\Actions\RenameAction;
+use App\Helpers\ContentHelper;
+use App\Helpers\TokenHelper;
+use App\Helpers\BackupHelper;
+use App\Helpers\CacheHelper;
+use App\Security\JsonUserHandler;
 use Nacho\Controllers\AbstractController;
-use Wiki\Helpers\NavRenderer;
+use Nacho\Models\HttpMethod;
+use Nacho\Models\HttpResponseCode;
+use Nacho\Models\Request;
+use Nacho\Nacho;
 
 class AdminController extends AbstractController
 {
-    public function __construct(Nacho $wiki)
+    private ContentHelper $contentHelper;
+
+    public function __construct(Nacho $nacho)
     {
-        parent::__construct($wiki);
-        if (!$this->isGranted('Editor')) {
-            header('Http/1.1 401');
-            echo 'You are not allowed to view this part of the page. <a href="/">Return</a>';
-            die();
-        }
+        parent::__construct($nacho);
+        $this->contentHelper = new ContentHelper($nacho->getMarkdownHelper());
     }
 
-    function index($request)
+    /**
+     * GET:  fetch the markdown for a file
+     * POST: save edited file
+     */
+    function edit(Request $request)
     {
-        return $this->render('admin/admin.twig');
+        if (!key_exists('token', $_GET)) {
+            return $this->json(['message' => 'You need to be authenticated'], 401);
+        }
+        $tokenHelper = new TokenHelper();
+        $token = $_GET['token'];
+        $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
+        if (!$user) {
+            return $this->json(['message' => 'The provided Token is invalid'], 401);
+        }
+        $strPage = $_GET['entry'];
+        $page = $this->nacho->getMarkdownHelper()->getPage($strPage);
+
+        if (!$page || !is_file($page->file)) {
+            return $this->json(['message' => 'Unable to find this file']);
+        }
+
+        if (strtoupper($request->requestMethod) === HttpMethod::PUT) {
+            $this->nacho->getMarkdownHelper()->editPage($page->id, $_GET['content'], []);
+            $cacheHelper = new CacheHelper($this->nacho);
+            $cacheHelper->build();
+
+            return $this->json(['message' => 'successfully saved content', 'file' => $page->file]);
+        }
+
+        return $this->json((array) $page);
     }
 
-    public function delete($request)
+    public function addFolder(): string
     {
-        function returnHome()
-        {
-            header('Location: /admin');
-            header('HTTP/1.1 302');
+        $token = $_REQUEST['token'];
+        $parentFolder = $_REQUEST['parentFolder'];
+        $folderName = $_REQUEST['folderName'];
+        if (!$this->isGranted(JsonUserHandler::ROLE_EDITOR)) {
+            return $this->json(['message' => 'You are not authenticated'], 401);
         }
-        if (key_exists('file', $_REQUEST)) {
-            $file = $_REQUEST['file'];
-        } elseif (key_exists('dir', $_REQUEST)) {
-            $file = $_REQUEST['dir'];
+
+        $success = $this->contentHelper->create($parentFolder, $folderName, true);
+
+        return $this->json(['success' => $success]);
+    }
+
+    public function deleteFolder(Request $request): string
+    {
+        return $this->delete($request);
+    }
+
+    function add()
+    {
+        $token = $_REQUEST['token'];
+        $title = $_REQUEST['title'];
+        $parentFolder = $_REQUEST['parentFolder'];
+        // TODO: token check?
+
+        $success = $this->contentHelper->create($parentFolder, $title);
+
+        return $this->json(['success' => $success]);
+    }
+
+    function rename(Request $request)
+    {
+        if (!key_exists('entry', $_GET) || !key_exists('new-title', $_GET) || !key_exists('token', $_GET)) {
+            return $this->json(['message' => 'Please define entry and content'], HttpResponseCode::BAD_REQUEST);
+        }
+        if (strtoupper($request->requestMethod) !== HttpMethod::PUT) {
+            return $this->json(['message' => 'Only PUT allowed'], HttpResponseCode::METHOD_NOT_ALLOWED);
+        }
+
+        RenameAction::setMarkdownHelper($this->nacho->getMarkdownHelper());
+        $success = RenameAction::run($_GET);
+
+        return $this->json(['success' => $success]);
+    }
+
+    public function delete(): string
+    {
+        if (!key_exists('token', $_REQUEST)) {
+            return $this->json(['message' => 'You need to be authenticated'], 401);
+        }
+        $tokenHelper = new TokenHelper();
+        $token = $_REQUEST['token'];
+        $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
+        if (!$user) {
+            return $this->json(['message' => 'The provided Token is invalid'], 401);
+        }
+        if (!key_exists('entry', $_GET)) {
+            return $this->json($_GET, 400);
+        }
+
+        $entry = $_GET['entry'];
+
+        $success = $this->contentHelper->delete($entry);
+
+        if ($success) {
+            return $this->json(['message' => "successfully deleted ${entry}"]);
         } else {
-            returnHome();
+            return $this->json(['message' => "error deleting ${entry}"], 404);
         }
-        if (
-            substr($file, 0, strlen($_SERVER['DOCUMENT_ROOT'])) !==
-            $_SERVER['DOCUMENT_ROOT']
-        ) {
-            returnHome();
-        }
-
-        function rmdirRecursive($dir)
-        {
-            foreach (scandir($dir) as $sub) {
-                if ($sub !== '.' && $sub !== '..') {
-                    $newDir = $dir . '/' . $sub;
-                    if (is_file($newDir)) {
-                        unlink($newDir);
-                    } elseif (is_dir($newDir)) {
-                        rmdirRecursive($newDir);
-                    }
-                }
-            }
-            rmdir($dir);
-        }
-
-        if (is_file($file)) {
-            unlink($file);
-        } elseif (is_dir($file)) {
-            rmdirRecursive($file);
-        }
-        returnHome();
     }
 
-    public function add($request)
+    public function buildCache()
     {
-        if (strtolower($request->requestMethod) === 'post') {
-            $date = new DateTime();
-            $content =
-                "---\ntitle: " .
-                $_REQUEST['filename'] .
-                "\ndate: " .
-                $date->format('Y-m-d H:i') .
-                "\n---";
-            $file = CONTENT_DIR . '/' . $_REQUEST['filename'];
-            $parentDir = explode('/', $_REQUEST['filename']);
-            array_pop($parentDir);
-            $createdDirs = '';
-            foreach ($parentDir as $newDir) {
-                if (!is_dir(CONTENT_DIR . '/' . $createdDirs . '/' . $newDir)) {
-                    mkdir(CONTENT_DIR . '/' . $createdDirs . '/' . $newDir);
-                }
-                if ($createdDirs) {
-                    $createdDirs .= '/';
-                }
-                $createdDirs .= $newDir;
-            }
-            file_put_contents($file, $content);
-            header('Location: /admin/edit?fulldir=' . $file);
-            header('HTTP/1.1 302');
+        if (!key_exists('token', $_REQUEST)) {
+            return $this->json(['message' => 'You need to be authenticated'], 401);
         }
-
-        return $this->render('admin/add.twig');
+        $tokenHelper = new TokenHelper();
+        $token = $_REQUEST['token'];
+        $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
+        if (!$user) {
+            return $this->json(['message' => 'The provided Token is invalid'], 401);
+        }
+        $cacheHelper = new CacheHelper($this->nacho);
+        $cacheHelper->build();
+        return $this->json(['success' => true]);
     }
 
-    function edit($request)
+    public function generateBackup()
     {
-        if (key_exists('file', $_REQUEST)) {
-            $url =
-                $_SERVER['DOCUMENT_ROOT'] . '/' . urldecode($_REQUEST['file']);
-        } elseif (key_exists('fulldir', $_REQUEST)) {
-            $url = urldecode($_REQUEST['fulldir']);
+        if (!key_exists('token', $_REQUEST)) {
+            return $this->json(['message' => 'You need to be authenticated'], 401);
+        }
+        $tokenHelper = new TokenHelper();
+        $token = $_REQUEST['token'];
+        $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
+        if (!$user) {
+            return $this->json(['message' => 'The provided Token is invalid'], 401);
         }
 
-        if ($request->requestMethod === 'POST') {
-            if (!is_file($_REQUEST['fulldir'])) {
-                echo ('this is not a directory');
-            }
-            file_put_contents($_REQUEST['fulldir'], $_REQUEST['content']);
-            header('content-type: application/json');
-            return json_encode(['message' => 'successfully saved content']);
-        }
+        $backupHelper = new BackupHelper();
+        $zip = $backupHelper->generateBackup();
 
-        $content = file_get_contents($url);
-
-        return $this->render('admin/edit.twig', [
-            'content' => base64_encode($content),
-            'fulldir' => $url,
-        ]);
+        return $this->json(['file' => $zip]);
     }
 
-    protected function render(string $file, array $args = [])
+    public function restoreFromBackup(Request $request)
     {
-        $nav = new NavRenderer($this->nacho);
-        $tmp = $this->nacho->getPages();
-        $page = $this->nacho->getPage('/');
-        $pages = ['/' => $nav->findChildPages('/', $page, $tmp)];
+        if (!key_exists('token', $request->getBody())) {
+            return $this->json(['message' => 'You need to be authenticated'], 401);
+        }
+        $tokenHelper = new TokenHelper();
+        $token = $request->getBody()['token'];
+        $user = $tokenHelper->isTokenValid($token, $this->nacho->getUserHandler()->getUsers());
+        if (!$user) {
+            return $this->json(['message' => 'The provided Token is invalid'], 401);
+        }
 
-        $args['pages'] = $pages;
-        $args['referer'] = $_SERVER['HTTP_REFERER'];
+        $zipPath = $_FILES['backup']['tmp_name'];
+        $backupHelper = new BackupHelper();
+        $success = $backupHelper->restoreFromBackup($zipPath);
+        $cacheHelper = new CacheHelper($this->nacho);
+        $cacheHelper->build();
 
-        return parent::render($file, $args);
+        return $this->json(['success' => $success]);
     }
 }
