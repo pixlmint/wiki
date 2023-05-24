@@ -59,23 +59,22 @@ class ContentHelper
 
     public function delete(string $entry): bool
     {
-        $file = WikiConfiguration::contentDir() . $entry . '.md';
-        if (is_file($file)) {
-            unlink($file);
+        if (is_dir(WikiConfiguration::contentDir() . $entry)) {
+            return $this->deleteFolder(WikiConfiguration::contentDir() . $entry);
+        } else {
+            return $this->deleteFile($entry);
         }
+    }
+
+    private function deleteFile(string $entry): bool
+    {
         $page = $this->markdownHelper->getPage($entry);
-        $filename = $page->file;
-        $split_name = explode(DIRECTORY_SEPARATOR, $filename);
+        return unlink($page->file);
+    }
 
-        $success = unlink($filename);
-
-        if ($split_name[-1] !== 'index.md') {
-            return $success;
-        }
-
-        array_pop($split_name);
-        self::rmdir_recursive(implode("/", $split_name));
-
+    private function deleteFolder(string $folderDirectory): bool
+    {
+        self::rmdir_recursive($folderDirectory);
         return true;
     }
 
