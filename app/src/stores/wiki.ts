@@ -58,9 +58,7 @@ export const useWikiStore = defineStore('wikiStore', {
         throw 'Not editing any entry';
       }
       if (token === null) {
-        token = '';
-        // TODO: uncomment
-        //throw new Error('token cannot be null');
+        throw new Error('token cannot be null');
       }
       const data = {
         token: token,
@@ -80,8 +78,7 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     addEntry(parentFolder : string, title: string, token: string | null) {
       if (token === null) {
-        // TODO: uncomment
-        //throw new Error('token cannot be null');
+        throw new Error('token cannot be null');
       }
       const data = {
         parentFolder: parentFolder,
@@ -94,8 +91,7 @@ export const useWikiStore = defineStore('wikiStore', {
     addFolder(parentFolder: string, folderName: any, token: string | null) {
       console.log(folderName);
       if (token === null) {
-        // TODO: uncomment
-        //throw new Error('token cannot be null');
+        throw new Error('token cannot be null');
       }
       const data = {
         parentFolder: parentFolder,
@@ -107,8 +103,7 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     deleteFolder(folderName: string, token: string | null) {
       if (token === null) {
-        // TODO: uncomment
-        // throw 'Token cannot be null';
+        throw 'Token cannot be null';
       }
 
       const data = {
@@ -120,8 +115,7 @@ export const useWikiStore = defineStore('wikiStore', {
     },
     deleteEntry(entry: string, token: string | null) {
       if (token === null) {
-        // TODO: uncomment
-        // throw new Error('invalid token');
+        throw new Error('invalid token');
       }
       const data = {
         entry: entry,

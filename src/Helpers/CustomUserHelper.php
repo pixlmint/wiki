@@ -9,8 +9,27 @@ use Nacho\Contracts\UserHandlerInterface;
 use Nacho\Security\UserInterface;
 use Nacho\Security\UserRepository;
 
-class CustomUserHelper extends JsonUserHandler implements UserHandlerInterface
+final class CustomUserHelper extends JsonUserHandler implements UserHandlerInterface
 {
+    const ROLE_SUPER_ADMIN = 'Super Admin';
+    const ROLE_EDITOR = 'Editor';
+    const ROLE_READER = 'Reader';
+    const ROLE_GUEST = 'Guest';
+
+    public function getCurrentUser()
+    {
+        $token = $_REQUEST['token'];
+        if (!$token) {
+
+        }
+    }
+
+    public function isGranted(string $minRight = self::ROLE_GUEST, ?UserInterface $user = null): bool
+    {
+        $users = $this->getUsers();
+        return parent::isGranted($minRight, $user);
+    }
+
     public function setPassword(string $username, string $newPassword)
     {
         /** @var TokenUser $user */

@@ -1,6 +1,4 @@
-import axios from 'axios';
 import {defineStore} from "pinia"
-import {queryFormatter} from '../helpers/queryFormatter';
 import {buildRequest, send} from "@/src/helpers/xhr";
 
 interface State {
@@ -25,6 +23,15 @@ export const useAuthStore = defineStore('authStore', {
         setToken(token: string) {
             this.token = token;
             localStorage.setItem('token', token);
+        },
+        haveEditRights() {
+            return this.token !== null;
+        },
+        haveViewRights() {
+            return this.haveEditRights();
+        },
+        haveDeleteRights() {
+            return this.haveEditRights();
         },
         changePassword(payload: ChangePasswordForm) {
             const request = buildRequest('/api/auth/change-password', payload, 'POST');

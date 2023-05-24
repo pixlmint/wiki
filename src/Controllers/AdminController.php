@@ -7,6 +7,7 @@ use App\Helpers\ContentHelper;
 use App\Helpers\TokenHelper;
 use App\Helpers\BackupHelper;
 use App\Helpers\CacheHelper;
+use App\Security\JsonUserHandler;
 use Nacho\Controllers\AbstractController;
 use Nacho\Models\HttpMethod;
 use Nacho\Models\HttpResponseCode;
@@ -61,7 +62,9 @@ class AdminController extends AbstractController
         $token = $_REQUEST['token'];
         $parentFolder = $_REQUEST['parentFolder'];
         $folderName = $_REQUEST['folderName'];
-        // TODO: Token check
+        if (!$this->isGranted(JsonUserHandler::ROLE_EDITOR)) {
+            return $this->json(['message' => 'You are not authenticated'], 401);
+        }
 
         $success = $this->contentHelper->create($parentFolder, $folderName, true);
 

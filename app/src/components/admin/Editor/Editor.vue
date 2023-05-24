@@ -20,10 +20,8 @@ export default defineComponent({
     }
   },
   created() {
-    const token = useAuthStore().getToken;
-    if (token === null) {
-      // TODO: uncomment
-      // throw new Error('You are not allowed to edit entries');
+    if (useAuthStore().haveEditRights()) {
+      throw new Error('You are not allowed to edit entries');
     }
     let entry = new URLSearchParams(location.search).get('p');
     if (entry === null) {
