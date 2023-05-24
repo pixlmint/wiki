@@ -4,7 +4,7 @@
             <el-sub-menu data-is-entry="false" :index="index">
                 <template #title>
                     {{ element.title }}
-                    <el-dropdown>
+                    <el-dropdown v-if="canEdit">
                         <el-button circle>
                             <el-icon>
                                 <more-filled/>
@@ -30,7 +30,7 @@
                 <div>
                     {{ element.title }}
                 </div>
-                <el-dropdown>
+                <el-dropdown v-if="canEdit">
                     <el-button circle>
                         <el-icon>
                             <more-filled/>
@@ -83,7 +83,10 @@ export default defineComponent({
         },
         childIndex() {
             return this.parentIndex + '-' + this.index;
-        }
+        },
+        canEdit() {
+            return useAuthStore().haveEditRights();
+        },
     },
     methods: {
         edit() {

@@ -15,8 +15,7 @@
                                   :index="myIndex">
                     </PWNavElement>
                 </el-menu>
-                <!-- TODO: only show button if user is allowed to add pages/folders -->
-                <el-dropdown class="full-width">
+                <el-dropdown class="full-width" v-if="canEdit">
                     <el-button class="full-width">
                         <el-icon>
                             <CirclePlus/>
@@ -219,6 +218,9 @@ export default defineComponent({
                 return [];
             }
             return id.split('/');
+        },
+        canEdit() {
+            return this.authStore.haveEditRights();
         },
         mainNavShowing() {
             return this.mainStore.isLargeNavShowing;

@@ -19,11 +19,23 @@ class InitController extends AbstractController
 
         $year = WikiConfiguration::title();
 
-        $isAdminCreated = AdminHelper::isAdminCreated();
+        $isAdminCreated = $this->isAdminCreated();
 
         $version = WikiConfiguration::version();
 
         return $this->json(['is_token_valid' => $isTokenValid, 'title' => $year, 'version' => $version, 'adminCreated' => $isAdminCreated]);
+    }
+
+    public function isAdminCreated(): bool
+    {
+        $users = $this->nacho->getUserHandler()->getUsers();
+        foreach ($users as $user) {
+            if ($user['role'] === 'Editor') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isTokenValid(): string

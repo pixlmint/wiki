@@ -82,8 +82,7 @@ export default defineComponent({
             return this.wikiStore.currentEntry?.content;
         },
         canEdit() {
-            return true;
-            // return useAuthStore().token !== null;
+            return useAuthStore().haveEditRights();
         },
     },
     methods: {
