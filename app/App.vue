@@ -33,13 +33,13 @@ export default defineComponent({
         }
     },
     computed: {
-      mainContentClasses() {
-          if (this.mainStore.isLargeNavShowing) {
-              return 'main-content large-nav';
-          } else {
-              return 'main-content small-nav';
-          }
-      }
+        mainContentClasses() {
+            if (this.mainStore.isLargeNavShowing) {
+                return 'main-content large-nav';
+            } else {
+                return 'main-content small-nav';
+            }
+        }
     },
     created() {
         const mainStore = useMainStore();
@@ -68,57 +68,62 @@ export default defineComponent({
 
 <style lang="scss">
 @import './style/main.scss';
-.main-content {
-    background-color: var(--el-bg-color);
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    min-width: 100%;
-    min-height: 100vh;
-    padding: 5px;
 
-    &.small-nav {
-        margin: 0 auto 0 1rem;
-    }
+.main-content {
+  background-color: var(--el-bg-color);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  min-width: 100%;
+  min-height: 100vh;
+  padding: 5px;
+
+  &.small-nav {
+    margin: 0 auto 0 1rem;
+  }
 }
 
 @media screen and (min-width: $mobileBreakpoint) {
-    .main-content {
-        &.large-nav {
-            margin: 0 0 0 $navWidth;
-        }
-
-        .article-body {
-            padding: 0;
-
-            img {
-                max-width: 1000px;
-            }
-        }
+  .main-content {
+    &.large-nav {
+      margin: 0 0 0 $navWidth;
     }
+
+    .article {
+      max-width: calc(100vw - $navWidth);
+
+      .article-body {
+        padding: 0;
+
+        img {
+          max-width: 1000px;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 1500px) {
-    .main-content {
-        &.large-nav {
-            margin: 0 auto 0 auto !important;
-        }
+  .main-content {
+    &.large-nav {
+      margin: 0 auto 0 auto !important;
     }
+  }
 }
 
 @media screen and (min-width: 1300px) {
-    .main-content {
-        width: 80%;
-        min-width: unset !important;
-        max-width: 1000px;
-        box-shadow: var(--box-shadow);
+  .main-content {
+    width: 80%;
+    min-width: unset !important;
+    max-width: 1000px;
+    box-shadow: var(--box-shadow);
 
-        &.large-nav {
-            margin: 0 auto 0 $navWidth;
-        }
-
-        &.small-nav {
-            margin: 0 auto 0 auto;
-        }
+    &.large-nav {
+      margin: 0 auto 0 $navWidth;
     }
+
+    &.small-nav {
+      margin: 0 auto 0 auto;
+    }
+  }
 }
 </style>
