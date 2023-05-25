@@ -20,7 +20,7 @@ export default defineComponent({
     }
   },
   created() {
-    if (useAuthStore().haveEditRights()) {
+    if (!useAuthStore().haveEditRights()) {
       throw new Error('You are not allowed to edit entries');
     }
     let entry = new URLSearchParams(location.search).get('p');
