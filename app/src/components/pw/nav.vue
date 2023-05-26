@@ -8,6 +8,13 @@
                     </el-icon>
                 </div>
                 <el-menu @click="loadPage" :router="true" class="main-nav">
+                    <el-menu-item class="pw-menu-item" data-is-entry="true" index="/">
+                        <div>
+                            <el-icon>
+                                <HomeFilled></HomeFilled>
+                            </el-icon>
+                        </div>
+                    </el-menu-item>
                     <PWNavElement v-for="(childElement, myIndex) in nav.children"
                                   parentIndex="0"
                                   :key="myIndex"
@@ -94,6 +101,7 @@ import {
     CirclePlus,
     FolderAdd,
     DocumentAdd,
+    HomeFilled,
 } from "@element-plus/icons-vue";
 import {isMobile} from "@/src/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
@@ -127,6 +135,7 @@ export default defineComponent({
         CaretRight,
         CaretLeft,
         CirclePlus,
+        HomeFilled,
     },
     data() {
         return {
