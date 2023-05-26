@@ -249,7 +249,7 @@ export default defineComponent({
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
-    width: $navWidth;
+    width: $navLargeWidth;
 }
 
 @media screen and (max-width: $mobileBreakpoint) {
@@ -293,7 +293,8 @@ export default defineComponent({
     cursor: pointer;
 
     .nav-toggle-small {
-        padding-top: 20px;
+        position: absolute;
+        top: 10px;
     }
 
     .breadcrumbs {

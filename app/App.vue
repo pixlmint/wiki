@@ -84,13 +84,21 @@ export default defineComponent({
 
 @media screen and (min-width: $mobileBreakpoint) {
   .main-content {
+    margin: 0 0 0 $navLargeWidth;
+
     &.large-nav {
-      margin: 0 0 0 $navWidth;
+      .article {
+        max-width: calc(100vw - $navLargeWidth);
+      }
+    }
+
+    &.small-nav {
+      .article {
+        max-width: calc(100vw - $navSmallWidth);
+      }
     }
 
     .article {
-      max-width: calc(100vw - $navWidth);
-
       .article-body {
         padding: 0;
 
@@ -118,7 +126,7 @@ export default defineComponent({
     box-shadow: var(--box-shadow);
 
     &.large-nav {
-      margin: 0 auto 0 $navWidth;
+      margin: 0 auto 0 $navLargeWidth;
     }
 
     &.small-nav {
