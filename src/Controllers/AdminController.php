@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Actions\RenameAction;
 use App\Helpers\ContentHelper;
+use App\Helpers\CustomUserHelper;
 use App\Helpers\TokenHelper;
 use App\Helpers\BackupHelper;
 use App\Helpers\CacheHelper;
@@ -59,10 +60,9 @@ class AdminController extends AbstractController
 
     public function addFolder(): string
     {
-        $token = $_REQUEST['token'];
         $parentFolder = $_REQUEST['parentFolder'];
         $folderName = $_REQUEST['folderName'];
-        if (!$this->isGranted(JsonUserHandler::ROLE_EDITOR)) {
+        if (!$this->isGranted(CustomUserHelper::ROLE_EDITOR)) {
             return $this->json(['message' => 'You are not authenticated'], 401);
         }
 
@@ -76,12 +76,14 @@ class AdminController extends AbstractController
         return $this->delete($request);
     }
 
-    function add()
+    function add(): string
     {
-        $token = $_REQUEST['token'];
         $title = $_REQUEST['title'];
         $parentFolder = $_REQUEST['parentFolder'];
-        // TODO: token check?
+
+        if (!$this->isGranted(CustomUserHelper::ROLE_EDITOR)) {
+            return $this->json(['message' => 'You are not authenticated'], 401);
+        }
 
         $success = $this->contentHelper->create($parentFolder, $title);
 

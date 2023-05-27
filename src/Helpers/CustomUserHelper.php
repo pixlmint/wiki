@@ -16,21 +16,29 @@ final class CustomUserHelper extends JsonUserHandler implements UserHandlerInter
     const ROLE_READER = 'Reader';
     const ROLE_GUEST = 'Guest';
 
+    private TokenHelper $tokenHelper;
+
+    public function __construct()
+    {
+        $this->tokenHelper = new TokenHelper();
+    }
+
     public function getCurrentUser()
     {
-        if (!in_array('token', $_REQUEST)) {
+        if (!key_exists('token', $_REQUEST)) {
             return new TokenUser(0, 'Guest', self::ROLE_GUEST, null, null, null, null);
         }
 
         $token = $_REQUEST['token'];
-        $tokenHelper = new TokenHelper();
 
-        return $tokenHelper->getUserByToken($token, $this->getUsers());
+        return $this->tokenHelper->getUserByToken($token, $this->getUsers());
     }
 
     public function isGranted(string $minRight = self::ROLE_GUEST, ?UserInterface $user = null): bool
     {
-        $users = $this->getUsers();
+        if (!$user) {
+            $user = $this->getCurrentUser();
+        }
         return parent::isGranted($minRight, $user);
     }
 
