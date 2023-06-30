@@ -19,6 +19,8 @@ import {AxiosResponse} from "axios";
 import {ElNotification} from "element-plus";
 import Modals from "@/src/components/modals.vue";
 import {useDialogStore} from "@/src/stores/dialog";
+import {configureStores} from "@/src/helpers/xhr";
+import {useLoadingStore} from "@/src/stores/loading";
 
 export default defineComponent({
     name: "App",
@@ -46,6 +48,7 @@ export default defineComponent({
         const authStore = useAuthStore();
         authStore.loadToken();
         const token = authStore.getToken;
+        configureStores(authStore, useLoadingStore());
         const settings = useUserSettings().loadUserSettings();
         useUserSettings().setCurrentTheme(settings.theme);
         mainStore.init(token).then((response: AxiosResponse) => {

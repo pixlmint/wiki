@@ -72,7 +72,7 @@ export const useAuthStore = defineStore('authStore', {
             });
         },
         login(data: object) {
-            const request = buildRequest('/api/login', data, 'POST');
+            const request = buildRequest('/api/auth/login', data, 'POST');
             return send(request).then(response => {
                 this.setToken(response.data.token);
             });
