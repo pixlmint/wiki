@@ -58,15 +58,8 @@ export const useAuthStore = defineStore('authStore', {
                 this.setToken(response.data.token);
             })
         },
-        generateNewToken(username: string, token: string | null) {
-            if (token === null) {
-                throw new Error('invalid token');
-            }
-            const data = {
-                username: username,
-                token: token,
-            };
-            const request = buildRequest('/api/auth/generate-new-token', data, 'POST');
+        generateNewToken(username: string) {
+            const request = buildRequest('/api/auth/generate-new-token', {username: username}, 'POST');
             return send(request).then(response => {
                 this.setToken(response.data.token);
             });

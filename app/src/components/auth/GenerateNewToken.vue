@@ -26,7 +26,7 @@ export default defineComponent({
   methods: {
     submit() {
       const authStore = useAuthStore();
-      authStore.generateNewToken(this.username, authStore.token)
+      authStore.generateNewToken(this.username)
     },
   },
 })
