@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import {buildRequest, send} from "@/src/helpers/xhr";
+import {ElNotification} from "element-plus";
 
 interface WikiEntry {
   raw_content: string,
@@ -113,16 +114,15 @@ export const useWikiStore = defineStore('wikiStore', {
       const request = buildRequest('/api/admin/folder/delete', data, 'DELETE');
       return send(request);
     },
-    deleteEntry(entry: string, token: string | null) {
-      if (token === null) {
-        throw new Error('invalid token');
-      }
-      const data = {
-        entry: entry,
-        token: token,
-      };
-      const request = buildRequest('/api/admin/entry/delete', data, 'DELETE');
-      return send(request);
+    deleteEntry(entry: string) {
+      const request = buildRequest('/api/admin/entry/delete', {entry: entry}, 'DELETE');
+      return send(request).then(() => {
+        ElNotification({
+          type: 'success',
+          title: 'Success',
+          message: 'Successfully Deleted the Entry'
+        });
+      });
     },
     renameEntry(newName: string, token: string | null) {
       if (this.currentEntry === null) {

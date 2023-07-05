@@ -53,6 +53,7 @@ import {useAuthStore} from "@/src/stores/auth";
 import fa from '@/src/components/fa.vue'
 import {useRoute, useRouter} from "vue-router";
 import {MoreFilled, Edit, Delete} from "@element-plus/icons-vue";
+import {ElDialog} from "element-plus";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -92,8 +93,11 @@ export default defineComponent({
         deleteEntry() {
             const doDelete = confirm("Are you sure you want to delete this entry");
             if (doDelete) {
-                useWikiStore().deleteEntry(this.entry, useAuthStore().token);
-                // TODO: what now?
+                useWikiStore().deleteEntry(this.entry).then(() => {
+                  useWikiStore().loadNav();
+                  useWikiStore().fetchEntry('/');
+                  this.router.push('/');
+                });
             }
         },
     },
