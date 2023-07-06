@@ -1,16 +1,17 @@
 <?php
 
+use App\Controllers\FrontendController;
+
 return [
-    'routes' => require_once('routes.php'),
-    'wiki' => require_once('wiki.php'),
-    'hooks' => [
+    "plugins" => [
         [
-            'anchor' => 'post_find_route',
-            'hook' => App\Hooks\RouteCheckHook::class,
+            'name' => 'pixlcms-wiki-plugin',
+            'install_method' => 'composer',
+            'enabled' => true,
+            'config' => require_once('vendor/pixlmint/pixlcms-wiki-plugin/config/config.php'),
         ],
     ],
-    'security' => [
-        'user_model' => App\Models\TokenUser::class,
-        'userHandler' => App\Helpers\CustomUserHelper::class,
-    ],
+    'base' => [
+        'frontendController' => FrontendController::class,
+    ]
 ];

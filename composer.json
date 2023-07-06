@@ -1,9 +1,10 @@
 {
-    "name": "christiangroeber/wiki",
+    "name": "pixlmint/wiki",
     "description": "Your very own Wiki, powered by Markdown, Vue and Nachos",
     "require": {
         "ext-json":  "*",
-        "christiangroeber/nacho": "*"
+        "pixlmint/pixl-cms": "*",
+        "pixlmint/pixlcms-wiki-plugin": "*"
     },
     "autoload": {
         "psr-4": {

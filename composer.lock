@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f83647cff3cfa6b656b893f4220cb2c",
+    "content-hash": "0cbeb7f4b2b998f14f99c1037388f356",
     "packages": [
         {
-            "name": "christiangroeber/nacho",
-            "version": "0.39",
+            "name": "pixlmint/nacho",
+            "version": "0.44",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ChristianGroeber/Nacho.git",
-                "reference": "e47a6c36b75066e40178a947d3ef043403839fb8"
+                "url": "https://github.com/pixlmint/Nacho.git",
+                "reference": "004f39ee1b91cfe8efb38777553c861196c29411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristianGroeber/Nacho/zipball/e47a6c36b75066e40178a947d3ef043403839fb8",
-                "reference": "e47a6c36b75066e40178a947d3ef043403839fb8",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/004f39ee1b91cfe8efb38777553c861196c29411",
+                "reference": "004f39ee1b91cfe8efb38777553c861196c29411",
                 "shasum": ""
             },
             "require": {
-                "erusev/parsedown": "*",
                 "php": "8.*",
+                "pixlmint/parsedown": "*",
                 "symfony/yaml": "^5.2",
                 "twig/twig": "^1.36"
             },
@@ -44,23 +44,23 @@
             ],
             "description": "My own Lightweight PHP Framework",
             "support": {
-                "issues": "https://github.com/ChristianGroeber/Nacho/issues",
-                "source": "https://github.com/ChristianGroeber/Nacho/tree/0.39"
+                "issues": "https://github.com/pixlmint/Nacho/issues",
+                "source": "https://github.com/pixlmint/Nacho/tree/0.44"
             },
-            "time": "2023-04-12T17:04:27+00:00"
+            "time": "2023-06-30T13:33:07+00:00"
         },
         {
-            "name": "erusev/parsedown",
-            "version": "1.7.4",
+            "name": "pixlmint/parsedown",
+            "version": "1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/erusev/parsedown.git",
-                "reference": "cb17b6477dfff935958ba01325f2e8a2bfa6dab3"
+                "url": "https://github.com/pixlmint/parsedown.git",
+                "reference": "7e8307309aea50fdf1bc5d0f5d30ed4e4a3476c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/cb17b6477dfff935958ba01325f2e8a2bfa6dab3",
-                "reference": "cb17b6477dfff935958ba01325f2e8a2bfa6dab3",
+                "url": "https://api.github.com/repos/pixlmint/parsedown/zipball/7e8307309aea50fdf1bc5d0f5d30ed4e4a3476c5",
+                "reference": "7e8307309aea50fdf1bc5d0f5d30ed4e4a3476c5",
                 "shasum": ""
             },
             "require": {
@@ -72,8 +72,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Parsedown": ""
+                "psr-4": {
+                    "PixlMint\\Parsedown\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -85,6 +85,11 @@
                     "name": "Emanuil Rusev",
                     "email": "hello@erusev.com",
                     "homepage": "http://erusev.com"
+                },
+                {
+                    "name": "Christian Gröber",
+                    "email": "christian.groeber@bluewin.ch",
+                    "homepage": "https://christian-groeber.ch"
                 }
             ],
             "description": "Parser for Markdown.",
@@ -94,23 +99,86 @@
                 "parser"
             ],
             "support": {
-                "issues": "https://github.com/erusev/parsedown/issues",
-                "source": "https://github.com/erusev/parsedown/tree/1.7.x"
+                "source": "https://github.com/pixlmint/parsedown/tree/1.0"
             },
-            "time": "2019-12-30T22:54:17+00:00"
+            "time": "2023-06-30T12:45:53+00:00"
         },
         {
-            "name": "symfony/deprecation-contracts",
-            "version": "v3.2.1",
+            "name": "pixlmint/pixl-cms",
+            "version": "1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "e2d1534420bd723d0ef5aec58a22c5fe60ce6f5e"
+                "url": "https://github.com/pixlmint/pixl-cms.git",
+                "reference": "92d1b9f148733f1b3ab6360c2c77e0aa122e6ece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/e2d1534420bd723d0ef5aec58a22c5fe60ce6f5e",
-                "reference": "e2d1534420bd723d0ef5aec58a22c5fe60ce6f5e",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/92d1b9f148733f1b3ab6360c2c77e0aa122e6ece",
+                "reference": "92d1b9f148733f1b3ab6360c2c77e0aa122e6ece",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "pixlmint/nacho": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PixlMint\\CMS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "A lightweight CMS powered by Markdown and Nachos",
+            "support": {
+                "issues": "https://github.com/pixlmint/pixl-cms/issues",
+                "source": "https://github.com/pixlmint/pixl-cms/tree/1.2"
+            },
+            "time": "2023-06-30T16:03:33+00:00"
+        },
+        {
+            "name": "pixlmint/pixlcms-wiki-plugin",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
+                "reference": "3e93cafe1106608296f48e4231d1f8532394fbe5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/3e93cafe1106608296f48e4231d1f8532394fbe5",
+                "reference": "3e93cafe1106608296f48e4231d1f8532394fbe5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "pixlmint/pixl-cms": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PixlMint\\WikiPlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "The official wiki plugin for PixlCMS",
+            "support": {
+                "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.0"
+            },
+            "time": "2023-06-30T15:53:01+00:00"
+        },
+        {
+            "name": "symfony/deprecation-contracts",
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/deprecation-contracts.git",
+                "reference": "7c3aff79d10325257a001fcf92d991f24fc967cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/7c3aff79d10325257a001fcf92d991f24fc967cf",
+                "reference": "7c3aff79d10325257a001fcf92d991f24fc967cf",
                 "shasum": ""
             },
             "require": {
@@ -119,7 +187,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.3-dev"
+                    "dev-main": "3.4-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -148,7 +216,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.2.1"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.3.0"
             },
             "funding": [
                 {
@@ -164,7 +232,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-01T10:25:55+00:00"
+            "time": "2023-05-23T14:45:45+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

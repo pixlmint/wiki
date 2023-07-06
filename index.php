@@ -2,6 +2,6 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Nacho\Core;
+use PixlMint\CMS\CmsCore;
 
-Core::getInstance()->run();
+CmsCore::init();

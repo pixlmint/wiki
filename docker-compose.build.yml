@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  "wiki_build":
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        UID: 99
+        GID: 100
+    image: christiangroeber/wiki
+    container_name: wiki_build
+    volumes:
+      - data:/var/www/html/data
+      - content:/var/www/html/content
+      - media:/var/www/html/media
+    environment:
+      SECRET: 'adsf'
+    ports:
+      - "88:80"
+
+volumes:
+  data:
+  media:
+  content:

@@ -6,3 +6,4 @@ content
 users.json
 data/*
 dist/*
+.secret
