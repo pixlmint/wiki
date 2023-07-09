@@ -53,16 +53,12 @@ export const useWikiStore = defineStore('wikiStore', {
     getNav: state => state.nav,
   },
   actions: {
-    saveEntry(token: string | null) {
+    saveEntry() {
       const currentEntry = this.currentEntry;
       if (currentEntry === null) {
         throw 'Not editing any entry';
       }
-      if (token === null) {
-        throw new Error('token cannot be null');
-      }
       const data = {
-        token: token,
         content: currentEntry.raw_content,
         meta: currentEntry.meta,
         entry: currentEntry.id,
@@ -78,40 +74,23 @@ export const useWikiStore = defineStore('wikiStore', {
       });
     },
     addEntry(parentFolder : string, title: string, token: string | null) {
-      if (token === null) {
-        throw new Error('token cannot be null');
-      }
       const data = {
         parentFolder: parentFolder,
-        token: token,
         title: title,
       };
       const request = buildRequest('/api/admin/entry/add', data, 'POST');
       return send(request);
     },
     addFolder(parentFolder: string, folderName: any, token: string | null) {
-      console.log(folderName);
-      if (token === null) {
-        throw new Error('token cannot be null');
-      }
       const data = {
         parentFolder: parentFolder,
         folderName: folderName,
-        token: token,
       };
       const request = buildRequest('/api/admin/folder/add', data, 'POST');
       return send(request);
     },
     deleteFolder(folderName: string, token: string | null) {
-      if (token === null) {
-        throw 'Token cannot be null';
-      }
-
-      const data = {
-        entry: folderName,
-        token: token,
-      };
-      const request = buildRequest('/api/admin/folder/delete', data, 'DELETE');
+      const request = buildRequest('/api/admin/folder/delete', {entry: folderName}, 'DELETE');
       return send(request);
     },
     deleteEntry(entry: string) {
