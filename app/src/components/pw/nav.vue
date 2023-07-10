@@ -253,12 +253,13 @@ export default defineComponent({
 
 #nav {
     background-color: var(--el-bg-color);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
     width: $navLargeWidth;
+    overflow-y: auto;
 }
 
 @media screen and (max-width: $mobileBreakpoint) {
