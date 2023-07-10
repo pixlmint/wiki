@@ -40,6 +40,8 @@ export const useMainStore = defineStore('main', {
                 if (response.data.is_token_valid !== 'token_valid') {
                     useAuthStore().logout();
                 }
+                const data = response.data;
+                data.version = data.wikiVersion;
                 this.$state.meta = response.data;
 
                 return response;

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="Settings" v-model="isShowing">
+    <el-dialog class="user-settings-popup" title="Settings" v-model="isShowing">
         <el-form v-model="settings">
             <el-form-item label="Auto save">
                 <el-switch v-model="settings.autoSave"/>
@@ -19,6 +19,9 @@
                 </el-radio-group>
             </el-form-item>
         </el-form>
+        <template #footer>
+            PixlWiki Version {{ version }}
+        </template>
     </el-dialog>
 </template>
 
@@ -49,6 +52,9 @@ export default defineComponent({
       });
     },
     computed: {
+        version() {
+            return useMainStore().meta.version;
+        },
         isShowing: {
             get() {
                 return route === this.dialogStore.getShowingDialog;
@@ -67,3 +73,13 @@ export default defineComponent({
     },
 })
 </script>
+
+<style lang="scss">
+.user-settings-popup footer {
+    width: 100%;
+    text-align: center;
+    color: grey;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+</style>
