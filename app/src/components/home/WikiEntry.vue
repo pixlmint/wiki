@@ -51,15 +51,13 @@ import {useWikiStore} from '@/src/stores/wiki'
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import fa from '@/src/components/fa.vue'
-import {useRoute, useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 import {MoreFilled, Edit, Delete} from "@element-plus/icons-vue";
-import {ElDialog} from "element-plus";
 
 export default defineComponent({
     name: "WikiEntry",
     data: () => {
         return {
-            entry: useRoute().path,
             wikiStore: useWikiStore(),
             router: useRouter(),
         }
@@ -70,17 +68,12 @@ export default defineComponent({
         Edit,
         Delete,
     },
-    created: function () {
-        this.wikiStore.fetchEntry(this.entry).then(function () {
-            useMainStore().setTitle(useWikiStore().currentEntry.meta.title);
-        });
-    },
     computed: {
         title() {
-            return this.wikiStore.currentEntry?.meta.title;
+            return this.wikiStore.safeCurrentEntry.meta.title;
         },
         content() {
-            return this.wikiStore.currentEntry?.content;
+            return this.wikiStore.safeCurrentEntry.content;
         },
         canEdit() {
             return useAuthStore().haveEditRights();
@@ -88,15 +81,15 @@ export default defineComponent({
     },
     methods: {
         editEntry() {
-            this.router.push('/admin/edit?p=' + this.entry);
+            this.router.push('/admin/edit?p=' + this.wikiStore.safeCurrentEntry.id);
         },
         deleteEntry() {
-            const doDelete = confirm("Are you sure you want to delete this entry");
+            const doDelete = confirm(`Are you sure you want to delete ${this.wikiStore.safeCurrentEntry.meta.title}`);
             if (doDelete) {
-                useWikiStore().deleteEntry(this.entry).then(() => {
-                  useWikiStore().loadNav();
-                  useWikiStore().fetchEntry('/');
-                  this.router.push('/');
+                useWikiStore().deleteEntry(this.wikiStore.safeCurrentEntry.id).then(() => {
+                    useWikiStore().loadNav();
+                    useWikiStore().fetchEntry('/');
+                    this.router.push('/');
                 });
             }
         },
@@ -108,17 +101,17 @@ export default defineComponent({
 @import '../../../style/variables.scss';
 
 .article-body {
-  margin: 5px;
+    margin: 5px;
 
-  img {
-    max-width: unset;
-    width: 100vw;
-    margin-left: -5px;
-  }
+    img {
+        max-width: unset;
+        width: 100vw;
+        margin-left: -5px;
+    }
 }
 
 h2, h3, h4, h5, h6 {
-  border-bottom: 1px solid var(--el-border-color);
+    border-bottom: 1px solid var(--el-border-color);
 }
 
 .mobile-action-buttons {

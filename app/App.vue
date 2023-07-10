@@ -3,7 +3,7 @@
         <pw-loading></pw-loading>
         <pw-nav></pw-nav>
         <div :class="mainContentClasses">
-            <router-view></router-view>
+            <router-view v-if="mainContentLoaded"></router-view>
         </div>
         <Modals/>
     </div>
@@ -21,6 +21,7 @@ import Modals from "@/src/components/modals.vue";
 import {useDialogStore} from "@/src/stores/dialog";
 import {configureStores} from "@/src/helpers/xhr";
 import {useLoadingStore} from "@/src/stores/loading";
+import {useRoute} from "vue-router";
 
 export default defineComponent({
     name: "App",
@@ -32,6 +33,7 @@ export default defineComponent({
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
             dialogStore: useDialogStore(),
+            mainContentLoaded: false,
         }
     },
     computed: {
@@ -44,27 +46,41 @@ export default defineComponent({
         }
     },
     created() {
-        const mainStore = useMainStore();
         const authStore = useAuthStore();
         authStore.loadToken();
-        const token = authStore.getToken;
         configureStores(authStore, useLoadingStore());
         const settings = useUserSettings().loadUserSettings();
         useUserSettings().setCurrentTheme(settings.theme);
-        mainStore.init(token).then((response: AxiosResponse) => {
-            if (response.data.is_token_valid === 'token_invalid') {
-                this.dialogStore.showDialog('/auth/login');
-                ElNotification({
-                    title: 'Error',
-                    message: 'Your token is invalid, please login again',
-                    type: 'warning',
-                });
-            }
-            this.mainStore.setTitle(this.mainStore.getMeta.title);
-            if (!this.mainStore.meta.adminCreated) {
-                this.dialogStore.showDialog('/auth/create-admin');
-            }
-        })
+        this.init();
+        this.loadMainContent();
+    },
+    methods: {
+        loadMainContent() {
+            const path = useRoute().path;
+
+            useWikiStore().fetchEntry(path).then(() => {
+                this.mainContentLoaded = true;
+            })
+        },
+        init() {
+            const authStore = useAuthStore();
+            const mainStore = useMainStore();
+            const token = authStore.getToken;
+            mainStore.init(token).then((response: AxiosResponse) => {
+                if (response.data.is_token_valid === 'token_invalid') {
+                    this.dialogStore.showDialog('/auth/login');
+                    ElNotification({
+                        title: 'Error',
+                        message: 'Your token is invalid, please login again',
+                        type: 'warning',
+                    });
+                }
+                this.mainStore.setTitle(this.mainStore.getMeta.title);
+                if (!this.mainStore.meta.adminCreated) {
+                    this.dialogStore.showDialog('/auth/create-admin');
+                }
+            })
+        },
     },
 })
 </script>

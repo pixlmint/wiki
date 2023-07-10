@@ -51,13 +51,17 @@ export const useWikiStore = defineStore('wikiStore', {
     getLoadedEntries: (state) => state.loadedEntries,
     getCurrentEntry: (state) => state.currentEntry,
     getNav: state => state.nav,
+    safeCurrentEntry: state => {
+      if (state.currentEntry === null) {
+        throw new Error('currentEntry is null');
+      }
+
+      return state.currentEntry;
+    }
   },
   actions: {
     saveEntry() {
-      const currentEntry = this.currentEntry;
-      if (currentEntry === null) {
-        throw 'Not editing any entry';
-      }
+      const currentEntry = this.safeCurrentEntry;
       const data = {
         content: currentEntry.raw_content,
         meta: currentEntry.meta,
@@ -81,7 +85,7 @@ export const useWikiStore = defineStore('wikiStore', {
       const request = buildRequest('/api/admin/entry/add', data, 'POST');
       return send(request);
     },
-    addFolder(parentFolder: string, folderName: any, token: string | null) {
+    addFolder(parentFolder: string, folderName: any) {
       const data = {
         parentFolder: parentFolder,
         folderName: folderName,
