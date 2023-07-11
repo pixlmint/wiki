@@ -20,17 +20,18 @@
             </el-form-item>
         </el-form>
         <template #footer>
-            PixlWiki Version {{ version }}
+            PixlWiki Version <span @click="showVersionsPopup">{{ version }}</span>
         </template>
     </el-dialog>
 </template>
 
 <script lang="ts">
-import {defineComponent, watch} from "vue";
+import {defineComponent, h, watch} from "vue";
 import {useDialogStore} from "@/src/stores/dialog";
 import {useUserSettings} from "@/src/stores/user-settings";
 import {useMainStore} from "@/src/stores/main";
 import {Sunny, Moon} from "@element-plus/icons-vue";
+import {ElMessageBox} from "element-plus";
 
 const route = '/settings';
 
@@ -46,14 +47,14 @@ export default defineComponent({
         }
     },
     created() {
-      watch(this.settings, (value) => {
-          this.userSettings.updateSettings(value);
-          this.setTheme(value.theme);
-      });
+        watch(this.settings, (value) => {
+            this.userSettings.updateSettings(value);
+            this.setTheme(value.theme);
+        });
     },
     computed: {
         version() {
-            return useMainStore().meta.version;
+            return useMainStore().meta.frontendVersion;
         },
         isShowing: {
             get() {
@@ -69,6 +70,16 @@ export default defineComponent({
             document.documentElement.classList.remove('light');
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add(theme);
+        },
+        showVersionsPopup() {
+            ElMessageBox({
+                title: 'Version Information',
+                message: h('ul', null, [
+                    h('li', null, 'Plugin Version: '+ useMainStore().meta.pluginVersion),
+                    h('li', null, 'CMS Version: '+ useMainStore().meta.cmsVersion),
+                    h('li', null, 'Frontend Version: '+ useMainStore().meta.frontendVersion),
+                ]),
+            })
         },
     },
 })

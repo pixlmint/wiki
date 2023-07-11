@@ -5,7 +5,9 @@ import {useAuthStore} from "@/src/stores/auth";
 
 interface Meta {
     title: string,
-    version: string,
+    pluginVersion: string,
+    cmsVersion: string,
+    frontendVersion: string,
     adminCreated: boolean,
     is_token_valid: string,
 }
@@ -22,7 +24,9 @@ export const useMainStore = defineStore('main', {
         pageTitle: 'Wiki',
         meta: {
             title: 'Loading...',
-            version: '0',
+            frontendVersion: '0',
+            cmsVersion: '0',
+            pluginVersion: '0',
             adminCreated: false,
             is_token_valid: 'token_not_set',
         },
@@ -41,7 +45,8 @@ export const useMainStore = defineStore('main', {
                     useAuthStore().logout();
                 }
                 const data = response.data;
-                data.version = data.wikiVersion;
+                data.pluginVersion = data.wikiVersion;
+                data.cmsVersion = data.version;
                 this.$state.meta = response.data;
 
                 return response;
