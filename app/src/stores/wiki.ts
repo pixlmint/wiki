@@ -77,7 +77,7 @@ export const useWikiStore = defineStore('wikiStore', {
         this.loadedEntries.push(response.data);
       });
     },
-    addEntry(parentFolder : string, title: string, token: string | null) {
+    addEntry(parentFolder : string, title: string) {
       const data = {
         parentFolder: parentFolder,
         title: title,
@@ -107,7 +107,7 @@ export const useWikiStore = defineStore('wikiStore', {
         });
       });
     },
-    renameEntry(newName: string, token: string | null) {
+    renameEntry(newName: string) {
       if (this.currentEntry === null) {
         throw 'Current Entry is not defined';
       }
@@ -115,7 +115,6 @@ export const useWikiStore = defineStore('wikiStore', {
       const data = {
         'new-title': newName,
         entry: this.currentEntry.id,
-        token: token,
       }
       const request = buildRequest('/api/admin/entry/rename', data, 'PUT');
       return send(request);

@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="isFolder">
-            <el-sub-menu data-is-entry="false" :index="index">
+            <el-sub-menu data-is-entry="false" :index="element.id">
                 <template #title>
                     {{ element.title }}
                     <el-dropdown v-if="canEdit">
@@ -18,10 +18,8 @@
                     </el-dropdown>
                 </template>
                 <PWNavElement v-for="(childElement, myIndex) in element.children"
-                              :parentIndex="index"
                               :key="myIndex"
-                              :element="childElement"
-                              :index="childIndex">
+                              :element="childElement">
                 </PWNavElement>
             </el-sub-menu>
         </template>
@@ -81,9 +79,6 @@ export default defineComponent({
         isFolder() {
             return this.element && this.element.isFolder;
         },
-        childIndex() {
-            return this.parentIndex + '-' + this.index;
-        },
         canEdit() {
             return useAuthStore().haveEditRights();
         },
@@ -105,7 +100,7 @@ export default defineComponent({
                 cancelButtonText: 'Cancel',
                 inputValue: this.element.title,
             }).then(name => {
-                this.wikiStore.renameEntry(name.value, this.token).then(response => {
+                this.wikiStore.renameEntry(name.value).then(response => {
                     this.wikiStore.loadNav();
                 });
             })
@@ -117,7 +112,7 @@ export default defineComponent({
                 cancelButtonText: 'No',
                 type: 'warning',
             }).then(() => {
-                this.wikiStore.deleteEntry(this.element.id, this.token).then(() => {
+                this.wikiStore.deleteEntry(this.element.id).then(() => {
                     this.wikiStore.loadNav();
                 });
             });
@@ -138,7 +133,7 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addEntry(this.element.id, name.value, this.token).then(response => {
+                this.wikiStore.addEntry(this.element.id, name.value).then(response => {
                     this.wikiStore.loadNav();
                 });
             })
@@ -148,7 +143,7 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addFolder(this.element.id, name.value, this.token).then(() => {
+                this.wikiStore.addFolder(this.element.id, name.value).then(() => {
                     this.wikiStore.loadNav();
                 })
             })
