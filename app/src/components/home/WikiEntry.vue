@@ -1,7 +1,10 @@
 <template>
     <div class="article">
         <div class="article-head">
-            <h1>{{ title }}</h1>
+            <div class="d-flex" style="align-items: center; gap: 1rem;">
+                <h1>{{ title }}</h1>
+                <el-icon v-if="!isPublic" title="This Entry is Private, only you can see it"><Lock/></el-icon>
+            </div>
             <div v-if="canEdit">
                 <el-dropdown class="mobile-action-buttons">
                     <el-button circle>
@@ -51,7 +54,7 @@ import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from "@/src/stores/auth";
 import fa from '@/src/components/fa.vue'
 import {useRouter} from "vue-router";
-import {MoreFilled, Edit, Delete} from "@element-plus/icons-vue";
+import {MoreFilled, Edit, Delete, Lock} from "@element-plus/icons-vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -66,6 +69,7 @@ export default defineComponent({
         MoreFilled,
         Edit,
         Delete,
+        Lock,
     },
     computed: {
         title() {
@@ -76,6 +80,9 @@ export default defineComponent({
         },
         canEdit() {
             return useAuthStore().haveEditRights();
+        },
+        isPublic() {
+            return this.wikiStore.safeCurrentEntry.meta.security !== 'private';
         },
     },
     methods: {
