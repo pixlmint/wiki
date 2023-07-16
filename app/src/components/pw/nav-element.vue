@@ -4,6 +4,7 @@
             <el-sub-menu data-is-entry="false" :index="element.id">
                 <template #title>
                     {{ element.title }}
+                    <el-icon class="private-icon" v-if="!isPublic"><Lock/></el-icon>
                     <el-dropdown v-if="canEdit">
                         <el-button circle>
                             <el-icon>
@@ -13,6 +14,15 @@
                         <template #dropdown>
                             <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
                             <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="switchSecurity">
+                                <el-icon v-if="isPublic">
+                                    <Lock/>
+                                </el-icon>
+                                <el-icon v-else>
+                                    <Unlock/>
+                                </el-icon>
+                                {{ securitySwitchText }}
+                            </el-dropdown-item>
                             <el-dropdown-item class="danger" @click="deleteFolder"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
                         </template>
                     </el-dropdown>
@@ -27,6 +37,7 @@
             <el-menu-item class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <div>
                     {{ element.title }}
+                    <el-icon class="private-icon" v-if="!isPublic"><Lock/></el-icon>
                 </div>
                 <el-dropdown v-if="canEdit">
                     <el-button circle>
@@ -37,6 +48,15 @@
                     <template #dropdown>
                         <el-dropdown-item @click="edit"><el-icon><Edit/></el-icon>Edit</el-dropdown-item>
                         <el-dropdown-item @click="rename"><el-icon><EditPen/></el-icon>Rename</el-dropdown-item>
+                        <el-dropdown-item @click="switchSecurity">
+                            <el-icon v-if="isPublic">
+                                <Lock/>
+                            </el-icon>
+                            <el-icon v-else>
+                                <Unlock/>
+                            </el-icon>
+                            {{ securitySwitchText }}
+                        </el-dropdown-item>
                         <el-dropdown-item class="danger" @click="deletePage"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
                     </template>
                 </el-dropdown>
@@ -48,7 +68,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useRouter} from "vue-router";
-import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen} from "@element-plus/icons-vue";
+import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen, Lock, Unlock} from "@element-plus/icons-vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore} from "@/src/stores/auth";
@@ -71,6 +91,8 @@ export default defineComponent({
         Delete,
         Edit,
         EditPen,
+        Lock,
+        Unlock,
     },
     computed: {
         MoreFilled() {
@@ -81,6 +103,16 @@ export default defineComponent({
         },
         canEdit() {
             return useAuthStore().haveEditRights();
+        },
+        isPublic() {
+            return this.element && this.element.isPublic;
+        },
+        securitySwitchText() {
+          if (this.isPublic) {
+              return 'Set Private';
+          } else {
+              return 'Set Public';
+          }
         },
     },
     methods: {
@@ -115,6 +147,13 @@ export default defineComponent({
                 this.wikiStore.deleteEntry(this.element.id).then(() => {
                     this.wikiStore.loadNav();
                 });
+            });
+        },
+        switchSecurity() {
+            const newState = this.isPublic ? 'private' : 'public';
+            this.element.isPublic = !this.element.isPublic;
+            this.wikiStore.setSecurityState(this.element.id, newState).then(() => {
+                this.wikiStore.loadNav();
             });
         },
         deleteFolder() {
@@ -159,4 +198,7 @@ export default defineComponent({
     }
 }
 
+.private-icon {
+    color: var(--el-text-color-secondary);
+}
 </style>

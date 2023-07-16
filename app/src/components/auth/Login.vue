@@ -21,6 +21,7 @@ import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useDialogStore} from "@/src/stores/dialog";
+import {useWikiStore} from "@/src/stores/wiki";
 
 const route = '/auth/login';
 
@@ -41,6 +42,7 @@ export default defineComponent({
         submitLoginForm() {
             this.authStore.login(this.loginForm).then(() => {
                 this.dialogStore.clearShowingDialog();
+                useWikiStore().loadNav();
             })
         },
     },

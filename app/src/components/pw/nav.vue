@@ -215,6 +215,7 @@ export default defineComponent({
         },
         logout() {
             useAuthStore().logout();
+            useWikiStore().loadNav();
         },
         login() {
             this.dialogStore.showDialog('/auth/login');

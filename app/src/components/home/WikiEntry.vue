@@ -48,7 +48,6 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
-import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import fa from '@/src/components/fa.vue'
 import {useRouter} from "vue-router";

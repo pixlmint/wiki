@@ -19,6 +19,8 @@ interface EntryMeta {
   date_formatted: string,
   description: string | null,
   author: string | null,
+  owner: string | null,
+  security: string | null,
 }
 
 interface Nav extends Array<NavElement> {
@@ -30,6 +32,7 @@ interface NavElement {
   url: string,
   showing: boolean,
   children: Nav,
+  isPublic: boolean,
 }
 
 interface WikiEntryList extends Array<WikiEntry> {
@@ -117,6 +120,14 @@ export const useWikiStore = defineStore('wikiStore', {
         entry: this.currentEntry.id,
       }
       const request = buildRequest('/api/admin/entry/rename', data, 'PUT');
+      return send(request);
+    },
+    setSecurityState(entry: string, newState: string) {
+      const data = {
+        entry: entry,
+        new_state: newState,
+      }
+      const request = buildRequest('/api/admin/entry/change-security', data, 'PUT');
       return send(request);
     },
     loadNav() {
