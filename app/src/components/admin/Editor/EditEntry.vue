@@ -36,7 +36,7 @@ export default defineComponent({
             return this.wikiStore.currentEntry.raw_content;
         },
         wHeight() {
-            return window.innerHeight - 150;
+            return window.innerHeight - 170;
         },
     },
     methods: {

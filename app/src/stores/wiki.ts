@@ -35,6 +35,11 @@ interface NavElement {
   isPublic: boolean,
 }
 
+interface EditorState {
+  lastSaved: Date| null,
+  editingUnsavedChanges: boolean,
+}
+
 interface WikiEntryList extends Array<WikiEntry> {
 }
 
@@ -42,6 +47,7 @@ interface State {
   loadedEntries: WikiEntryList,
   currentEntry: WikiEntry | null,
   nav: Nav | null,
+  editor: EditorState,
 }
 
 export const useWikiStore = defineStore('wikiStore', {
@@ -49,6 +55,10 @@ export const useWikiStore = defineStore('wikiStore', {
     loadedEntries: [],
     currentEntry: null,
     nav: null,
+    editor: {
+      lastSaved: null,
+      editingUnsavedChanges: false,
+    }
   }),
   getters: {
     getLoadedEntries: (state) => state.loadedEntries,
@@ -65,13 +75,17 @@ export const useWikiStore = defineStore('wikiStore', {
   actions: {
     saveEntry() {
       const currentEntry = this.safeCurrentEntry;
+      this.editor.editingUnsavedChanges = false;
       const data = {
         content: currentEntry.raw_content,
         meta: currentEntry.meta,
         entry: currentEntry.id,
       }
       const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
-      return send(request);
+      return send(request).then(response => {
+        this.editor.lastSaved = new Date();
+        return response;
+      });
     },
     fetchEntry(entry: string) {
       const request = buildRequest('/api/entry/view', {p: entry});

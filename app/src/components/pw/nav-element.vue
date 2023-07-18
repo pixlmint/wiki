@@ -121,8 +121,8 @@ export default defineComponent({
             this.router.push('/admin/edit?p=' + this.element.id);
             if (currentRoute === '/admin/edit') {
                 useWikiStore().fetchEntry(this.element.id).then(() => {
-                    this.title = "Edit " + useWikiStore().currentEntry?.meta.title;
-                    useMainStore().setTitle(this.title)
+                    const title = "Edit " + useWikiStore().safeCurrentEntry.meta.title;
+                    useMainStore().setTitle(title)
                 });
             }
         },
