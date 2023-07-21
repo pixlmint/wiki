@@ -73,10 +73,11 @@ export default defineComponent({
             }
         },
         loadMainContent() {
-            const path = useRoute().path;
+            const path = location.pathname;
 
             useWikiStore().fetchEntry(path).then(() => {
                 this.mainContentLoaded = true;
+                useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
             })
         },
         init() {
