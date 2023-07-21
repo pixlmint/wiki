@@ -18,6 +18,9 @@
                     </el-radio>
                 </el-radio-group>
             </el-form-item>
+            <el-form-item label="Build Index">
+                <el-button @click="rebuildIndex"><el-icon><Refresh/></el-icon></el-button>
+            </el-form-item>
         </el-form>
         <template #footer>
             PixlWiki Version <span @click="showVersionsPopup">{{ version }}</span>
@@ -32,8 +35,8 @@ import {defineComponent, h, watch} from "vue";
 import {useDialogStore} from "@/src/stores/dialog";
 import {useUserSettings} from "@/src/stores/user-settings";
 import {useMainStore} from "@/src/stores/main";
-import {Sunny, Moon} from "@element-plus/icons-vue";
-import {ElMessageBox} from "element-plus";
+import {Sunny, Moon, Refresh} from "@element-plus/icons-vue";
+import {ElMessageBox, ElNotification} from "element-plus";
 import {useAuthStore} from "@/src/stores/auth";
 import {useWikiStore} from "@/src/stores/wiki";
 
@@ -41,7 +44,7 @@ const route = '/settings';
 
 export default defineComponent({
     components: {
-        Moon, Sunny,
+        Moon, Sunny, Refresh,
     },
     data() {
         return {
@@ -70,6 +73,14 @@ export default defineComponent({
         },
     },
     methods: {
+        rebuildIndex() {
+            useWikiStore().rebuildIndex().then(response => {
+                ElNotification({
+                    title: 'Rebuild Index',
+                    message: 'Built in ' + Math.round(response.data.indexTime * 1000) + "ms",
+                });
+            })
+        },
         logout() {
             useAuthStore().logout();
             useWikiStore().loadNav();

@@ -73,6 +73,10 @@ export const useWikiStore = defineStore('wikiStore', {
     }
   },
   actions: {
+    rebuildIndex() {
+      const request = buildRequest('/api/index');
+      return send(request);
+    },
     search(query: string) {
       const request = buildRequest('/api/search', {q: query});
       return send(request);
