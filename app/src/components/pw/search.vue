@@ -61,6 +61,7 @@ export default defineComponent({
 
         input {
             width: 100%;
+            background-color: var(--el-bg-secondary);
         }
     }
 
