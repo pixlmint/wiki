@@ -1,6 +1,7 @@
 <template>
     <div class="wiki">
         <pw-loading></pw-loading>
+        <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>
         <div :class="mainContentClasses">
             <router-view v-if="mainContentLoaded"></router-view>
@@ -10,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, Events} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useWikiStore} from "@/src/stores/wiki";
@@ -43,7 +44,10 @@ export default defineComponent({
             } else {
                 return 'main-content small-nav';
             }
-        }
+        },
+        searchShowing() {
+            return useMainStore().isSearchShowing;
+        },
     },
     created() {
         const authStore = useAuthStore();
@@ -53,8 +57,21 @@ export default defineComponent({
         useUserSettings().setCurrentTheme(settings.theme);
         this.init();
         this.loadMainContent();
+        window.addEventListener('keydown', this.keyListener);
     },
     methods: {
+        keyListener(event: Event) {
+            if(event.ctrlKey && event.key === 'k') {
+                event.preventDefault();
+                useMainStore().isSearchShowing = true;
+                setTimeout(() => {
+                    document.getElementById('search-input').focus();
+                }, 200);
+            }
+            if (event.key === 'Escape') {
+                useMainStore().isSearchShowing = false;
+            }
+        },
         loadMainContent() {
             const path = useRoute().path;
 

@@ -14,6 +14,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import PWNav from '@/src/components/pw/nav.vue';
 import PWLoading from '@/src/components/pw/loading.vue';
+import PWSearch from '@/src/components/pw/search.vue';
 
 VueMarkdownEditor.use(vuepressTheme, {
   Prism,
@@ -29,5 +30,6 @@ app.use(ElementPlus)
 
 app.component('pw-nav', PWNav);
 app.component('pw-loading', PWLoading);
+app.component('pw-search', PWSearch);
 
 app.mount('#app')

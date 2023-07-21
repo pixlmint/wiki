@@ -17,6 +17,7 @@ interface State {
     meta: Meta,
     editingUnsavedChanges: boolean,
     isLargeNavShowing: boolean,
+    isSearchShowing: booleam,
 }
 
 export const useMainStore = defineStore('main', {
@@ -32,6 +33,7 @@ export const useMainStore = defineStore('main', {
         },
         editingUnsavedChanges: false,
         isLargeNavShowing: true,
+        isSearchShowing: false,
     }),
     getters: {
         getPageTitle: (state) => state.pageTitle,

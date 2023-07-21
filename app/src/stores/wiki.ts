@@ -73,6 +73,10 @@ export const useWikiStore = defineStore('wikiStore', {
     }
   },
   actions: {
+    search(query: string) {
+      const request = buildRequest('/api/search', {q: query});
+      return send(request);
+    },
     saveEntry() {
       const currentEntry = this.safeCurrentEntry;
       this.editor.editingUnsavedChanges = false;
