@@ -51,27 +51,13 @@
                     <el-button @click="login" class="user-button">Login</el-button>
                 </template>
                 <template v-else>
-                    <el-dropdown>
-                        <el-button class="user-button">
-                            <el-icon class="icon">
-                                <Avatar></Avatar>
-                            </el-icon>
-                            <span class="text">Admin</span>
-                        </el-button>
-                        <template #dropdown>
-                            <el-dropdown-item v-for="action in userActions" @click="action.action">{{
-                                action.title
-                                }}
-                            </el-dropdown-item>
-                        </template>
-                    </el-dropdown>
+                    <el-button @click="settings" class="user-button">
+                        <el-icon class="icon">
+                            <Avatar></Avatar>
+                        </el-icon>
+                        <span class="text">Admin</span>
+                    </el-button>
                 </template>
-            </div>
-        </div>
-        <div class="nav-user-dropdown" v-show="userDropdownShowing">
-            <div v-for="action in userActions" @click="action.action" class="nav-user-dropdown-button">{{
-                action.title
-                }}
             </div>
         </div>
         <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
@@ -146,16 +132,6 @@ export default defineComponent({
             mainStore: useMainStore(),
             authStore: useAuthStore(),
             currentlyActiveRoute: '/',
-            userActions: [
-                {
-                    title: "Logout",
-                    action: this.logout,
-                },
-                {
-                    title: "Settings",
-                    action: this.settings,
-                }
-            ],
             token: useAuthStore().getToken,
         }
     },
@@ -212,10 +188,6 @@ export default defineComponent({
                 }
                 useMainStore().setTitle(currentEntry.meta.title);
             });
-        },
-        logout() {
-            useAuthStore().logout();
-            useWikiStore().loadNav();
         },
         login() {
             this.dialogStore.showDialog('/auth/login');

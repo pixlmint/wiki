@@ -21,6 +21,8 @@
         </el-form>
         <template #footer>
             PixlWiki Version <span @click="showVersionsPopup">{{ version }}</span>
+            |
+            <span @click="logout">Logout</span>
         </template>
     </el-dialog>
 </template>
@@ -32,6 +34,8 @@ import {useUserSettings} from "@/src/stores/user-settings";
 import {useMainStore} from "@/src/stores/main";
 import {Sunny, Moon} from "@element-plus/icons-vue";
 import {ElMessageBox} from "element-plus";
+import {useAuthStore} from "@/src/stores/auth";
+import {useWikiStore} from "@/src/stores/wiki";
 
 const route = '/settings';
 
@@ -66,6 +70,10 @@ export default defineComponent({
         },
     },
     methods: {
+        logout() {
+            useAuthStore().logout();
+            useWikiStore().loadNav();
+        },
         setTheme(theme: string) {
             document.documentElement.classList.remove('light');
             document.documentElement.classList.remove('dark');
