@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import {buildRequest, send} from "@/src/helpers/xhr";
 
 interface Settings {
     autoSave: boolean,
@@ -32,6 +33,12 @@ export const useUserSettings = defineStore('userSettings', {
         updateSettings(settings: Settings) {
             this.settings = settings;
             localStorage.setItem('userSettings', JSON.stringify(settings));
+        },
+        downloadBackup() {
+            const request = buildRequest('/api/admin/generate-backup');
+            send(request).then(response => {
+                location.href = response.data.file;
+            });
         },
         setCurrentTheme(theme: string) {
             document.documentElement.classList.remove('light');

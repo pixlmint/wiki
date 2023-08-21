@@ -19,7 +19,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.5',
+        'version' => '1.6',
     ],
     'base' => [
         'frontendController' => FrontendController::class,

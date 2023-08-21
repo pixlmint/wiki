@@ -17,7 +17,7 @@ interface State {
     meta: Meta,
     editingUnsavedChanges: boolean,
     isLargeNavShowing: boolean,
-    isSearchShowing: booleam,
+    isSearchShowing: boolean,
 }
 
 export const useMainStore = defineStore('main', {
