@@ -1,0 +1,37 @@
+{
+    "dir": "ltr",
+    "lang": "en",
+    "name": "Wiki",
+    "scope": "/",
+    "display": "standalone",
+    "start_url": "/",
+    "short_name": "Wiki",
+    "theme_color": "#09b5a7",
+    "orientation": "any",
+    "background_color": "#000000",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "/dist/assets/android-launchericon-96-96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/dist/assets/android-launchericon-192-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/dist/assets/android-launchericon-512-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ],
+    "shortcuts": [],
+    "screenshots": [],
+    "generated": "true"
+}

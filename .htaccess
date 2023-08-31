@@ -7,7 +7,8 @@
     RewriteCond %{REQUEST_URI} ^/public/.* [OR]
     RewriteCond %{REQUEST_URI} ^/backup/.* [OR]
     RewriteCond %{REQUEST_URI} ^/favicon\.ico [OR]
-    RewriteCond %{REQUEST_URI} ^/robots\.txt
+    RewriteCond %{REQUEST_URI} ^/robots\.txt [OR]
+    RewriteCond %{REQUEST_URI} ^/manifest\.webmanifest
     # If any of the above conditions are met, do nothing and exit
     RewriteRule ^ - [L]
 
