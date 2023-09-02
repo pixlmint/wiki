@@ -43,7 +43,10 @@
             </div>
         </div>
         <div class="article-body">
-            <p v-html="content"></p>
+            <div v-if="isPdfContent">
+                <PDFContent :b64pdf="content"></PDFContent>
+            </div>
+            <p v-else v-html="content"></p>
         </div>
     </div>
 </template>
@@ -55,6 +58,7 @@ import {useAuthStore} from "@/src/stores/auth";
 import fa from '@/src/components/fa.vue'
 import {useRouter} from "vue-router";
 import {MoreFilled, Edit, Delete, Lock} from "@element-plus/icons-vue";
+import PDFContent from "@/src/components/home/PDFContent.vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -65,6 +69,7 @@ export default defineComponent({
         }
     },
     components: {
+        PDFContent,
         fa,
         MoreFilled,
         Edit,
@@ -83,6 +88,9 @@ export default defineComponent({
         },
         isPublic() {
             return this.wikiStore.safeCurrentEntry.meta.security !== 'private';
+        },
+        isPdfContent() {
+            return 'pdf' in this.wikiStore.safeCurrentEntry.meta
         },
     },
     methods: {
