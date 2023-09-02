@@ -90,7 +90,10 @@ export default defineComponent({
             return this.wikiStore.safeCurrentEntry.meta.security !== 'private';
         },
         isPdfContent() {
-            return 'pdf' in this.wikiStore.safeCurrentEntry.meta
+            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+                return false;
+            }
+            return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
         },
     },
     methods: {

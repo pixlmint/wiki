@@ -61,7 +61,7 @@ export default defineComponent({
     },
     methods: {
         keyListener(event: Event) {
-            if(event.ctrlKey && event.key === 'k') {
+            if (event.ctrlKey && event.key === 'k') {
                 event.preventDefault();
                 useMainStore().isSearchShowing = true;
                 setTimeout(() => {
@@ -74,6 +74,14 @@ export default defineComponent({
         },
         loadMainContent() {
             const path = location.pathname;
+
+            const regex = /\/?admin\/.*/gm;
+            const match = regex.exec(path);
+
+            if (match !== null && match.length > 0) {
+                this.mainContentLoaded = true;
+                return;
+            }
 
             useWikiStore().fetchEntry(path).then(() => {
                 this.mainContentLoaded = true;
@@ -107,68 +115,68 @@ export default defineComponent({
 @import './style/main.scss';
 
 .main-content {
-  background-color: var(--el-bg-color);
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  min-width: 100%;
-  min-height: 100vh;
-  padding: 5px;
+    background-color: var(--el-bg-color);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    min-width: 100%;
+    min-height: 100vh;
+    padding: 5px;
 
-  &.small-nav {
-    margin: 0 auto 0 1rem;
-  }
+    &.small-nav {
+        margin: 0 auto 0 1rem;
+    }
 }
 
 @media screen and (min-width: $mobileBreakpoint) {
-  .main-content {
-    margin: 0 0 0 $navLargeWidth;
+    .main-content {
+        margin: 0 0 0 $navLargeWidth;
 
-    &.large-nav {
-      .article {
-        max-width: calc(100vw - $navLargeWidth);
-      }
-    }
-
-    &.small-nav {
-      .article {
-        max-width: calc(100vw - $navSmallWidth);
-      }
-    }
-
-    .article {
-      .article-body {
-        padding: 0;
-
-        img {
-          max-width: 1000px;
+        &.large-nav {
+            .article {
+                max-width: calc(100vw - $navLargeWidth);
+            }
         }
-      }
+
+        &.small-nav {
+            .article {
+                max-width: calc(100vw - $navSmallWidth);
+            }
+        }
+
+        .article {
+            .article-body {
+                padding: 0;
+
+                img {
+                    max-width: 1000px;
+                }
+            }
+        }
     }
-  }
 }
 
 @media screen and (min-width: 1500px) {
-  .main-content {
-    &.large-nav {
-      margin: 0 auto 0 auto !important;
+    .main-content {
+        &.large-nav {
+            margin: 0 auto 0 auto !important;
+        }
     }
-  }
 }
 
 @media screen and (min-width: 1300px) {
-  .main-content {
-    width: 80%;
-    min-width: unset !important;
-    max-width: 1000px;
-    box-shadow: var(--box-shadow);
+    .main-content {
+        width: 80%;
+        min-width: unset !important;
+        max-width: 1000px;
+        box-shadow: var(--box-shadow);
 
-    &.large-nav {
-      margin: 0 auto 0 $navLargeWidth;
-    }
+        &.large-nav {
+            margin: 0 auto 0 $navLargeWidth;
+        }
 
-    &.small-nav {
-      margin: 0 auto 0 auto;
+        &.small-nav {
+            margin: 0 auto 0 auto;
+        }
     }
-  }
 }
 </style>
