@@ -66,6 +66,13 @@ export default defineComponent({
             formData.append('alternative_content', newFile);
             const request = buildRequest('/api/admin/entry/upload-alternative-content', formData, 'POST');
             send(request).then(response => {
+                if (!response.data.success) {
+                    ElNotification({
+                        type: "error",
+                        title: "Error",
+                        message: "File was not able to upload",
+                    });
+                }
                 this.wikiStore.loadNav();
                 this.dialogStore.clearShowingDialog();
                 this.router.push(response.data.id);
