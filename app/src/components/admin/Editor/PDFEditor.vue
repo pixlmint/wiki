@@ -41,8 +41,8 @@ export default defineComponent({
             const formData = new FormData();
             formData.append('entry', this.wikiStore.safeCurrentEntry.id);
             formData.append('meta', JSON.stringify(this.wikiStore.safeCurrentEntry.meta));
-            formData.append('alternate_content', newFile);
-            const request = buildRequest('/api/admin/entry/update-alternate-content', formData, 'POST');
+            formData.append('alternative_content', newFile);
+            const request = buildRequest('/api/admin/entry/update-alternative-content', formData, 'POST');
             send(request);
         }
     },
