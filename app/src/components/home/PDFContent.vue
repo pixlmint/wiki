@@ -20,6 +20,8 @@ export default defineComponent({
         return {
             pdf: null as null | pdfjslib.PDFDocumentProxy,
             loader: useLoadingStore(),
+            loadingIntervalMs: 100,
+            loadingIntervalId: null as null | number,
             totalPages: 0,
             renderedPages: 0,
         };
@@ -47,6 +49,9 @@ export default defineComponent({
             }
 
             // Load the new PDF
+            this.loader.increaseLoadingCount();
+            this.loader.increaseLoadingTime(5000);
+            window.setInterval(this.updateLoadingTime, this.loadingIntervalMs);
             const loadingTask = pdfjslib.getDocument({data: uint8Array});
             loadingTask.promise.then((pdf: pdfjslib.PDFDocumentProxy) => {
                 this.pdf = pdf;
@@ -58,11 +63,25 @@ export default defineComponent({
                 }
             });
         },
+        updateLoadingTime() {
+            this.loader.increaseTimePassed(this.loadingIntervalMs);
+        },
+        clearLoadingInterval() {
+            this.loader.decreaseLoadingCount();
+            if (this.loader.loadingCount < 1) {
+                this.loader.resetLoadingBar();
+            }
+            if (this.loadingIntervalId === null) {
+                return;
+            }
+            window.clearInterval(this.loadingIntervalId);
+        },
         renderNextBatch(start: number, end: number) {
             for (let i = start; i <= end; i++) {
                 this.renderPage(i);
             }
             this.renderedPages = end;
+            this.clearLoadingInterval();
         },
         renderPage(pageNumber: number) {
             this.$nextTick(() => {
@@ -89,7 +108,7 @@ export default defineComponent({
                         };
                         page.render(renderContext);
                     } else {
-                        throw "Element is not a canvas";
+                        console.warn("Element is not a canvas");
                     }
                 });
             });
