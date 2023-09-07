@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRaw} from "vue";
+import {defineComponent, toRaw, watch, ref} from "vue";
 import * as pdfjslib from "pdfjs-dist";
+import {useLoadingStore} from "@/src/stores/loading";
 
 pdfjslib.GlobalWorkerOptions.workerSrc = 'https://jslib.pixlmint.ch/pdf.worker.min.js';
 
@@ -18,29 +19,45 @@ export default defineComponent({
     data() {
         return {
             pdf: null as null | pdfjslib.PDFDocumentProxy,
+            loader: useLoadingStore(),
             totalPages: 0,
             renderedPages: 0,
         };
     },
     mounted: function () {
-        const pdfData = atob(this.b64pdf);
-        const uint8Array = new Uint8Array(pdfData.length);
-        for (let i = 0; i < pdfData.length; i++) {
-            uint8Array[i] = pdfData.charCodeAt(i);
+        this.loadPdf(this.b64pdf);
+    },
+    watch: {
+        b64pdf(newVal) {
+            this.loadPdf(newVal);
         }
-
-        const loadingTask = pdfjslib.getDocument({data: uint8Array});
-        loadingTask.promise.then((pdf: pdfjslib.PDFDocumentProxy) => {
-            this.pdf = pdf;
-            this.totalPages = pdf.numPages;
-            if (this.totalPages > 10) {
-                this.renderNextBatch(1, 10);
-            } else {
-                this.renderNextBatch(1, this.totalPages);
-            }
-        })
     },
     methods: {
+        loadPdf(b64pdf: string) {
+            if (this.pdf) {
+                const rawPdf = toRaw(this.pdf);
+                rawPdf.destroy();
+                this.pdf = null;
+            }
+            // Decode the new PDF
+            const pdfData = atob(b64pdf);
+            const uint8Array = new Uint8Array(pdfData.length);
+            for (let i = 0; i < pdfData.length; i++) {
+                uint8Array[i] = pdfData.charCodeAt(i);
+            }
+
+            // Load the new PDF
+            const loadingTask = pdfjslib.getDocument({data: uint8Array});
+            loadingTask.promise.then((pdf: pdfjslib.PDFDocumentProxy) => {
+                this.pdf = pdf;
+                this.totalPages = pdf.numPages;
+                if (this.totalPages > 10) {
+                    this.renderNextBatch(1, 10);
+                } else {
+                    this.renderNextBatch(1, this.totalPages);
+                }
+            });
+        },
         renderNextBatch(start: number, end: number) {
             for (let i = start; i <= end; i++) {
                 this.renderPage(i);
@@ -53,25 +70,29 @@ export default defineComponent({
                     return;
                 }
                 const rawPdf = toRaw(this.pdf);
-                console.log("Calling getPage on: ", rawPdf);
                 rawPdf.getPage(pageNumber).then((page: any) => {
                     const scale = 1.5;
                     const viewport = page.getViewport({scale});
 
                     // Prepare canvas using PDF page dimensions
-                    const canvas = this.$refs["pdfCanvas" + pageNumber][0];
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                    const canvasElement = this.$refs["pdfCanvas" + pageNumber][0];
+                    if (canvasElement instanceof HTMLCanvasElement) {
+                        const canvas = canvasElement;
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
 
-                    // Render PDF page into canvas context
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: viewport,
-                    };
-                    page.render(renderContext);
+                        // Render PDF page into canvas context
+                        const renderContext = {
+                            canvasContext: context,
+                            viewport: viewport,
+                        };
+                        page.render(renderContext);
+                    } else {
+                        throw "Element is not a canvas";
+                    }
                 });
-            })
+            });
         },
         handleScroll() {
             const container = this.$refs.pdfContainer as HTMLElement;
@@ -84,5 +105,5 @@ export default defineComponent({
             }
         },
     },
-})
+});
 </script>

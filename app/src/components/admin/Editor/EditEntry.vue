@@ -62,7 +62,7 @@ export default defineComponent({
         },
         save() {
             this.mainStore.setHasUnsavedChanges(false);
-            return this.wikiStore.saveEntry(useAuthStore().token)
+            return this.wikiStore.saveEntry()
         },
         checkGoHome() {
             if (this.mainStore.editingUnsavedChanges && confirm('You\'ve go unsaved changes. Save first?')) {

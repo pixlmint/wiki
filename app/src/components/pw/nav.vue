@@ -42,6 +42,12 @@
                                 </el-icon>
                                 Entry
                             </el-dropdown-item>
+                            <el-dropdown-item @click="addPdf">
+                                <el-icon>
+                                    <DocumentAdd/>
+                                </el-icon>
+                                PDF
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -72,23 +78,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, h, toRaw, ref} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
-import {toRaw} from "vue";
 import PWNavElement from "@/src/components/pw/nav-element.vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useRouter} from "vue-router";
 import {useDialogStore} from "@/src/stores/dialog";
-import {
-    Avatar,
-    CaretRight,
-    CaretLeft,
-    CirclePlus,
-    FolderAdd,
-    DocumentAdd,
-    HomeFilled,
-} from "@element-plus/icons-vue";
+import {Avatar, CaretLeft, CaretRight, CirclePlus, DocumentAdd, FolderAdd, HomeFilled,} from "@element-plus/icons-vue";
 import {isMobile} from "@/src/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
 
@@ -150,7 +147,7 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addFolder('/', name.value, this.token).then(() => {
+                this.wikiStore.addFolder('/', name.value).then(() => {
                     this.wikiStore.loadNav();
                 });
             })
@@ -160,10 +157,14 @@ export default defineComponent({
                 confirmButtonText: 'Ok',
                 cancelButtonText: 'Cancel',
             }).then(name => {
-                this.wikiStore.addEntry('/', name.value, this.token).then(response => {
+                this.wikiStore.addEntry('/', name.value).then(() => {
                     this.wikiStore.loadNav();
                 });
             })
+        },
+        addPdf() {
+            this.dialogStore.setPdfParentFolder('/');
+            this.dialogStore.showDialog('/nav/new-pdf');
         },
         hideMainNav() {
             this.mainStore.toggleLargeNavShowing(false);

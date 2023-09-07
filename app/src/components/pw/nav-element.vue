@@ -13,6 +13,7 @@
                         </el-button>
                         <template #dropdown>
                             <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
+                            <el-dropdown-item @click="addPdf"><el-icon><DocumentAdd/></el-icon>Add PDF</el-dropdown-item>
                             <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
                             <el-dropdown-item @click="switchSecurity">
                                 <el-icon v-if="isPublic">
@@ -73,6 +74,7 @@ import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore} from "@/src/stores/auth";
 import {useMainStore} from "@/src/stores/main";
+import {useDialogStore} from "@/src/stores/dialog";
 
 export default defineComponent({
     name: 'PWNavElement',
@@ -82,6 +84,7 @@ export default defineComponent({
             wikiStore: useWikiStore(),
             router: useRouter(),
             token: useAuthStore().getToken,
+            dialogStore: useDialogStore(),
         }
     },
     components: {
@@ -176,6 +179,10 @@ export default defineComponent({
                     this.wikiStore.loadNav();
                 });
             })
+        },
+        addPdf() {
+            this.dialogStore.setPdfParentFolder(this.element.id);
+            this.dialogStore.showDialog('/nav/new-pdf');
         },
         addSubfolder() {
             ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {

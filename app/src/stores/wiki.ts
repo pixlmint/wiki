@@ -36,7 +36,7 @@ interface NavElement {
 }
 
 interface EditorState {
-  lastSaved: Date| null,
+  lastSaved: Date | null,
   editingUnsavedChanges: boolean,
 }
 
@@ -102,12 +102,21 @@ export const useWikiStore = defineStore('wikiStore', {
         this.loadedEntries.push(response.data);
       });
     },
-    addEntry(parentFolder : string, title: string) {
+    addEntry(parentFolder: string, title: string) {
       const data = {
         parentFolder: parentFolder,
         title: title,
       };
       const request = buildRequest('/api/admin/entry/add', data, 'POST');
+      return send(request);
+    },
+    addPdf(parentFolder: string, title: string) {
+      const data = {
+        parentFolder: parentFolder,
+        title: title,
+        renderer: 'pdf',
+      };
+      const request = buildRequest('/api/admin/entry/upload-alternative-content', data, 'POST');
       return send(request);
     },
     addFolder(parentFolder: string, folderName: any) {

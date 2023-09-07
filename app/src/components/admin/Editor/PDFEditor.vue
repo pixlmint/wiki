@@ -40,6 +40,7 @@ export default defineComponent({
             const newFile = files[0];
             const formData = new FormData();
             formData.append('entry', this.wikiStore.safeCurrentEntry.id);
+            formData.append('meta', JSON.stringify(this.wikiStore.safeCurrentEntry.meta));
             formData.append('alternate_content', newFile);
             const request = buildRequest('/api/admin/entry/update-alternate-content', formData, 'POST');
             send(request);
