@@ -3,6 +3,9 @@
         <div class="article-head">
             <div class="d-flex" style="align-items: center; gap: 1rem;">
                 <h1>{{ title }}</h1>
+                <el-tag type="info" v-if="isPdfContent">
+                    PDF
+                </el-tag>
                 <el-icon v-if="!isPublic" title="This Entry is Private, only you can see it"><Lock/></el-icon>
             </div>
             <div v-if="canEdit">
