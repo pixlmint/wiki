@@ -34,6 +34,9 @@ onMounted(() => {
       change: () => {
         emit('update:modelValue', e.getMarkdown());
       },
+      keyup: () => {
+        emit('input', e.getMarkdown());
+      },
       keydown: (type: EditorType, event: KeyboardEvent) => {
         if (event.ctrlKey && event.code === 'KeyS') {
           event.preventDefault();
@@ -42,7 +45,6 @@ onMounted(() => {
       },
     },
   });
-  console.log(e);
   e.addCommand('markdown', 'ctrl+s', () => {
     emit('save', e.getMarkdown());  // Emit a custom "save" event with the current Markdown content
     return true;

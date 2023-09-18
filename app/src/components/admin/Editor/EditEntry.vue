@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <pw-md-editor @save="save" @change="updateContent" v-model="markdown"></pw-md-editor>
+      <pw-md-editor @input="updateContent" @save="save" @change="updateContent" v-model="markdown"></pw-md-editor>
     </div>
   </div>
 </template>
@@ -44,18 +44,13 @@ export default defineComponent({
     },
   },
   methods: {
-    updateContent() {
+    updateContent(md: string) {
       if (!this.wikiStore.currentEntry) {
         console.error('Not editing an entry');
         return '';
       }
       this.mainStore.setHasUnsavedChanges(true);
-      const area = document.getElementsByTagName('textarea').item(0);
-      if (area === null) {
-        console.error('Unable to find the text area');
-        return '';
-      }
-      this.wikiStore.currentEntry.raw_content = area.value;
+      this.wikiStore.currentEntry.raw_content = md;
 
       if (this.userSettings.getSettings.autoSave && !isTimeoutSet()) {
         saveTimeout = window.setTimeout(() => {
