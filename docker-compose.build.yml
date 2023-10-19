@@ -16,8 +16,11 @@ services:
       - media:/var/www/html/media
     environment:
       SECRET: 'adsf'
+      SSH_PUBLIC_KEYS: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQD3Aq5QbXWteiTkJ+GTLG/ty17aYyZ7rHF9bVe5LydkLH3LWkzUxgkYCdkw4EWWMsr0w8PFt8d9RJd0P91BsHUxzg2E6umjNjZuNCX7eA9/Dyrm02TTqCQsJ9HZElkCfdwofjbEKTlnFLlwKIwlf73RzdeQa36K4lwL49/wJ2I32W3cQkNo7+58V8QHuYxyXKrvpTb1EgJ0dmCyvjwrUZKq2IpPWOMWdd+NAdVKqsNxrctKOZ8EuBYUN79jVyb2U1o3TFoUUO3rzLqQx0z6iCp7F7zZZsfEoTijBmSTZDzbJRdlwJS9l9925NB8p8MERaQLQwznF+h3f0wVkxD32u6ndqLK4FoBE9TNVKU0fSDicpeFrWpXeEffiP0IMqzDigkqM8facBca81s94q2yj0jt2KmyvixZjyhuhUUaILcyQdCr9POpNTsi4HaJjarF+OgjiwgL3T6ONffPvJryL26vmQePqYVJKmIGR4Yo7OulFmJ6yzgWDzHD+Z2ZerB/9U0= christian@christian-ubuntu-22"
+      CONFIG_URL: "https://raw.githubusercontent.com/pixlmint/cli-config/main/.vimrc"
     ports:
       - "88:80"
+      - "23:22"
 
 volumes:
   data:
