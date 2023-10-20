@@ -125,6 +125,12 @@ export default defineComponent({
     &.small-nav {
         margin: 0 auto 0 1rem;
     }
+
+    &.large-nav {
+        .md-editor {
+            max-width: calc(100vw - $navLargeWidth);
+        }
+    }
 }
 
 @media screen and (min-width: $mobileBreakpoint) {
@@ -155,7 +161,7 @@ export default defineComponent({
     }
 }
 
-@media screen and (min-width: 1500px) {
+@media screen and (min-width: 1600px) {
     .main-content {
         &.large-nav {
             margin: 0 auto 0 auto !important;

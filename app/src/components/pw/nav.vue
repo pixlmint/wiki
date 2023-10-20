@@ -235,6 +235,7 @@ export default defineComponent({
     width: $navLargeWidth;
     overflow-y: auto;
     overflow-x: hidden;
+    z-index: 100;
 }
 
 @media screen and (max-width: $mobileBreakpoint) {

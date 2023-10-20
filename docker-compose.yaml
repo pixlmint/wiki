@@ -5,6 +5,8 @@ services:
         image: christiangroeber/php-server:8.1.2
         container_name: wiki
         ports:
-            - '91:80'
+            - '94:80'
         volumes:
             - ./:/var/www/html
+        environment:
+            SECRET: 'asdf'
