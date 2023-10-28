@@ -6,7 +6,9 @@
                 <el-tag type="info" v-if="isPdfContent">
                     PDF
                 </el-tag>
-                <el-icon v-if="!isPublic" title="This Entry is Private, only you can see it"><Lock/></el-icon>
+                <el-icon v-if="!isPublic" title="This Entry is Private, only you can see it">
+                    <Lock/>
+                </el-icon>
             </div>
             <div v-if="canEdit">
                 <el-dropdown class="mobile-action-buttons">
@@ -84,6 +86,9 @@ export default defineComponent({
             return this.wikiStore.safeCurrentEntry.meta.title;
         },
         content() {
+            window.setTimeout(() => {
+                MathJax.typeset();
+            }, 50);
             return this.wikiStore.safeCurrentEntry.content;
         },
         canEdit() {

@@ -1245,6 +1245,11 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.194.tgz#b71eb6f7a0ff11bff59fc987134a093029258a76"
   integrity sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==
 
+"@types/mathjax@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/mathjax/-/mathjax-0.0.39.tgz#fcffdfbaee04d0b4a67a1f8f62ecde3f3cf58169"
+  integrity sha512-2bT/0HsPl/CR+tT6U/I/+n0HaaJelZ6sbjG/XbBe3UDhG8cOHFihpnUq9/Yt1Gf0RWbBqc+lUMoiNAZi1LnRTA==
+
 "@types/mime@*":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-3.0.1.tgz#5f8f2bca0a5863cb69bc0b0acd88c96cb1d4ae10"
@@ -6802,6 +6807,11 @@ math-random@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
   integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
+
+mathjax@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/mathjax/-/mathjax-3.2.2.tgz#c754d7b46a679d7f3fa03543d6b8bf124ddf9f6b"
+  integrity sha512-Bt+SSVU8eBG27zChVewOicYs7Xsdt40qm4+UpHyX7k0/O9NliPc+x77k1/FEsPsjKPZGJvtRZM1vO+geW0OhGw==
 
 mathml-tag-names@^2.1.3:
   version "2.1.3"

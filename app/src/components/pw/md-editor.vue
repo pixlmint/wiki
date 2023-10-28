@@ -31,6 +31,13 @@ onMounted(() => {
         theme: userSettingsStore.settings.theme,
         useCommandShortcut: false,
         events: {
+            beforePreviewRender: (html: string) => {
+                window.setTimeout(() => {
+                    // @ts-ignore
+                    MathJax.typeset()
+                }, 20);
+                return html;
+            },
             change: () => {
                 emit('update:modelValue', e.getMarkdown());
             },

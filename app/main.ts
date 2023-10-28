@@ -10,6 +10,7 @@ import PWNav from '@/src/components/pw/nav.vue';
 import PWLoading from '@/src/components/pw/loading.vue';
 import PWSearch from '@/src/components/pw/search.vue';
 import PWMDEditor from '@/src/components/pw/md-editor.vue';
+import 'mathjax/es5/tex-svg-full.js';
 
 const app = createApp(App)
 app.use(VueAxios, axios)
