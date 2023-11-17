@@ -12,6 +12,13 @@ return [
             'config' => require_once('vendor/pixlmint/pixlcms-wiki-plugin/config/config.php'),
         ],
     ],
+    'routes' => [
+        [
+            'route' => '/',
+            'controller' => FrontendController::class,
+            'function' => 'index',
+        ],
+    ],
     'hooks' => [
         [
             'anchor' => 'init',
@@ -22,6 +29,7 @@ return [
         'version' => '1.9',
     ],
     'base' => [
+        'debugEnabled' => true,
         'frontendController' => FrontendController::class,
     ]
 ];

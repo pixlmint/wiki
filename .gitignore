@@ -7,3 +7,4 @@ users.json
 data/*
 dist/*
 .secret
+var
