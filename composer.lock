@@ -303,12 +303,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "0e48b0e48614a24450c28d98971ff732875e4ab6"
+                "reference": "5d5a3e17423cc2209efa4c2ea8ed248f74220868"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/0e48b0e48614a24450c28d98971ff732875e4ab6",
-                "reference": "0e48b0e48614a24450c28d98971ff732875e4ab6",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/5d5a3e17423cc2209efa4c2ea8ed248f74220868",
+                "reference": "5d5a3e17423cc2209efa4c2ea8ed248f74220868",
                 "shasum": ""
             },
             "require": {
@@ -328,7 +328,7 @@
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
                 "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.4"
             },
-            "time": "2023-11-17T14:44:26+00:00"
+            "time": "2023-11-17T15:09:37+00:00"
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",

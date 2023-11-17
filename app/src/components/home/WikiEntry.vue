@@ -2,7 +2,12 @@
     <div class="article">
         <div class="article-head">
             <div class="d-flex" style="align-items: center; gap: 1rem;">
-                <h1>{{ title }}</h1>
+                <div>
+                    <el-breadcrumb separator="/" class="breadcrumbs print-visible">
+                        <el-breadcrumb-item v-for="item in currentTitleArray">{{ item }}</el-breadcrumb-item>
+                    </el-breadcrumb>
+                    <h1>{{ title }}</h1>
+                </div>
                 <el-tag type="info" v-if="isPdfContent">
                     PDF
                 </el-tag>
@@ -10,7 +15,7 @@
                     <Lock/>
                 </el-icon>
             </div>
-            <div v-if="canEdit">
+            <div v-if="canEdit" class="print-invisible">
                 <el-dropdown class="mobile-action-buttons">
                     <el-button circle>
                         <el-icon>
@@ -85,6 +90,13 @@ export default defineComponent({
         title() {
             return this.wikiStore.safeCurrentEntry.meta.title;
         },
+        currentTitleArray() {
+            const id = this.wikiStore.safeCurrentEntry.id;
+            if (!id) {
+                return [];
+            }
+            return id.split('/');
+        },
         content() {
             window.setTimeout(() => {
                 MathJax.typeset();
@@ -133,6 +145,10 @@ export default defineComponent({
         width: 100vw;
         margin-left: -5px;
     }
+}
+
+h1 {
+    margin-top: 0.5rem;
 }
 
 h2, h3, h4, h5, h6 {

@@ -3,3 +3,19 @@
         display: flex;
     }
 }
+
+@media print {
+    .print-invisible {
+        display: none !important;
+    }
+
+    .print-visible {
+        display: block;
+    }
+}
+
+@media screen {
+    .print-visible {
+        display: none;
+    }
+}

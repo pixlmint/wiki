@@ -26,10 +26,10 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.9',
+        'version' => '1.10',
     ],
     'base' => [
-        'debugEnabled' => true,
+        'debugEnabled' => false,
         'frontendController' => FrontendController::class,
     ]
 ];

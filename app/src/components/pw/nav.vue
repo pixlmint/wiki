@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="nav" v-show="mainNavShowing">
+        <div id="nav" class="print-invisible" v-show="mainNavShowing">
             <div>
                 <div @click="hideMainNav" class="nav-toggle">
                     <el-icon>
