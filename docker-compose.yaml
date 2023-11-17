@@ -12,7 +12,6 @@ services:
         volumes:
             - ./:/var/www/html
         environment:
-            SECRET: 'asdf'
             INI_ZEND_EXTENSION: xdebug.so
             OPCACHE_MAX_WASTED_PERCENTAGE: 20
             OPCACHE_JIT: 1255
