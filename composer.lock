@@ -245,16 +245,16 @@
         },
         {
             "name": "pixlmint/parsedown",
-            "version": "1.1",
+            "version": "1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/parsedown.git",
-                "reference": "91a49fd66c85e80c4ab90b90fc5ffafdbffd6e13"
+                "reference": "5f2c5ee8f93540b3ab62c29c5a1be683d10b6660"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/parsedown/zipball/91a49fd66c85e80c4ab90b90fc5ffafdbffd6e13",
-                "reference": "91a49fd66c85e80c4ab90b90fc5ffafdbffd6e13",
+                "url": "https://api.github.com/repos/pixlmint/parsedown/zipball/5f2c5ee8f93540b3ab62c29c5a1be683d10b6660",
+                "reference": "5f2c5ee8f93540b3ab62c29c5a1be683d10b6660",
                 "shasum": ""
             },
             "require": {
@@ -293,9 +293,9 @@
                 "parser"
             ],
             "support": {
-                "source": "https://github.com/pixlmint/parsedown/tree/1.1"
+                "source": "https://github.com/pixlmint/parsedown/tree/1.2"
             },
-            "time": "2023-11-17T18:05:36+00:00"
+            "time": "2023-11-18T13:28:23+00:00"
         },
         {
             "name": "pixlmint/pixl-cms",
