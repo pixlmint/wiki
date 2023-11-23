@@ -89,3 +89,31 @@ p {
     margin: 22px 0;
     letter-spacing: 0.2px;
 }
+
+table {
+    min-width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--el-border-color);
+
+    thead {
+        th {
+            font-weight: bold;
+            background-color: var(--el-text-color-primary);
+            color: var(--el-bg-secondary);
+            border-bottom: 2px solid var(--el-border-color);
+            padding: 5px;
+        }
+    }
+
+    tbody {
+        tr:nth-child(odd) td {
+            background-color: var(--el-bg-secondary);
+        }
+
+        td {
+            padding: 0.8rem 0 0.8rem 5px;
+            border-bottom: 1px solid var(--el-border-color);
+        }
+    }
+}
