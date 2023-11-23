@@ -299,16 +299,16 @@
         },
         {
             "name": "pixlmint/pixl-cms",
-            "version": "2.0.5",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "e0d5ae0f5e5a4b0916c0e608386d1f21f6db45cb"
+                "reference": "5d632b8b53631e476786161ce711b343e6aae56a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/e0d5ae0f5e5a4b0916c0e608386d1f21f6db45cb",
-                "reference": "e0d5ae0f5e5a4b0916c0e608386d1f21f6db45cb",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/5d632b8b53631e476786161ce711b343e6aae56a",
+                "reference": "5d632b8b53631e476786161ce711b343e6aae56a",
                 "shasum": ""
             },
             "require": {
@@ -326,9 +326,9 @@
             "description": "A lightweight CMS powered by Markdown and Nachos",
             "support": {
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
-                "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.5"
+                "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.6"
             },
-            "time": "2023-11-19T12:56:40+00:00"
+            "time": "2023-11-23T19:41:06+00:00"
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
