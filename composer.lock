@@ -196,16 +196,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.4.4",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "38a19a7f5d426a6cfb0edbd30e842ae6727e6237"
+                "reference": "63a5066b278600ad832bb4692d6850357e2cd822"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/38a19a7f5d426a6cfb0edbd30e842ae6727e6237",
-                "reference": "38a19a7f5d426a6cfb0edbd30e842ae6727e6237",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/63a5066b278600ad832bb4692d6850357e2cd822",
+                "reference": "63a5066b278600ad832bb4692d6850357e2cd822",
                 "shasum": ""
             },
             "require": {
@@ -239,9 +239,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.4.4"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.4.5"
             },
-            "time": "2023-11-19T12:55:55+00:00"
+            "time": "2023-12-02T08:59:29+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -299,16 +299,16 @@
         },
         {
             "name": "pixlmint/pixl-cms",
-            "version": "2.0.5",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "e0d5ae0f5e5a4b0916c0e608386d1f21f6db45cb"
+                "reference": "5d632b8b53631e476786161ce711b343e6aae56a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/e0d5ae0f5e5a4b0916c0e608386d1f21f6db45cb",
-                "reference": "e0d5ae0f5e5a4b0916c0e608386d1f21f6db45cb",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/5d632b8b53631e476786161ce711b343e6aae56a",
+                "reference": "5d632b8b53631e476786161ce711b343e6aae56a",
                 "shasum": ""
             },
             "require": {
@@ -326,22 +326,22 @@
             "description": "A lightweight CMS powered by Markdown and Nachos",
             "support": {
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
-                "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.5"
+                "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.6"
             },
-            "time": "2023-11-19T12:56:40+00:00"
+            "time": "2023-11-23T19:41:06+00:00"
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
-            "version": "1.6.3",
+            "version": "1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
-                "reference": "2110b3071c5973b9a32be69c2880835cc5a33f88"
+                "reference": "933511bf33e41641d4e642eda896e934711bed9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/2110b3071c5973b9a32be69c2880835cc5a33f88",
-                "reference": "2110b3071c5973b9a32be69c2880835cc5a33f88",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/933511bf33e41641d4e642eda896e934711bed9f",
+                "reference": "933511bf33e41641d4e642eda896e934711bed9f",
                 "shasum": ""
             },
             "require": {
@@ -358,9 +358,9 @@
             "description": "The official wiki plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.3"
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.4"
             },
-            "time": "2023-11-17T14:35:39+00:00"
+            "time": "2023-12-05T09:04:00+00:00"
         },
         {
             "name": "psr/container",
