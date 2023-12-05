@@ -26,7 +26,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.11',
+        'version' => '1.12',
     ],
     'base' => [
         'debugEnabled' => false,

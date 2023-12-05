@@ -23,6 +23,10 @@
                         </el-icon>
                     </el-button>
                     <template #dropdown>
+                        <el-dropdown-item @click="viewMarkdown" title="View">
+                            <el-icon><View/></el-icon>
+                            View
+                        </el-dropdown-item>
                         <el-dropdown-item @click="editEntry" title="Edit">
                             <el-icon>
                                 <edit/>
@@ -38,6 +42,9 @@
                     </template>
                 </el-dropdown>
                 <div class="desktop-action-buttons">
+                    <el-button circle @click="viewMarkdown">
+                        <el-icon><View/></el-icon>
+                    </el-button>
                     <el-button @click="editEntry">
                         <el-icon>
                             <edit/>
@@ -67,8 +74,9 @@ import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from "@/src/stores/auth";
 import fa from '@/src/components/fa.vue'
 import {useRouter} from "vue-router";
-import {MoreFilled, Edit, Delete, Lock} from "@element-plus/icons-vue";
+import {MoreFilled, Edit, Delete, Lock, View} from "@element-plus/icons-vue";
 import PDFContent from "@/src/components/home/PDFContent.vue";
+import {queryFormatter} from "@/src/helpers/queryFormatter";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -76,6 +84,7 @@ export default defineComponent({
         return {
             wikiStore: useWikiStore(),
             router: useRouter(),
+            authStore: useAuthStore(),
         }
     },
     components: {
@@ -85,6 +94,7 @@ export default defineComponent({
         Edit,
         Delete,
         Lock,
+        View,
     },
     computed: {
         title() {
@@ -130,6 +140,10 @@ export default defineComponent({
                 });
             }
         },
+        viewMarkdown() {
+            const query = queryFormatter({token: this.authStore.token, entry: this.wikiStore.safeCurrentEntry.id});
+            window.open(location.origin + "/api/admin/entry/view-markdown?" + query, "_blank");
+        }
     },
 })
 </script>
