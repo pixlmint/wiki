@@ -40,6 +40,10 @@ h1 {
     font-size: 2.5rem;
 }
 
+li p {
+    margin: 0;
+}
+
 .danger {
     color: var(--el-color-danger) !important;
 }
