@@ -14,13 +14,13 @@ interface WikiEntry {
 
 interface EntryMeta {
   title: string,
-  date: string,
-  time: number,
   date_formatted: string,
   description: string | null,
   author: string | null,
   owner: string | null,
   security: string | null,
+  dateUpdated: string | null,
+  dateCreated: string | null,
 }
 
 interface Nav extends Array<NavElement> {
@@ -88,10 +88,12 @@ export const useWikiStore = defineStore('wikiStore', {
         content: currentEntry.raw_content,
         meta: currentEntry.meta,
         entry: currentEntry.id,
+        lastUpdate: currentEntry.meta.dateUpdated,
       }
       const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
       return send(request).then(response => {
         this.editor.lastSaved = new Date();
+        this.currentEntry.meta.dateUpdated = response.data.lastUpdate;
         return response;
       });
     },
