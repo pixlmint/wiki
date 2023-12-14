@@ -1,6 +1,7 @@
 <template>
     <div class="wiki">
-        <pw-loading></pw-loading>
+      <el-button @click="dialogStore.showDialog('/draw')">Draw</el-button>
+      <pw-loading></pw-loading>
         <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>
         <div :class="mainContentClasses">
@@ -22,7 +23,6 @@ import Modals from "@/src/components/modals.vue";
 import {useDialogStore} from "@/src/stores/dialog";
 import {configureStores} from "@/src/helpers/xhr";
 import {useLoadingStore} from "@/src/stores/loading";
-import {useRoute} from "vue-router";
 
 export default defineComponent({
     name: "App",

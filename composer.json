@@ -4,7 +4,8 @@
     "require": {
         "ext-json":  "*",
         "pixlmint/pixl-cms": "*",
-        "pixlmint/pixlcms-wiki-plugin": "*"
+        "pixlmint/pixlcms-wiki-plugin": "*",
+        "pixlmint/pixlcms-media-plugin": "*"
     },
     "autoload": {
         "psr-4": {
