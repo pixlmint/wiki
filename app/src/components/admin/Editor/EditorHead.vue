@@ -1,13 +1,28 @@
 <template>
     <div>
-        <div class="d-flex gap-1 editor-header ai_center">
-            <el-button circle @click="checkGoHome">
-                <el-icon>
-                    <arrow-left/>
-                </el-icon>
-            </el-button>
-            <input class="title-editor" @change="rename" :value="title"/>
-        </div>
+        <el-row justify="space-between" align="middle">
+            <el-col :span="12">
+                <el-row align="middle" class="editor-header">
+                    <el-col :span="2">
+                        <el-button circle @click="checkGoHome">
+                            <el-icon>
+                                <arrow-left/>
+                            </el-icon>
+                        </el-button>
+                    </el-col>
+                    <el-col :span="22">
+                        <input class="title-editor" @change="rename" :value="title"/>
+                    </el-col>
+                </el-row>
+            </el-col>
+            <el-col :span="2">
+                <div>
+                    <el-button @click="showDrawModal">
+                        <pw-icon icon="pen-ruler"></pw-icon>
+                    </el-button>
+                </div>
+            </el-col>
+        </el-row>
         <p class="last-edited">
             {{ lastSavedFormatted }}
         </p>
@@ -22,10 +37,13 @@ import {ArrowLeft} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import {useMainStore} from "@/src/stores/main";
 import {ElMessageBox} from "element-plus";
+import {useDialogStore} from "@/src/stores/dialog";
+import PwIcon from "@/src/components/pw/icon.vue";
 
 export default defineComponent({
     name: "EditorHead",
     components: {
+        PwIcon,
         ArrowLeft,
     },
     data() {
@@ -33,6 +51,7 @@ export default defineComponent({
             router: useRouter(),
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
+            dialogStore: useDialogStore(),
             now: new Date(),
             interval: -1,
         }
@@ -64,6 +83,9 @@ export default defineComponent({
         },
     },
     methods: {
+        showDrawModal() {
+            this.dialogStore.showDialog('/draw');
+        },
         save() {
             return useWikiStore().saveEntry()
         },

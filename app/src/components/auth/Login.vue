@@ -1,6 +1,6 @@
 <template>
     <el-dialog title="Login" v-model="isShowing">
-        <el-form :model="loginForm" @submit.prevent="login">
+        <el-form :model="loginForm">
             <el-form-item label="Username">
                 <el-input v-model="loginForm.username"/>
             </el-form-item>

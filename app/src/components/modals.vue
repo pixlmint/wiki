@@ -4,7 +4,6 @@
         <CreateAdmin></CreateAdmin>
         <UserSettings></UserSettings>
         <NewPDF></NewPDF>
-        <DrawModal></DrawModal>
     </div>
 </template>
 
@@ -14,7 +13,6 @@ import Login from "@/src/components/auth/Login.vue";
 import CreateAdmin from "@/src/components/auth/CreateAdmin.vue";
 import UserSettings from "@/src/components/user-settings.vue";
 import NewPDF from "@/src/components/auth/NewPDF.vue";
-import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 
 export default defineComponent({
     name: 'Modals',
@@ -23,7 +21,6 @@ export default defineComponent({
         CreateAdmin,
         UserSettings,
         NewPDF,
-        DrawModal,
     },
 })
 </script>

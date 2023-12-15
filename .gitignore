@@ -6,5 +6,6 @@ content
 users.json
 data/*
 dist/*
+media/*
 .secret
 var

@@ -34,13 +34,16 @@
           </template>
         </el-row>
       </el-col>
+      <el-col :span="4">
+        <el-button @click="save"><pw-icon icon="save"></pw-icon></el-button>
+      </el-col>
     </el-row>
     <div class="canvas" ref="canvasContainer"></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ref, onMounted, defineProps, computed, onBeforeUnmount} from 'vue';
+import {ref, onMounted, defineProps, computed, onBeforeUnmount, defineEmits} from 'vue';
 import p5 from 'p5';
 import PwIcon from "@/src/components/pw/icon.vue";
 
@@ -57,6 +60,13 @@ let pointerType = "";
 
 let lastPoint;
 let currentPath = [];
+
+const emit = defineEmits();
+
+const save = () => {
+  const imageBase64 = myP5.canvas.toDataURL('image/jpeg');
+  emit('save', imageBase64);
+}
 
 interface Tool {
   name: String,
@@ -197,7 +207,7 @@ const drawStroke = (sketch: any, tool: DrawTool) => {
 const modeErase = new EraserTool("Erase", "eraser", (sketch) => {
   if (currentPath.length > 0) {
     sketch.erase();
-    sketch.strokeWeight(modeErase.selectedWeight); // Set desired eraser size
+    sketch.strokeWeight(modeErase.selectableWeights[modeErase.selectedWeightIndex]); // Set desired eraser size
     // Apply eraser to each point in the current path
     for (let p of currentPath) {
       sketch.point(p.x, p.y);

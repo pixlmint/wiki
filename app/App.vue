@@ -1,6 +1,5 @@
 <template>
     <div class="wiki">
-      <el-button @click="dialogStore.showDialog('/draw')">Draw</el-button>
       <pw-loading></pw-loading>
         <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>

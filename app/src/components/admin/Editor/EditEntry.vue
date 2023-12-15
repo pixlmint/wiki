@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="container">
-      <pw-md-editor @input="updateContent" @save="save" @change="updateContent" v-model="markdown"></pw-md-editor>
+      <pw-md-editor :key="componentKey" @input="updateContent" @save="save" @change="updateContent" v-model="markdown"></pw-md-editor>
     </div>
+    <DrawModal @imagesave="imageSave"></DrawModal>
   </div>
 </template>
 
@@ -12,6 +13,8 @@ import {useWikiStore} from '@/src/stores/wiki'
 import {useRouter} from 'vue-router'
 import {useMainStore} from "@/src/stores/main";
 import {useUserSettings} from "@/src/stores/user-settings";
+import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
+import {useDialogStore} from "@/src/stores/dialog";
 
 let saveTimeout: number | null = null;
 
@@ -20,11 +23,14 @@ const isTimeoutSet = () => {
 }
 
 export default defineComponent({
+  components: {DrawModal},
   data: function () {
     return {
       mainStore: useMainStore(),
       wikiStore: useWikiStore(),
       userSettings: useUserSettings(),
+      dialogStore: useDialogStore(),
+      componentKey: 0,
     }
   },
   created() {
@@ -58,6 +64,20 @@ export default defineComponent({
           saveTimeout = null;
         }, 5000);
       }
+    },
+    imageSave(imgPath) {
+        let imgUrl = location.protocol + "//" + location.hostname
+        if (location.port !== "80") {
+            imgUrl += ":" + location.port;
+        }
+        imgUrl += imgPath;
+        let md = this.wikiStore.safeCurrentEntry.raw_content;
+        md += "![painting](" + imgUrl + ")";
+        this.wikiStore.safeCurrentEntry.raw_content = md;
+        this.save().then(() => {
+            this.componentKey += 1;
+            this.dialogStore.clearShowingDialog();
+        });
     },
     save() {
       this.mainStore.setHasUnsavedChanges(false);
