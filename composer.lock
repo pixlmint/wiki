@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cbeb7f4b2b998f14f99c1037388f356",
+    "content-hash": "d981a4b86042183eb26a10ae92563515",
     "packages": [
         {
             "name": "laravel/serializable-closure",
@@ -65,6 +65,63 @@
                 "source": "https://github.com/laravel/serializable-closure"
             },
             "time": "2023-11-08T14:08:06+00:00"
+        },
+        {
+            "name": "mhor/php-mediainfo",
+            "version": "5.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mhor/php-mediainfo.git",
+                "reference": "eb247c3207dd895e73c2cb94864633af55fa5c11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mhor/php-mediainfo/zipball/eb247c3207dd895e73c2cb94864633af55fa5c11",
+                "reference": "eb247c3207dd895e73c2cb94864633af55fa5c11",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "symfony/filesystem": "~3.4|~4.0|~5.0|~6.0",
+                "symfony/process": "~3.4|~4.0|~5.0|~6.0"
+            },
+            "require-dev": {
+                "phpspec/prophecy": "^1.15",
+                "phpunit/phpunit": "~8.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "6.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mhor\\MediaInfo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mhor",
+                    "email": "maxime.horcholle@gmail.com"
+                }
+            ],
+            "description": "PHP wrapper around the mediainfo command",
+            "keywords": [
+                "id3",
+                "mediainfo",
+                "metadata",
+                "wrapper"
+            ],
+            "support": {
+                "issues": "https://github.com/mhor/php-mediainfo/issues",
+                "source": "https://github.com/mhor/php-mediainfo/tree/5.5.0"
+            },
+            "time": "2023-05-10T16:03:31+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -196,16 +253,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "63a5066b278600ad832bb4692d6850357e2cd822"
+                "reference": "59afdfcfc19c4c80ce0f47653ece7d0fe4b9e810"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/63a5066b278600ad832bb4692d6850357e2cd822",
-                "reference": "63a5066b278600ad832bb4692d6850357e2cd822",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/59afdfcfc19c4c80ce0f47653ece7d0fe4b9e810",
+                "reference": "59afdfcfc19c4c80ce0f47653ece7d0fe4b9e810",
                 "shasum": ""
             },
             "require": {
@@ -239,9 +296,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.4.5"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.4.6"
             },
-            "time": "2023-12-02T08:59:29+00:00"
+            "time": "2023-12-14T17:24:09+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -299,16 +356,16 @@
         },
         {
             "name": "pixlmint/pixl-cms",
-            "version": "2.0.6",
+            "version": "2.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "5d632b8b53631e476786161ce711b343e6aae56a"
+                "reference": "edaa3376f25f9f2e0cc3323989dead93777a50ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/5d632b8b53631e476786161ce711b343e6aae56a",
-                "reference": "5d632b8b53631e476786161ce711b343e6aae56a",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/edaa3376f25f9f2e0cc3323989dead93777a50ba",
+                "reference": "edaa3376f25f9f2e0cc3323989dead93777a50ba",
                 "shasum": ""
             },
             "require": {
@@ -326,9 +383,42 @@
             "description": "A lightweight CMS powered by Markdown and Nachos",
             "support": {
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
-                "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.6"
+                "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.7"
             },
-            "time": "2023-11-23T19:41:06+00:00"
+            "time": "2023-12-15T22:39:57+00:00"
+        },
+        {
+            "name": "pixlmint/pixlcms-media-plugin",
+            "version": "1.6.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pixlmint/pixlcms-media-plugin.git",
+                "reference": "2c46f32d05940c4a14fbdeac334a1e83b431d105"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-media-plugin/zipball/2c46f32d05940c4a14fbdeac334a1e83b431d105",
+                "reference": "2c46f32d05940c4a14fbdeac334a1e83b431d105",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "mhor/php-mediainfo": "^5.5",
+                "pixlmint/pixl-cms": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PixlMint\\Media\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "A simple Media plugin for PixlCMS",
+            "support": {
+                "issues": "https://github.com/pixlmint/pixlcms-media-plugin/issues",
+                "source": "https://github.com/pixlmint/pixlcms-media-plugin/tree/1.6.4"
+            },
+            "time": "2023-12-15T22:38:48+00:00"
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
@@ -533,6 +623,69 @@
             "time": "2023-05-23T14:45:45+00:00"
         },
         {
+            "name": "symfony/filesystem",
+            "version": "v6.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "952a8cb588c3bc6ce76f6023000fb932f16a6e59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/952a8cb588c3bc6ce76f6023000fb932f16a6e59",
+                "reference": "952a8cb588c3bc6ce76f6023000fb932f16a6e59",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides basic utilities for the filesystem",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/filesystem/tree/v6.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-07-26T17:27:13+00:00"
+        },
+        {
             "name": "symfony/polyfill-ctype",
             "version": "v1.28.0",
             "source": {
@@ -613,6 +766,150 @@
                 }
             ],
             "time": "2023-01-26T09:26:14+00:00"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.28.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "42292d99c55abe617799667f454222c54c60e229"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/42292d99c55abe617799667f454222c54c60e229",
+                "reference": "42292d99c55abe617799667f454222c54c60e229",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "provide": {
+                "ext-mbstring": "*"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.28-dev"
+                },
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.28.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-07-28T09:04:16+00:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v6.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "191703b1566d97a5425dc969e4350d32b8ef17aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/191703b1566d97a5425dc969e4350d32b8ef17aa",
+                "reference": "191703b1566d97a5425dc969e4350d32b8ef17aa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Executes commands in sub-processes",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/v6.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-11-17T21:06:49+00:00"
         },
         {
             "name": "symfony/yaml",

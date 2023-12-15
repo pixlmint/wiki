@@ -11,6 +11,12 @@ return [
             'enabled' => true,
             'config' => require_once('vendor/pixlmint/pixlcms-wiki-plugin/config/config.php'),
         ],
+        [
+            'name' => 'pixlcms-media-plugin',
+            'install_method' => 'composer',
+            'enabled' => true,
+            'config' => require_once('vendor/pixlmint/pixlcms-media-plugin/config/config.php'),
+        ],
     ],
     'routes' => [
         [
@@ -26,7 +32,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.12',
+        'version' => '1.13',
     ],
     'base' => [
         'debugEnabled' => false,

@@ -22,6 +22,7 @@ services:
             OPCACHE_VALIDATE_TIMESTAMPS: 1
             OPCACHE_INTERNED_STRINGS_BUFFER: 16
             XDEBUG_MODE: debug
-            XDEBUG_CLIENT_HOST: 127.0.0.1
+            XDEBUG_CLIENT_HOST: 192.168.1.170
+            XDEBUG_CLIENT_PORT: 9000
             XDEBUG_START_WITH_REQUEST: yes
             XDEBUG_DISCOVER_CLIENT_HOST: true
