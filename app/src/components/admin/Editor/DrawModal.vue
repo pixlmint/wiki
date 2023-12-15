@@ -1,6 +1,6 @@
 <template>
-  <el-dialog fullscreen="true" v-model="isShowing">
-    <p5-canvas :width="width" :height="height"></p5-canvas>
+  <el-dialog :fullscreen="true" v-model="isShowing">
+    <p5-canvas v-if="isShowing" :width="width" :height="height"></p5-canvas>
   </el-dialog>
 </template>
 

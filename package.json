@@ -13,6 +13,10 @@
     "dependencies": {
         "@babel/runtime": "^7.18.9",
         "@element-plus/icons-vue": "^2.1.0",
+        "@fortawesome/fontawesome-svg-core": "^6.5.1",
+        "@fortawesome/free-regular-svg-icons": "^6.5.1",
+        "@fortawesome/free-solid-svg-icons": "^6.5.1",
+        "@fortawesome/vue-fontawesome": "^3.0.5",
         "@mdi/font": "^6.6.96",
         "@toast-ui/editor": "^3.2.2",
         "@types/pdfjs-dist": "^2.10.378",
