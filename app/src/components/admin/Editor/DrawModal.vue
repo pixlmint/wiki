@@ -1,6 +1,6 @@
 <template>
-  <el-dialog title="Draw" v-model="isShowing">
-    <p5-canvas></p5-canvas>
+  <el-dialog fullscreen="true" v-model="isShowing">
+    <p5-canvas :width="width" :height="height"></p5-canvas>
   </el-dialog>
 </template>
 
@@ -20,6 +20,12 @@ export default defineComponent({
     }
   },
   computed: {
+    width() {
+      return (window.innerWidth - 100).toString();
+    },
+    height() {
+      return (window.innerHeight - 100).toString();
+    },
     isShowing: {
       get() {
         return route === this.dialogStore.getShowingDialog;
