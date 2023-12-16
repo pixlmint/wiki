@@ -35,17 +35,26 @@
                 </el-row>
             </el-col>
             <el-col :span="4">
+                <el-button @click="debug.enabled = !debug.enabled">
+                    <pw-icon icon="bug"></pw-icon>
+                </el-button>
                 <el-button @click="save">
                     <pw-icon icon="save"></pw-icon>
                 </el-button>
             </el-col>
         </el-row>
         <div class="canvas" ref="canvasContainer"></div>
+        <div v-if="debug.enabled" class="paint-debug">
+            <div>Mouse Position: {{ debug.mousePosition.x }}, {{ debug.mousePosition.y }}</div>
+            <div>Pointer Type: {{ pointerType }}</div>
+            <div>Paths Count: {{ paths.length }}</div>
+            <div>Current Path: {{ currentPath }}</div>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import {ref, onMounted, defineProps, computed, onBeforeUnmount, defineEmits} from 'vue';
+import {computed, defineEmits, defineProps, onBeforeUnmount, onMounted, ref} from 'vue';
 import p5 from 'p5';
 import PwIcon from "@/src/components/pw/icon.vue";
 
@@ -62,28 +71,48 @@ let pointerType = "";
 
 let lastPoint: p5.Vector;
 let currentPoint: p5.Vector;
-let currentPath: { x: number, y: number, speed: number }[] = [];
+let currentPath: PaintStroke;
+let paths: PaintStroke[] = [];
 
 const emit = defineEmits();
+
+const debug = ref({
+    enabled: false,
+    mousePosition: {
+        x: 0,
+        y: 0,
+    },
+});
 
 const save = () => {
     const imageBase64 = myP5.canvas.toDataURL('image/jpeg');
     emit('save', imageBase64);
 }
 
+interface PaintStroke {
+    points: PaintStrokePoint[],
+    color: String,
+    baseWeight: number,
+}
+
+interface PaintStrokePoint {
+    x: number,
+    y: number,
+    speed: number,
+    pressure?: number,
+}
+
 interface Tool {
     name: String,
     icon: String,
-    modifyFunction: Function,
+    drawFunction: Function,
+    startModifyFunction?: Function,
+    endModifyFunction?: Function,
 }
 
 interface StrokeColor {
     name: String,
     hex: String,
-}
-
-interface TemporaryModificationTool {
-    tempModifyFunction: Function,
 }
 
 interface ColorSelectableTool {
@@ -104,12 +133,16 @@ interface DrawSettings {
 class BaseTool implements Tool {
     name: String;
     icon: String;
-    modifyFunction: Function;
+    drawFunction: Function;
+    startModifyFunction?: Function;
+    endModifyFunction?: Function;
 
-    constructor(name: String, icon: String, modifyFunction: Function) {
+    constructor(name: String, icon: String, drawFunction: Function, startModifyFunction?: Function, endModifyFunction?: Function) {
         this.name = name;
         this.icon = icon;
-        this.modifyFunction = modifyFunction;
+        this.drawFunction = drawFunction;
+        this.startModifyFunction = startModifyFunction;
+        this.endModifyFunction = endModifyFunction;
     }
 }
 
@@ -162,20 +195,18 @@ const selectedTool = computed({
     }
 })
 
-class DrawTool extends BaseTool implements ColorSelectableTool, WeightSelectableTool, TemporaryModificationTool {
+class DrawTool extends BaseTool implements ColorSelectableTool, WeightSelectableTool {
     selectableColors: StrokeColor[];
     selectedColorIndex: number;
     selectableWeights: number[];
     selectedWeightIndex: number;
-    tempModifyFunction: Function;
 
-    constructor(name: String, icon: String, modifyFunction: Function, selectableColors: StrokeColor[], selectableWeights: number[], tempModifyFunction: Function) {
-        super(name, icon, modifyFunction);
+    constructor(name: String, icon: String, drawFunction: Function, selectableColors: StrokeColor[], selectableWeights: number[], startModifyFunction?: Function, endModifyFunction?: Function) {
+        super(name, icon, drawFunction, startModifyFunction, endModifyFunction);
         this.selectableColors = selectableColors;
         this.selectableWeights = selectableWeights;
         this.selectedColorIndex = 0;
         this.selectedWeightIndex = 0;
-        this.tempModifyFunction = tempModifyFunction;
     }
 }
 
@@ -183,85 +214,154 @@ class EraserTool extends BaseTool implements WeightSelectableTool {
     selectableWeights: number[];
     selectedWeightIndex: number;
 
-    constructor(name: String, icon: String, modifyFunction: Function, selectableWeights: number[]) {
-        super(name, icon, modifyFunction);
+    constructor(name: String, icon: String, drawFunction: Function, selectableWeights: number[], startModifyFunction?: Function, endModifyFunction?: Function) {
+        super(name, icon, drawFunction, startModifyFunction, endModifyFunction);
         this.selectableWeights = selectableWeights;
         this.selectedWeightIndex = 0;
     }
 }
 
 const drawTempStroke = (sketch: p5.Graphics, tool: DrawTool) => {
-    console.log('drawTempStroke');
-    temporaryBuffer.noErase();
-    temporaryBuffer.noFill();
-    temporaryBuffer.stroke(tool.selectableColors[tool.selectedColorIndex].hex);
-    temporaryBuffer.strokeWeight(tool.selectableWeights[tool.selectedWeightIndex]);
-    temporaryBuffer.line(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y);
-    lastPoint.set(currentPoint.x, currentPoint.y);
-    sketch.image(temporaryBuffer, 0, 0);
-}
-
-const drawStroke = (sketch: any, tool: DrawTool) => {
     sketch.noErase();
     sketch.noFill();
     sketch.stroke(tool.selectableColors[tool.selectedColorIndex].hex);
-    sketch.beginShape();
-    for (let i = 0; i < currentPath.length; i++) {
-        const p = currentPath[i]
-        let weight = sketch.map(p.speed, 0, 10, 10, 1);
-        weight = sketch.constrain(weight, 1, 2);
-        sketch.strokeWeight(tool.selectableWeights[tool.selectedWeightIndex]);
-        if (i === 0 || i === currentPath.length - 1) {
-            sketch.vertex(p.x, p.y);
-        } else {
-            // Calculate control points for Bezier curve
-            let controlPoints = calculateControlPoints(currentPath, i); // Implement this function
-            sketch.bezierVertex(controlPoints.cx1, controlPoints.cy1, controlPoints.cx2, controlPoints.cy2, p.x, p.y);
-        }
-    }
-    sketch.endShape();
-    currentPath = [];
+    sketch.strokeWeight(tool.selectableWeights[tool.selectedWeightIndex]);
+    sketch.line(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y);
+    lastPoint.set(currentPoint.x, currentPoint.y);
 }
 
-const calculateControlPoints = (path: object[], index: number) => {
-    // Get the current point, and its immediate neighbors
-    const p0 = index > 0 ? path[index - 1] : path[0];
-    const p1 = path[index];
-    const p2 = index < path.length - 1 ? path[index + 1] : p1;
+const paintStrokes = (sketch: p5.Graphics, tool: Tool) => {
+    if (!(tool instanceof EraserTool)) {
+        paths.push(currentPath);
+    }
+    sketch.background(255);
+    sketch.noErase();
+    sketch.noFill();
+    paths.forEach((stroke: PaintStroke) => {
+        sketch.stroke(stroke.color);
+        sketch.strokeWeight(stroke.baseWeight);
+        sketch.beginShape();
+        stroke.points.forEach((p, i) => {
+            if (i === 0 || i === stroke.points.length - 1) {
+                sketch.vertex(p.x, p.y);
+            } else {
+                sketch.curveVertex(p.x, p.y);
+            }
+        });
+        sketch.endShape();
+    });
+}
 
-    // Calculate midpoints
-    const m0 = {x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2};
-    const m1 = {x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2};
+const myEraseStrokes = (erasePath: PaintStroke) => {
+    return paths.flatMap((stroke: PaintStroke) => {
+        let splitStrokes: PaintStroke[] = [];
 
-    // Calculate control points
-    const l0 = Math.sqrt(Math.pow(p1.x - p0.x, 2) + Math.pow(p1.y - p0.y, 2));
-    const l1 = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-    const alpha = l0 / (l0 + l1);
-    const controlPoint = {x: m1.x + (m0.x - m1.x) * alpha, y: m1.y + (m0.y - m1.y) * alpha};
+        for (let i = 0; i < stroke.points.length; i++) {
+            const currentPoint = stroke.points[i];
+            const nextPoint = stroke.points[i + 1];
 
-    // Return control points
-    return {
-        cx1: controlPoint.x,
-        cy1: controlPoint.y,
-        cx2: controlPoint.x,
-        cy2: controlPoint.y
+            if (nextPoint) {
+                let intersections: any[] = [];
+
+                erasePath.points.forEach((eraserPoint: PaintStrokePoint) => {
+                    intersections.push(...findLineCircleIntersections(
+                        currentPoint, nextPoint, eraserPoint, erasePath.baseWeight
+                    ));
+                });
+                intersections = intersections.filter((p: p5.Vector) =>
+                    p.x >= Math.min(currentPoint.x, nextPoint.x) &&
+                    p.x <= Math.max(currentPoint.x, nextPoint.x) &&
+                    p.y >= Math.min(currentPoint.y, nextPoint.y) &&
+                    p.y <= Math.max(currentPoint.y, nextPoint.y)
+                );
+                console.table(intersections);
+            }
+        }
+    });
+}
+
+const distanceBetween = (point1: PaintStrokePoint, point2: PaintStrokePoint) => {
+    return Math.sqrt(
+        Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2)
+    );
+}
+
+const isStrokeErased = (stroke: PaintStroke, eraserStroke: PaintStroke) => {
+    for (let i = 0; i < stroke.points.length; i++) {
+        const currentPoint = stroke.points[i];
+
+        // Check if any eraser point overlaps with a stroke point
+        const pointErased = eraserStroke.points.some(eraserPoint =>
+            distanceBetween(currentPoint, eraserPoint) <= eraserStroke.baseWeight
+        );
+
+        if (pointErased) {
+            return true;
+        }
+
+        // Check if any eraser point overlaps with a line between stroke points
+        if (i < stroke.points.length - 1) {
+            const nextPoint = stroke.points[i + 1];
+            const lineErased = eraserStroke.points.some(eraserPoint =>
+                isLineSegmentIntersectingCircle(currentPoint, nextPoint, eraserPoint, eraserStroke.baseWeight)
+            );
+
+            if (lineErased) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+const eraseStrokes = (erasePath: PaintStroke) => {
+    return paths.filter(stroke => !isStrokeErased(stroke, erasePath));
+}
+
+const isLineSegmentIntersectingCircle = (p0: PaintStrokePoint, p1: PaintStrokePoint, circleCenter: PaintStrokePoint, radius: number) => {
+    // Line segment vector
+    const lineVec = {x: p1.x - p0.x, y: p1.y - p0.y};
+
+    // Vector from line start to circle center
+    const toCircleVec = {x: circleCenter.x - p0.x, y: circleCenter.y - p0.y};
+
+    // Project toCircleVec onto lineVec
+    const lengthLineVec = Math.sqrt(lineVec.x * lineVec.x + lineVec.y * lineVec.y);
+    const dotProduct = (toCircleVec.x * lineVec.x + toCircleVec.y * lineVec.y) / lengthLineVec;
+    const closestPointOnLine = {
+        x: p0.x + (dotProduct / lengthLineVec) * lineVec.x,
+        y: p0.y + (dotProduct / lengthLineVec) * lineVec.y
     };
+
+    // Check if closest point is within line segment bounds
+    const isWithinSegment = dotProduct >= 0 && dotProduct <= lengthLineVec;
+
+    // Distance from circle center to closest point on line
+    const distanceToLine = Math.sqrt(
+        (circleCenter.x - closestPointOnLine.x) * (circleCenter.x - closestPointOnLine.x) +
+        (circleCenter.y - closestPointOnLine.y) * (circleCenter.y - closestPointOnLine.y)
+    );
+
+    return isWithinSegment && distanceToLine <= radius;
 }
 
 const modeErase = new EraserTool("Erase", "eraser", (sketch: any) => {
-    if (currentPath.length > 0) {
+    if (currentPath.points.length > 0) {
         sketch.erase();
         sketch.strokeWeight(modeErase.selectableWeights[modeErase.selectedWeightIndex]); // Set desired eraser size
         // Apply eraser to each point in the current path
-        for (let p of currentPath) {
+        for (let p of currentPath.points) {
             sketch.point(p.x, p.y);
         }
     }
-    currentPath = [];
-}, [5, 10, 20, 30]);
+}, [2, 30], undefined, (sketch: p5.Graphics, tool: Tool) => {
+    paths = eraseStrokes(currentPath);
+    console.table(paths);
+    paintStrokes(sketch, modeErase);
+});
 
-const modeDraw = new DrawTool("Draw", "pencil", drawStroke, [colorBlack, colorBlue, colorGreen, colorRed], [1, 2, 5], drawTempStroke);
-const modeHighlight = new DrawTool("Highlight", "highlighter", drawStroke, [hColorYellow, hColorGreen, hColorPurple], [10, 20, 50], drawTempStroke);
+const modeDraw = new DrawTool("Draw", "pencil", drawTempStroke, [colorBlack, colorBlue, colorGreen, colorRed], [1, 2, 5], undefined, paintStrokes);
+const modeHighlight = new DrawTool("Highlight", "highlighter", drawTempStroke, [hColorYellow, hColorGreen, hColorPurple], [10, 20, 50], undefined, paintStrokes);
 
 const tools = [modeDraw, modeHighlight, modeErase];
 
@@ -291,10 +391,6 @@ onBeforeUnmount(() => {
     window.removeEventListener("pointerup", pointerUpEvent);
     canvas.removeEventListener("pointerleave", pointerUpEvent);
 
-    //canvas.removeEventListener("mousedown", pointerDownEvent);
-    //window.removeEventListener("mouseleave", pointerUpEvent);
-    //canvas.removeEventListener("mousemove", pointerMoveEvent);
-
     canvas.removeEventListener('touchstart', killDefaultBehavior);
     canvas.removeEventListener('touchmove', killDefaultBehavior);
     canvas.removeEventListener('touchend', killDefaultBehavior);
@@ -308,7 +404,7 @@ const initP5 = function () {
         return;
     }
     const canvas = canvasContainer.value as HTMLElement;
-    myP5 = new p5((sketch) => {
+    myP5 = new p5((sketch: p5.Graphics) => {
         sketch.setup = () => {
             sketch.createCanvas(props.width, props.height - 100);
             sketch.background(255);
@@ -318,11 +414,7 @@ const initP5 = function () {
         };
         sketch.draw = () => {
             if (isDrawing) {
-                if (instanceOfTemporaryModificationTool(settings.value.selectedTool)) {
-                    settings.value.selectedTool.tempModifyFunction(sketch, settings.value.selectedTool);
-                } else {
-                    settings.value.selectedTool.modifyFunction(sketch, settings.value.selectedTool);
-                }
+                settings.value.selectedTool.drawFunction(sketch, settings.value.selectedTool);
             }
         };
     }, canvas);
@@ -332,22 +424,21 @@ const initP5 = function () {
     window.addEventListener("pointerup", pointerUpEvent);
     canvas.addEventListener("pointerleave", pointerUpEvent);
 
-    // canvas.addEventListener("mousedown", pointerDownEvent);
-    // window.addEventListener("mouseup", pointerUpEvent);
-    // window.addEventListener("mousemove", pointerMoveEvent);
-
     canvas.addEventListener('touchstart', killDefaultBehavior);
     canvas.addEventListener('touchmove', killDefaultBehavior);
     canvas.addEventListener('touchend', killDefaultBehavior);
 
+    if (debug.value.enabled) {
+        canvas.addEventListener("pointermove", (event: PointerEvent) => {
+            debug.value.mousePosition.x = event.offsetX;
+            debug.value.mousePosition.y = event.offsetY;
+        });
+    }
+
     console.log('p5 initialized');
 }
 
-const instanceOfTemporaryModificationTool = (obj: any): obj is TemporaryModificationTool => {
-    return 'tempModifyFunction' in obj;
-}
-
-const pointerMoveEvent = event => {
+const pointerMoveEvent = (event: PointerEvent) => {
     if (pointerType === "pen" || pointerType === "mouse") {
         baseMoveEvent(event);
     }
@@ -355,41 +446,63 @@ const pointerMoveEvent = event => {
 
 const baseMoveEvent = (event: PointerEvent) => {
     if (isDrawing) {
-        console.log(event);
         const mX = event.offsetX;
         const mY = event.offsetY;
-        const speed = myP5.dist(mX, mY, lastPoint.x, lastPoint.y);
-        currentPath.push({
-            x: mX,
-            y: mY,
-            speed: speed,
-        });
+        pushPoint(event);
         currentPoint = myP5.createVector(mX, mY);
         event.preventDefault();
     }
+}
+
+const pushPoint = (event: PointerEvent) => {
+    currentPath.points.push({
+        x: event.offsetX,
+        y: event.offsetY,
+        speed: 0,
+        pressure: event.pressure,
+    });
 }
 
 const pointerDownEvent = (event: PointerEvent) => {
     pointerType = event.pointerType;
     if (pointerType === "pen" || pointerType === "mouse") {
-        console.log(event);
+        if (settings.value.selectedTool.startModifyFunction !== undefined) {
+            settings.value.selectedTool.startModifyFunction(myP5, settings.value.selectedTool);
+        }
         isDrawing = true;
-        currentPath = [];
         const mX = event.offsetX;
         const mY = event.offsetY;
         lastPoint.set(mX, mY);
         currentPoint = myP5.createVector(mX, mY);
+        let baseWeight = 1;
+        let baseColor = '#000';
+        if ('selectableWeights' in settings.value.selectedTool && 'selectedWeightIndex' in settings.value.selectedTool) {
+            baseWeight = settings.value.selectedTool.selectableWeights[settings.value.selectedTool.selectedWeightIndex];
+        }
+        if ('selectableColors' in settings.value.selectedTool && 'selectedColorIndex' in settings.value.selectedTool) {
+            baseColor = settings.value.selectedTool.selectableColors[settings.value.selectedTool.selectedColorIndex].hex;
+        }
+        currentPath = {
+            points: [],
+            color: baseColor,
+            baseWeight: baseWeight,
+        };
+        pushPoint(event);
         event.preventDefault();
     }
 }
 
 const pointerUpEvent = (event: PointerEvent) => {
-    currentPath = [];
-    console.log(event);
+    if (!isDrawing) {
+        return;
+    }
+    if (settings.value.selectedTool.endModifyFunction !== undefined) {
+        settings.value.selectedTool.endModifyFunction(myP5, settings.value.selectedTool);
+    }
     isDrawing = false;
 }
 
-const killDefaultBehavior = event => {
+const killDefaultBehavior = (event: Event) => {
     event.preventDefault();
 }
 </script>
@@ -403,6 +516,15 @@ const killDefaultBehavior = event => {
 
 .controls {
     height: 100px;
+}
+
+.paint-debug {
+    position: absolute;
+    background-color: rgba(223, 223, 223, 0.33);
+    bottom: 0;
+    left: 0;
+    max-height: 30%;
+    overflow-y: scroll;
 }
 </style>
 
