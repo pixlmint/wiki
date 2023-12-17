@@ -49,6 +49,8 @@
             <div>Pointer Type: {{ pointerType }}</div>
             <div>Paths Count: {{ paths.length }}</div>
             <div>Current Path: {{ currentPath }}</div>
+
+            <svg class="d3" :width="props.width" :height="props.height - 100"></svg>
         </div>
     </div>
 </template>
@@ -56,6 +58,7 @@
 <script lang="ts" setup>
 import {computed, defineEmits, defineProps, onBeforeUnmount, onMounted, ref} from 'vue';
 import p5 from 'p5';
+import * as d3 from 'd3';
 import PwIcon from "@/src/components/pw/icon.vue";
 
 const canvasContainer = ref(null);
@@ -85,8 +88,40 @@ const debug = ref({
 });
 
 const save = () => {
+    drawSvg(paths);
     const imageBase64 = myP5.canvas.toDataURL('image/jpeg');
     emit('save', imageBase64);
+}
+
+const drawSvg = (data: PaintStroke[]) => {
+    const lineGenerator = d3.line()
+        .x((d: PaintStrokePoint) => {
+            return d.x;
+        })
+        .y((d: PaintStrokePoint) => {
+            return d.y;
+        })
+        .curve(d3.curveBasis);
+
+    const svg = d3.select("svg.d3");
+    const paintStrokes = svg.selectAll("path")
+        .data(data)
+        .enter()
+        .append("path")
+        .attr("d", (d: PaintStroke) => {
+            const pathData = lineGenerator(d.points);
+            console.log(pathData);
+            return pathData;
+        })
+        .attr("fill", "none")
+        .attr("stroke", (d: PaintStroke) => {
+            return d.color;
+        })
+        .attr("stroke-width", (d: PaintStroke) => {
+            return d.baseWeight;
+        });
+
+    console.log(paintStrokes);
 }
 
 interface PaintStroke {
@@ -252,7 +287,7 @@ const paintStrokes = (sketch: p5.Graphics, tool: Tool) => {
     });
 }
 
-const myEraseStrokes = (erasePath: PaintStroke) => {
+/* const myEraseStrokes = (erasePath: PaintStroke) => {
     return paths.flatMap((stroke: PaintStroke) => {
         let splitStrokes: PaintStroke[] = [];
 
@@ -278,7 +313,7 @@ const myEraseStrokes = (erasePath: PaintStroke) => {
             }
         }
     });
-}
+}*/
 
 const distanceBetween = (point1: PaintStrokePoint, point2: PaintStrokePoint) => {
     return Math.sqrt(
