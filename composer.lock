@@ -389,16 +389,16 @@
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",
-            "version": "1.6.4",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-media-plugin.git",
-                "reference": "2c46f32d05940c4a14fbdeac334a1e83b431d105"
+                "reference": "d7788063ee8ab30f5994b03c4ff94d8264188da9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-media-plugin/zipball/2c46f32d05940c4a14fbdeac334a1e83b431d105",
-                "reference": "2c46f32d05940c4a14fbdeac334a1e83b431d105",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-media-plugin/zipball/d7788063ee8ab30f5994b03c4ff94d8264188da9",
+                "reference": "d7788063ee8ab30f5994b03c4ff94d8264188da9",
                 "shasum": ""
             },
             "require": {
@@ -416,9 +416,9 @@
             "description": "A simple Media plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-media-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-media-plugin/tree/1.6.4"
+                "source": "https://github.com/pixlmint/pixlcms-media-plugin/tree/1.6.5"
             },
-            "time": "2023-12-15T22:38:48+00:00"
+            "time": "2023-12-18T21:54:54+00:00"
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",

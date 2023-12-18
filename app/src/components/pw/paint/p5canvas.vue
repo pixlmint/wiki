@@ -43,37 +43,34 @@
                 </el-button>
             </el-col>
         </el-row>
-        <div class="canvas" ref="canvasContainer"></div>
+        <svg class="d3-canvas" ref="svgContainer" :width="props.width" :height="props.height - 100"></svg>
         <div v-if="debug.enabled" class="paint-debug">
             <div>Mouse Position: {{ debug.mousePosition.x }}, {{ debug.mousePosition.y }}</div>
             <div>Pointer Type: {{ pointerType }}</div>
             <div>Paths Count: {{ paths.length }}</div>
             <div>Current Path: {{ currentPath }}</div>
-
-            <svg class="d3" :width="props.width" :height="props.height - 100"></svg>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, defineEmits, defineProps, onBeforeUnmount, onMounted, ref} from 'vue';
-import p5 from 'p5';
+import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import * as d3 from 'd3';
 import PwIcon from "@/src/components/pw/icon.vue";
 
-const canvasContainer = ref(null);
+const svgContainer = ref(null);
 
 const props = defineProps({
     height: String,
     width: String,
 });
 
-let myP5: p5;
+let svgCanvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
 let isDrawing = false;
 let pointerType = "";
 
-let lastPoint: p5.Vector;
-let currentPoint: p5.Vector;
+let lastPoint: Vector;
+let currentPoint: Vector;
 let currentPath: PaintStroke;
 let paths: PaintStroke[] = [];
 
@@ -88,40 +85,16 @@ const debug = ref({
 });
 
 const save = () => {
-    drawSvg(paths);
-    const imageBase64 = myP5.canvas.toDataURL('image/jpeg');
-    emit('save', imageBase64);
+    reDrawSvg(paths, svgCanvas);
+    let svgData = svgCanvas.html();
+    svgData = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' + svgCanvas.attr('width') + '" height="' + svgCanvas.attr('height') + '">' + svgData + '</svg>';
+    emit('save', svgData);
 }
 
-const drawSvg = (data: PaintStroke[]) => {
-    const lineGenerator = d3.line()
-        .x((d: PaintStrokePoint) => {
-            return d.x;
-        })
-        .y((d: PaintStrokePoint) => {
-            return d.y;
-        })
-        .curve(d3.curveBasis);
+interface Vector {
+    x: number,
+    y: number,
 
-    const svg = d3.select("svg.d3");
-    const paintStrokes = svg.selectAll("path")
-        .data(data)
-        .enter()
-        .append("path")
-        .attr("d", (d: PaintStroke) => {
-            const pathData = lineGenerator(d.points);
-            console.log(pathData);
-            return pathData;
-        })
-        .attr("fill", "none")
-        .attr("stroke", (d: PaintStroke) => {
-            return d.color;
-        })
-        .attr("stroke-width", (d: PaintStroke) => {
-            return d.baseWeight;
-        });
-
-    console.log(paintStrokes);
 }
 
 interface PaintStroke {
@@ -181,6 +154,32 @@ class BaseTool implements Tool {
     }
 }
 
+class DrawTool extends BaseTool implements ColorSelectableTool, WeightSelectableTool {
+    selectableColors: StrokeColor[];
+    selectedColorIndex: number;
+    selectableWeights: number[];
+    selectedWeightIndex: number;
+
+    constructor(name: String, icon: String, drawFunction: Function, selectableColors: StrokeColor[], selectableWeights: number[], startModifyFunction?: Function, endModifyFunction?: Function) {
+        super(name, icon, drawFunction, startModifyFunction, endModifyFunction);
+        this.selectableColors = selectableColors;
+        this.selectableWeights = selectableWeights;
+        this.selectedColorIndex = 0;
+        this.selectedWeightIndex = 0;
+    }
+}
+
+class EraserTool extends BaseTool implements WeightSelectableTool {
+    selectableWeights: number[];
+    selectedWeightIndex: number;
+
+    constructor(name: String, icon: String, drawFunction: Function, selectableWeights: number[], startModifyFunction?: Function, endModifyFunction?: Function) {
+        super(name, icon, drawFunction, startModifyFunction, endModifyFunction);
+        this.selectableWeights = selectableWeights;
+        this.selectedWeightIndex = 0;
+    }
+}
+
 const colorBlack = {
     name: 'Black',
     hex: "#000",
@@ -230,61 +229,24 @@ const selectedTool = computed({
     }
 })
 
-class DrawTool extends BaseTool implements ColorSelectableTool, WeightSelectableTool {
-    selectableColors: StrokeColor[];
-    selectedColorIndex: number;
-    selectableWeights: number[];
-    selectedWeightIndex: number;
+const drawTempStroke = (sketch: any, tool: DrawTool) => {
+    sketch.append('line')
+        .style('stroke', tool.selectableColors[tool.selectedColorIndex].hex)
+        .style('stroke-width', tool.selectableWeights[tool.selectedWeightIndex])
+        .attr('x1', lastPoint.x)
+        .attr('y1', lastPoint.y)
+        .attr('x2', currentPoint.x)
+        .attr('y2', currentPoint.y);
 
-    constructor(name: String, icon: String, drawFunction: Function, selectableColors: StrokeColor[], selectableWeights: number[], startModifyFunction?: Function, endModifyFunction?: Function) {
-        super(name, icon, drawFunction, startModifyFunction, endModifyFunction);
-        this.selectableColors = selectableColors;
-        this.selectableWeights = selectableWeights;
-        this.selectedColorIndex = 0;
-        this.selectedWeightIndex = 0;
-    }
+
+    lastPoint = {x: currentPoint.x, y: currentPoint.y};
 }
 
-class EraserTool extends BaseTool implements WeightSelectableTool {
-    selectableWeights: number[];
-    selectedWeightIndex: number;
-
-    constructor(name: String, icon: String, drawFunction: Function, selectableWeights: number[], startModifyFunction?: Function, endModifyFunction?: Function) {
-        super(name, icon, drawFunction, startModifyFunction, endModifyFunction);
-        this.selectableWeights = selectableWeights;
-        this.selectedWeightIndex = 0;
-    }
-}
-
-const drawTempStroke = (sketch: p5.Graphics, tool: DrawTool) => {
-    sketch.noErase();
-    sketch.noFill();
-    sketch.stroke(tool.selectableColors[tool.selectedColorIndex].hex);
-    sketch.strokeWeight(tool.selectableWeights[tool.selectedWeightIndex]);
-    sketch.line(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y);
-    lastPoint.set(currentPoint.x, currentPoint.y);
-}
-
-const paintStrokes = (sketch: p5.Graphics, tool: Tool) => {
-    if (!(tool instanceof EraserTool)) {
+const paintStrokes = (paths: PaintStroke[], sketch: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
+    if (!(settings.value.selectedTool instanceof EraserTool)) {
         paths.push(currentPath);
     }
-    sketch.background(255);
-    sketch.noErase();
-    sketch.noFill();
-    paths.forEach((stroke: PaintStroke) => {
-        sketch.stroke(stroke.color);
-        sketch.strokeWeight(stroke.baseWeight);
-        sketch.beginShape();
-        stroke.points.forEach((p, i) => {
-            if (i === 0 || i === stroke.points.length - 1) {
-                sketch.vertex(p.x, p.y);
-            } else {
-                sketch.curveVertex(p.x, p.y);
-            }
-        });
-        sketch.endShape();
-    });
+    reDrawSvg(paths, sketch);
 }
 
 /* const myEraseStrokes = (erasePath: PaintStroke) => {
@@ -380,19 +342,37 @@ const isLineSegmentIntersectingCircle = (p0: PaintStrokePoint, p1: PaintStrokePo
     return isWithinSegment && distanceToLine <= radius;
 }
 
-const modeErase = new EraserTool("Erase", "eraser", (sketch: any) => {
-    if (currentPath.points.length > 0) {
-        sketch.erase();
-        sketch.strokeWeight(modeErase.selectableWeights[modeErase.selectedWeightIndex]); // Set desired eraser size
-        // Apply eraser to each point in the current path
-        for (let p of currentPath.points) {
-            sketch.point(p.x, p.y);
-        }
-    }
-}, [2, 30], undefined, (sketch: p5.Graphics, tool: Tool) => {
+const reDrawSvg = (data: PaintStroke[], canvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
+    canvas.selectAll('*').remove();
+    const lineGenerator = d3.line()
+        .x((d: PaintStrokePoint) => {
+            return d.x;
+        })
+        .y((d: PaintStrokePoint) => {
+            return d.y;
+        })
+        .curve(d3.curveBasis);
+
+    const paintStrokes = canvas.selectAll("path")
+        .data(data)
+        .enter()
+        .append("path")
+        .attr("d", (d: PaintStroke) => {
+            return lineGenerator(d.points);
+        })
+        .attr("fill", "none")
+        .attr("stroke", (d: PaintStroke) => {
+            return d.color;
+        })
+        .attr("stroke-width", (d: PaintStroke) => {
+            return d.baseWeight;
+        });
+}
+
+const modeErase = new EraserTool("Erase", "eraser", () => {
+}, [2, 30], undefined, (sketch: any, tool: Tool) => {
     paths = eraseStrokes(currentPath);
-    console.table(paths);
-    paintStrokes(sketch, modeErase);
+    reDrawSvg(paths, svgCanvas);
 });
 
 const modeDraw = new DrawTool("Draw", "pencil", drawTempStroke, [colorBlack, colorBlue, colorGreen, colorRed], [1, 2, 5], undefined, paintStrokes);
@@ -412,65 +392,55 @@ const toggleActiveTool = (tool: Tool, index: number) => {
 }
 
 onMounted(() => {
-    initP5();
+    initDrawing();
     document.body.classList.add('selectDisabled');
 });
 
 onBeforeUnmount(() => {
-    console.log('called unmount');
-    document.body.classList.remove('selectDisabled');
-    const canvas = canvasContainer.value as HTMLElement;
-
-    canvas.removeEventListener("pointermove", pointerMoveEvent);
-    canvas.removeEventListener("pointerdown", pointerDownEvent);
-    window.removeEventListener("pointerup", pointerUpEvent);
-    canvas.removeEventListener("pointerleave", pointerUpEvent);
-
-    canvas.removeEventListener('touchstart', killDefaultBehavior);
-    canvas.removeEventListener('touchmove', killDefaultBehavior);
-    canvas.removeEventListener('touchend', killDefaultBehavior);
-})
-
-let temporaryBuffer: p5.Graphics;
-
-const initP5 = function () {
-    if (typeof myP5 !== 'undefined') {
-        console.log('p5 has already been initialized');
+    if (typeof svgCanvas === 'undefined') {
+        console.log('already unmounted');
         return;
     }
-    const canvas = canvasContainer.value as HTMLElement;
-    myP5 = new p5((sketch: p5.Graphics) => {
-        sketch.setup = () => {
-            sketch.createCanvas(props.width, props.height - 100);
-            sketch.background(255);
-            sketch.frameRate(120);
-            lastPoint = sketch.createVector(sketch.mouseX, sketch.mouseY);
-            temporaryBuffer = sketch.createGraphics(props.width, props.height - 100);
-        };
-        sketch.draw = () => {
-            if (isDrawing) {
-                settings.value.selectedTool.drawFunction(sketch, settings.value.selectedTool);
-            }
-        };
-    }, canvas);
+    console.log('called unmount');
+    document.body.classList.remove('selectDisabled');
 
-    canvas.addEventListener("pointermove", pointerMoveEvent);
-    canvas.addEventListener("pointerdown", pointerDownEvent);
-    window.addEventListener("pointerup", pointerUpEvent);
-    canvas.addEventListener("pointerleave", pointerUpEvent);
+    const c: HTMLElement | Element | null = document.querySelector('svg.d3-canvas');
 
-    canvas.addEventListener('touchstart', killDefaultBehavior);
-    canvas.addEventListener('touchmove', killDefaultBehavior);
-    canvas.addEventListener('touchend', killDefaultBehavior);
+    c.removeEventListener("pointermove", pointerMoveEvent);
+    c.removeEventListener("pointerdown", pointerDownEvent);
+    window.removeEventListener("pointerup", pointerUpEvent);
+    c.removeEventListener("pointerleave", pointerUpEvent);
 
-    if (debug.value.enabled) {
-        canvas.addEventListener("pointermove", (event: PointerEvent) => {
-            debug.value.mousePosition.x = event.offsetX;
-            debug.value.mousePosition.y = event.offsetY;
-        });
+    c.removeEventListener('touchstart', killDefaultBehavior);
+    c.removeEventListener('touchmove', killDefaultBehavior);
+    c.removeEventListener('touchend', killDefaultBehavior);
+})
+
+const initDrawing = function () {
+    if (typeof svgCanvas !== 'undefined') {
+        console.log('canvas has already been initialized');
+        return;
     }
+    svgCanvas = d3.select('svg.d3-canvas');
 
-    console.log('p5 initialized');
+    console.log(svgCanvas);
+
+    const c: HTMLElement | Element | null = document.querySelector('svg.d3-canvas');
+
+    c.addEventListener("pointermove", pointerMoveEvent);
+    c.addEventListener("pointerdown", pointerDownEvent);
+    window.addEventListener("pointerup", pointerUpEvent);
+    c.addEventListener("pointerleave", pointerUpEvent);
+
+    c.addEventListener('touchstart', killDefaultBehavior);
+    c.addEventListener('touchmove', killDefaultBehavior);
+    c.addEventListener('touchend', killDefaultBehavior);
+    c.addEventListener("pointermove", (event: PointerEvent) => {
+        debug.value.mousePosition.x = event.offsetX;
+        debug.value.mousePosition.y = event.offsetY;
+    });
+
+    console.log('drawing initialized');
 }
 
 const pointerMoveEvent = (event: PointerEvent) => {
@@ -484,7 +454,8 @@ const baseMoveEvent = (event: PointerEvent) => {
         const mX = event.offsetX;
         const mY = event.offsetY;
         pushPoint(event);
-        currentPoint = myP5.createVector(mX, mY);
+        currentPoint = {x: mX, y: mY};
+        settings.value.selectedTool.drawFunction(svgCanvas, settings.value.selectedTool);
         event.preventDefault();
     }
 }
@@ -502,13 +473,13 @@ const pointerDownEvent = (event: PointerEvent) => {
     pointerType = event.pointerType;
     if (pointerType === "pen" || pointerType === "mouse") {
         if (settings.value.selectedTool.startModifyFunction !== undefined) {
-            settings.value.selectedTool.startModifyFunction(myP5, settings.value.selectedTool);
+            settings.value.selectedTool.startModifyFunction(svgCanvas, settings.value.selectedTool);
         }
         isDrawing = true;
         const mX = event.offsetX;
         const mY = event.offsetY;
-        lastPoint.set(mX, mY);
-        currentPoint = myP5.createVector(mX, mY);
+        lastPoint = {x: mX, y: mY};
+        currentPoint = {x: mX, y: mY};
         let baseWeight = 1;
         let baseColor = '#000';
         if ('selectableWeights' in settings.value.selectedTool && 'selectedWeightIndex' in settings.value.selectedTool) {
@@ -532,7 +503,7 @@ const pointerUpEvent = (event: PointerEvent) => {
         return;
     }
     if (settings.value.selectedTool.endModifyFunction !== undefined) {
-        settings.value.selectedTool.endModifyFunction(myP5, settings.value.selectedTool);
+        settings.value.selectedTool.endModifyFunction(paths, svgCanvas);
     }
     isDrawing = false;
 }
@@ -543,7 +514,7 @@ const killDefaultBehavior = (event: Event) => {
 </script>
 
 <style scoped lang="scss">
-.canvas {
+svg.d3-canvas {
     touch-action: none;
     user-select: none;
     border: 2px solid black;

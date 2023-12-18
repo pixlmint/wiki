@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :fullscreen="true" v-model="isShowing">
-    <p5-canvas @save="save" v-if="isShowing" :width="width" :height="height"></p5-canvas>
-  </el-dialog>
+    <el-dialog :fullscreen="true" v-model="isShowing">
+        <p5-canvas @save="save" v-if="isShowing" :width="width" :height="height"></p5-canvas>
+    </el-dialog>
 </template>
 
 <script lang="ts">
@@ -14,30 +14,30 @@ import {buildRequest, send} from "@/src/helpers/xhr";
 const route = '/draw';
 
 export default defineComponent({
-  name: "DrawModal",
-  components: {P5Canvas},
-  data() {
-    return {
-      dialogStore: useDialogStore(),
-      wikiStore: useWikiStore(),
-    }
-  },
-  computed: {
-    width() {
-      return (window.innerWidth - 100).toString();
+    name: "DrawModal",
+    components: {P5Canvas},
+    data() {
+        return {
+            dialogStore: useDialogStore(),
+            wikiStore: useWikiStore(),
+        }
     },
-    height() {
-      return (window.innerHeight - 100).toString();
+    computed: {
+        width() {
+            return (window.innerWidth - 100).toString();
+        },
+        height() {
+            return (window.innerHeight - 100).toString();
+        },
+        isShowing: {
+            get() {
+                return route === this.dialogStore.getShowingDialog;
+            },
+            set() {
+                this.dialogStore.clearShowingDialog();
+            }
+        }
     },
-    isShowing: {
-      get() {
-        return route === this.dialogStore.getShowingDialog;
-      },
-      set() {
-        this.dialogStore.clearShowingDialog();
-      }
-    }
-  },
 });
 </script>
 
@@ -50,16 +50,23 @@ const wikiStore = useWikiStore();
 
 const emit = defineEmits(['imagesave']);
 
-const save = (image) => {
-      const data = {
-        data: image,
+const save = (image: any) => {
+    console.log(image);
+    const data = {
+        files: [
+            {
+                name: new Date().valueOf() + ".svg",
+                data: image,
+                type: "image/svg+xml",
+            },
+        ],
         gallery: wikiStore.safeCurrentEntry.id,
-      };
+    };
 
-      const request = buildRequest("/api/admin/gallery/upload-b64", data, "POST");
-      send(request).then(response => {
-        emit('imagesave', response.data.scaled[1080]);
-      });
+    const request = buildRequest("/api/admin/gallery/upload", data, "POST");
+    send(request).then(response => {
+        emit('imagesave', response.data.files[0].path);
+    });
 }
 
 </script>

@@ -65,7 +65,7 @@ export default defineComponent({
         }, 5000);
       }
     },
-    imageSave(imgPath) {
+    imageSave(imgPath: string) {
         let imgUrl = location.protocol + "//" + location.hostname
         if (location.port !== "80") {
             imgUrl += ":" + location.port;
