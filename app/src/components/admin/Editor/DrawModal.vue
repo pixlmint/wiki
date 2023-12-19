@@ -1,13 +1,13 @@
 <template>
     <el-dialog :fullscreen="true" v-model="isShowing">
-        <p5-canvas @save="save" v-if="isShowing" :width="width" :height="height"></p5-canvas>
+        <d3-canvas @save="save" v-if="isShowing" :width="width" :height="height"></d3-canvas>
     </el-dialog>
 </template>
 
 <script lang="ts">
-import {defineComponent, toRaw} from "vue";
+import {defineComponent} from "vue";
 import {useDialogStore} from "@/src/stores/dialog";
-import P5Canvas from "@/src/components/pw/paint/p5canvas.vue";
+import D3Canvas from "@/src/components/pw/d3canvas.vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {buildRequest, send} from "@/src/helpers/xhr";
 
@@ -15,7 +15,7 @@ const route = '/draw';
 
 export default defineComponent({
     name: "DrawModal",
-    components: {P5Canvas},
+    components: {D3Canvas},
     data() {
         return {
             dialogStore: useDialogStore(),
