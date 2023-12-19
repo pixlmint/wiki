@@ -9,7 +9,6 @@ import {defineComponent} from "vue";
 import {useDialogStore} from "@/src/stores/dialog";
 import D3Canvas from "@/src/components/pw/d3canvas.vue";
 import {useWikiStore} from "@/src/stores/wiki";
-import {buildRequest, send} from "@/src/helpers/xhr";
 
 const route = '/draw';
 

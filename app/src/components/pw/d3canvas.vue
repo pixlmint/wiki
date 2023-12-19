@@ -1,48 +1,50 @@
 <template>
     <div>
-        <el-row :gutter="2" class="controls">
-            <el-col :span="2" v-for="(tool, index) in tools">
-                <el-button @click="toggleActiveTool(tool, index)">
-                    <pw-icon :icon="tool.icon"></pw-icon>
-                </el-button>
-            </el-col>
-            <el-col :span="12">
-                <el-row :gutter="2">
-                    <template v-for="(tool, index) in tools">
-                        <el-col :span="4" v-show="selectedTool === index" v-if="tool instanceof DrawTool">
-                            <el-select v-model="tool.selectedColorIndex" placeholder="Stroke Color">
-                                <el-option
-                                    v-for="(color, cIndex) in tool.selectableColors"
-                                    :key="cIndex"
-                                    :label="color.name"
-                                    :value="cIndex"
-                                    :style="'color: ' + color.hex"
-                                />
-                            </el-select>
-                        </el-col>
-                        <el-col :span="4" v-show="selectedTool === index"
-                                v-if="tool instanceof DrawTool || tool instanceof EraserTool">
-                            <el-select v-model="tool.selectedWeightIndex" placeholder="Stroke Weight">
-                                <el-option
-                                    v-for="(weight, wIndex) in tool.selectableWeights"
-                                    :key="wIndex"
-                                    :label="weight"
-                                    :value="wIndex"
-                                />
-                            </el-select>
-                        </el-col>
-                    </template>
-                </el-row>
-            </el-col>
-            <el-col :span="4">
-                <el-button @click="debug.enabled = !debug.enabled">
-                    <pw-icon icon="bug"></pw-icon>
-                </el-button>
-                <el-button @click="save">
-                    <pw-icon icon="save"></pw-icon>
-                </el-button>
-            </el-col>
-        </el-row>
+        <div class="drawing-toolbar">
+            <div class="drawing-toolbar-section top-section">
+                <div class="drawing-toolbar-tools d-flex gap-1">
+                    <div v-for="(tool, index) in tools">
+                        <el-button @click="toggleActiveTool(tool, index)">
+                            <pw-icon :icon="tool.icon"></pw-icon>
+                        </el-button>
+                    </div>
+                </div>
+                <div class="drawing-toolbar-actions">
+                    <el-button @click="debug.enabled = !debug.enabled">
+                        <pw-icon icon="bug"></pw-icon>
+                    </el-button>
+                    <el-button @click="save">
+                        <pw-icon icon="save"></pw-icon>
+                    </el-button>
+                </div>
+            </div>
+            <div class="drawing-toolbar-section">
+                <template v-for="(tool, index) in tools">
+                    <div v-show="selectedTool === index" v-if="tool instanceof DrawTool">
+                        <el-select v-model="tool.selectedColorIndex" placeholder="Stroke Color">
+                            <el-option
+                                v-for="(color, cIndex) in tool.selectableColors"
+                                :key="cIndex"
+                                :label="color.name"
+                                :value="cIndex"
+                                :style="'color: ' + color.hex"
+                            />
+                        </el-select>
+                    </div>
+                    <div v-show="selectedTool === index"
+                         v-if="tool instanceof DrawTool || tool instanceof EraserTool">
+                        <el-select v-model="tool.selectedWeightIndex" placeholder="Stroke Weight">
+                            <el-option
+                                v-for="(weight, wIndex) in tool.selectableWeights"
+                                :key="wIndex"
+                                :label="weight"
+                                :value="wIndex"
+                            />
+                        </el-select>
+                    </div>
+                </template>
+            </div>
+        </div>
         <svg class="d3-canvas" ref="svgContainer" :width="props.width" :height="props.height - 100"></svg>
         <div v-if="debug.enabled" class="paint-debug">
             <div>Mouse Position: {{ debug.mousePosition.x }}, {{ debug.mousePosition.y }}</div>
@@ -506,6 +508,21 @@ const killDefaultBehavior = (event: Event) => {
 </script>
 
 <style scoped lang="scss">
+.drawing-toolbar {
+    width: 80%;
+
+    .drawing-toolbar-section {
+        display: flex;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        gap: 5px;
+
+        &.top-section {
+            justify-content: space-between;
+        }
+    }
+}
+
 svg.d3-canvas {
     touch-action: none;
     user-select: none;
