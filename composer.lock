@@ -253,16 +253,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.4.6",
+            "version": "1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "59afdfcfc19c4c80ce0f47653ece7d0fe4b9e810"
+                "reference": "5934569db8bfd2b71c59000c9dd8ffb03e85ad13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/59afdfcfc19c4c80ce0f47653ece7d0fe4b9e810",
-                "reference": "59afdfcfc19c4c80ce0f47653ece7d0fe4b9e810",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/5934569db8bfd2b71c59000c9dd8ffb03e85ad13",
+                "reference": "5934569db8bfd2b71c59000c9dd8ffb03e85ad13",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.4.6"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.4.7"
             },
-            "time": "2023-12-14T17:24:09+00:00"
+            "time": "2023-12-19T20:28:49+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -360,12 +360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "edaa3376f25f9f2e0cc3323989dead93777a50ba"
+                "reference": "d560d1e2a2e1e4e32190c067fc1be2f8cb11544e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/edaa3376f25f9f2e0cc3323989dead93777a50ba",
-                "reference": "edaa3376f25f9f2e0cc3323989dead93777a50ba",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/d560d1e2a2e1e4e32190c067fc1be2f8cb11544e",
+                "reference": "d560d1e2a2e1e4e32190c067fc1be2f8cb11544e",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
                 "source": "https://github.com/pixlmint/pixl-cms/tree/2.0.7"
             },
-            "time": "2023-12-15T22:39:57+00:00"
+            "time": "2023-12-19T20:42:03+00:00"
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",

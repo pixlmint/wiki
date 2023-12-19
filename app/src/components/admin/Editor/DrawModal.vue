@@ -45,18 +45,19 @@ export default defineComponent({
 import {useDialogStore} from "@/src/stores/dialog";
 import {useWikiStore} from "@/src/stores/wiki";
 import {buildRequest, send} from "@/src/helpers/xhr";
+import {Drawing} from "@/src/contracts/Canvas";
 
 const wikiStore = useWikiStore();
 
 const emit = defineEmits(['imagesave']);
 
-const save = (image: any) => {
-    console.log(image);
+const save = (drawing: Drawing) => {
+    console.log(drawing);
     const data = {
         files: [
             {
                 name: new Date().valueOf() + ".svg",
-                data: image,
+                data: drawing.svg,
                 type: "image/svg+xml",
             },
         ],
@@ -65,7 +66,18 @@ const save = (image: any) => {
 
     const request = buildRequest("/api/admin/gallery/upload", data, "POST");
     send(request).then(response => {
-        emit('imagesave', response.data.files[0].path);
+        const path = response.data.files[0].path;
+        const drawings = wikiStore.safeCurrentEntry.meta.drawings;
+        if (drawings === undefined || drawings === null) {
+            wikiStore.safeCurrentEntry.meta.drawings = [];
+        }
+        drawing.svg = path;
+        wikiStore.safeCurrentEntry.meta.drawings.push(drawing);
+        wikiStore.saveEntry().then(response => {
+            console.log(response);
+
+            emit('imagesave', path);
+        });
     });
 }
 

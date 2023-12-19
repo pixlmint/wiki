@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {buildRequest, send} from "@/src/helpers/xhr";
 import {ElNotification} from "element-plus";
+import {Drawing} from "@/src/contracts/Canvas";
 
 interface WikiEntry {
   raw_content: string,
@@ -21,6 +22,7 @@ interface EntryMeta {
   security: string | null,
   dateUpdated: string | null,
   dateCreated: string | null,
+  drawings: Drawing[] | null,
 }
 
 interface Nav extends Array<NavElement> {
@@ -86,14 +88,14 @@ export const useWikiStore = defineStore('wikiStore', {
       this.editor.editingUnsavedChanges = false;
       const data = {
         content: currentEntry.raw_content,
-        meta: currentEntry.meta,
+        meta: JSON.stringify(currentEntry.meta),
         entry: currentEntry.id,
         lastUpdate: currentEntry.meta.dateUpdated,
       }
       const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
       return send(request).then(response => {
         this.editor.lastSaved = new Date();
-        this.currentEntry.meta.dateUpdated = response.data.lastUpdate;
+        this.safeCurrentEntry.meta.dateUpdated = response.data.lastUpdate;
         return response;
       });
     },

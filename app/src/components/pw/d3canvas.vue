@@ -57,6 +57,7 @@
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import * as d3 from 'd3';
 import PwIcon from "@/src/components/pw/icon.vue";
+import {Vector, PaintStroke, PaintStrokePoint, Drawing} from "@/src/contracts/Canvas";
 
 const svgContainer = ref(null);
 
@@ -88,26 +89,17 @@ const save = () => {
     reDrawSvg(paths, svgCanvas);
     let svgData = svgCanvas.html();
     svgData = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' + svgCanvas.attr('width') + '" height="' + svgCanvas.attr('height') + '">' + svgData + '</svg>';
-    emit('save', svgData);
-}
-
-interface Vector {
-    x: number,
-    y: number,
-
-}
-
-interface PaintStroke {
-    points: PaintStrokePoint[],
-    color: String,
-    baseWeight: number,
-}
-
-interface PaintStrokePoint {
-    x: number,
-    y: number,
-    speed: number,
-    pressure?: number,
+    const drawing = {
+        svg: svgData,
+        data: {
+            paths: paths,
+            meta: {
+                width: parseInt(props.width),
+                height: parseInt(props.height),
+            },
+        }
+    } as Drawing;
+    emit('save', drawing);
 }
 
 interface Tool {
