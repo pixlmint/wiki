@@ -72,10 +72,8 @@ const save = (drawing: Drawing) => {
             wikiStore.safeCurrentEntry.meta.drawings = [];
         }
         drawing.svg = path;
-        wikiStore.safeCurrentEntry.meta.drawings.push(drawing);
-        wikiStore.saveEntry().then(response => {
-            console.log(response);
-
+        const svgRequest = buildRequest('/api/admin/svg/store-data', {drawing: JSON.stringify(drawing)}, 'POST');
+        send(svgRequest).then(response => {
             emit('imagesave', path);
         });
     });
