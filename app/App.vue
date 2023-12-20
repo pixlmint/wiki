@@ -117,17 +117,17 @@ export default defineComponent({
     background-color: var(--el-bg-color);
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
-    min-width: 100%;
     min-height: 100vh;
     padding: 5px;
 
     &.small-nav {
-        margin: 0 auto 0 1rem;
+        margin: 0 auto 0 $navSmallWidth;
+        max-width: calc(100vw - $navSmallWidth);
     }
 
     &.large-nav {
+        max-width: calc(100vw - $navLargeWidth);
         .md-editor {
-            max-width: calc(100vw - $navLargeWidth);
         }
     }
 }
@@ -170,9 +170,8 @@ export default defineComponent({
 
 @media screen and (min-width: 1300px) {
     .main-content {
-        width: 80%;
         min-width: unset !important;
-        max-width: 1000px;
+        max-width: 1000px !important;
         box-shadow: var(--box-shadow);
 
         &.large-nav {

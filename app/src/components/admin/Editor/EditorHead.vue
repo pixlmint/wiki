@@ -105,12 +105,16 @@ export default defineComponent({
                     cancelButtonText: 'Cancel',
                     confirmButtonText: 'Proceed'
                 }).then(() => {
-                    const id = useWikiStore().safeCurrentEntry.id;
+                    const ws = useWikiStore();
+                    ws.fetchEntry(ws.safeCurrentEntry.id);
+                    const id = ws.safeCurrentEntry.id;
                     this.router.push(id);
                 }).catch(() => {
                 })
             } else {
-                const id = useWikiStore().safeCurrentEntry.id;
+                const ws = useWikiStore();
+                ws.fetchEntry(ws.safeCurrentEntry.id);
+                const id = ws.safeCurrentEntry.id;
                 this.router.push(id);
             }
         },
