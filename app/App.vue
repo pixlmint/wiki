@@ -122,12 +122,18 @@ export default defineComponent({
 
     &.small-nav {
         margin: 0 auto 0 $navSmallWidth;
-        max-width: calc(100vw - $navSmallWidth);
+        width: calc(100vw - $navSmallWidth);
+
+        img {
+            max-width: calc(100vw - $navSmallWidth);
+        }
     }
 
     &.large-nav {
-        max-width: calc(100vw - $navLargeWidth);
-        .md-editor {
+        width: calc(100vw - $navLargeWidth);
+
+        img {
+            max-width: calc(100vw - $navLargeWidth);
         }
     }
 }
@@ -136,25 +142,9 @@ export default defineComponent({
     .main-content {
         margin: 0 0 0 $navLargeWidth;
 
-        &.large-nav {
-            .article {
-                max-width: calc(100vw - $navLargeWidth);
-            }
-        }
-
-        &.small-nav {
-            .article {
-                max-width: calc(100vw - $navSmallWidth);
-            }
-        }
-
         .article {
             .article-body {
                 padding: 0;
-
-                img {
-                    max-width: 1000px;
-                }
             }
         }
     }
@@ -173,6 +163,10 @@ export default defineComponent({
         min-width: unset !important;
         max-width: 1000px !important;
         box-shadow: var(--box-shadow);
+
+        img {
+            max-width: 1000px !important;
+        }
 
         &.large-nav {
             margin: 0 auto 0 $navLargeWidth;
