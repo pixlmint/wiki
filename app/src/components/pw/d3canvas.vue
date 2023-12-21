@@ -8,6 +8,12 @@
                             <pw-icon :icon="tool.icon"></pw-icon>
                         </el-button>
                     </div>
+                    <el-divider direction="vertical"></el-divider>
+                    <div v-for="(mode, index) in modes">
+                        <el-button @click="toggleActiveMode(mode, index)">
+                            <pw-icon :icon="mode.icon"></pw-icon>
+                        </el-button>
+                    </div>
                 </div>
                 <div class="drawing-toolbar-actions">
                     <el-button @click="debug.enabled = !debug.enabled">
@@ -59,7 +65,8 @@
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import * as d3 from 'd3';
 import PwIcon from "@/src/components/pw/icon.vue";
-import {Vector, PaintStroke, PaintStrokePoint, Drawing} from "@/src/contracts/Canvas";
+import {Vector, PaintStroke, PaintStrokePoint, Drawing, DrawingMode} from "@/src/contracts/Canvas";
+import {BaseType, Selection} from "d3";
 
 const svgContainer = ref(null);
 
@@ -129,7 +136,22 @@ interface WeightSelectableTool {
 
 interface DrawSettings {
     selectedTool: Tool,
+    selectedMode: DrawingMode,
     selectedStrokeColor: StrokeColor,
+}
+
+class BaseDrawingMode implements DrawingMode {
+    name: String;
+    icon: String;
+    pointsTransformer: Function;
+    appendObject: (stroke: PaintStroke, canvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => Selection<SVGPathElement, PaintStroke, BaseType, unknown>;
+
+    constructor(name: String, icon: String, pointsTransformer: Function, appendObject: (stroke: PaintStroke) => Selection<SVGPathElement, PaintStroke, BaseType, unknown>) {
+        this.name = name;
+        this.icon = icon;
+        this.pointsTransformer = pointsTransformer;
+        this.appendObject = appendObject;
+    }
 }
 
 class BaseTool implements Tool {
@@ -174,6 +196,27 @@ class EraserTool extends BaseTool implements WeightSelectableTool {
     }
 }
 
+class BoundingBox {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
+
+    constructor() {
+        this.minX = Number.MAX_VALUE;
+        this.minY = Number.MAX_VALUE;
+        this.maxX = Number.MIN_VALUE;
+        this.maxY = Number.MIN_VALUE;
+    }
+
+    update(point: PaintStrokePoint): void {
+        this.minX = Math.min(this.minX, point.x);
+        this.minY = Math.min(this.minY, point.y);
+        this.maxX = Math.max(this.maxX, point.x);
+        this.maxY = Math.max(this.maxY, point.y);
+    }
+}
+
 const colorBlack = {
     name: 'Black',
     hex: "#000",
@@ -212,6 +255,7 @@ const hColorPurple = {
 
 const t = ref({
     toolIndex: 0,
+    modeIndex: 0,
 });
 
 const selectedTool = computed({
@@ -237,39 +281,12 @@ const drawTempStroke = (sketch: any, tool: DrawTool) => {
 }
 
 const paintStrokes = (paths: PaintStroke[], sketch: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
+    currentPath.points = settings.value.selectedMode.pointsTransformer(currentPath.points);
     if (!(settings.value.selectedTool instanceof EraserTool)) {
         paths.push(currentPath);
     }
     reDrawSvg(paths, sketch);
 }
-
-/* const myEraseStrokes = (erasePath: PaintStroke) => {
-    return paths.flatMap((stroke: PaintStroke) => {
-        let splitStrokes: PaintStroke[] = [];
-
-        for (let i = 0; i < stroke.points.length; i++) {
-            const currentPoint = stroke.points[i];
-            const nextPoint = stroke.points[i + 1];
-
-            if (nextPoint) {
-                let intersections: any[] = [];
-
-                erasePath.points.forEach((eraserPoint: PaintStrokePoint) => {
-                    intersections.push(...findLineCircleIntersections(
-                        currentPoint, nextPoint, eraserPoint, erasePath.baseWeight
-                    ));
-                });
-                intersections = intersections.filter((p: p5.Vector) =>
-                    p.x >= Math.min(currentPoint.x, nextPoint.x) &&
-                    p.x <= Math.max(currentPoint.x, nextPoint.x) &&
-                    p.y >= Math.min(currentPoint.y, nextPoint.y) &&
-                    p.y <= Math.max(currentPoint.y, nextPoint.y)
-                );
-                console.table(intersections);
-            }
-        }
-    });
-}*/
 
 const distanceBetween = (point1: PaintStrokePoint, point2: PaintStrokePoint) => {
     return Math.sqrt(
@@ -338,30 +355,115 @@ const isLineSegmentIntersectingCircle = (p0: PaintStrokePoint, p1: PaintStrokePo
 
 const reDrawSvg = (data: PaintStroke[], canvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
     canvas.selectAll('*').remove();
-    const lineGenerator = d3.line()
+
+    data.forEach((stroke: PaintStroke) => {
+        const mode = stroke.drawingMode;
+        const drawnObject = mode.appendObject(stroke, canvas);
+
+        drawnObject
+            .attr("stroke-width", stroke.baseWeight)
+            .attr("fill", "none")
+            .attr("stroke", stroke.color);
+    });
+}
+
+const modeFreehand = new BaseDrawingMode('Freehand', 'hand', (points: PaintStrokePoint[]) => {
+    return points;
+}, (stroke: PaintStroke, canvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
+    const lineGenerator = d3.line<PaintStrokePoint>()
         .x((d: PaintStrokePoint) => {
-            return d.x;
+            return d.x
         })
         .y((d: PaintStrokePoint) => {
-            return d.y;
+            return d.y
         })
         .curve(d3.curveBasis);
 
-    const paintStrokes = canvas.selectAll("path")
-        .data(data)
-        .enter()
+    return canvas
         .append("path")
-        .attr("d", (d: PaintStroke) => {
-            return lineGenerator(d.points);
-        })
-        .attr("fill", "none")
-        .attr("stroke", (d: PaintStroke) => {
-            return d.color;
-        })
-        .attr("stroke-width", (d: PaintStroke) => {
-            return d.baseWeight;
-        });
-}
+        .datum(stroke.points)
+        .attr("d", lineGenerator);
+});
+
+const modeRectangle = new BaseDrawingMode('Rectangle', 'vector-square', (points: PaintStrokePoint[]) => {
+    if (points.length < 2) {
+        throw "At least 2 points required";
+    }
+
+    const firstPoint = points[0];
+    let biggestX = 0;
+    let biggestY = 0;
+    points.forEach((point: PaintStrokePoint) => {
+        if (point.x > biggestX) {
+            biggestX = point.x;
+        }
+        if (point.y > biggestY) {
+            biggestY = point.y;
+        }
+    });
+
+    return [
+        firstPoint,
+        {
+            x: biggestX,
+            y: firstPoint.y,
+        } as PaintStrokePoint,
+        {
+            x: biggestX,
+            y: biggestY
+        } as PaintStrokePoint,
+        {
+            x: firstPoint.x,
+            y: biggestY,
+        } as PaintStrokePoint,
+    ];
+}, (point: PaintStroke, canvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
+    const bb = new BoundingBox();
+    point.points.forEach((point: PaintStrokePoint) => bb.update(point));
+
+    console.log(bb);
+    const height = bb.maxY - bb.minY;
+    const width = bb.maxX - bb.minX;
+    return canvas.append('rect')
+        .attr('x', bb.minX)
+        .attr('y', bb.minY)
+        .attr('height', height)
+        .attr('width', width);
+});
+
+const modeCircle = new BaseDrawingMode("Circle", "circle", (points: PaintStrokePoint[]) => {
+    const bb = new BoundingBox();
+    points.forEach((point: PaintStrokePoint) => {
+        bb.update(point);
+    });
+    return [
+        {
+            x: bb.maxX,
+            y: bb.maxY,
+        } as PaintStrokePoint,
+        {
+            x: bb.minX,
+            y: bb.minY,
+        } as PaintStrokePoint,
+    ];
+}, (point: PaintStroke, canvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) => {
+    const bb = new BoundingBox();
+    point.points.forEach((point: PaintStrokePoint) => {
+        bb.update(point);
+    });
+
+    const center = {
+        x: (bb.maxX + bb.minX) / 2,
+        y: (bb.maxY + bb.minY) / 2,
+    } as Vector
+
+    const radius = bb.maxX - center.x;
+
+    return canvas.append('circle')
+        .attr('cx', center.x)
+        .attr('cy', center.y)
+        .attr('r', radius);
+});
 
 const modeErase = new EraserTool("Erase", "eraser", () => {
 }, [2, 30], undefined, (sketch: any, tool: Tool) => {
@@ -373,9 +475,11 @@ const modeDraw = new DrawTool("Draw", "pencil", drawTempStroke, [colorBlack, col
 const modeHighlight = new DrawTool("Highlight", "highlighter", drawTempStroke, [hColorYellow, hColorGreen, hColorPurple], [10, 20, 50], undefined, paintStrokes);
 
 const tools = [modeDraw, modeHighlight, modeErase];
+const modes = [modeFreehand, modeRectangle, modeCircle];
 
 const settings = ref({
     selectedTool: modeDraw,
+    selectedMode: modeFreehand,
     selectedStrokeColor: colorBlack,
 } as DrawSettings);
 
@@ -385,10 +489,20 @@ const toggleActiveTool = (tool: Tool, index: number) => {
     t.value.toolIndex = index;
 }
 
+const toggleActiveMode = (mode: DrawingMode, index: number) => {
+    console.log(mode);
+    settings.value.selectedMode = mode;
+    t.value.modeIndex = index;
+}
+
 onMounted(() => {
     initDrawing();
     document.body.classList.add('selectDisabled');
 });
+
+const onResize = (event: Event) => {
+    console.log('resized'); // TODO: implement onresize
+}
 
 onBeforeUnmount(() => {
     if (typeof svgCanvas === 'undefined') {
@@ -399,6 +513,8 @@ onBeforeUnmount(() => {
     document.body.classList.remove('selectDisabled');
 
     const c: HTMLElement | Element | null = document.querySelector('svg.d3-canvas');
+
+    window.removeEventListener('resize', onResize);
 
     c.removeEventListener("pointermove", pointerMoveEvent);
     c.removeEventListener("pointerdown", pointerDownEvent);
@@ -433,6 +549,8 @@ const initDrawing = function () {
         debug.value.mousePosition.x = event.offsetX;
         debug.value.mousePosition.y = event.offsetY;
     });
+
+    window.addEventListener('resize', onResize);
 
     console.log('drawing initialized');
 }
@@ -496,6 +614,7 @@ const pointerUpEvent = (event: PointerEvent) => {
     if (!isDrawing) {
         return;
     }
+    currentPath.drawingMode = settings.value.selectedMode;
     if (settings.value.selectedTool.endModifyFunction !== undefined) {
         settings.value.selectedTool.endModifyFunction(paths, svgCanvas);
     }
