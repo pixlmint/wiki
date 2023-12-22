@@ -32,7 +32,6 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {useWikiStore} from '@/src/stores/wiki';
-import {useAuthStore} from '@/src/stores/auth';
 import {ArrowLeft} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import {useMainStore} from "@/src/stores/main";

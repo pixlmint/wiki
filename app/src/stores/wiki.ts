@@ -96,6 +96,7 @@ export const useWikiStore = defineStore('wikiStore', {
             return send(request).then(response => {
                 this.editor.lastSaved = new Date();
                 this.safeCurrentEntry.meta.dateUpdated = response.data.lastUpdate;
+                this.fetchEntry(this.safeCurrentEntry.id);
                 return response;
             });
         },
@@ -105,6 +106,17 @@ export const useWikiStore = defineStore('wikiStore', {
                 this.currentEntry = response.data;
                 this.loadedEntries.push(response.data);
             });
+        },
+        fetchLastChanged(entry: string) {
+            const request = buildRequest('/api/admin/entry/fetch-last-changed', {entry: entry});
+            return send(request).then(response => {
+                return new Date(response.data.lastChanged);
+            });
+        },
+        async getCurrentEntryFromServer() {
+            const request = buildRequest('/api/entry/view', {p: this.safeCurrentEntry.id});
+            let response = await send(request);
+            return response.data.raw_content;
         },
         addEntry(parentFolder: string, title: string) {
             const data = {

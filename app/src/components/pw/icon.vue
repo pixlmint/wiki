@@ -5,10 +5,10 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle} from "@fortawesome/free-solid-svg-icons";
+import {faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight} from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
-library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle);
+library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight);
 
 export default defineComponent({
   name: 'pw-icon',

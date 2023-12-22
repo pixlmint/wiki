@@ -51,7 +51,6 @@ const wikiStore = useWikiStore();
 const emit = defineEmits(['imagesave']);
 
 const save = (drawing: Drawing) => {
-    console.log(drawing);
     const data = {
         files: [
             {

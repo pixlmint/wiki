@@ -20,8 +20,24 @@ const editor = ref(null);
 
 const userSettingsStore = useUserSettings();
 
+let e: any;
+
+const createRefreshButton = () => {
+    const button = document.createElement('button');
+
+    button.className = 'toastui-editor-toolbar-icons last';
+    button.style.backgroundImage = 'none';
+    button.style.margin = '0';
+    button.innerHTML = `<span>Reload</span>`;
+    button.addEventListener('click', () => {
+        e.exec('refresh');
+    });
+
+    return button;
+};
+
 onMounted(() => {
-    const e = new Editor({
+    e = new Editor({
         el: editor.value,
         height: window.innerHeight - 200 + 'px',
         initialEditType: 'markdown',
@@ -30,6 +46,20 @@ onMounted(() => {
         usageStatistics: false,
         theme: userSettingsStore.settings.theme,
         useCommandShortcut: false,
+        toolbarItems: [
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol', 'task'],
+            ['code', 'codeblock'],
+            [
+                {
+                    el: createRefreshButton(),
+                    name: 'refresh',
+                    command: 'refresh',
+                    tooltip: 'Refresh',
+                },
+            ]
+        ],
         events: {
             beforePreviewRender: (html: string) => {
                 window.setTimeout(() => {
@@ -53,7 +83,12 @@ onMounted(() => {
         },
     });
     e.addCommand('markdown', 'ctrl+s', () => {
-        emit('save', e.getMarkdown());  // Emit a custom "save" event with the current Markdown content
+        emit('save', e.getMarkdown());
+        return true;
+    });
+    e.addCommand('markdown', 'refresh', () => {
+        emit('refresh');
+        // TODO: I have to press refresh twice to actually trigger a refresh
         return true;
     });
     if (modelValue) {
