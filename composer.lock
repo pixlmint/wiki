@@ -422,35 +422,40 @@
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
-            "version": "1.6.5",
+            "version": "1.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
-                "reference": "9f1d8f7e1762fdbc7d5e25ce0cc307da7691eab3"
+                "reference": "0d3cd240862d097b00c12eeab5a0e2d48ff50c43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/9f1d8f7e1762fdbc7d5e25ce0cc307da7691eab3",
-                "reference": "9f1d8f7e1762fdbc7d5e25ce0cc307da7691eab3",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/0d3cd240862d097b00c12eeab5a0e2d48ff50c43",
+                "reference": "0d3cd240862d097b00c12eeab5a0e2d48ff50c43",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
+                "ext-zlib": "*",
                 "pixlmint/pixl-cms": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.3"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "PixlMint\\WikiPlugin\\": "src/"
+                    "PixlMint\\WikiPlugin\\": "src/",
+                    "PixlMint\\WikiPlugin\\Tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "The official wiki plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.5"
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.6"
             },
-            "time": "2023-12-19T21:54:46+00:00"
+            "time": "2023-12-22T15:28:54+00:00"
         },
         {
             "name": "psr/container",
