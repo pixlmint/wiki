@@ -153,12 +153,6 @@ export default defineComponent({
 
 .article-body {
     margin: 5px;
-
-    img {
-        max-width: unset;
-        width: 100vw;
-        margin-left: -5px;
-    }
 }
 
 h1 {

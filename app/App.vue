@@ -136,6 +136,10 @@ export default defineComponent({
             max-width: calc(100vw - $navLargeWidth);
         }
     }
+
+    img {
+        margin: 0 auto;
+    }
 }
 
 @media screen and (min-width: $mobileBreakpoint) {
