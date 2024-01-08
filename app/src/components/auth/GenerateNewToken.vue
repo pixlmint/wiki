@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 
 export default defineComponent({
   data: () => {
@@ -26,7 +26,7 @@ export default defineComponent({
   methods: {
     submit() {
       const authStore = useAuthStore();
-      authStore.generateNewToken(this.username)
+      authStore.generateNewToken()
     },
   },
 })

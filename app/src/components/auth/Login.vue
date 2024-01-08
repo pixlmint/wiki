@@ -19,7 +19,7 @@
 <script>
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 import {useDialogStore} from "@/src/stores/dialog";
 import {useWikiStore} from "@/src/stores/wiki";
 

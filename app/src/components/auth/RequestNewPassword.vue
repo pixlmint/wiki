@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 
 export default defineComponent({
   data: () => {

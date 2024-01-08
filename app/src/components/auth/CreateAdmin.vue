@@ -16,9 +16,8 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 import {useDialogStore} from "@/src/stores/dialog";
-import {useRouter} from "vue-router";
 
 const route = '/auth/create-admin';
 

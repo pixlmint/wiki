@@ -71,7 +71,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 import fa from '@/src/components/fa.vue'
 import {useRouter} from "vue-router";
 import {MoreFilled, Edit, Delete, Lock, View} from "@element-plus/icons-vue";

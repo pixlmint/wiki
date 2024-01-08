@@ -15,7 +15,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 import {useRouter} from "vue-router";
 
 export default defineComponent({
