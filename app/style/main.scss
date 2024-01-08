@@ -32,6 +32,10 @@ body {
     --el-switch-on-color: var(--wiki-accent-color) !important;
 }
 
+.el-sub-menu .el-icon {
+    margin-right: 1px !important;
+}
+
 a {
     color: var(--wiki-accent-color);
 }
