@@ -5,6 +5,10 @@
 }
 
 @media print {
+    .main-content {
+        width: 100vw !important;
+    }
+
     .print-invisible {
         display: none !important;
     }
