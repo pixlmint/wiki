@@ -4,13 +4,13 @@ import {ElNotification} from "element-plus";
 import {Drawing} from "@/src/contracts/Canvas";
 
 interface WikiEntry {
-    raw_content: string,
-    content: string,
-    id: string,
-    url: string,
-    hidden: boolean,
-    meta: EntryMeta,
-    file: string,
+  raw_content: string,
+  content: string,
+  id: string,
+  url: string,
+  hidden: boolean,
+  meta: EntryMeta,
+  file: string,
 }
 
 interface EntryMeta {
@@ -82,6 +82,10 @@ export const useWikiStore = defineStore('wikiStore', {
         search(query: string) {
             const request = buildRequest('/api/search', {q: query});
             return send(request);
+        },
+        loadDrawings(entry: string) {
+            const request = buildRequest('/api/load-drawings', {entry: entry});
+            send(request);
         },
         saveEntry() {
             const currentEntry = this.safeCurrentEntry;

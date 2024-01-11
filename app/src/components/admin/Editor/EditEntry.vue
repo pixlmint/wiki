@@ -5,6 +5,7 @@
                           v-model="markdown"></pw-md-editor>
         </div>
         <DrawModal @imagesave="imageSave"></DrawModal>
+        <DrawingsEditorModal></DrawingsEditorModal>
         <CurrentFileDiffModal @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
     </div>
 </template>
@@ -19,6 +20,7 @@ import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
 import {useDialogStore} from "@/src/stores/dialog";
 import {DateTime} from "luxon";
+import DrawingsEditorModal from "@/src/components/admin/Editor/DrawingsEditorModal.vue";
 
 
 // TODO: use lastChanged to detect which version of the content is newer
