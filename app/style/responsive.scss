@@ -5,6 +5,15 @@
 }
 
 @media print {
+    body {
+        font-size: 9pt;
+    }
+
+    img {
+        width: unset;
+        max-width: 100%;
+    }
+
     .main-content {
         width: 100vw !important;
     }
