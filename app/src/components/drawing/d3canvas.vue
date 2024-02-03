@@ -55,6 +55,7 @@
         <div v-if="debug.enabled" class="paint-debug">
             <div>Mouse Position: {{ debug.mousePosition.x }}, {{ debug.mousePosition.y }}</div>
             <div>Pointer Type: {{ pointerType }}</div>
+            <div>Polling Rate: <el-slider v-model="editorConfig.pollingRate"></el-slider></div>
             <div>Paths Count: {{ paths.length }}</div>
             <div>Current Path: {{ currentPath }}</div>
         </div>
@@ -77,6 +78,7 @@ const props = defineProps({
 
 let svgCanvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
 let isDrawing = false;
+let lastMove: any = null;
 let pointerType = "";
 
 let lastPoint: Vector;
@@ -93,6 +95,10 @@ const debug = ref({
         y: 0,
     },
 });
+
+const editorConfig = ref({
+    pollingRate: 30,
+})
 
 const save = () => {
     reDrawSvg(paths, svgCanvas);
@@ -561,7 +567,6 @@ const pointerMoveEvent = (event: PointerEvent) => {
     }
 }
 
-let lastMove: any = null;
 const baseMoveEvent = (event: PointerEvent) => {
     if (isDrawing) {
         const currentMove: any = new Date();
@@ -569,7 +574,7 @@ const baseMoveEvent = (event: PointerEvent) => {
             console.log("last move is null")
             return;
         }
-        if (currentMove - lastMove >= 30) {
+        if (currentMove - lastMove >= editorConfig.value.pollingRate) {
             const mX = event.offsetX;
             const mY = event.offsetY;
             pushPoint(event);
