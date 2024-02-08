@@ -47,6 +47,7 @@
         "vue-diff": "^1.2.4",
         "vue-meta": "^2.4.0",
         "vue-router": "^4.1.5",
+        "vuedraggable": "^4.1.0",
         "wave-ui": "^2.43.0",
         "workbox-precaching": "^6.5.4"
     },
@@ -60,6 +61,7 @@
         "@types/luxon": "^3.3.7",
         "@types/mathjax": "^0.0.39",
         "@types/p5": "^1.7.4",
+        "@types/vuedraggable": "^2.24.0",
         "@types/webpack-env": "^1.18.0",
         "@typescript-eslint/eslint-plugin": "^5.35.1",
         "@typescript-eslint/parser": "^5.35.1",

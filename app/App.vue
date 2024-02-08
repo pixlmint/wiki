@@ -33,7 +33,7 @@ export default defineComponent({
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
             dialogStore: useDialogStore(),
-            mainContentLoaded: false,
+            mainContentLoaded: true,
         }
     },
     computed: {
@@ -54,9 +54,11 @@ export default defineComponent({
         configureStores(authStore, useLoadingStore());
         const settings = useUserSettings().loadUserSettings();
         useUserSettings().setCurrentTheme(settings.theme);
-        this.init();
-        this.loadMainContent();
-        window.addEventListener('keydown', this.keyListener);
+        /*
+                this.init();
+                this.loadMainContent();
+                window.addEventListener('keydown', this.keyListener);
+        */
     },
     methods: {
         keyListener(event: Event) {
