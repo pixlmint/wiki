@@ -32,7 +32,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.15.5',
+        'version' => '1.15.6',
     ],
     'base' => [
         'debugEnabled' => false,
