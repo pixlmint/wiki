@@ -1,46 +1,21 @@
 <template>
-    <div>
-        <two-lists-tests></two-lists-tests>
+    <div class="board">
+        <list v-for="list in board" :key="list.id" :list="list"></list>
     </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import TwoListsTests from "@/src/components/kanban/two-lists-test.vue";
+import List from "@/src/components/kanban/list.vue";
 
 export default defineComponent({
-    name: 'Board',
+    name: 'board',
     components: {
-        TwoListsTests,
+        list: List,
     },
     data() {
         return {
             enabled: true,
-            tasks: [
-                {
-                    name: 'task 1',
-                    header: 'list 1',
-                    children: [
-                        {
-                            name: 'task 2',
-                            children: [],
-                        },
-                    ],
-                },
-                {
-                    name: 'task 3',
-                    children: [
-                        {
-                            name: 'task 4',
-                            children: [],
-                        },
-                    ],
-                },
-                {
-                    name: 'task 5',
-                    children: [],
-                },
-            ],
             board: [
                 {
                     name: 'Tasks',
@@ -68,9 +43,6 @@ export default defineComponent({
             dragging: false,
         }
     },
-    created() {
-        console.log('board');
-    },
     methods: {
         log(event: Event) {
             console.log(event)
@@ -83,12 +55,12 @@ export default defineComponent({
 <style lang="scss">
 .board {
     display: flex;
-    width: 100%;
+    width: inherit;
+    max-width: inherit;
+    height: 100%;
     gap: 1rem;
-
-    .boardList {
-        width: 300px;
-    }
+    overflow-x: auto;
+    flex-wrap: nowrap;
 }
 
 .drag-area {
