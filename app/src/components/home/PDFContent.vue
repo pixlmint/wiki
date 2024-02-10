@@ -11,7 +11,7 @@ import {defineComponent, toRaw, watch, ref} from "vue";
 import * as pdfjslib from "pdfjs-dist";
 import {useLoadingStore} from "@/src/stores/loading";
 
-pdfjslib.GlobalWorkerOptions.workerSrc = 'https://jslib.pixlmint.ch/pdf.worker.min.js';
+pdfjslib.GlobalWorkerOptions.workerSrc = 'https://jslib.pixlmint.ch/pdfjs-dist/3.11.174/pdf.worker.min.js';
 
 export default defineComponent({
     name: 'PDFContent',

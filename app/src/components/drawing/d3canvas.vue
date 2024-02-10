@@ -55,6 +55,7 @@
         <div v-if="debug.enabled" class="paint-debug">
             <div>Mouse Position: {{ debug.mousePosition.x }}, {{ debug.mousePosition.y }}</div>
             <div>Pointer Type: {{ pointerType }}</div>
+            <div>Polling Rate: <el-slider v-model="editorConfig.pollingRate"></el-slider></div>
             <div>Paths Count: {{ paths.length }}</div>
             <div>Current Path: {{ currentPath }}</div>
         </div>
@@ -77,6 +78,7 @@ const props = defineProps({
 
 let svgCanvas: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
 let isDrawing = false;
+let lastMove: any = null;
 let pointerType = "";
 
 let lastPoint: Vector;
@@ -93,6 +95,10 @@ const debug = ref({
         y: 0,
     },
 });
+
+const editorConfig = ref({
+    pollingRate: 30,
+})
 
 const save = () => {
     reDrawSvg(paths, svgCanvas);
@@ -563,12 +569,20 @@ const pointerMoveEvent = (event: PointerEvent) => {
 
 const baseMoveEvent = (event: PointerEvent) => {
     if (isDrawing) {
-        const mX = event.offsetX;
-        const mY = event.offsetY;
-        pushPoint(event);
-        currentPoint = {x: mX, y: mY};
-        settings.value.selectedTool.drawFunction(svgCanvas, settings.value.selectedTool);
-        event.preventDefault();
+        const currentMove: any = new Date();
+        if (lastMove === null) {
+            console.log("last move is null")
+            return;
+        }
+        if (currentMove - lastMove >= editorConfig.value.pollingRate) {
+            const mX = event.offsetX;
+            const mY = event.offsetY;
+            pushPoint(event);
+            currentPoint = {x: mX, y: mY};
+            settings.value.selectedTool.drawFunction(svgCanvas, settings.value.selectedTool);
+            event.preventDefault();
+            lastMove = currentMove;
+        }
     }
 }
 
@@ -588,6 +602,7 @@ const pointerDownEvent = (event: PointerEvent) => {
             settings.value.selectedTool.startModifyFunction(svgCanvas, settings.value.selectedTool);
         }
         isDrawing = true;
+        lastMove = new Date();
         const mX = event.offsetX;
         const mY = event.offsetY;
         lastPoint = {x: mX, y: mY};
@@ -604,7 +619,7 @@ const pointerDownEvent = (event: PointerEvent) => {
             points: [],
             color: baseColor,
             baseWeight: baseWeight,
-        };
+        } as any;
         pushPoint(event);
         event.preventDefault();
     }
@@ -619,6 +634,7 @@ const pointerUpEvent = (event: PointerEvent) => {
         settings.value.selectedTool.endModifyFunction(paths, svgCanvas);
     }
     isDrawing = false;
+    lastMove = null;
 }
 
 const killDefaultBehavior = (event: Event) => {
