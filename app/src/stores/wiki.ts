@@ -1,29 +1,7 @@
 import {defineStore} from 'pinia'
 import {buildRequest, send} from "@/src/helpers/xhr";
 import {ElNotification} from "element-plus";
-import {Drawing} from "@/src/contracts/Canvas";
-
-interface WikiEntry {
-    raw_content: string,
-    content: string,
-    id: string,
-    url: string,
-    hidden: boolean,
-    meta: EntryMeta,
-    file: string,
-}
-
-interface EntryMeta {
-    title: string,
-    date_formatted: string,
-    description: string | null,
-    author: string | null,
-    owner: string | null,
-    security: string | null,
-    dateUpdated: string | null,
-    dateCreated: string | null,
-    drawings: Drawing[] | null,
-}
+import {WikiEntry} from "@/src/contracts/WikiBase";
 
 interface Nav extends Array<NavElement> {
 }

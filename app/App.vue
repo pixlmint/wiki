@@ -1,6 +1,6 @@
 <template>
     <div class="wiki">
-      <pw-loading></pw-loading>
+        <pw-loading></pw-loading>
         <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>
         <div :class="mainContentClasses">
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, Events} from "vue";
+import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "@/src/stores/auth";
 import {useWikiStore} from "@/src/stores/wiki";
@@ -33,7 +33,7 @@ export default defineComponent({
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
             dialogStore: useDialogStore(),
-            mainContentLoaded: true,
+            mainContentLoaded: false,
         }
     },
     computed: {
@@ -54,11 +54,9 @@ export default defineComponent({
         configureStores(authStore, useLoadingStore());
         const settings = useUserSettings().loadUserSettings();
         useUserSettings().setCurrentTheme(settings.theme);
-        /*
-                this.init();
-                this.loadMainContent();
-                window.addEventListener('keydown', this.keyListener);
-        */
+        this.init();
+        this.loadMainContent();
+        window.addEventListener('keydown', this.keyListener);
     },
     methods: {
         keyListener(event: Event) {

@@ -14,7 +14,7 @@ services:
         volumes:
             - ./:/var/www/html
         environment:
-            # INI_ZEND_EXTENSION: xdebug.so
+            INI_ZEND_EXTENSION: xdebug.so
             OPCACHE_MAX_WASTED_PERCENTAGE: 20
             OPCACHE_JIT: 1255
             OPCACHE_ENABLE: 1

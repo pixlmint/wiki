@@ -17,6 +17,12 @@ return [
             'enabled' => true,
             'config' => require_once('vendor/pixlmint/pixlcms-media-plugin/config/config.php'),
         ],
+        [
+            'name' => 'pixlcms-kanban-plugin',
+            'install_method' => 'sourcecode',
+            'enabled' => true,
+            'config' => require_once('plugins/pixlcms-kanban-plugin/config/config.php'),
+        ],
     ],
     'routes' => [
         [
@@ -35,7 +41,7 @@ return [
         'version' => '1.15.6',
     ],
     'base' => [
-        'debugEnabled' => false,
+        'debugEnabled' => true,
         'frontendController' => FrontendController::class,
     ]
 ];
