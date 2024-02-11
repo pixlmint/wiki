@@ -10,7 +10,7 @@
 import {defineComponent, ref} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElNotification} from "element-plus";
-import {buildRequest, send} from "@/src/helpers/xhr";
+import {buildRequest, send} from "pixlcms-wrapper";
 
 export default defineComponent({
     name: 'PDFEditor',

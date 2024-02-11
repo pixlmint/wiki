@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useLoadingStore} from "@/src/stores/loading";
+import {useLoadingStore} from "pixlcms-wrapper";
 
 export default defineComponent({
   name: "PWLoading",

@@ -6,26 +6,26 @@
         <div :class="mainContentClasses">
             <router-view v-if="mainContentLoaded"></router-view>
         </div>
-        <Modals/>
+        <Debug v-if="isDebugEnabled"/>
+        <Modals :dialog-components="dialogs"/>
     </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
-import {useAuthStore} from "@/src/stores/auth";
+import {configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore} from "pixlcms-wrapper";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useUserSettings} from "@/src/stores/user-settings";
 import {AxiosResponse} from "axios";
 import {ElNotification} from "element-plus";
-import Modals from "@/src/components/modals.vue";
-import {useDialogStore} from "@/src/stores/dialog";
-import {configureStores} from "@/src/helpers/xhr";
-import {useLoadingStore} from "@/src/stores/loading";
+import {dialogs} from '@/src/dialogs';
+import Debug from "@/src/components/debug/debug.vue";
 
 export default defineComponent({
     name: "App",
     components: {
+        Debug,
         Modals,
     },
     data: () => {
@@ -34,6 +34,7 @@ export default defineComponent({
             wikiStore: useWikiStore(),
             dialogStore: useDialogStore(),
             mainContentLoaded: false,
+            dialogs: dialogs(),
         }
     },
     computed: {
@@ -46,6 +47,9 @@ export default defineComponent({
         },
         searchShowing() {
             return useMainStore().isSearchShowing;
+        },
+        isDebugEnabled() {
+            return this.mainStore.meta.debugEnabled;
         },
     },
     created() {

@@ -72,9 +72,8 @@ import {useRouter} from "vue-router";
 import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen, Lock, Unlock} from "@element-plus/icons-vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {useMainStore} from "@/src/stores/main";
-import {useDialogStore} from "@/src/stores/dialog";
 
 export default defineComponent({
     name: 'PWNavElement',
@@ -181,8 +180,7 @@ export default defineComponent({
             })
         },
         addPdf() {
-            this.dialogStore.setPdfParentFolder(this.element.id);
-            this.dialogStore.showDialog('/nav/new-pdf');
+            this.dialogStore.showDialog({route: '/nav/new-pdf', data: this.element.id});
         },
         addSubfolder() {
             ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {

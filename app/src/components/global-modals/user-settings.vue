@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="user-settings-popup" title="Settings" v-model="isShowing">
+    <pm-dialog class="user-settings-popup" title="Settings" :route="route">
         <el-form v-model="settings">
             <el-form-item label="Auto save">
                 <el-switch v-model="settings.autoSave"/>
@@ -30,30 +30,30 @@
             |
             <span @click="logout">Logout</span>
         </template>
-    </el-dialog>
+    </pm-dialog>
 </template>
 
 <script lang="ts">
 import {defineComponent, h, watch} from "vue";
-import {useDialogStore} from "@/src/stores/dialog";
 import {useUserSettings} from "@/src/stores/user-settings";
 import {useMainStore} from "@/src/stores/main";
 import {Sunny, Moon, Refresh, ArrowDown} from "@element-plus/icons-vue";
 import {ElMessageBox, ElNotification} from "element-plus";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore} from "pixlcms-wrapper";
 import {useWikiStore} from "@/src/stores/wiki";
 
-const route = '/settings';
+export const route = '/settings';
 
 export default defineComponent({
     components: {
         Moon, Sunny, Refresh, ArrowDown,
     },
+    name: "UserSettings",
     data() {
         return {
-            dialogStore: useDialogStore(),
             userSettings: useUserSettings(),
             settings: useUserSettings().getSettings,
+            route: route,
         }
     },
     created() {
@@ -65,14 +65,6 @@ export default defineComponent({
     computed: {
         version() {
             return useMainStore().meta.frontendVersion;
-        },
-        isShowing: {
-            get() {
-                return route === this.dialogStore.getShowingDialog;
-            },
-            set() {
-                this.dialogStore.clearShowingDialog();
-            }
         },
     },
     methods: {

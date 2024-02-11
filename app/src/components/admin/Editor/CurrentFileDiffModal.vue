@@ -1,8 +1,8 @@
 <template>
-    <el-dialog :fullscreen="true" v-model="isShowing">
+    <pm-dialog :fullscreen="true" :route="route">
         <diff-editor @submit-merge="submitMerge" :modified-text="modifiedText"
                      :original-text="originalText"></diff-editor>
-    </el-dialog>
+    </pm-dialog>
 </template>
 
 <script setup lang="ts">
@@ -19,7 +19,7 @@ const submitMerge = (merged: string) => {
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useDialogStore} from "@/src/stores/dialog";
+import {useDialogStore} from "pixlcms-wrapper";
 import {useWikiStore} from "@/src/stores/wiki";
 import DiffEditor from "@/src/components/pw/diff-editor.vue";
 
@@ -36,6 +36,7 @@ export default defineComponent({
             wikiStore: useWikiStore(),
             originalText: '',
             diff: '',
+            route: route,
         }
     },
     mounted() {
@@ -47,14 +48,6 @@ export default defineComponent({
         modifiedText() {
             return this.wikiStore.safeCurrentEntry.raw_content;
         },
-        isShowing: {
-            get() {
-                return route === this.dialogStore.getShowingDialog;
-            },
-            set() {
-                this.dialogStore.clearShowingDialog();
-            }
-        }
     },
 });
 </script>

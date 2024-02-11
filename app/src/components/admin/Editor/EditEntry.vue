@@ -4,8 +4,8 @@
             <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save" @change="updateContent"
                           v-model="markdown"></pw-md-editor>
         </div>
-        <DrawModal @imagesave="imageSave"></DrawModal>
-        <CurrentFileDiffModal @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
+        <DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>
+        <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
     </div>
 </template>
 
@@ -17,7 +17,7 @@ import {useMainStore} from "@/src/stores/main";
 import {useUserSettings} from "@/src/stores/user-settings";
 import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
-import {useDialogStore} from "@/src/stores/dialog";
+import {useDialogStore} from "pixlcms-wrapper";
 import {DateTime} from "luxon";
 
 
@@ -56,13 +56,19 @@ export default defineComponent({
                 this.wikiStore.safeCurrentEntry.raw_content = newMarkdown;
             }
         },
+        isDrawing() {
+            return this.dialogStore.isDialogShowing('/draw');
+        },
+        isDiffing() {
+            return this.dialogStore.isDialogShowing('/diff');
+        },
     },
     methods: {
         submitMerge(d: any) {
             this.wikiStore.safeCurrentEntry.raw_content = d;
             this.wikiStore.safeCurrentEntry.meta.dateUpdated = DateTime.now().toFormat("yyyy-LL-dd HH:mm")
             this.wikiStore.saveEntry();
-            this.dialogStore.clearShowingDialog();
+            this.dialogStore.hideDialog('/diff');
         },
         refresh() {
             this.wikiStore.fetchEntry(this.wikiStore.safeCurrentEntry.id);
@@ -85,15 +91,10 @@ export default defineComponent({
             }
         },
         imageSave(imgPath: string) {
-            let imgUrl = location.protocol + "//" + location.hostname
-            if (location.port !== "80" && location.port !== "443") {
-                imgUrl += ":" + location.port;
-            }
-            imgUrl += imgPath;
             let md = this.wikiStore.safeCurrentEntry.raw_content;
-            md += "![painting](" + imgUrl + ")";
+            md += "![painting](" + imgPath + ")";
             this.wikiStore.safeCurrentEntry.raw_content = md;
-            this.dialogStore.clearShowingDialog();
+            this.dialogStore.hideDialog('/draw');
             this.save();
         },
         showDiff() {

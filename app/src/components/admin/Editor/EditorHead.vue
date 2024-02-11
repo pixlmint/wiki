@@ -18,7 +18,7 @@
             <el-col :span="2">
                 <div>
                     <el-button @click="showDrawModal">
-                        <pw-icon icon="pen-ruler"></pw-icon>
+                        <pm-icon icon="pen-ruler"></pm-icon>
                     </el-button>
                 </div>
             </el-col>
@@ -36,13 +36,11 @@ import {ArrowLeft} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
 import {useMainStore} from "@/src/stores/main";
 import {ElMessageBox} from "element-plus";
-import {useDialogStore} from "@/src/stores/dialog";
-import PwIcon from "@/src/components/pw/icon.vue";
+import {useDialogStore} from "pixlcms-wrapper";
 
 export default defineComponent({
     name: "EditorHead",
     components: {
-        PwIcon,
         ArrowLeft,
     },
     data() {

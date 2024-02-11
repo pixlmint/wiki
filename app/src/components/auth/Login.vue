@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="Login" v-model="isShowing">
+    <pm-dialog :route="route" title="Login">
         <el-form :model="loginForm">
             <el-form-item label="Username">
                 <el-input v-model="loginForm.username"/>
@@ -13,17 +13,16 @@
         <el-button @click="submitLoginForm">Login</el-button>
       </span>
         </template>
-    </el-dialog>
+    </pm-dialog>
 </template>
 
 <script>
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
-import {useAuthStore} from "@/src/stores/auth";
-import {useDialogStore} from "@/src/stores/dialog";
+import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {useWikiStore} from "@/src/stores/wiki";
 
-const route = '/auth/login';
+export const route = '/auth/login';
 
 export default defineComponent({
     name: "LoginModal",
@@ -36,25 +35,16 @@ export default defineComponent({
             authStore: useAuthStore(),
             mainStore: useMainStore(),
             dialogStore: useDialogStore(),
+            route: route,
         }
     },
     methods: {
         submitLoginForm() {
             this.authStore.login(this.loginForm).then(() => {
-                this.dialogStore.clearShowingDialog();
+                this.dialogStore.hideDialog(this.route);
                 useWikiStore().loadNav();
-            })
+            });
         },
-    },
-    computed: {
-        isShowing: {
-            get() {
-                return route === this.dialogStore.getShowingDialog;
-            },
-            set() {
-                this.dialogStore.clearShowingDialog();
-            }
-        }
     },
 })
 </script>

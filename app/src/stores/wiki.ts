@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {buildRequest, send} from "@/src/helpers/xhr";
+import {buildRequest, send} from "pixlcms-wrapper";
 import {ElNotification} from "element-plus";
 import {WikiEntry} from "@/src/contracts/WikiBase";
 

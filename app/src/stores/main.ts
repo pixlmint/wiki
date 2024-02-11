@@ -1,7 +1,6 @@
 import {AxiosResponse} from 'axios';
 import {defineStore} from "pinia";
-import {buildRequest, send} from "@/src/helpers/xhr";
-import {useAuthStore} from "@/src/stores/auth";
+import {useAuthStore, buildRequest, send} from "pixlcms-wrapper";
 
 interface Meta {
     title: string,
@@ -10,6 +9,7 @@ interface Meta {
     frontendVersion: string,
     adminCreated: boolean,
     is_token_valid: string,
+    debugEnabled: boolean,
 }
 
 interface State {
@@ -30,6 +30,7 @@ export const useMainStore = defineStore('main', {
             pluginVersion: '0',
             adminCreated: false,
             is_token_valid: 'token_not_set',
+            debugEnabled: false,
         },
         editingUnsavedChanges: false,
         isLargeNavShowing: true,

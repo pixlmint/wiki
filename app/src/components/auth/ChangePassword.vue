@@ -1,61 +1,47 @@
 <template>
-  <div class="main-content">
-    <!--    <div>-->
-    <!--      <router-link class="btn" to="/auth">Return</router-link>-->
-    <!--    </div>-->
-    <!--    <form @submit.prevent="submit">-->
-    <!--      <div class="form-row">-->
-    <!--        <input placeholder="Username" v-model="username" type="text" />-->
-    <!--      </div>-->
-    <!--      <div class="form-row">-->
-    <!--        <input-->
-    <!--          placeholder="Current Password"-->
-    <!--          v-model="currentPassword"-->
-    <!--          type="password"-->
-    <!--        />-->
-    <!--      </div>-->
-    <!--      <div class="form-row">-->
-    <!--        <input placeholder="Password" v-model="newPassword1" type="password" />-->
-    <!--      </div>-->
-    <!--      <div class="form-row">-->
-    <!--        <input-->
-    <!--          placeholder="Repeat Password"-->
-    <!--          v-model="newPassword2"-->
-    <!--          type="password"-->
-    <!--        />-->
-    <!--      </div>-->
-    <!--      <button class="mt-1" type="submit">Submit</button>-->
-    <!--    </form>-->
-  </div>
+    <pm-dialog title="Change Password">
+        <el-form v-model="form" @submit.prevent="submit">
+            <el-form-item label="Username">
+                <el-input v-model="form.username"/>
+            </el-form-item>
+            <el-form-item label="Current Password">
+                <el-input type="password" v-model="form.currentPassword"/>
+            </el-form-item>
+            <el-form-item label="New Password">
+                <el-input v-model="form.newPassword1" type="password"/>
+            </el-form-item>
+            <el-form-item label="Repeat Password">
+                <el-input v-model="form.newPassword2" type="password"/>
+            </el-form-item>
+            <el-button type="submit">Submit</el-button>
+        </el-form>
+    </pm-dialog>
 </template>
 
 <script lang="ts">
-import {useAuthStore} from "../../stores/auth"
-import {useRouter} from 'vue-router'
 import {defineComponent} from "vue";
+import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
+
+export const route = "/auth/change-password";
 
 export default defineComponent({
-  data: () => {
-    return {
-      username: "",
-      currentPassword: "",
-      newPassword1: "",
-      newPassword2: "",
-    };
-  },
-  methods: {
-    submit() {
-      const authStore = useAuthStore()
-      authStore.changePassword({
-        username: this.username,
-        currentPassword: this.currentPassword,
-        newPassword1: this.newPassword1,
-        newPassword2: this.newPassword2,
-      }).then(() => {
-        const router = useRouter()
-        router.push('/')
-      });
+    data: () => {
+        return {
+            form: {
+                username: "",
+                currentPassword: "",
+                newPassword1: "",
+                newPassword2: "",
+            },
+            dialogStore: useDialogStore(),
+        };
     },
-  },
+    methods: {
+        submit() {
+            useAuthStore().changePassword(this.form).then(() => {
+                this.dialogStore.hideDialog(route);
+            });
+        },
+    },
 })
 </script>

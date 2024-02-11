@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRaw, watch, ref} from "vue";
+import {defineComponent, toRaw} from "vue";
 import * as pdfjslib from "pdfjs-dist";
-import {useLoadingStore} from "@/src/stores/loading";
+import {useLoadingStore} from "pixlcms-wrapper";
 
 pdfjslib.GlobalWorkerOptions.workerSrc = 'https://jslib.pixlmint.ch/pdfjs-dist/3.11.174/pdf.worker.min.js';
 

@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {buildRequest, send} from "@/src/helpers/xhr";
+import {buildRequest, send} from "pixlcms-wrapper";
 
 interface Settings {
     autoSave: boolean,

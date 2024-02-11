@@ -11,18 +11,37 @@ import PWLoading from '@/src/components/pw/loading.vue';
 import PWSearch from '@/src/components/pw/search.vue';
 import PWMDEditor from '@/src/components/pw/md-editor.vue';
 import VueDiff from 'vue-diff';
-import 'mathjax/es5/tex-svg-full.js';
+import {main, Dialog, Icon} from "pixlcms-wrapper";
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {
+    faArrowRotateRight,
+    faBug, faCircle,
+    faEraser,
+    faHand,
+    faHighlighter,
+    faPencil,
+    faPenRuler,
+    faSave,
+    faVectorSquare, faTimes
+} from "@fortawesome/free-solid-svg-icons";
+
+const pinia = createPinia();
 
 const app = createApp(App)
 app.use(VueAxios, axios)
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 app.use(VueDiff)
+app.use(main, {pinia});
 
 app.component('pw-nav', PWNav);
 app.component('pw-loading', PWLoading);
 app.component('pw-search', PWSearch);
 app.component('pw-md-editor', PWMDEditor);
+app.component('pm-dialog', Dialog);
+app.component('pm-icon', Icon);
+
+library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight, faTimes);
 
 app.mount('#app')

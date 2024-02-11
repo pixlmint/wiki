@@ -5,22 +5,22 @@
                 <div class="drawing-toolbar-tools d-flex gap-1">
                     <div v-for="(tool, index) in tools">
                         <el-button @click="toggleActiveTool(tool, index)">
-                            <pw-icon :icon="tool.icon"></pw-icon>
+                            <pm-icon :icon="tool.icon"></pm-icon>
                         </el-button>
                     </div>
                     <el-divider direction="vertical"></el-divider>
                     <div v-for="(mode, index) in modes">
                         <el-button @click="toggleActiveMode(mode, index)">
-                            <pw-icon :icon="mode.icon"></pw-icon>
+                            <pm-icon :icon="mode.icon"></pm-icon>
                         </el-button>
                     </div>
                 </div>
                 <div class="drawing-toolbar-actions">
                     <el-button @click="debug.enabled = !debug.enabled">
-                        <pw-icon icon="bug"></pw-icon>
+                        <pm-icon icon="bug"></pm-icon>
                     </el-button>
                     <el-button @click="save">
-                        <pw-icon icon="save"></pw-icon>
+                        <pm-icon icon="save"></pm-icon>
                     </el-button>
                 </div>
             </div>
@@ -65,7 +65,6 @@
 <script lang="ts" setup>
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import * as d3 from 'd3';
-import PwIcon from "@/src/components/pw/icon.vue";
 import {Vector, PaintStroke, PaintStrokePoint, Drawing, DrawingMode} from "@/src/contracts/Canvas";
 import {BaseType, Selection} from "d3";
 
