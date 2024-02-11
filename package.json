@@ -24,6 +24,7 @@
         "mathjax": "^3.2.2",
         "pdfjs-dist": "^3.10.111",
         "pinia": "^2.0.22",
+        "pixlcms-wrapper": "^1.0.10",
         "qs": "^6.10.3",
         "sass-brunch": "^3.0.1",
         "vue": "^3.2.39",
