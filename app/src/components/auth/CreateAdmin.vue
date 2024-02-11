@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="Create Admin" v-model="isShowing">
+    <pm-dialog title="Create Admin" :route="route">
         <el-form v-model="adminForm">
             <el-form-item label="Username">
                 <el-input type="text" v-model="adminForm.username"/>
@@ -11,15 +11,14 @@
         <template #footer>
             <el-button @click="submit">Submit</el-button>
         </template>
-    </el-dialog>
+    </pm-dialog>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore} from "pixlcms-wrapper";
-import {useDialogStore} from "@/src/stores/dialog";
+import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 
-const route = '/auth/create-admin';
+export const route = '/auth/create-admin';
 
 export default defineComponent({
     data() {
@@ -29,17 +28,8 @@ export default defineComponent({
                 password: '',
             },
             dialogStore: useDialogStore(),
+            route: route,
         }
-    },
-    computed: {
-        isShowing: {
-            get() {
-                return route === this.dialogStore.getShowingDialog;
-            },
-            set() {
-                this.dialogStore.clearShowingDialog();
-            }
-        },
     },
     methods: {
         submit() {

@@ -72,7 +72,6 @@
 import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from "pixlcms-wrapper";
-import fa from '@/src/components/fa.vue'
 import {useRouter} from "vue-router";
 import {MoreFilled, Edit, Delete, Lock, View} from "@element-plus/icons-vue";
 import PDFContent from "@/src/components/home/PDFContent.vue";
@@ -89,7 +88,6 @@ export default defineComponent({
     },
     components: {
         PDFContent,
-        fa,
         MoreFilled,
         Edit,
         Delete,

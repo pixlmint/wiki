@@ -19,7 +19,7 @@ const submitMerge = (merged: string) => {
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useDialogStore} from "@/src/stores/dialog";
+import {useDialogStore} from "pixlcms-wrapper";
 import {useWikiStore} from "@/src/stores/wiki";
 import DiffEditor from "@/src/components/pw/diff-editor.vue";
 

@@ -32,7 +32,9 @@ module.exports = {
   resolve: {
     alias: {
       '@': paths.resolve('app'),
+      vue: paths.resolve('./node_modules/vue')
     },
+    symlinks: false,
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],
   },
 

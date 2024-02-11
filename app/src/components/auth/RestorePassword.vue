@@ -1,9 +1,6 @@
 <template>
-    <div class="main-content">
-        <div>
-            <router-link class="btn" to="/auth">Return</router-link>
-        </div>
-        <form @submit.prevent="submit">
+    <pm-dialog>
+        <el-form @submit.prevent="submit">
             <div class="form-row">
                 <input placeholder="Username" v-model="username" type="text"/>
             </div>
@@ -18,8 +15,8 @@
                 />
             </div>
             <button class="mt-1" type="submit">Submit</button>
-        </form>
-    </div>
+        </el-form>
+    </pm-dialog>
 </template>
 
 <script lang="ts">
@@ -27,6 +24,8 @@ import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "pixlcms-wrapper";
 import {useRouter} from "vue-router";
+
+export const route = "/auth/restore-password";
 
 export default defineComponent({
     data: () => {

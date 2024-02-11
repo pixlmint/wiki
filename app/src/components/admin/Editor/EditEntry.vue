@@ -4,7 +4,7 @@
             <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save" @change="updateContent"
                           v-model="markdown"></pw-md-editor>
         </div>
-        <DrawModal @imagesave="imageSave"></DrawModal>
+        <DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>
         <CurrentFileDiffModal @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
     </div>
 </template>
@@ -17,7 +17,7 @@ import {useMainStore} from "@/src/stores/main";
 import {useUserSettings} from "@/src/stores/user-settings";
 import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
-import {useDialogStore} from "@/src/stores/dialog";
+import {useDialogStore} from "pixlcms-wrapper";
 import {DateTime} from "luxon";
 
 
@@ -56,6 +56,9 @@ export default defineComponent({
                 this.wikiStore.safeCurrentEntry.raw_content = newMarkdown;
             }
         },
+        isDrawing() {
+            return this.dialogStore.isDialogShowing('/draw');
+        }
     },
     methods: {
         submitMerge(d: any) {
