@@ -1,10 +1,10 @@
 <template>
     <div class="board-list">
-        <h3>{{ list.name }}</h3>
-        <draggable class="items-list" :list="list.items" group="board" itemKey="name">
+        <h3>{{ list.meta.title }}</h3>
+        <draggable class="items-list" :list="cards" group="board" itemKey="name">
             <template #item="{element, index}">
                 <el-card class="item" shadow="hover">
-                    {{ element.name }} {{ index }}
+                    {{ element.meta.title }} {{ index }}
                 </el-card>
             </template>
             <template #footer>
@@ -13,7 +13,7 @@
                 </el-card>
                 <el-row justify="end">
                     <el-col :span="4">
-                        <el-button @click="toggleAddItem"><pw-icon icon="plus"></pw-icon></el-button>
+                        <el-button @click="toggleAddItem"><pm-icon icon="plus"></pm-icon></el-button>
                     </el-col>
                 </el-row>
             </template>
@@ -22,14 +22,12 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from "vue";
+import {defineComponent, toRaw} from "vue";
 import draggable from "vuedraggable";
-import PwIcon from "@/src/components/pw/icon.vue";
 
 export default defineComponent({
     name: "List",
     components: {
-        PwIcon,
         draggable,
     },
     props: {
@@ -42,6 +40,14 @@ export default defineComponent({
         return {
             addingItem: false,
             newItemText: "",
+        }
+    },
+    created() {
+        console.log(toRaw(this.list));
+    },
+    computed: {
+        cards() {
+            return Object.values(this.list.children);
         }
     },
     methods: {

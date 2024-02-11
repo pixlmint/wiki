@@ -422,16 +422,16 @@
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
-            "version": "1.6.6",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
-                "reference": "0d3cd240862d097b00c12eeab5a0e2d48ff50c43"
+                "reference": "159595e230d3ebee15e274baca5e0b431f15747b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/0d3cd240862d097b00c12eeab5a0e2d48ff50c43",
-                "reference": "0d3cd240862d097b00c12eeab5a0e2d48ff50c43",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/159595e230d3ebee15e274baca5e0b431f15747b",
+                "reference": "159595e230d3ebee15e274baca5e0b431f15747b",
                 "shasum": ""
             },
             "require": {
@@ -453,9 +453,9 @@
             "description": "The official wiki plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.6"
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.7"
             },
-            "time": "2023-12-22T15:28:54+00:00"
+            "time": "2024-02-11T10:06:52+00:00"
         },
         {
             "name": "psr/container",

@@ -24,7 +24,9 @@
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-item @click="viewMarkdown" title="View">
-                            <el-icon><View/></el-icon>
+                            <el-icon>
+                                <View/>
+                            </el-icon>
                             View
                         </el-dropdown-item>
                         <el-dropdown-item @click="editEntry" title="Edit">
@@ -43,7 +45,9 @@
                 </el-dropdown>
                 <div class="desktop-action-buttons">
                     <el-button circle @click="viewMarkdown">
-                        <el-icon><View/></el-icon>
+                        <el-icon>
+                            <View/>
+                        </el-icon>
                     </el-button>
                     <el-button @click="editEntry">
                         <el-icon>
@@ -63,6 +67,9 @@
             <div v-if="isPdfContent">
                 <PDFContent :b64pdf="content"></PDFContent>
             </div>
+            <div v-else-if="isBoard">
+                <board :board-id="entryId"/>
+            </div>
             <p v-else v-html="content"></p>
         </div>
     </div>
@@ -76,6 +83,7 @@ import {useRouter} from "vue-router";
 import {MoreFilled, Edit, Delete, Lock, View} from "@element-plus/icons-vue";
 import PDFContent from "@/src/components/home/PDFContent.vue";
 import {queryFormatter} from "@/src/helpers/queryFormatter";
+import board from "@/src/components/kanban/board.vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -93,6 +101,7 @@ export default defineComponent({
         Delete,
         Lock,
         View,
+        board,
     },
     computed: {
         title() {
@@ -122,6 +131,12 @@ export default defineComponent({
                 return false;
             }
             return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
+        },
+        isBoard() {
+            return 'board' === this.wikiStore.safeCurrentEntry.meta.kind;
+        },
+        entryId() {
+            return this.wikiStore.safeCurrentEntry.id;
         },
     },
     methods: {

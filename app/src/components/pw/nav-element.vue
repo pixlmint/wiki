@@ -38,6 +38,7 @@
             <el-menu-item class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <div>
                     {{ element.title }}
+                    <el-tag type="info" v-if="element.kind !== 'plain'">{{ element.kind }}</el-tag>
                     <el-icon class="private-icon" v-if="!isPublic"><Lock/></el-icon>
                 </div>
                 <el-dropdown v-if="canEdit">
@@ -101,7 +102,7 @@ export default defineComponent({
             return MoreFilled
         },
         isFolder() {
-            return this.element && this.element.isFolder;
+            return this.element && this.element.isFolder && this.element.kind === 'plain';
         },
         canEdit() {
             return useAuthStore().haveEditRights();

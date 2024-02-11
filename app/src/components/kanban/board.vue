@@ -1,20 +1,31 @@
 <template>
     <div class="board">
-        <list v-for="list in board" :key="list.id" :list="list"></list>
+        <list v-if="boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
     </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
 import List from "@/src/components/kanban/list.vue";
+import {useWikiStore} from "@/src/stores/wiki";
+import {useBoardStore} from "@/src/stores/board";
 
 export default defineComponent({
     name: 'board',
     components: {
         list: List,
     },
+    props: {
+        boardId: {
+            type: String,
+            required: true,
+        }
+    },
     data() {
         return {
+            wikiStore: useWikiStore(),
+            boardStore: useBoardStore(),
+            boardLoaded: false,
             enabled: true,
             board: [
                 {
@@ -42,6 +53,16 @@ export default defineComponent({
             ],
             dragging: false,
         }
+    },
+    created() {
+        this.boardStore.loadBoard(this.boardId).then(() => {
+            this.boardLoaded = true;
+        });
+    },
+    computed: {
+        boardLists() {
+            return this.boardStore.safeCurrentBoard.children;
+        },
     },
     methods: {
         log(event: Event) {

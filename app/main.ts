@@ -22,7 +22,7 @@ import {
     faPencil,
     faPenRuler,
     faSave,
-    faVectorSquare, faTimes
+    faVectorSquare, faTimes, faPlus
 } from "@fortawesome/free-solid-svg-icons";
 
 const pinia = createPinia();
@@ -42,6 +42,6 @@ app.component('pw-md-editor', PWMDEditor);
 app.component('pm-dialog', Dialog);
 app.component('pm-icon', Icon);
 
-library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight, faTimes);
+library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight, faTimes, faPlus);
 
 app.mount('#app')
