@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import 'vue-diff/dist/index.css';
 
