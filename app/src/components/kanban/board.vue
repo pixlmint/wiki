@@ -16,6 +16,7 @@ import {defineComponent} from "vue";
 import List from "@/src/components/kanban/list.vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useBoardStore} from "@/src/stores/board";
+import {useMainStore} from "@/src/stores/main";
 
 export default defineComponent({
     name: 'board',
@@ -32,6 +33,7 @@ export default defineComponent({
         return {
             wikiStore: useWikiStore(),
             boardStore: useBoardStore(),
+            mainStore: useMainStore(),
             boardLoaded: false,
             enabled: true,
             dragging: false,
@@ -42,6 +44,7 @@ export default defineComponent({
     created() {
         this.boardStore.loadBoard(this.boardId).then(() => {
             this.boardLoaded = true;
+            this.mainStore.setTitle(this.boardStore.safeCurrentBoard.meta.title);
         });
     },
     computed: {
