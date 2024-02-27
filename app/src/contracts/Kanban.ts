@@ -6,6 +6,7 @@ export interface BaseBoardItemResponse extends WikiEntry {
 
 export interface BoardResponse extends BaseBoardItemResponse {
     meta: BoardMeta,
+    children: ListResponse[],
 }
 
 export interface ListResponse extends BaseBoardItemResponse {
@@ -13,6 +14,7 @@ export interface ListResponse extends BaseBoardItemResponse {
 }
 
 export interface BaseBoardItemMeta extends EntryMeta {
+    uid: string,
 }
 
 export interface BoardMeta extends BaseBoardItemMeta {

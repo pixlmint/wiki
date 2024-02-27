@@ -1,6 +1,13 @@
 <template>
     <div class="board">
         <list v-if="boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+        <div class="board-list">
+            <el-input ref="addItemInput" v-if="isAddingList" v-on:keyup.enter="addList"
+                      v-model="newListName"></el-input>
+            <el-button @click="toggleAddList">
+                <pm-icon icon="plus"></pm-icon>
+            </el-button>
+        </div>
     </div>
 </template>
 
@@ -27,31 +34,9 @@ export default defineComponent({
             boardStore: useBoardStore(),
             boardLoaded: false,
             enabled: true,
-            board: [
-                {
-                    name: 'Tasks',
-                    id: '1',
-                    items: [
-                        {name: 'John', id: 1},
-                    ],
-                },
-                {
-                    name: 'Doing',
-                    id: '2',
-                    items: [
-                        {name: 'Joao', id: 6},
-                    ],
-                },
-                {
-                    name: 'Done',
-                    id: '3',
-                    items: [
-                        {name: 'Jean', id: 11},
-                        {name: 'Gerard', id: 12},
-                    ],
-                },
-            ],
             dragging: false,
+            isAddingList: false,
+            newListName: null,
         }
     },
     created() {
@@ -67,6 +52,18 @@ export default defineComponent({
     methods: {
         log(event: Event) {
             console.log(event)
+        },
+        addList() {
+            if (this.newListName === null) {
+                throw 'List name cannot be null';
+            }
+            this.boardStore.createList(this.boardId, this.newListName).then(() => {
+                this.isAddingList = false;
+                this.newListName = null;
+            });
+        },
+        toggleAddList() {
+            this.isAddingList = true;
         },
     },
 })
@@ -87,5 +84,26 @@ export default defineComponent({
 .drag-area {
     min-height: 200px;
     outline: 1px dashed;
+}
+
+.board-list {
+    width: 300px;
+    overflow-y: auto;
+    max-height: 100%;
+    margin: 10px;
+    padding: 20px;
+    flex-shrink: 0;
+    border: 1px solid var(--el-border-color);
+    border-radius: var(--el-border-radius-base);
+    background-color: var(--el-bg-secondary);
+}
+
+.items-list {
+    min-height: 200px;
+
+    .item {
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
 }
 </style>

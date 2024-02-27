@@ -68,22 +68,22 @@
         },
         {
             "name": "mhor/php-mediainfo",
-            "version": "5.5.0",
+            "version": "5.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mhor/php-mediainfo.git",
-                "reference": "eb247c3207dd895e73c2cb94864633af55fa5c11"
+                "reference": "c0b31474d6fdfadf44e7cbf3af718b68d35c8695"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mhor/php-mediainfo/zipball/eb247c3207dd895e73c2cb94864633af55fa5c11",
-                "reference": "eb247c3207dd895e73c2cb94864633af55fa5c11",
+                "url": "https://api.github.com/repos/mhor/php-mediainfo/zipball/c0b31474d6fdfadf44e7cbf3af718b68d35c8695",
+                "reference": "c0b31474d6fdfadf44e7cbf3af718b68d35c8695",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2",
-                "symfony/filesystem": "~3.4|~4.0|~5.0|~6.0",
-                "symfony/process": "~3.4|~4.0|~5.0|~6.0"
+                "symfony/filesystem": "~3.4|~4.0|~5.0|~6.0|~7.0",
+                "symfony/process": "~3.4|~4.0|~5.0|~6.0|~7.0"
             },
             "require-dev": {
                 "phpspec/prophecy": "^1.15",
@@ -119,9 +119,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mhor/php-mediainfo/issues",
-                "source": "https://github.com/mhor/php-mediainfo/tree/5.5.0"
+                "source": "https://github.com/mhor/php-mediainfo/tree/5.6.0"
             },
-            "time": "2023-05-10T16:03:31+00:00"
+            "time": "2024-02-14T22:37:38+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -253,16 +253,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "9cb5bb0d7c848dcce632b6219c605a3fa7e98d44"
+                "reference": "28bfd82b2dcbdddcb90e6974b5916ae513feaa17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/9cb5bb0d7c848dcce632b6219c605a3fa7e98d44",
-                "reference": "9cb5bb0d7c848dcce632b6219c605a3fa7e98d44",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/28bfd82b2dcbdddcb90e6974b5916ae513feaa17",
+                "reference": "28bfd82b2dcbdddcb90e6974b5916ae513feaa17",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.5.2"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.5.4"
             },
-            "time": "2024-02-10T20:44:47+00:00"
+            "time": "2024-02-24T22:24:46+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -356,16 +356,16 @@
         },
         {
             "name": "pixlmint/pixl-cms",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "26061a8af4fbacf05faf1ba2e2eb6665357323f0"
+                "reference": "aa3bd630b69bbff061d1220e0e4bf93df8daf49f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/26061a8af4fbacf05faf1ba2e2eb6665357323f0",
-                "reference": "26061a8af4fbacf05faf1ba2e2eb6665357323f0",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/aa3bd630b69bbff061d1220e0e4bf93df8daf49f",
+                "reference": "aa3bd630b69bbff061d1220e0e4bf93df8daf49f",
                 "shasum": ""
             },
             "require": {
@@ -383,9 +383,9 @@
             "description": "A lightweight CMS powered by Markdown and Nachos",
             "support": {
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
-                "source": "https://github.com/pixlmint/pixl-cms/tree/2.1.0"
+                "source": "https://github.com/pixlmint/pixl-cms/tree/2.1.1"
             },
-            "time": "2023-12-28T17:57:39+00:00"
+            "time": "2024-02-23T15:08:32+00:00"
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",

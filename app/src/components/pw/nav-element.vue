@@ -15,6 +15,7 @@
                             <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
                             <el-dropdown-item @click="addPdf"><el-icon><DocumentAdd/></el-icon>Add PDF</el-dropdown-item>
                             <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="addBoard"><el-icon><DocumentAdd/></el-icon>Add Board</el-dropdown-item>
                             <el-dropdown-item @click="switchSecurity">
                                 <el-icon v-if="isPublic">
                                     <Lock/>
@@ -75,6 +76,7 @@ import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {useMainStore} from "@/src/stores/main";
+import {useBoardStore} from "@/src/stores/board";
 
 export default defineComponent({
     name: 'PWNavElement',
@@ -85,6 +87,7 @@ export default defineComponent({
             router: useRouter(),
             token: useAuthStore().getToken,
             dialogStore: useDialogStore(),
+            boardStore: useBoardStore(),
         }
     },
     components: {
@@ -179,6 +182,16 @@ export default defineComponent({
                     this.wikiStore.loadNav();
                 });
             })
+        },
+        addBoard() {
+            ElMessageBox.prompt('New Board', 'Add Board', {
+                confirmButtonText: 'Ok',
+                cancelButtonText: 'Cancel',
+            }).then(name => {
+                this.boardStore.createBoard(this.element.id, name.value).then(() => {
+                    this.wikiStore.loadNav();
+                })
+            });
         },
         addPdf() {
             this.dialogStore.showDialog({route: '/nav/new-pdf', data: this.element.id});

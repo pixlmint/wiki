@@ -1,7 +1,7 @@
 <template>
     <div class="board-list">
         <h3>{{ list.meta.title }}</h3>
-        <draggable class="items-list" :list="cards" group="board" itemKey="name">
+        <draggable class="items-list" @change="updateList" :list="cards" group="board" itemKey="name">
             <template #item="{element, index}">
                 <el-card class="item" shadow="hover">
                     {{ element.meta.title }} {{ index }}
@@ -24,6 +24,7 @@
 <script lang="ts">
 import {defineComponent, toRaw} from "vue";
 import draggable from "vuedraggable";
+import {useBoardStore} from "@/src/stores/board";
 
 export default defineComponent({
     name: "List",
@@ -40,50 +41,47 @@ export default defineComponent({
         return {
             addingItem: false,
             newItemText: "",
+            boardStore: useBoardStore(),
         }
     },
     created() {
         console.log(toRaw(this.list));
+        if (this.list.children === null) {
+            this.list.children = {};
+        }
     },
     computed: {
         cards() {
+            if (this.list.children === null) {
+                return [];
+            }
             return Object.values(this.list.children);
         }
     },
     methods: {
+        updateList(event: Event) {
+            if ('added' in event) {
+                console.log('handling added event');
+                const newCard = event.added.element;
+                this.list.children[newCard.id] = newCard;
+                this.boardStore.moveCard(this.list.meta.uid, newCard.meta.uid);
+            } else if ('removed' in event) {
+                console.log('handling removed event', event);
+                delete this.list.children[event.removed.element.id];
+            } else {
+                console.log('I don\'t know what to do with this event', event);
+            }
+        },
         toggleAddItem: function () {
             this.addingItem = true;
         },
         addItem: function () {
-            this.list.items.push({
-                name: this.newItemText,
+            this.boardStore.createListItem(this.list.id, this.newItemText).then((response: Response) => {
+                this.newItemText = "";
+                this.addingItem = false;
+                this.list.children = response.data.list.children;
             });
-            this.newItemText = "";
-            this.addingItem = false;
         },
     }
 });
 </script>
-
-<style lang="scss" scoped>
-.board-list {
-    width: 300px;
-    overflow-y: auto;
-    max-height: 100%;
-    margin: 10px;
-    padding: 20px;
-    flex-shrink: 0;
-    border: 1px solid var(--el-border-color);
-    border-radius: var(--el-border-radius-base);
-    background-color: var(--el-bg-secondary);
-}
-
-.items-list {
-    min-height: 200px;
-
-    .item {
-        margin-bottom: 10px;
-        cursor: pointer;
-    }
-}
-</style>
