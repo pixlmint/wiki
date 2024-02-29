@@ -20,7 +20,6 @@ import {defineComponent, ref} from "vue";
 import {useDialogStore, buildRequest, send} from "pixlcms-wrapper";
 import {ElNotification} from "element-plus";
 import {useWikiStore} from "@/src/stores/wiki";
-import {useRouter} from "vue-router";
 
 export const route = '/nav/new-pdf';
 
@@ -30,7 +29,6 @@ export default defineComponent({
         return {
             dialogStore: useDialogStore(),
             wikiStore: useWikiStore(),
-            router: useRouter(),
             title: '',
             file: ref('upload'),
             route: route,
@@ -65,7 +63,7 @@ export default defineComponent({
                 }
                 this.wikiStore.loadNav();
                 this.dialogStore.hideDialog(this.route);
-                this.router.push(response.data.id);
+                // this.router.push(response.data.id);
             });
         },
         updateTitle(event: Event) {

@@ -7,8 +7,8 @@
                         <CaretLeft/>
                     </el-icon>
                 </div>
-                <el-menu @click="loadPage" :router="true" class="main-nav">
-                    <el-menu-item class="pw-menu-item" data-is-entry="true" index="/">
+                <el-menu @click="navClickListener" :router="false" class="main-nav">
+                    <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
                         <div>
                             <el-icon>
                                 <HomeFilled></HomeFilled>
@@ -77,16 +77,16 @@
     </div>
 </template>
 
-<script lang="ts">
-import {defineComponent, h, toRaw, ref} from "vue";
+<script setup lang="ts">
+import {toRaw, computed} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav-element.vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {useRouter} from "vue-router";
 import {Avatar, CaretLeft, CaretRight, CirclePlus, DocumentAdd, FolderAdd, HomeFilled,} from "@element-plus/icons-vue";
 import {isMobile} from "@/src/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
+import {navigate} from "@/src/helpers/navigator";
 
 const findListElement = (target: any) => {
     if (target.nodeName === 'LI') {
@@ -107,118 +107,99 @@ const navElementIsFolder = (target: any) => {
     }
 }
 
-export default defineComponent({
-    name: 'PWNav',
-    components: {
-        DocumentAdd,
-        FolderAdd,
-        PWNavElement,
-        Avatar,
-        CaretRight,
-        CaretLeft,
-        CirclePlus,
-        HomeFilled,
-    },
-    data() {
-        return {
-            router: useRouter(),
-            dialogStore: useDialogStore(),
-            userDropdownShowing: false,
-            wikiStore: useWikiStore(),
-            mainStore: useMainStore(),
-            authStore: useAuthStore(),
-            currentlyActiveRoute: '/',
-            token: useAuthStore().getToken,
-        }
-    },
-    created: () => {
-        if (isMobile()) {
-            useMainStore().toggleLargeNavShowing(false);
-        }
-        useWikiStore().loadNav();
-    },
-    methods: {
-        settings() {
-            this.dialogStore.showDialog('/settings');
-        },
-        addSubFolder() {
-            ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'Cancel',
-            }).then(name => {
-                this.wikiStore.addFolder('/', name.value).then(() => {
-                    this.wikiStore.loadNav();
-                });
-            })
-        },
-        addSubEntry() {
-            ElMessageBox.prompt('New Page Title', 'Add Page', {
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'Cancel',
-            }).then(name => {
-                this.wikiStore.addEntry('/', name.value).then(() => {
-                    this.wikiStore.loadNav();
-                });
-            })
-        },
-        addPdf() {
-            this.dialogStore.setPdfParentFolder('/');
-            this.dialogStore.showDialog('/nav/new-pdf');
-        },
-        hideMainNav() {
-            this.mainStore.toggleLargeNavShowing(false);
-        },
-        showMainNav() {
-            this.mainStore.toggleLargeNavShowing(true);
-        },
-        loadPage(event: any) {
-            const isFolder = navElementIsFolder(event.target);
-            const entry = document.location.pathname;
-            console.log(entry);
-            if (entry === '/admin/edit' || isFolder) {
-                return '';
-            }
-            useWikiStore().fetchEntry(entry).then(function () {
-                if (!isFolder && isMobile()) {
-                    useMainStore().toggleLargeNavShowing(false);
-                }
-                const currentEntry = useWikiStore().currentEntry;
-                if (currentEntry === null) {
-                    throw 'currentEntry is null';
-                }
-                useMainStore().setTitle(currentEntry.meta.title);
-            });
-        },
-        login() {
-            this.dialogStore.showDialog('/auth/login');
-        },
-    },
-    computed: {
-        currentTitleArray() {
-            const id = this.wikiStore.currentEntry?.id;
-            if (!id) {
-                return [];
-            }
-            return id.split('/');
-        },
-        canEdit() {
-            return this.authStore.haveEditRights();
-        },
-        mainNavShowing() {
-            return this.mainStore.isLargeNavShowing;
-        },
-        isLoggedIn() {
-            return useAuthStore().getToken !== null;
-        },
-        nav() {
-            const wikiStore = useWikiStore()
-            if (wikiStore.getNav === null) {
-                return {}
-            }
-            return toRaw(wikiStore.getNav);
-        },
-    },
-})
+const dialogStore = useDialogStore();
+const wikiStore = useWikiStore();
+const mainStore = useMainStore();
+const authStore = useAuthStore();
+
+// created
+if (isMobile()) {
+    useMainStore().toggleLargeNavShowing(false);
+}
+useWikiStore().loadNav();
+
+// methods
+const settings = function () {
+    dialogStore.showDialog('/settings');
+}
+const addSubFolder = function () {
+    ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel',
+    }).then(name => {
+        wikiStore.addFolder('/', name.value).then(() => {
+            wikiStore.loadNav();
+        });
+    })
+}
+const addSubEntry = function () {
+    ElMessageBox.prompt('New Page Title', 'Add Page', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel',
+    }).then(name => {
+        wikiStore.addEntry('/', name.value).then(() => {
+            wikiStore.loadNav();
+        });
+    })
+}
+const addPdf = function () {
+    dialogStore.setPdfParentFolder('/');
+    dialogStore.showDialog('/nav/new-pdf');
+}
+const hideMainNav = function () {
+    mainStore.toggleLargeNavShowing(false);
+}
+const showMainNav = function () {
+    mainStore.toggleLargeNavShowing(true);
+}
+const navClickListener = function (event: Event) {
+    const isFolder = navElementIsFolder(event.target);
+    if (isFolder) {
+        return;
+    }
+    const element = findElementWithTagName(event.target, 'LI');
+    console.log(element);
+    const id = element.dataset.pwEntryId;
+    if (id === undefined || id === null) {
+        throw 'No ID found';
+    }
+    navigate(id);
+}
+const login = function () {
+    dialogStore.showDialog('/auth/login');
+}
+const findElementWithTagName = function (element: HTMLElement, tagName: string): HTMLElement {
+    if (element.tagName === tagName || element.parentElement === null) {
+        return element;
+    }
+    return findElementWithTagName(element.parentElement, tagName);
+}
+
+// computed
+const currentTitleArray = computed(() => {
+    const id = wikiStore.currentEntry?.id;
+    if (!id) {
+        return [];
+    }
+    return id.split('/');
+});
+const canEdit = computed(() => {
+    return authStore.haveEditRights();
+});
+const mainNavShowing = computed(() => {
+    return mainStore.isLargeNavShowing;
+});
+const isLoggedIn = computed(() => {
+    return useAuthStore().getToken !== null;
+});
+const nav = computed(() => {
+    const wikiStore = useWikiStore()
+    if (wikiStore.getNav === null) {
+        return {}
+    }
+    return toRaw(wikiStore.getNav);
+});
+
 </script>
 
 <style scoped lang="scss">

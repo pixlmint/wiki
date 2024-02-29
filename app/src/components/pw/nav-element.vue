@@ -15,7 +15,7 @@
                             <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
                             <el-dropdown-item @click="addPdf"><el-icon><DocumentAdd/></el-icon>Add PDF</el-dropdown-item>
                             <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
-                            <el-dropdown-item @click="addBoard"><el-icon><DocumentAdd/></el-icon>Add Board</el-dropdown-item>
+                            <el-dropdown-item @click="addBoard"><pm-icon package="brands" icon="trello"></pm-icon>Add Board</el-dropdown-item>
                             <el-dropdown-item @click="switchSecurity">
                                 <el-icon v-if="isPublic">
                                     <Lock/>
@@ -36,10 +36,10 @@
             </el-sub-menu>
         </template>
         <template v-else>
-            <el-menu-item class="pw-menu-item" data-is-entry="true" :index="element.id">
+            <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <div>
                     {{ element.title }}
-                    <el-tag type="info" v-if="element.kind !== 'plain'">{{ element.kind }}</el-tag>
+                    <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
                     <el-icon class="private-icon" v-if="!isPublic"><Lock/></el-icon>
                 </div>
                 <el-dropdown v-if="canEdit">
@@ -70,13 +70,13 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useRouter} from "vue-router";
 import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen, Lock, Unlock} from "@element-plus/icons-vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {useMainStore} from "@/src/stores/main";
 import {useBoardStore} from "@/src/stores/board";
+import {navigate} from "@/src/helpers/navigator";
 
 export default defineComponent({
     name: 'PWNavElement',
@@ -84,7 +84,6 @@ export default defineComponent({
     data() {
         return {
             wikiStore: useWikiStore(),
-            router: useRouter(),
             token: useAuthStore().getToken,
             dialogStore: useDialogStore(),
             boardStore: useBoardStore(),
@@ -124,7 +123,8 @@ export default defineComponent({
     methods: {
         edit() {
             const currentRoute = location.pathname;
-            this.router.push('/admin/edit?p=' + this.element.id);
+            // this.router.push('/admin/edit?p=' + this.element.id);
+            navigate('/admin/edit?p=' + this.element.id);
             if (currentRoute === '/admin/edit') {
                 useWikiStore().fetchEntry(this.element.id).then(() => {
                     const title = "Edit " + useWikiStore().safeCurrentEntry.meta.title;

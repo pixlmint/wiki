@@ -23,7 +23,6 @@
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore} from "pixlcms-wrapper";
-import {useRouter} from "vue-router";
 
 export const route = "/auth/restore-password";
 
@@ -48,7 +47,7 @@ export default defineComponent({
                 password2: this.password2,
                 token: urlParams.get('token') as string
             }).then(() => {
-                useRouter().push('/');
+                // useRouter().push('/');
             });
         },
     },

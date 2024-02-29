@@ -21,7 +21,7 @@ return [
             'name' => 'pixlcms-kanban-plugin',
             'install_method' => 'sourcecode',
             'enabled' => true,
-            'config' => require_once('plugins/pixlcms-kanban-plugin/config/config.php'),
+            'config' => require_once('vendor/pixlmint/pixlcms-kanban-plugin/config/config.php'),
         ],
     ],
     'routes' => [

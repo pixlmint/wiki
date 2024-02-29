@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d981a4b86042183eb26a10ae92563515",
+    "content-hash": "5abc70fcb221b68cd6e9ac1395d138d5",
     "packages": [
         {
             "name": "laravel/serializable-closure",
@@ -386,6 +386,42 @@
                 "source": "https://github.com/pixlmint/pixl-cms/tree/2.1.1"
             },
             "time": "2024-02-23T15:08:32+00:00"
+        },
+        {
+            "name": "pixlmint/pixlcms-kanban-plugin",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pixlmint/pixlcms-kanban-plugin.git",
+                "reference": "3e5dd2e7a3b7e8706c8968ac8dca708998d081e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/3e5dd2e7a3b7e8706c8968ac8dca708998d081e2",
+                "reference": "3e5dd2e7a3b7e8706c8968ac8dca708998d081e2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-zlib": "*",
+                "pixlmint/pixl-cms": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PixlMint\\KanbanPlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Trello-like API Plugin for pixlcms",
+            "support": {
+                "issues": "https://github.com/pixlmint/pixlcms-kanban-plugin/issues",
+                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.0"
+            },
+            "time": "2024-02-27T19:59:31+00:00"
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",

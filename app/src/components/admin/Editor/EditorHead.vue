@@ -33,10 +33,10 @@
 import {defineComponent} from 'vue'
 import {useWikiStore} from '@/src/stores/wiki';
 import {ArrowLeft} from "@element-plus/icons-vue";
-import {useRouter} from "vue-router";
 import {useMainStore} from "@/src/stores/main";
 import {ElMessageBox} from "element-plus";
 import {useDialogStore} from "pixlcms-wrapper";
+import {navigate} from "@/src/helpers/navigator";
 
 export default defineComponent({
     name: "EditorHead",
@@ -45,7 +45,6 @@ export default defineComponent({
     },
     data() {
         return {
-            router: useRouter(),
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
             dialogStore: useDialogStore(),
@@ -105,14 +104,14 @@ export default defineComponent({
                     const ws = useWikiStore();
                     ws.fetchEntry(ws.safeCurrentEntry.id);
                     const id = ws.safeCurrentEntry.id;
-                    this.router.push(id);
+                    navigate(id);
                 }).catch(() => {
                 })
             } else {
                 const ws = useWikiStore();
                 ws.fetchEntry(ws.safeCurrentEntry.id);
                 const id = ws.safeCurrentEntry.id;
-                this.router.push(id);
+                navigate(id);
             }
         },
         updateNow() {

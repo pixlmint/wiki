@@ -12,7 +12,6 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
-import {useRouter} from 'vue-router'
 import {useMainStore} from "@/src/stores/main";
 import {useUserSettings} from "@/src/stores/user-settings";
 import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
@@ -121,9 +120,6 @@ export default defineComponent({
                 this.doGoHome();
             }*/
         },
-        doGoHome() {
-            useRouter().push('/');
-        }
     },
 })
 </script>

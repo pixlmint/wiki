@@ -1,6 +1,5 @@
 import {createApp} from "vue";
 import App from './App.vue'
-import router from "./src/routes"
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 import {createPinia} from "pinia"
@@ -10,6 +9,7 @@ import PWNav from '@/src/components/pw/nav.vue';
 import PWLoading from '@/src/components/pw/loading.vue';
 import PWSearch from '@/src/components/pw/search.vue';
 import PWMDEditor from '@/src/components/pw/md-editor.vue';
+import ViewPage from '@/src/components/pw/view-page.vue';
 import VueDiff from 'vue-diff';
 import {main, Dialog, Icon} from "pixlcms-wrapper";
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -24,13 +24,15 @@ import {
     faSave,
     faVectorSquare, faTimes, faPlus
 } from "@fortawesome/free-solid-svg-icons";
+import {
+    faTrello
+} from "@fortawesome/free-brands-svg-icons";
 
 const pinia = createPinia();
 
 const app = createApp(App)
 app.use(VueAxios, axios)
 app.use(pinia)
-app.use(router)
 app.use(ElementPlus)
 app.use(VueDiff)
 app.use(main, {pinia});
@@ -41,7 +43,8 @@ app.component('pw-search', PWSearch);
 app.component('pw-md-editor', PWMDEditor);
 app.component('pm-dialog', Dialog);
 app.component('pm-icon', Icon);
+app.component('pw-view-page', ViewPage);
 
-library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight, faTimes, faPlus);
+library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight, faTimes, faPlus, faTrello);
 
 app.mount('#app')

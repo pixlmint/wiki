@@ -1,11 +1,15 @@
 <template>
-    <div>
-        <EditorHead/>
+    <view-page>
+        <template #heading>
+            <EditorHead/>
+        </template>
+        <template #content>
         <div v-if="isEntryLoaded">
             <PDFEditor v-if="isPdf"></PDFEditor>
             <EditEntry v-else></EditEntry>
         </div>
-    </div>
+        </template>
+    </view-page>
 </template>
 
 <script lang="ts">
@@ -16,8 +20,15 @@ import {useAuthStore} from 'pixlcms-wrapper'
 import {useWikiStore} from "@/src/stores/wiki";
 import {useMainStore} from "@/src/stores/main";
 import PDFEditor from "@/src/components/admin/Editor/PDFEditor.vue";
+import ViewPage from "@/src/components/pw/view-page.vue";
 
 export default defineComponent({
+    components: {
+        PDFEditor,
+        EditorHead,
+        EditEntry,
+        ViewPage,
+    },
     data: function () {
         return {
             isEntryLoaded: false,
@@ -46,11 +57,6 @@ export default defineComponent({
             this.title = "Edit " + this.wikiStore.safeCurrentEntry.meta.title;
             useMainStore().setTitle(this.title)
         });
-    },
-    components: {
-        PDFEditor,
-        EditorHead,
-        EditEntry,
     },
 })
 </script>

@@ -13,7 +13,6 @@
 import {defineComponent} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useMainStore} from "@/src/stores/main";
-import {useRouter} from "vue-router";
 
 export default defineComponent({
     name: 'PWSearch',
@@ -21,7 +20,6 @@ export default defineComponent({
         return {
             searchQuery: '',
             searchResults: [],
-            router: useRouter(),
             timeoutTimer: 0,
         };
     },
@@ -29,7 +27,7 @@ export default defineComponent({
         openEntry(id: string) {
             useWikiStore().fetchEntry(id);
             useMainStore().isSearchShowing = false;
-            this.router.push(id);
+            //this.router.push(id);
         },
         search() {
             window.clearTimeout(this.timeoutTimer);

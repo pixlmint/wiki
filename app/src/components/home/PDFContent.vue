@@ -1,20 +1,32 @@
 <template>
-    <div>
+    <view-page>
+        <template #heading>
+            <entry-heading>
+                <template #title-extras>
+                    <el-tag>PDF</el-tag>
+                </template>
+            </entry-heading>
+        </template>
+        <template #content>
         <div ref="pdfContainer" @scroll="handleScroll">
             <canvas v-for="n in totalPages" :key="n" :ref="'pdfCanvas' + n"></canvas>
         </div>
-    </div>
+        </template>
+    </view-page>
 </template>
 
 <script lang="ts">
 import {defineComponent, toRaw} from "vue";
 import * as pdfjslib from "pdfjs-dist";
 import {useLoadingStore} from "pixlcms-wrapper";
+import ViewPage from "@/src/components/pw/view-page.vue";
+import EntryHeading from "@/src/components/home/entry-heading.vue";
 
 pdfjslib.GlobalWorkerOptions.workerSrc = 'https://jslib.pixlmint.ch/pdfjs-dist/3.11.174/pdf.worker.min.js';
 
 export default defineComponent({
     name: 'PDFContent',
+    components: {EntryHeading, ViewPage},
     props: ['b64pdf'],
     data() {
         return {

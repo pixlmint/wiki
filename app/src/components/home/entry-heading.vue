@@ -1,0 +1,129 @@
+<template>
+    <div class="article-head">
+        <div class="d-flex" style="align-items: center; gap: 1rem;">
+            <div>
+                <el-breadcrumb separator="/" class="breadcrumbs print-visible">
+                    <el-breadcrumb-item v-for="item in currentTitleArray">{{ item }}</el-breadcrumb-item>
+                </el-breadcrumb>
+                <h1><slot name="title">{{ title }}</slot></h1>
+            </div>
+            <el-icon v-if="!isPublic" title="This Entry is Private, only you can see it">
+                <Lock/>
+            </el-icon>
+            <slot name="title-extras"></slot>
+        </div>
+        <div v-if="canEdit" class="print-invisible">
+            <el-dropdown class="mobile-action-buttons">
+                <el-button circle>
+                    <el-icon>
+                        <more-filled/>
+                    </el-icon>
+                </el-button>
+                <template #dropdown>
+                    <el-dropdown-item v-if="props.displayViewMarkdownButton" @click="viewMarkdown" title="View">
+                        <el-icon>
+                            <View/>
+                        </el-icon>
+                        View
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="props.displayEditButton" @click="editEntry" title="Edit">
+                        <el-icon>
+                            <edit/>
+                        </el-icon>
+                        Edit
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="props.displayDeleteButton" class="danger" @click="deleteEntry" title="Delete">
+                        <el-icon>
+                            <delete/>
+                        </el-icon>
+                        Delete
+                    </el-dropdown-item>
+                </template>
+            </el-dropdown>
+            <div class="desktop-action-buttons">
+                <el-button v-if="props.displayViewMarkdownButton" circle @click="viewMarkdown">
+                    <el-icon>
+                        <View/>
+                    </el-icon>
+                </el-button>
+                <el-button v-if="props.displayEditButton" @click="editEntry">
+                    <el-icon>
+                        <edit/>
+                    </el-icon>
+                    Edit
+                </el-button>
+                <el-button v-if="props.displayDeleteButton" type="danger" @click="deleteEntry" circle>
+                    <el-icon>
+                        <delete/>
+                    </el-icon>
+                </el-button>
+            </div>
+        </div>
+    </div>
+</template>
+<script setup lang="ts">
+import {computed} from "vue";
+import {Delete, Edit, Lock, MoreFilled, View} from "@element-plus/icons-vue";
+import {useWikiStore} from "@/src/stores/wiki";
+import {useAuthStore} from "pixlcms-wrapper";
+import {queryFormatter} from "@/src/helpers/queryFormatter";
+import {navigate} from "@/src/helpers/navigator";
+
+const props = defineProps({
+    displayEditButton: {
+        type: Boolean,
+        default: true,
+    },
+    displayDeleteButton: {
+        type: Boolean,
+        default: true,
+    },
+    displayViewMarkdownButton: {
+        type: Boolean,
+        default: true,
+    },
+});
+
+const wikiStore = useWikiStore();
+const authStore = useAuthStore();
+
+const title = computed(() => {
+    return wikiStore.safeCurrentEntry.meta.title;
+});
+
+const editEntry = function () {
+    navigate('/admin/edit?p=' + wikiStore.safeCurrentEntry.id);
+}
+
+const viewMarkdown = function () {
+    const query = queryFormatter({token: authStore.token, entry: wikiStore.safeCurrentEntry.id});
+    window.open(location.origin + "/api/admin/entry/view-markdown?" + query, "_blank");
+}
+
+const deleteEntry = function () {
+    const doDelete = confirm(`Are you sure you want to delete ${wikiStore.safeCurrentEntry.meta.title}`);
+    if (doDelete) {
+        useWikiStore().deleteEntry(wikiStore.safeCurrentEntry.id).then(() => {
+            useWikiStore().loadNav();
+            useWikiStore().fetchEntry('/');
+            navigate('/');
+        });
+    }
+}
+
+const isPublic = computed(() => {
+    return wikiStore.safeCurrentEntry.meta.security !== 'private';
+});
+
+const currentTitleArray = computed(() => {
+    const id = wikiStore.safeCurrentEntry.id;
+    if (!id) {
+        return [];
+    }
+    return id.split('/');
+});
+
+const canEdit = computed(() => {
+    return authStore.haveEditRights();
+});
+</script>

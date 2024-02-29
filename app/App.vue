@@ -3,9 +3,8 @@
         <pw-loading></pw-loading>
         <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>
-        <div :class="mainContentClasses">
-            <router-view v-if="mainContentLoaded"></router-view>
-        </div>
+        <WikiEntry v-if="mainContentLoaded && !isEditing" :key="currentPath"></WikiEntry>
+        <Editor v-else-if="mainContentLoaded && isEditing"></Editor>
         <Debug v-if="isDebugEnabled"/>
         <Modals :dialog-components="dialogs"/>
     </div>
@@ -21,10 +20,16 @@ import {AxiosResponse} from "axios";
 import {ElNotification} from "element-plus";
 import {dialogs} from '@/src/dialogs';
 import Debug from "@/src/components/debug/debug.vue";
+import WikiEntry from "@/src/components/home/WikiEntry.vue";
+import {isMobile} from "@/src/helpers/mobile-detector";
+import {navigate} from "@/src/helpers/navigator";
+import Editor from "@/src/components/admin/Editor/Editor.vue";
 
 export default defineComponent({
     name: "App",
     components: {
+        Editor,
+        WikiEntry,
         Debug,
         Modals,
     },
@@ -35,21 +40,18 @@ export default defineComponent({
             dialogStore: useDialogStore(),
             mainContentLoaded: false,
             dialogs: dialogs(),
+            isEditing: false,
         }
     },
     computed: {
-        mainContentClasses() {
-            if (this.mainStore.isLargeNavShowing) {
-                return 'main-content large-nav';
-            } else {
-                return 'main-content small-nav';
-            }
-        },
         searchShowing() {
             return useMainStore().isSearchShowing;
         },
         isDebugEnabled() {
             return this.mainStore.meta.debugEnabled;
+        },
+        currentPath() {
+            return this.wikiStore.safeCurrentEntry.id;
         },
     },
     created() {
@@ -61,6 +63,8 @@ export default defineComponent({
         this.init();
         this.loadMainContent();
         window.addEventListener('keydown', this.keyListener);
+        window.addEventListener('popstate', this.popStateHandler);
+        window.addEventListener('pushstate', this.loadMainContent);
     },
     methods: {
         keyListener(event: Event) {
@@ -75,6 +79,10 @@ export default defineComponent({
                 useMainStore().isSearchShowing = false;
             }
         },
+        popStateHandler(event: PopStateEvent) {
+            navigate(event.state.url);
+            this.loadMainContent();
+        },
         loadMainContent() {
             const path = location.pathname;
 
@@ -83,11 +91,17 @@ export default defineComponent({
 
             if (match !== null && match.length > 0) {
                 this.mainContentLoaded = true;
+                this.isEditing = true;
                 return;
+            } else {
+                this.isEditing = false;
             }
 
             useWikiStore().fetchEntry(path).then(() => {
                 this.mainContentLoaded = true;
+                if (isMobile()) {
+                    useMainStore().toggleLargeNavShowing(false);
+                }
                 useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
             })
         },
@@ -161,7 +175,7 @@ export default defineComponent({
 @media screen and (min-width: 1600px) {
     .main-content {
         &.large-nav {
-            margin: 0 auto 0 auto !important;
+            margin: 0 auto 0 auto;
         }
     }
 }
@@ -169,7 +183,6 @@ export default defineComponent({
 @media screen and (min-width: 1300px) {
     .main-content {
         min-width: unset !important;
-        max-width: 1000px !important;
         box-shadow: var(--box-shadow);
 
         img {
@@ -182,6 +195,14 @@ export default defineComponent({
 
         &.small-nav {
             margin: 0 auto 0 auto;
+        }
+
+        &.full-width {
+
+        }
+
+        &.article-width {
+            max-width: 1000px !important;
         }
     }
 }

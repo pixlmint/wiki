@@ -54,8 +54,7 @@ export const useBoardStore = defineStore('boardStore', {
                 targetListUid: targetListUid,
                 cardUid: cardUid
             }, 'PUT');
-            let response = await send(request);
-            console.log(response);
+            return await send(request);
         },
         async createList(boardId: string, listName: string) {
             if (this.loadedBoard === null) {
