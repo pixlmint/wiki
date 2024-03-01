@@ -1,9 +1,9 @@
 <template>
     <div class="board">
-        <list v-if="boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+        <list v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
         <div class="board-list">
-            <el-input ref="addItemInput" v-if="isAddingList" v-on:keyup.enter="addList"
-                      v-model="newListName"></el-input>
+            <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.enter="addList"
+                      v-model="data.newListName"></el-input>
             <el-button @click="toggleAddList">
                 <pm-icon icon="plus"></pm-icon>
             </el-button>
@@ -11,65 +11,60 @@
     </div>
 </template>
 
-<script lang="ts">
-import {defineComponent} from "vue";
+<script lang="ts" setup>
+import {ref, defineProps, reactive, computed} from "vue";
 import List from "@/src/components/kanban/list.vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useBoardStore} from "@/src/stores/board";
 import {useMainStore} from "@/src/stores/main";
 
-export default defineComponent({
-    name: 'board',
-    components: {
-        list: List,
+const addItemInput = ref(null);
+
+const props = defineProps({
+    boardId: {
+        type: String,
+        required: true,
     },
-    props: {
-        boardId: {
-            type: String,
-            required: true,
-        }
-    },
-    data() {
-        return {
-            wikiStore: useWikiStore(),
-            boardStore: useBoardStore(),
-            mainStore: useMainStore(),
-            boardLoaded: false,
-            enabled: true,
-            dragging: false,
-            isAddingList: false,
-            newListName: null,
-        }
-    },
-    created() {
-        this.boardStore.loadBoard(this.boardId).then(() => {
-            this.boardLoaded = true;
-            this.mainStore.setTitle(this.boardStore.safeCurrentBoard.meta.title);
-        });
-    },
-    computed: {
-        boardLists() {
-            return this.boardStore.safeCurrentBoard.children;
-        },
-    },
-    methods: {
-        log(event: Event) {
-            console.log(event)
-        },
-        addList() {
-            if (this.newListName === null) {
-                throw 'List name cannot be null';
-            }
-            this.boardStore.createList(this.boardId, this.newListName).then(() => {
-                this.isAddingList = false;
-                this.newListName = null;
-            });
-        },
-        toggleAddList() {
-            this.isAddingList = true;
-        },
-    },
-})
+});
+const wikiStore = useWikiStore();
+const boardStore = useBoardStore();
+const mainStore = useMainStore();
+
+const data = reactive({
+    boardLoaded: false,
+    enabled: true,
+    dragging: false,
+    isAddingList: false,
+    newListName: null,
+});
+
+// created
+boardStore.loadBoard(props.boardId).then(() => {
+    data.boardLoaded = true;
+    mainStore.setTitle(boardStore.safeCurrentBoard.meta.title);
+});
+const boardLists = computed(() => {
+    return boardStore.safeCurrentBoard.children;
+});
+
+const log = function (event: Event) {
+    console.log(event)
+}
+const addList = function () {
+    if (data.newListName === null) {
+        throw 'List name cannot be null';
+    }
+    boardStore.createList(props.boardId, data.newListName).then(() => {
+        data.isAddingList = false;
+        data.newListName = null;
+    });
+}
+const toggleAddList = function () {
+    data.isAddingList = true;
+    if (addItemInput.value) {
+        addItemInput.value.focus();
+    }
+}
 
 </script>
 

@@ -8,8 +8,8 @@
                 </el-card>
             </template>
             <template #footer>
-                <el-card v-show="addingItem">
-                    <el-input ref="addItemInput" v-on:keyup.enter="addItem" v-model="newItemText"></el-input>
+                <el-card v-show="data.addingItem">
+                    <el-input ref="addItemInput" v-on:keyup.enter="addItem" v-model="data.newItemText"></el-input>
                 </el-card>
                 <el-row justify="end">
                     <el-col :span="4">
@@ -21,67 +21,65 @@
     </div>
 </template>
 
-<script lang="ts">
-import {defineComponent, toRaw} from "vue";
+<script lang="ts" setup>
 import draggable from "vuedraggable";
 import {useBoardStore} from "@/src/stores/board";
+import {AxiosResponse} from "axios";
+import {reactive, computed, ref} from "vue";
 
-export default defineComponent({
-    name: "List",
-    components: {
-        draggable,
-    },
-    props: {
-        list: {
-            type: Object,
-            required: true,
-        }
-    },
-    data() {
-        return {
-            addingItem: false,
-            newItemText: "",
-            boardStore: useBoardStore(),
-        }
-    },
-    created() {
-        console.log(toRaw(this.list));
-        if (this.list.children === null) {
-            this.list.children = {};
-        }
-    },
-    computed: {
-        cards() {
-            if (this.list.children === null) {
-                return [];
-            }
-            return Object.values(this.list.children);
-        }
-    },
-    methods: {
-        updateList(event: Event) {
-            if ('added' in event) {
-                console.log('handling added event');
-                const newCard = event.added.element;
-                this.list.children[newCard.id] = newCard;
-                this.boardStore.moveCard(this.list.meta.uid, newCard.meta.uid);
-            } else if ('removed' in event) {
-                console.log('handling removed event', event);
-                delete this.list.children[event.removed.element.id];
-            } else {
-                console.log('I don\'t know what to do with this event', event);
-            }
-        },
-        toggleAddItem: function () {
-            this.addingItem = true;
-        },
-        addItem: function () {
-            this.boardStore.createListItem(this.list.id, this.newItemText).then((response: Response) => {
-                this.newItemText = "";
-                this.addingItem = false;
-                this.list.children = response.data.list.children;
-            });
-        },
+const props = defineProps({
+    list: {
+        type: Object,
+        required: true,
     }
 });
+
+const data = reactive({
+    addingItem: false,
+    newItemText: "",
+});
+
+const addItemInput = ref(null);
+
+const boardStore = useBoardStore();
+
+// created
+if (props.list.children === null) {
+    props.list.children = {};
+}
+
+const cards = computed(() => {
+    if (props.list.children === null) {
+        return [];
+    }
+    return Object.values(props.list.children);
+});
+
+
+const updateList = function (event: Event) {
+    if ('added' in event) {
+        const newCard = event.added.element;
+        props.list.children[newCard.id] = newCard;
+        boardStore.moveCard(props.list.meta.uid, newCard.meta.uid);
+    } else if ('removed' in event) {
+        console.log('handling removed event', event);
+        delete props.list.children[event.removed.element.id];
+    } else {
+        console.log('I don\'t know what to do with this event', event);
+    }
+}
+const toggleAddItem = function () {
+    data.addingItem = true;
+    if (addItemInput.value) {
+        addItemInput.value.focus();
+    }
+}
+
+const addItem = function () {
+    boardStore.createListItem(props.list.id, data.newItemText).then((response: AxiosResponse) => {
+        data.newItemText = "";
+        data.addingItem = false;
+        props.list.children = response.data.list.children;
+    });
+}
 </script>
