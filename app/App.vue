@@ -174,8 +174,16 @@ export default defineComponent({
 
 @media screen and (min-width: 1600px) {
     .main-content {
-        &.large-nav {
+        &.large-nav.article-width {
             margin: 0 auto 0 auto;
+        }
+    }
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1599px) {
+    .main-content {
+        &.large-nav {
+            margin: 0 auto 0 $navLargeWidth;
         }
     }
 }
@@ -189,16 +197,8 @@ export default defineComponent({
             max-width: 1000px !important;
         }
 
-        &.large-nav {
-            margin: 0 auto 0 $navLargeWidth;
-        }
-
         &.small-nav {
             margin: 0 auto 0 auto;
-        }
-
-        &.full-width {
-
         }
 
         &.article-width {
