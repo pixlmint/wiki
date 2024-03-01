@@ -41,7 +41,7 @@ return [
         'version' => '1.16.0',
     ],
     'base' => [
-        'debugEnabled' => true,
+        'debugEnabled' => false,
         'frontendController' => FrontendController::class,
     ]
 ];
