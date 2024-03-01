@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, defineProps, reactive, computed} from "vue";
+import {ref, defineProps, reactive, computed, toRaw} from "vue";
 import List from "@/src/components/kanban/list.vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useBoardStore} from "@/src/stores/board";
@@ -43,8 +43,20 @@ boardStore.loadBoard(props.boardId).then(() => {
     data.boardLoaded = true;
     mainStore.setTitle(boardStore.safeCurrentBoard.meta.title);
 });
+
 const boardLists = computed(() => {
-    return boardStore.safeCurrentBoard.children;
+    const lists = [];
+    const listIds = boardStore.safeCurrentBoard.meta.board.lists;
+    const children = Object.values(boardStore.safeCurrentBoard.children);
+    for (let i = 0; i < listIds.length; i++) {
+        for (let x = 0; x < children.length; x++) {
+            if (listIds[i] === children[x].id) {
+                lists.push(children[x]);
+            }
+        }
+    }
+
+    return lists;
 });
 
 const log = function (event: Event) {

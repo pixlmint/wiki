@@ -158,7 +158,6 @@ const navClickListener = function (event: Event) {
         return;
     }
     const element = findElementWithTagName(event.target, 'LI');
-    console.log(element);
     const id = element.dataset.pwEntryId;
     if (id === undefined || id === null) {
         throw 'No ID found';
