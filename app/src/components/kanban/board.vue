@@ -47,7 +47,11 @@ boardStore.loadBoard(props.boardId).then(() => {
 const boardLists = computed(() => {
     const lists = [];
     const listIds = boardStore.safeCurrentBoard.meta.board.lists;
-    const children = Object.values(boardStore.safeCurrentBoard.children);
+    const childrenObj = boardStore.safeCurrentBoard.children;
+    if (childrenObj === null || Object.keys(childrenObj).length === 0) {
+        return lists;
+    }
+    const children = Object.values(childrenObj);
     for (let i = 0; i < listIds.length; i++) {
         for (let x = 0; x < children.length; x++) {
             if (listIds[i] === children[x].id) {
