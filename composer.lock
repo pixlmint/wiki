@@ -253,16 +253,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.5.4",
+            "version": "1.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "28bfd82b2dcbdddcb90e6974b5916ae513feaa17"
+                "reference": "72ed9d373b9d4e9e3a96c1cab06164c09b8278f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/28bfd82b2dcbdddcb90e6974b5916ae513feaa17",
-                "reference": "28bfd82b2dcbdddcb90e6974b5916ae513feaa17",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/72ed9d373b9d4e9e3a96c1cab06164c09b8278f4",
+                "reference": "72ed9d373b9d4e9e3a96c1cab06164c09b8278f4",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.5.4"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.5.5"
             },
-            "time": "2024-02-24T22:24:46+00:00"
+            "time": "2024-03-04T18:42:33+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -389,16 +389,16 @@
         },
         {
             "name": "pixlmint/pixlcms-kanban-plugin",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-kanban-plugin.git",
-                "reference": "3e5dd2e7a3b7e8706c8968ac8dca708998d081e2"
+                "reference": "ecdcf61d98b38bab5960c537adae476eb37e5911"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/3e5dd2e7a3b7e8706c8968ac8dca708998d081e2",
-                "reference": "3e5dd2e7a3b7e8706c8968ac8dca708998d081e2",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/ecdcf61d98b38bab5960c537adae476eb37e5911",
+                "reference": "ecdcf61d98b38bab5960c537adae476eb37e5911",
                 "shasum": ""
             },
             "require": {
@@ -419,9 +419,9 @@
             "description": "A Trello-like API Plugin for pixlcms",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-kanban-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.0"
+                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.1"
             },
-            "time": "2024-02-27T19:59:31+00:00"
+            "time": "2024-03-04T18:55:20+00:00"
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",
@@ -458,16 +458,16 @@
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
-            "version": "1.6.7",
+            "version": "1.6.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
-                "reference": "159595e230d3ebee15e274baca5e0b431f15747b"
+                "reference": "4859e232d195e8ce088152fe24082ecc7509c52f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/159595e230d3ebee15e274baca5e0b431f15747b",
-                "reference": "159595e230d3ebee15e274baca5e0b431f15747b",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/4859e232d195e8ce088152fe24082ecc7509c52f",
+                "reference": "4859e232d195e8ce088152fe24082ecc7509c52f",
                 "shasum": ""
             },
             "require": {
@@ -489,9 +489,9 @@
             "description": "The official wiki plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.7"
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.8"
             },
-            "time": "2024-02-11T10:06:52+00:00"
+            "time": "2024-03-04T18:56:42+00:00"
         },
         {
             "name": "psr/container",
@@ -887,16 +887,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v6.4.3",
+            "version": "v6.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "31642b0818bfcff85930344ef93193f8c607e0a3"
+                "reference": "710e27879e9be3395de2b98da3f52a946039f297"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/31642b0818bfcff85930344ef93193f8c607e0a3",
-                "reference": "31642b0818bfcff85930344ef93193f8c607e0a3",
+                "url": "https://api.github.com/repos/symfony/process/zipball/710e27879e9be3395de2b98da3f52a946039f297",
+                "reference": "710e27879e9be3395de2b98da3f52a946039f297",
                 "shasum": ""
             },
             "require": {
@@ -928,7 +928,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v6.4.3"
+                "source": "https://github.com/symfony/process/tree/v6.4.4"
             },
             "funding": [
                 {
@@ -944,7 +944,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T14:51:35+00:00"
+            "time": "2024-02-20T12:31:00+00:00"
         },
         {
             "name": "symfony/yaml",

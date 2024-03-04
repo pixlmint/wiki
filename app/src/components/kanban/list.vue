@@ -4,7 +4,7 @@
         <draggable class="items-list" @change="updateList" :list="cards" group="board" itemKey="name">
             <template #item="{element, index}">
                 <el-card class="item" shadow="hover">
-                    {{ element.meta.title }} {{ index }}
+                    {{ element.meta.title }}
                 </el-card>
             </template>
             <template #footer>
