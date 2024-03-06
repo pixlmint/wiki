@@ -7,55 +7,39 @@
                 </el-breadcrumb>
                 <h1><slot name="title">{{ title }}</slot></h1>
             </div>
-            <el-icon v-if="!isPublic" title="This Entry is Private, only you can see it">
-                <Lock/>
-            </el-icon>
+            <pm-icon v-if="!isPublic" title="This Entry is Private, only you can see it" icon="lock"></pm-icon>
             <slot name="title-extras"></slot>
         </div>
         <div v-if="canEdit" class="print-invisible">
             <el-dropdown class="mobile-action-buttons">
                 <el-button circle>
-                    <el-icon>
-                        <more-filled/>
-                    </el-icon>
+                    <pm-icon icon="ellipsis"></pm-icon>
                 </el-button>
                 <template #dropdown>
                     <el-dropdown-item v-if="props.displayViewMarkdownButton" @click="viewMarkdown" title="View">
-                        <el-icon>
-                            <View/>
-                        </el-icon>
+                        <pm-icon icon="eye"></pm-icon>
                         View
                     </el-dropdown-item>
                     <el-dropdown-item v-if="props.displayEditButton" @click="editEntry" title="Edit">
-                        <el-icon>
-                            <edit/>
-                        </el-icon>
+                        <pm-icon icon="pen-to-square"></pm-icon>
                         Edit
                     </el-dropdown-item>
                     <el-dropdown-item v-if="props.displayDeleteButton" class="danger" @click="deleteEntry" title="Delete">
-                        <el-icon>
-                            <delete/>
-                        </el-icon>
+                        <pm-icon icon="trash"></pm-icon>
                         Delete
                     </el-dropdown-item>
                 </template>
             </el-dropdown>
             <div class="desktop-action-buttons">
                 <el-button v-if="props.displayViewMarkdownButton" circle @click="viewMarkdown">
-                    <el-icon>
-                        <View/>
-                    </el-icon>
+                    <pm-icon icon="eye"></pm-icon>
                 </el-button>
                 <el-button v-if="props.displayEditButton" @click="editEntry">
-                    <el-icon>
-                        <edit/>
-                    </el-icon>
+                    <pm-icon icon="pen-to-square"></pm-icon>
                     Edit
                 </el-button>
                 <el-button v-if="props.displayDeleteButton" type="danger" @click="deleteEntry" circle>
-                    <el-icon>
-                        <delete/>
-                    </el-icon>
+                    <pm-icon icon="trash"></pm-icon>
                 </el-button>
             </div>
         </div>
@@ -63,7 +47,6 @@
 </template>
 <script setup lang="ts">
 import {computed} from "vue";
-import {Delete, Edit, Lock, MoreFilled, View} from "@element-plus/icons-vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useAuthStore} from "pixlcms-wrapper";
 import {queryFormatter} from "@/src/helpers/queryFormatter";

@@ -3,16 +3,12 @@
         <div id="nav" class="print-invisible" v-show="mainNavShowing">
             <div>
                 <div @click="hideMainNav" class="nav-toggle">
-                    <el-icon>
-                        <CaretLeft/>
-                    </el-icon>
+                    <pm-icon icon="caret-left"></pm-icon>
                 </div>
                 <el-menu @click="navClickListener" :router="false" class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
                         <div>
-                            <el-icon>
-                                <HomeFilled></HomeFilled>
-                            </el-icon>
+                            <pm-icon icon="house"></pm-icon>
                         </div>
                     </el-menu-item>
                     <PWNavElement v-for="(childElement, myIndex) in nav.children"
@@ -24,30 +20,13 @@
                 </el-menu>
                 <el-dropdown class="full-width" v-if="canEdit">
                     <el-button class="full-width">
-                        <el-icon>
-                            <CirclePlus/>
-                        </el-icon>
+                        <pm-icon icon="circle-plus"></pm-icon>
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item @click="addSubFolder">
-                                <el-icon>
-                                    <FolderAdd/>
-                                </el-icon>
-                                Folder
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="addSubEntry">
-                                <el-icon>
-                                    <DocumentAdd/>
-                                </el-icon>
-                                Entry
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="addPdf">
-                                <el-icon>
-                                    <DocumentAdd/>
-                                </el-icon>
-                                PDF
-                            </el-dropdown-item>
+                            <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
+                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
+                            <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -58,18 +37,14 @@
                 </template>
                 <template v-else>
                     <el-button @click="settings" class="user-button">
-                        <el-icon class="icon">
-                            <Avatar></Avatar>
-                        </el-icon>
+                        <pm-icon icon="user"></pm-icon>
                         <span class="text">Admin</span>
                     </el-button>
                 </template>
             </div>
         </div>
         <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
-            <el-icon class="nav-toggle-small">
-                <CaretRight/>
-            </el-icon>
+            <pm-icon class="nav-toggle-small" icon="caret-right"></pm-icon>
             <el-breadcrumb separator="/" class="breadcrumbs">
                 <el-breadcrumb-item v-for="item in currentTitleArray">{{ item }}</el-breadcrumb-item>
             </el-breadcrumb>
@@ -83,18 +58,18 @@ import {useWikiStore} from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav-element.vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {Avatar, CaretLeft, CaretRight, CirclePlus, DocumentAdd, FolderAdd, HomeFilled,} from "@element-plus/icons-vue";
 import {isMobile} from "@/src/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
 import {navigate} from "@/src/helpers/navigator";
 
-const findListElement = (target: any) => {
+const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
         return target;
     }
     if (target.parentElement.nodeName === 'LI') {
         return target.parentElement;
     }
+    return findListElement(target.parentElement);
 }
 
 const navElementIsFolder = (target: any) => {
@@ -245,6 +220,10 @@ const nav = computed(() => {
     &:hover {
         background-color: var(--el-menu-hover-bg-color);
     }
+
+    svg {
+        padding-right: 5px;
+    }
 }
 
 #mobile-nav {
@@ -310,6 +289,18 @@ const nav = computed(() => {
         &:hover {
             background-color: var(--el-menu-hover-bg-color);
         }
+    }
+}
+
+.el-dropdown-menu__item {
+    svg {
+        margin-right: 5px;
+    }
+}
+
+.el-sub-menu__title {
+    .submenu-title {
+        margin-right: 5px;
     }
 }
 </style>

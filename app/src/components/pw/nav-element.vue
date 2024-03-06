@@ -3,29 +3,23 @@
         <template v-if="isFolder">
             <el-sub-menu data-is-entry="false" :index="element.id">
                 <template #title>
-                    {{ element.title }}
-                    <el-icon class="private-icon" v-if="!isPublic"><Lock/></el-icon>
+                    <span class="submenu-title">{{ element.title }}</span>
+                    <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     <el-dropdown v-if="canEdit">
                         <el-button circle>
-                            <el-icon>
-                                <more-filled/>
-                            </el-icon>
+                            <pm-icon icon="ellipsis"></pm-icon>
                         </el-button>
                         <template #dropdown>
-                            <el-dropdown-item @click="addPage"><el-icon><DocumentAdd/></el-icon>Add Page</el-dropdown-item>
-                            <el-dropdown-item @click="addPdf"><el-icon><DocumentAdd/></el-icon>Add PDF</el-dropdown-item>
-                            <el-dropdown-item @click="addSubfolder"><el-icon><FolderAdd/></el-icon>Add Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="addPage"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
+                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
+                            <el-dropdown-item @click="addSubfolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
                             <el-dropdown-item @click="addBoard"><pm-icon package="brands" icon="trello"></pm-icon>Add Board</el-dropdown-item>
                             <el-dropdown-item @click="switchSecurity">
-                                <el-icon v-if="isPublic">
-                                    <Lock/>
-                                </el-icon>
-                                <el-icon v-else>
-                                    <Unlock/>
-                                </el-icon>
+                                <pm-icon v-if="isPublic" icon="lock"></pm-icon>
+                                <pm-icon v-else icon="unlock"></pm-icon>
                                 {{ securitySwitchText }}
                             </el-dropdown-item>
-                            <el-dropdown-item class="danger" @click="deleteFolder"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
+                            <el-dropdown-item class="danger" @click="deleteFolder"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
                         </template>
                     </el-dropdown>
                 </template>
@@ -40,27 +34,22 @@
                 <div>
                     {{ element.title }}
                     <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
-                    <el-icon class="private-icon" v-if="!isPublic"><Lock/></el-icon>
+                    <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
+                    <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                 </div>
                 <el-dropdown v-if="canEdit">
                     <el-button circle>
-                        <el-icon>
-                            <more-filled/>
-                        </el-icon>
+                        <pm-icon icon="ellipsis"></pm-icon>
                     </el-button>
                     <template #dropdown>
-                        <el-dropdown-item @click="edit"><el-icon><Edit/></el-icon>Edit</el-dropdown-item>
-                        <el-dropdown-item @click="rename"><el-icon><EditPen/></el-icon>Rename</el-dropdown-item>
+                        <el-dropdown-item @click="edit"><pm-icon icon="pen"></pm-icon>Edit</el-dropdown-item>
+                        <el-dropdown-item @click="rename"><pm-icon icon="pen-to-square"></pm-icon>Rename</el-dropdown-item>
                         <el-dropdown-item @click="switchSecurity">
-                            <el-icon v-if="isPublic">
-                                <Lock/>
-                            </el-icon>
-                            <el-icon v-else>
-                                <Unlock/>
-                            </el-icon>
+                            <pm-icon v-if="isPublic" icon="lock"></pm-icon>
+                            <pm-icon v-else icon="unlock"></pm-icon>
                             {{ securitySwitchText }}
                         </el-dropdown-item>
-                        <el-dropdown-item class="danger" @click="deletePage"><el-icon><Delete/></el-icon>Delete</el-dropdown-item>
+                        <el-dropdown-item class="danger" @click="deletePage"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
                     </template>
                 </el-dropdown>
             </el-menu-item>
@@ -70,7 +59,6 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {MoreFilled, FolderAdd, DocumentAdd, Delete, Edit, EditPen, Lock, Unlock} from "@element-plus/icons-vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
@@ -89,20 +77,7 @@ export default defineComponent({
             boardStore: useBoardStore(),
         }
     },
-    components: {
-        MoreFilled,
-        FolderAdd,
-        DocumentAdd,
-        Delete,
-        Edit,
-        EditPen,
-        Lock,
-        Unlock,
-    },
     computed: {
-        MoreFilled() {
-            return MoreFilled
-        },
         isFolder() {
             return this.element && this.element.isFolder && this.element.kind === 'plain';
         },
@@ -123,7 +98,6 @@ export default defineComponent({
     methods: {
         edit() {
             const currentRoute = location.pathname;
-            // this.router.push('/admin/edit?p=' + this.element.id);
             navigate('/admin/edit?p=' + this.element.id);
             if (currentRoute === '/admin/edit') {
                 useWikiStore().fetchEntry(this.element.id).then(() => {
@@ -214,6 +188,18 @@ export default defineComponent({
 .el-dropdown {
     button {
         margin-left: 1rem;
+    }
+}
+
+.el-dropdown-menu__item {
+    svg {
+        margin-right: 5px;
+    }
+}
+
+.el-sub-menu__title {
+    .submenu-title {
+        margin-right: 5px;
     }
 }
 

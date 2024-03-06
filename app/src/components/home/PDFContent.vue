@@ -3,7 +3,7 @@
         <template #heading>
             <entry-heading>
                 <template #title-extras>
-                    <el-tag>PDF</el-tag>
+                    <el-tag type="danger"><pm-icon icon="file-pdf"></pm-icon></el-tag>
                 </template>
             </entry-heading>
         </template>

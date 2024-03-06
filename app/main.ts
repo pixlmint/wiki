@@ -22,7 +22,9 @@ import {
     faPencil,
     faPenRuler,
     faSave,
-    faVectorSquare, faTimes, faPlus
+    faVectorSquare, faTimes, faPlus, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
+    faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faHouse, faCirclePlus, faUser,
+    faEye, faMoon, faSun, faDownload, faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faTrello
@@ -45,6 +47,9 @@ app.component('pm-dialog', Dialog);
 app.component('pm-icon', Icon);
 app.component('pw-view-page', ViewPage);
 
-library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle, faArrowRotateRight, faTimes, faPlus, faTrello);
+library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle,
+    faArrowRotateRight, faTimes, faPlus, faTrello, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
+    faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faHouse, faCirclePlus, faUser,
+    faEye, faMoon, faSun, faDownload, faRotate);
 
 app.mount('#app')
