@@ -31,6 +31,7 @@
                 </template>
             </el-dropdown>
             <div class="desktop-action-buttons">
+                <slot name="actions-extra"></slot>
                 <el-button v-if="props.displayViewMarkdownButton" circle @click="viewMarkdown">
                     <pm-icon icon="eye"></pm-icon>
                 </el-button>

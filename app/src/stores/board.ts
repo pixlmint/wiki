@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {BoardResponse} from "@/src/contracts/Kanban";
 import {buildRequest, send} from "pixlcms-wrapper";
 import {useWikiStore} from '@/src/stores/wiki';
+const {DateTime} = require ('luxon');
 
 interface State {
     loadedBoard: BoardResponse | null
@@ -31,9 +32,6 @@ export const useBoardStore = defineStore('boardStore', {
         },
     },
     actions: {
-        localRemoveItem(listId: string, itemId: string) {
-            this.lastRemovedItem = {listId, itemId};
-        },
         async loadBoard(boardId: string) {
             const request = buildRequest('/api/board/load', {board: boardId});
             let response = await send(request);
@@ -46,8 +44,7 @@ export const useBoardStore = defineStore('boardStore', {
         },
         async createListItem(listId: string, name: String) {
             const request = buildRequest('/api/board/list/card/create', {listId: listId, name: name}, 'POST');
-            let response = await send(request);
-            return response;
+            return await send(request);
         },
         async moveCard(targetListUid: string, cardUid: string) {
             const request = buildRequest('/api/board/move-card', {
@@ -55,6 +52,19 @@ export const useBoardStore = defineStore('boardStore', {
                 cardUid: cardUid
             }, 'PUT');
             return await send(request);
+        },
+        async updateBoardMeta(newMeta: object) {
+            const now = DateTime.now();
+            const data = {
+                meta: newMeta,
+                entry: this.safeCurrentBoard.id,
+                lastUpdate: now.toFormat('yyyy-MM-dd HH:mm:ss'),
+                content: this.safeCurrentBoard.raw_content,
+            }
+
+            this.loadedBoard.meta = newMeta;
+            const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
+            return send(request);
         },
         async createList(boardId: string, listName: string) {
             if (this.loadedBoard === null) {

@@ -1,6 +1,6 @@
 <template>
     <div class="board">
-        <list v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+        <list class="board-list" v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
         <div class="board-list">
             <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.enter="addList"
                       v-model="data.newListName"></el-input>

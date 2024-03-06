@@ -5,6 +5,7 @@ import ChangePassword, {route as changePasswordRoute} from "@/src/components/aut
 import RequestNewPassword, {route as requestNewPasswordRoute} from "@/src/components/auth/RequestNewPassword.vue";
 import RestorePassword, {route as restorePasswordRoute} from "@/src/components/auth/RestorePassword.vue";
 import NewPDF, {route as newPdfRoute} from "@/src/components/auth/NewPDF.vue";
+import BoardSettings, {route as boardSettingsRoute} from "@/src/components/kanban/board-settings.vue";
 import {defineDialogs} from "pixlcms-wrapper";
 
 export const dialogs = defineDialogs([
@@ -35,5 +36,9 @@ export const dialogs = defineDialogs([
     {
         route: newPdfRoute,
         component: NewPDF,
+    },
+    {
+        route: boardSettingsRoute,
+        component: BoardSettings,
     },
 ]);
