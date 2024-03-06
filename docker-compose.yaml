@@ -7,7 +7,8 @@ services:
             dockerfile: local.Dockerfile
             context: .
             args:
-                UID: 1001
+                UID: 1000
+                GID: 1000
         container_name: wiki
         ports:
             - '94:80'
