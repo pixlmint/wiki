@@ -8,12 +8,19 @@ const cssWebpackConfig = require('./css')
 const config = require('../project.config')
 const terserOptions = require('./terserOptions')
 
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+
 module.exports = merge(baseWebpackConfig, cssWebpackConfig, {
   mode: 'production',
 
   output: {
     publicPath: config.build.publicPath,
   },
+
+  plugins: [
+      require('unplugin-auto-import/webpack').default({resolvers: [ElementPlusResolver()]}),
+      require('unplugin-vue-components/webpack').default({resolvers: [ElementPlusResolver()]}),
+  ],
 
   optimization: {
     minimize: true,
