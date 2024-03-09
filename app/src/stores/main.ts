@@ -43,6 +43,7 @@ export const useMainStore = defineStore('main', {
     actions: {
         init(token: string | null) {
             const request = buildRequest('/api/init', {token: token}, 'POST');
+            // @ts-ignore
             return send(request).then((response: AxiosResponse) => {
                 if (response.data.is_token_valid !== 'token_valid') {
                     useAuthStore().logout();

@@ -1,4 +1,5 @@
 import {EntryMeta, WikiEntry} from "@/src/contracts/WikiBase";
+import {RGB} from "@/src/contracts/Color";
 
 export interface BaseBoardItemResponse extends WikiEntry {
     meta: BaseBoardItemMeta,
@@ -20,6 +21,7 @@ export interface BaseBoardItemMeta extends EntryMeta {
 export interface BoardMeta extends BaseBoardItemMeta {
     board: {
         lists: String[],
+        labels: CardLabel[],
     },
 }
 
@@ -37,4 +39,9 @@ export class Board implements BaseBoardItem {
     fromResponse: Function = function (response: BaseBoardItemResponse) {
 
     }
+}
+
+export interface CardLabel {
+    title: string,
+    color: string,
 }

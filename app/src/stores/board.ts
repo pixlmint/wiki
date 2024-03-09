@@ -62,6 +62,7 @@ export const useBoardStore = defineStore('boardStore', {
                 content: this.safeCurrentBoard.raw_content,
             }
 
+            // @ts-ignore
             this.loadedBoard.meta = newMeta;
             const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
             return send(request);
