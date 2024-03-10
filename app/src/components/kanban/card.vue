@@ -1,7 +1,9 @@
 <template>
     <el-card @click="viewCard" class="item" shadow="hover">
         {{ props.cardData.meta.title }}
-        <card-label v-for="(label, index) in labels" :label="label" :key="index"></card-label>
+        <div class="labels">
+            <card-label v-for="(label, index) in labels" :label="label" :key="index"></card-label>
+        </div>
     </el-card>
 </template>
 
@@ -35,3 +37,16 @@ const viewCard = function () {
     });
 }
 </script>
+
+<style scoped lang="scss">
+.item {
+    position: relative;
+    padding-bottom: 10px;
+
+    .labels {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+}
+</style>

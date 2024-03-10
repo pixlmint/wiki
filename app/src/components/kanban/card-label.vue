@@ -1,12 +1,13 @@
 <template>
-    <div class="card-label" :style="'background-color: ' + color + ';color: ' + fontColor">
+    <span class="card-label" :style="'border-color: ' + color + '; background-color: ' + backgroundColor + ';color: ' + fontColor">
         {{ props.label.title }}
-    </div>
+    </span>
 </template>
 
 <script lang="ts" setup>
 import {computed} from "vue";
 import {hexToHsl} from "@/src/helpers/color";
+import Color from 'colorjs.io';
 
 const props = defineProps({
     label: {
@@ -24,6 +25,12 @@ const fontColor = computed(() => {
     }
 });
 
+const backgroundColor = computed(() => {
+    const color = new Color(props.label.color);
+    color.alpha = 0.25;
+    return color.toString();
+});
+
 const color = computed(() => {
     return props.label.color;
 });
@@ -31,9 +38,10 @@ const color = computed(() => {
 
 <style lang="scss" scoped>
 .card-label {
-    padding: 3px 10px;
-    border-radius: 17px;
+    padding: 1px 10px;
+    border-radius: 100px;
     display: inline-block;
     margin: 1px;
+    border: 1px solid black;
 }
 </style>
