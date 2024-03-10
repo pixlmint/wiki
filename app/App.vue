@@ -197,12 +197,12 @@ export default defineComponent({
             max-width: 1000px !important;
         }
 
-        &.small-nav {
-            margin: 0 auto 0 auto;
-        }
-
         &.article-width {
             max-width: 1000px !important;
+
+            &.small-nav {
+                margin: 0 auto 0 auto;
+            }
         }
     }
 }
