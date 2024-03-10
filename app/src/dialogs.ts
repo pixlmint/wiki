@@ -6,6 +6,7 @@ import RequestNewPassword, {route as requestNewPasswordRoute} from "@/src/compon
 import RestorePassword, {route as restorePasswordRoute} from "@/src/components/auth/RestorePassword.vue";
 import NewPDF, {route as newPdfRoute} from "@/src/components/auth/NewPDF.vue";
 import BoardSettings, {route as boardSettingsRoute} from "@/src/components/kanban/board-settings.vue";
+import CardModal, {route as cardModalRoute} from "@/src/components/kanban/card-modal.vue";
 import {defineDialogs} from "pixlcms-wrapper";
 
 export const dialogs = defineDialogs([
@@ -40,5 +41,9 @@ export const dialogs = defineDialogs([
     {
         route: boardSettingsRoute,
         component: BoardSettings,
+    },
+    {
+        route: cardModalRoute,
+        component: CardModal,
     },
 ]);

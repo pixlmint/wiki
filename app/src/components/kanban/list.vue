@@ -3,9 +3,7 @@
         <h3>{{ list.meta.title }}</h3>
         <draggable class="items-list" @change="updateList" :list="cards" group="board" itemKey="name">
             <template #item="{element, index}">
-                <el-card class="item" shadow="hover">
-                    {{ element.meta.title }}
-                </el-card>
+                <card :card-data="element" class="item"></card>
             </template>
             <template #footer>
                 <el-card v-show="data.addingItem">
@@ -26,6 +24,7 @@ import draggable from "vuedraggable";
 import {useBoardStore} from "@/src/stores/board";
 import {AxiosResponse} from "axios";
 import {reactive, computed, ref} from "vue";
+import Card from "@/src/components/kanban/card.vue";
 
 const props = defineProps({
     list: {

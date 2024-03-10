@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {BoardResponse} from "@/src/contracts/Kanban";
+import {BoardResponse, CardLabel} from "@/src/contracts/Kanban";
 import {buildRequest, send} from "pixlcms-wrapper";
 import {useWikiStore} from '@/src/stores/wiki';
 const {DateTime} = require ('luxon');
@@ -75,6 +75,18 @@ export const useBoardStore = defineStore('boardStore', {
             let response = await send(request);
             await this.loadBoard(boardId);
             return response;
+        },
+        refreshBoard() {
+            this.loadBoard(this.safeCurrentBoard.id);
+        },
+        getCardLabel(labelName: string): CardLabel {
+            for (let label of this.safeCurrentBoard.meta.board.labels) {
+                if (label.title === labelName) {
+                    return label;
+                }
+            }
+
+            throw 'label ' + labelName + ' not found';
         },
     }
 });
