@@ -389,16 +389,16 @@
         },
         {
             "name": "pixlmint/pixlcms-kanban-plugin",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-kanban-plugin.git",
-                "reference": "ecdcf61d98b38bab5960c537adae476eb37e5911"
+                "reference": "b1681ee8ec2904a57bfb0ca711ed91ee1356d64a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/ecdcf61d98b38bab5960c537adae476eb37e5911",
-                "reference": "ecdcf61d98b38bab5960c537adae476eb37e5911",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/b1681ee8ec2904a57bfb0ca711ed91ee1356d64a",
+                "reference": "b1681ee8ec2904a57bfb0ca711ed91ee1356d64a",
                 "shasum": ""
             },
             "require": {
@@ -419,9 +419,9 @@
             "description": "A Trello-like API Plugin for pixlcms",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-kanban-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.1"
+                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.2"
             },
-            "time": "2024-03-04T18:55:20+00:00"
+            "time": "2024-03-11T19:24:34+00:00"
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",
