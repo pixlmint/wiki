@@ -7,7 +7,6 @@
 <script lang="ts" setup>
 import {computed} from "vue";
 import {hexToHsl} from "@/src/helpers/color";
-import Color from 'colorjs.io';
 
 const props = defineProps({
     label: {
@@ -26,9 +25,7 @@ const fontColor = computed(() => {
 });
 
 const backgroundColor = computed(() => {
-    const color = new Color(props.label.color);
-    color.alpha = 0.25;
-    return color.toString();
+    return props.label.color;
 });
 
 const color = computed(() => {

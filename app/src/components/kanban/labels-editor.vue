@@ -9,6 +9,9 @@
                     <el-input @keydown="inputKeypress" id="card-label-input" v-model="data.newLabelName"></el-input>
                 </div>
                 <el-color-picker :span="1" v-model="data.newLabelColor"></el-color-picker>
+		<el-button @click="newRandomColor">
+		    <pm-icon icon="arrow-rotate-right"></pm-icon>
+		</el-button>
                 <el-button @click="addLabel">
                     <pm-icon icon="check"></pm-icon>
                 </el-button>
@@ -77,6 +80,11 @@ const randomColor = function () {
         const latestColor = props.labels[props.labels.length - 1].color;
         return randomizeColor(latestColor);
     }
+}
+
+const newRandomColor = function () {
+    const randomNewColor = randomColor();
+    data.newLabelColor = randomNewColor;
 }
 
 const addLabel = function () {
