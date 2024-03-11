@@ -61,6 +61,10 @@ html:not(.dark) {
     }
 }
 
+h1 {
+    margin: .5rem 0;
+}
+
 .board-view-page {
     background-repeat: no-repeat;
     background-size: cover;

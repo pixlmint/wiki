@@ -31,7 +31,7 @@
         </template>
         <template v-else>
             <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
-                <div>
+                <div class="d-flex align-items-center gap-2">
                     {{ element.title }}
                     <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
                     <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
