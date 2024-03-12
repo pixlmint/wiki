@@ -2,7 +2,7 @@
     <div class="board">
         <list class="board-list" v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
         <div class="board-list">
-            <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.enter="addList"
+            <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList" v-on:keyup.enter="addList"
                       v-model="data.newListName"></el-input>
             <el-button @click="toggleAddList">
                 <pm-icon icon="plus"></pm-icon>
@@ -74,6 +74,10 @@ const addList = function () {
         data.isAddingList = false;
         data.newListName = null;
     });
+}
+const cancelAddList = function () {
+    data.isAddingList = false;
+    data.newListName = null;
 }
 const toggleAddList = function () {
     data.isAddingList = true;

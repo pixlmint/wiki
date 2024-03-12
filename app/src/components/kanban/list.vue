@@ -7,7 +7,7 @@
             </template>
             <template #footer>
                 <el-card v-show="data.addingItem">
-                    <el-input ref="addItemInput" v-on:keyup.enter="addItem" v-model="data.newItemText"></el-input>
+                    <el-input ref="addItemInput" v-on:keyup.esc="cancelAddItem" v-on:keyup.enter="addItem" v-model="data.newItemText"></el-input>
                 </el-card>
                 <el-row justify="end">
                     <el-col :span="4">
@@ -72,6 +72,11 @@ const toggleAddItem = function () {
     if (addItemInput.value) {
         addItemInput.value.focus();
     }
+}
+
+const cancelAddItem = function () {
+   data.addingItem = false;
+   data.newItemText = "";
 }
 
 const addItem = function () {
