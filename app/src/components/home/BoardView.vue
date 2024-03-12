@@ -68,6 +68,11 @@ h1 {
 .board-view-page {
     background-repeat: no-repeat;
     background-size: cover;
+    height: calc(100vh - 10px);
+
+    &.main-content {
+        min-height: unset;
+    }
 
     .board-heading {
         padding: 10px;

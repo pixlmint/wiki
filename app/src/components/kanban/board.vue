@@ -90,6 +90,7 @@ const toggleAddList = function () {
     width: inherit;
     max-width: inherit;
     height: 100%;
+    max-height: 90vh;
     gap: 1rem;
     overflow-x: auto;
     flex-wrap: nowrap;
