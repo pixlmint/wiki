@@ -1,18 +1,20 @@
 <template>
     <div class="board">
-        <list class="board-list" v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+        <list v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
         <div class="board-list">
-            <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList" v-on:keyup.enter="addList"
-                      v-model="data.newListName"></el-input>
-            <el-button @click="toggleAddList">
-                <pm-icon icon="plus"></pm-icon>
-            </el-button>
+            <div class="d-flex justify-content-end">
+                <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList" v-on:keyup.enter="addList"
+                          v-model="data.newListName"></el-input>
+                <el-button v-show="!data.isAddingList" @click="toggleAddList">
+                    <pm-icon icon="plus"></pm-icon>
+                </el-button>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import {ref, defineProps, reactive, computed, toRaw} from "vue";
+import {ref, reactive, computed} from "vue";
 import List from "@/src/components/kanban/list.vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {useBoardStore} from "@/src/stores/board";
@@ -98,31 +100,11 @@ const toggleAddList = function () {
     gap: 1rem;
     overflow-x: auto;
     flex-wrap: nowrap;
+    align-items: flex-start;
 }
 
 .drag-area {
     min-height: 200px;
     outline: 1px dashed;
-}
-
-.board-list {
-    width: 300px;
-    overflow-y: auto;
-    max-height: 100%;
-    margin: 10px;
-    padding: 20px;
-    flex-shrink: 0;
-    border: 1px solid var(--el-border-color);
-    border-radius: var(--el-border-radius-base);
-    background-color: var(--el-bg-secondary);
-}
-
-.items-list {
-    min-height: 200px;
-
-    .item {
-        margin-bottom: 10px;
-        cursor: pointer;
-    }
 }
 </style>

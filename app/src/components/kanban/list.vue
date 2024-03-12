@@ -1,21 +1,20 @@
 <template>
     <div class="board-list">
         <h3>{{ list.meta.title }}</h3>
-        <draggable class="items-list" @change="updateList" :list="cards" group="board" itemKey="name">
+        <draggable v-show="cards.length > 0" class="items-list" @change="updateList" :list="cards" group="board" itemKey="name">
             <template #item="{element, index}">
                 <card :card-data="element" class="item"></card>
             </template>
-            <template #footer>
-                <el-card v-show="data.addingItem">
-                    <el-input ref="addItemInput" v-on:keyup.esc="cancelAddItem" v-on:keyup.enter="addItem" v-model="data.newItemText"></el-input>
-                </el-card>
-                <el-row justify="end">
-                    <el-col :span="4">
-                        <el-button @click="toggleAddItem"><pm-icon icon="plus"></pm-icon></el-button>
-                    </el-col>
-                </el-row>
-            </template>
         </draggable>
+        <div class="mt-1 d-flex justify-content-end">
+            <el-input v-show="data.addingItem" ref="addItemInput" v-on:keyup.esc="cancelAddItem"
+                      v-on:keyup.enter="addItem" v-model="data.newItemText"></el-input>
+            <div v-show="!data.addingItem">
+                <el-button @click="toggleAddItem">
+                    <pm-icon icon="plus"></pm-icon>
+                </el-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -75,8 +74,8 @@ const toggleAddItem = function () {
 }
 
 const cancelAddItem = function () {
-   data.addingItem = false;
-   data.newItemText = "";
+    data.addingItem = false;
+    data.newItemText = "";
 }
 
 const addItem = function () {
@@ -87,3 +86,27 @@ const addItem = function () {
     });
 }
 </script>
+
+<style lang="scss">
+.board-list {
+    width: 325px;
+    max-height: 82vh;
+    margin: 10px;
+    padding: 5px;
+    flex-shrink: 0;
+    border: 1px solid var(--el-border-color);
+    border-radius: var(--el-border-radius-base);
+    background-color: var(--el-bg-secondary);
+    overflow: auto;
+
+    .items-list {
+        max-height: 80%;
+        overflow-y: auto;
+
+        .item {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+    }
+}
+</style>
