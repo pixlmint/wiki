@@ -1,6 +1,6 @@
 <template>
-    <div class="board">
-        <list v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+    <div :class="{board: true, draggingCard: data.isDraggingCard}">
+        <list @startDragging="data.isDraggingCard = true" @stopDragging="data.isDraggingCard = false" v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
         <div class="board-list">
             <div class="d-flex justify-content-end">
                 <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList" v-on:keyup.enter="addList"
@@ -38,6 +38,7 @@ const data = reactive({
     dragging: false,
     isAddingList: false,
     newListName: null,
+    isDraggingCard: false,
 });
 
 // created

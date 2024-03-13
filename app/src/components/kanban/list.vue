@@ -1,7 +1,7 @@
 <template>
     <div class="board-list">
         <h3>{{ list.meta.title }}</h3>
-        <draggable v-show="cards.length > 0" class="items-list" @change="updateList" :list="cards" group="board" itemKey="name">
+        <draggable :class="{'items-list': true, 'empty-list': cards.length === 0}" @dragstart="emit('startDragging')" @dragend="emit('stopDragging')" @change="updateList" :list="cards" group="board" itemKey="name">
             <template #item="{element, index}">
                 <card :card-data="element" class="item"></card>
             </template>
@@ -31,6 +31,11 @@ const props = defineProps({
         required: true,
     }
 });
+
+const emit = defineEmits<{
+    startDragging: [],
+    stopDragging: [],
+}>();
 
 const data = reactive({
     addingItem: false,
@@ -101,6 +106,7 @@ const addItem = function () {
 
     .items-list {
         max-height: 80%;
+        min-height: 50px;
         overflow-y: auto;
 
         .item {
@@ -108,5 +114,9 @@ const addItem = function () {
             cursor: pointer;
         }
     }
+}
+
+.board:not(.draggingCard) .empty-list {
+    display: none;
 }
 </style>
