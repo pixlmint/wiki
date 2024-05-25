@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {buildRequest, send} from "pixlcms-wrapper";
 import {ElNotification} from "element-plus";
 import {WikiEntry} from "@/src/contracts/WikiBase";
+import {BoardResponse} from "@/src/contracts/Kanban";
 
 interface Nav extends Array<NavElement> {
 }
@@ -61,14 +62,17 @@ export const useWikiStore = defineStore('wikiStore', {
             const request = buildRequest('/api/search', {q: query});
             return send(request);
         },
-        saveEntry() {
+        saveCurrentEntry() {
             const currentEntry = this.safeCurrentEntry;
             this.editor.editingUnsavedChanges = false;
+            return this.saveEntry(currentEntry);
+        },
+        saveEntry(entry: WikiEntry | BoardResponse) {
             const data = {
-                content: currentEntry.raw_content,
-                meta: JSON.stringify(currentEntry.meta),
-                entry: currentEntry.id,
-                lastUpdate: currentEntry.meta.dateUpdated,
+                content: entry.raw_content,
+                meta: JSON.stringify(entry.meta),
+                entry: entry.id,
+                lastUpdate: entry.meta.dateUpdated,
             }
             const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
             return send(request).then(response => {

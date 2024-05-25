@@ -2,7 +2,7 @@
     <div>
         <div class="container">
             <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save" @change="updateContent"
-                          v-model="markdown"></pw-md-editor>
+                          v-model="markdown" :editorHeight="editorHeight"></pw-md-editor>
         </div>
         <DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>
         <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
@@ -61,12 +61,15 @@ export default defineComponent({
         isDiffing() {
             return this.dialogStore.isDialogShowing('/diff');
         },
+        editorHeight() {
+            return window.innerHeight - 200 + 'px';
+        }
     },
     methods: {
         submitMerge(d: any) {
             this.wikiStore.safeCurrentEntry.raw_content = d;
             this.wikiStore.safeCurrentEntry.meta.dateUpdated = DateTime.now().toFormat("yyyy-LL-dd HH:mm")
-            this.wikiStore.saveEntry();
+            this.wikiStore.saveCurrentEntry();
             this.dialogStore.hideDialog('/diff');
         },
         refresh() {
@@ -84,8 +87,8 @@ export default defineComponent({
 
             if (this.userSettings.getSettings.autoSave && !isTimeoutSet()) {
                 saveTimeout = window.setTimeout(() => {
-                    this.save();
                     saveTimeout = null;
+                    this.save();
                 }, 5000);
             }
         },
@@ -102,12 +105,15 @@ export default defineComponent({
         },
         save() {
             this.wikiStore.fetchLastChanged(this.wikiStore.safeCurrentEntry.id).then(lastChanged => {
+                if (isTimeoutSet()) {
+                    window.clearTimeout(saveTimeout);
+                }
                 const localLastChanged = new Date(this.wikiStore.safeCurrentEntry.meta.dateUpdated);
                 if (localLastChanged < lastChanged) {
                     this.showDiff();
                 } else {
                     this.mainStore.setHasUnsavedChanges(false);
-                    return this.wikiStore.saveEntry();
+                    return this.wikiStore.saveCurrentEntry();
                 }
             });
         },

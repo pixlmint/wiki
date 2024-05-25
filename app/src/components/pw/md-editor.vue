@@ -11,8 +11,9 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {useUserSettings} from "@/src/stores/user-settings";
 
-const {modelValue} = defineProps<{
+const {modelValue, editorHeight} = defineProps<{
     modelValue: string;
+    editorHeight: string;
 }>();
 const emit = defineEmits();
 
@@ -38,8 +39,9 @@ const createRefreshButton = () => {
 
 onMounted(() => {
     e = new Editor({
+        // @ts-ignore
         el: editor.value,
-        height: window.innerHeight - 200 + 'px',
+        height: editorHeight,
         initialEditType: 'markdown',
         previewStyle: 'tab',
         hideModeSwitch: true,
@@ -95,7 +97,6 @@ onMounted(() => {
         e.setMarkdown(modelValue);
     }
     window.addEventListener('resize', (event) => {
-        console.log(window.innerWidth);
     })
 });
 </script>

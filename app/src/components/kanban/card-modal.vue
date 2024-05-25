@@ -11,6 +11,7 @@
                     <el-button @click="saveSelectedLabels" v-show="settings.labelsChanged">
                         <pm-icon icon="save"></pm-icon>
                     </el-button>
+                    <pw-md-editor editorHeight="500px" v-if="settings.contentLoaded" @input="updateContent" @save="saveCardMdContent" v-model="cardMdContent"></pw-md-editor>
                 </div>
             </el-form-item>
         </el-form>
@@ -19,6 +20,8 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import { useUserSettings } from "@/src/stores/user-settings";
+import { ElNotification } from "element-plus";
 
 export const route = "/board/card/view";
 
@@ -38,6 +41,7 @@ import {BoardResponse, CardLabel} from "@/src/contracts/Kanban";
 const dialogStore = useDialogStore();
 const boardStore = useBoardStore();
 const wikiStore = useWikiStore();
+const userSettings = useUserSettings();
 
 const data = reactive({
     viewingCard: null as null | BoardResponse,
@@ -46,13 +50,26 @@ const data = reactive({
 const request = buildRequest('/api/entry/view', {p: dialogStore.getDialogData(route).id});
 send(request).then(response => {
     data.viewingCard = response.data;
+    if (data.viewingCard !== null) {
+        cardMdContent.value = data.viewingCard.raw_content;
+        settings.contentLoaded = true;
+    } else {
+        console.error('data.viewingCard is null');
+    }
 });
 
 const settings = reactive({
     labelsChanged: false,
+    contentLoaded: false,
 });
 
 const selectedLabels = ref([]);
+const cardMdContent = ref('');
+let saveTimeout : null | number = null;
+
+const isTimeoutSet = function () {
+    return saveTimeout !== null;
+}
 
 const labels = computed(() => {
     return boardStore.safeCurrentBoard.meta.board.labels;
@@ -70,6 +87,34 @@ const getSelectedLabels = function () {
     return selectedLabels.value.map((labelName: string) => {
         return toRaw(boardStore.getCardLabel(labelName));
     });
+}
+
+const updateContent = function (md: string) {
+    if (data.viewingCard === null) {
+        return;
+    }
+    data.viewingCard.raw_content = md;
+    if (userSettings.getSettings.autoSave && !isTimeoutSet()) {
+        saveTimeout = window.setTimeout(() => {
+            saveTimeout = null;
+            saveCardMdContent();
+        }, 5000);
+    }
+}
+
+const saveCardMdContent = function () {
+    if (data.viewingCard !== null) {
+        if (isTimeoutSet()) {
+            window.clearTimeout(saveTimeout);
+        }
+        wikiStore.saveEntry(data.viewingCard);
+    } else {
+        ElNotification({
+            type: 'warning',
+            title: 'Warning',
+            message: 'Unable to save the entry',
+        });
+    }
 }
 
 const saveSelectedLabels = function () {
@@ -91,8 +136,6 @@ const saveSelectedLabels = function () {
         content: data.viewingCard.raw_content,
     }
 
-    console.log(requestData);
-
     // @ts-ignore
     const request = buildRequest('/api/admin/entry/edit', requestData, 'PUT');
     send(request).then(() => {
@@ -105,6 +148,7 @@ const handleClose = function () {
 }
 
 window.setTimeout(function () {
+    cardMdContent.value = viewingCard.value.content;
     if (typeof viewingCard.value.meta.card !== 'undefined') {
         selectedLabels.value = viewingCard.value.meta.card.labels.map((label: CardLabel) => {
             return label.title;
@@ -112,3 +156,4 @@ window.setTimeout(function () {
     }
 }, 50);
 </script>
+

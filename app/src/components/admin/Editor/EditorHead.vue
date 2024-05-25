@@ -83,7 +83,7 @@ export default defineComponent({
             this.dialogStore.showDialog('/draw');
         },
         save() {
-            return useWikiStore().saveEntry()
+            return useWikiStore().saveCurrentEntry()
         },
         rename(e: InputEvent) {
             const newTitle = e.target?.value;
