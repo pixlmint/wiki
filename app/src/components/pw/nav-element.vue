@@ -57,8 +57,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import {defineComponent} from "vue";
+<script lang="ts" setup>
+import {computed} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
@@ -66,121 +66,145 @@ import {useMainStore} from "@/src/stores/main";
 import {useBoardStore} from "@/src/stores/board";
 import {navigate} from "@/src/helpers/navigator";
 
+const {element, index, parentIndex} = defineProps<{
+    element: NavElement,
+    index: string,
+    parentIndex: string,
+}>();
+
+type NavElement = {
+    isFolder: boolean,
+    isPublic: boolean,
+    kind: string,
+    id: string,
+    title: string,
+    children: NavElement[],
+};
+
+const wikiStore = useWikiStore();
+const token = useAuthStore().getToken;
+const dialogStore = useDialogStore();
+const boardStore = useBoardStore();
+const authStore = useAuthStore();
+
+const isFolder = computed(() => {
+    return element && element.isFolder && element.kind === 'plain';
+});
+
+const canEdit = computed(() => {
+    return authStore.haveEditRights();
+});
+
+const isPublic = computed(() => {
+    return element && element.isPublic;
+});
+
+const securitySwitchText = computed(() => {
+    if (isPublic) {
+        return 'Set Private';
+    } else {
+        return 'Set Public';
+    }
+});
+
+const edit = function () {
+    const currentRoute = location.pathname;
+    navigate('/admin/edit?p=' + element.id);
+    if (currentRoute === '/admin/edit') {
+        useWikiStore().fetchEntry(element.id).then(() => {
+            const title = "Edit " + useWikiStore().safeCurrentEntry.meta.title;
+            useMainStore().setTitle(title)
+        });
+    }
+}
+
+const rename = function () {
+    ElMessageBox.prompt('Pick a new Name', 'Rename', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel',
+        inputValue: element.title,
+    }).then(name => {
+        wikiStore.renameEntry(name.value).then(() => {
+            wikiStore.loadNav();
+        });
+    })
+}
+
+const deletePage = function () {
+    ElMessageBox.confirm('Are you sure you want to delete this page?', 'Warning', {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'warning',
+    }).then(() => {
+        wikiStore.deleteEntry(element.id).then(() => {
+            wikiStore.loadNav();
+        });
+    });
+}
+
+const switchSecurity = function () {
+    const newState = isPublic ? 'private' : 'public';
+    element.isPublic = !element.isPublic;
+    wikiStore.setSecurityState(element.id, newState).then(() => {
+        wikiStore.loadNav();
+    });
+}
+
+const deleteFolder = function () {
+    ElMessageBox.confirm('Are you sure you want to delete this folder and everything within it?', 'Warning', {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'warning',
+    }).then(() => {
+        wikiStore.deleteFolder(element.id, token).then(() => {
+            wikiStore.loadNav();
+        });
+    });
+}
+
+const addPage = function () {
+    ElMessageBox.prompt('New Page Title', 'Add Page', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel',
+    }).then(name => {
+        wikiStore.addEntry(element.id, name.value).then(() => {
+            wikiStore.loadNav();
+        });
+    });
+}
+
+const addBoard = function () {
+    ElMessageBox.prompt('New Board', 'Add Board', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel',
+    }).then(name => {
+        boardStore.createBoard(element.id, name.value).then(() => {
+            wikiStore.loadNav();
+        });
+    });
+}
+
+const addPdf = function () {
+    dialogStore.showDialog({route: '/nav/new-pdf', data: element.id});
+}
+
+const addSubfolder = function () {
+    ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel',
+    }).then(name => {
+        wikiStore.addFolder(element.id, name.value).then(() => {
+            wikiStore.loadNav();
+        });
+    });
+}
+</script>
+
+<script lang="ts">
+import {defineComponent} from "vue";
+
 export default defineComponent({
     name: 'PWNavElement',
-    props: ['element', 'index', 'parentIndex'],
-    data() {
-        return {
-            wikiStore: useWikiStore(),
-            token: useAuthStore().getToken,
-            dialogStore: useDialogStore(),
-            boardStore: useBoardStore(),
-        }
-    },
-    computed: {
-        isFolder() {
-            return this.element && this.element.isFolder && this.element.kind === 'plain';
-        },
-        canEdit() {
-            return useAuthStore().haveEditRights();
-        },
-        isPublic() {
-            return this.element && this.element.isPublic;
-        },
-        securitySwitchText() {
-          if (this.isPublic) {
-              return 'Set Private';
-          } else {
-              return 'Set Public';
-          }
-        },
-    },
-    methods: {
-        edit() {
-            const currentRoute = location.pathname;
-            navigate('/admin/edit?p=' + this.element.id);
-            if (currentRoute === '/admin/edit') {
-                useWikiStore().fetchEntry(this.element.id).then(() => {
-                    const title = "Edit " + useWikiStore().safeCurrentEntry.meta.title;
-                    useMainStore().setTitle(title)
-                });
-            }
-        },
-        rename() {
-            ElMessageBox.prompt('Pick a new Name', 'Rename', {
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'Cancel',
-                inputValue: this.element.title,
-            }).then(name => {
-                this.wikiStore.renameEntry(name.value).then(response => {
-                    this.wikiStore.loadNav();
-                });
-            })
-        },
-        deletePage() {
-            console.log(this.element);
-            ElMessageBox.confirm('Are you sure you want to delete this page?', 'Warning', {
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                type: 'warning',
-            }).then(() => {
-                this.wikiStore.deleteEntry(this.element.id).then(() => {
-                    this.wikiStore.loadNav();
-                });
-            });
-        },
-        switchSecurity() {
-            const newState = this.isPublic ? 'private' : 'public';
-            this.element.isPublic = !this.element.isPublic;
-            this.wikiStore.setSecurityState(this.element.id, newState).then(() => {
-                this.wikiStore.loadNav();
-            });
-        },
-        deleteFolder() {
-            ElMessageBox.confirm('Are you sure you want to delete this folder and everything within it?', 'Warning', {
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                type: 'warning',
-            }).then(() => {
-                this.wikiStore.deleteFolder(this.element.id, this.token).then(() => {
-                    this.wikiStore.loadNav();
-                });
-            });
-        },
-        addPage() {
-            ElMessageBox.prompt('New Page Title', 'Add Page', {
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'Cancel',
-            }).then(name => {
-                this.wikiStore.addEntry(this.element.id, name.value).then(response => {
-                    this.wikiStore.loadNav();
-                });
-            })
-        },
-        addBoard() {
-            ElMessageBox.prompt('New Board', 'Add Board', {
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'Cancel',
-            }).then(name => {
-                this.boardStore.createBoard(this.element.id, name.value).then(() => {
-                    this.wikiStore.loadNav();
-                })
-            });
-        },
-        addPdf() {
-            this.dialogStore.showDialog({route: '/nav/new-pdf', data: this.element.id});
-        },
-        addSubfolder() {
-            ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
-                confirmButtonText: 'Ok',
-                cancelButtonText: 'Cancel',
-            }).then(name => {
-                this.wikiStore.addFolder(this.element.id, name.value).then(() => {
-                    this.wikiStore.loadNav();
-                })
-            })
-        },
-    }
 });
 </script>
 
