@@ -8,7 +8,7 @@
             </entry-heading>
         </template>
         <template #content>
-        <div ref="pdfContainer" @scroll="handleScroll">
+        <div ref="pdfContainer">
             <canvas v-for="n in totalPages" :key="n" :ref="'pdfCanvas' + n"></canvas>
         </div>
         </template>
@@ -40,6 +40,10 @@ export default defineComponent({
     },
     mounted: function () {
         this.loadPdf(this.b64pdf);
+        document.addEventListener('scroll', this.handleScroll);
+    },
+    beforeUnmount: function () {
+        document.removeEventListener('scroll', this.handleScroll);
     },
     watch: {
         b64pdf(newVal) {
