@@ -66,10 +66,8 @@ import {useMainStore} from "@/src/stores/main";
 import {useBoardStore} from "@/src/stores/board";
 import {navigate} from "@/src/helpers/navigator";
 
-const {element, index, parentIndex} = defineProps<{
+const {element} = defineProps<{
     element: NavElement,
-    index: string,
-    parentIndex: string,
 }>();
 
 type NavElement = {
