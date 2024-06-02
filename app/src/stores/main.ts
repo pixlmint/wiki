@@ -10,6 +10,7 @@ interface Meta {
     adminCreated: boolean,
     is_token_valid: string,
     debugEnabled: boolean,
+    language: string,
 }
 
 interface State {
@@ -31,6 +32,7 @@ export const useMainStore = defineStore('main', {
             adminCreated: false,
             is_token_valid: 'token_not_set',
             debugEnabled: false,
+            language: 'en',
         },
         editingUnsavedChanges: false,
         isLargeNavShowing: true,
@@ -66,6 +68,9 @@ export const useMainStore = defineStore('main', {
                 document.title = title + ' · Wiki';
             }
             this.$state.pageTitle = title;
+        },
+        setLanguage(language: string) {
+            document.documentElement.lang = language;
         },
         toggleLargeNavShowing(isLargeNavShowing: boolean) {
             this.isLargeNavShowing = isLargeNavShowing;

@@ -39,6 +39,7 @@ return [
     ],
     'wikiFrontend' => [
         'version' => '1.16.15',
+        'language' => 'fr',
     ],
     'base' => [
         'debugEnabled' => false,

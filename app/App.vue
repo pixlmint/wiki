@@ -119,6 +119,7 @@ export default defineComponent({
                     });
                 }
                 this.mainStore.setTitle(this.mainStore.getMeta.title);
+                this.mainStore.setLanguage(this.mainStore.getMeta.language);
                 if (!this.mainStore.meta.adminCreated) {
                     this.dialogStore.showDialog('/auth/create-admin');
                 }
