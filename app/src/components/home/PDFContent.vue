@@ -105,8 +105,10 @@ export default defineComponent({
                     return;
                 }
                 const rawPdf = toRaw(this.pdf);
+                const initialScale = 1.0
                 rawPdf.getPage(pageNumber).then((page: any) => {
-                    const scale = 1.5;
+                    const articleWidth = document.querySelector('.article').offsetWidth;
+                    const scale = articleWidth / page.getViewport({initialScale}).viewBox[2];
                     const viewport = page.getViewport({scale});
 
                     // Prepare canvas using PDF page dimensions
