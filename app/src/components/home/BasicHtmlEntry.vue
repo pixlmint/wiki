@@ -5,18 +5,19 @@
             </entry-heading>
         </template>
         <template #content>
-            <p v-html="content"></p>
+            <ActualHtmlContent :content="props.content"></ActualHtmlContent>
         </template>
     </pw-view-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from "vue";
+<script lang="ts" setup>
 import EntryHeading from "@/src/components/home/entry-heading.vue";
+import ActualHtmlContent from "@/src/components/home/actual-html-content.vue";
 
-export default defineComponent({
-    name: "BasicHtmlEntry",
-    components: {EntryHeading},
-    props: ['content'],
-})
+const props = defineProps({
+    content: {
+        type: String,
+        required: true,
+    },
+});
 </script>

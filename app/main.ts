@@ -10,6 +10,7 @@ import PWLoading from '@/src/components/pw/loading.vue';
 import PWSearch from '@/src/components/pw/search.vue';
 import PWMDEditor from '@/src/components/pw/md-editor.vue';
 import ViewPage from '@/src/components/pw/view-page.vue';
+import Highlighting from '@/src/components/pw/highlighting.vue';
 import VueDiff from 'vue-diff';
 import {main, Dialog, Icon} from "pixlcms-wrapper";
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -46,6 +47,7 @@ app.component('pw-md-editor', PWMDEditor);
 app.component('pm-dialog', Dialog);
 app.component('pm-icon', Icon);
 app.component('pw-view-page', ViewPage);
+app.component('pw-highlighting', Highlighting);
 
 library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle,
     faArrowRotateRight, faTimes, faPlus, faTrello, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,

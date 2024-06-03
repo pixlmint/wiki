@@ -30,6 +30,7 @@
         "pdfjs-dist": "^3.10.111",
         "pinia": "^2.0.22",
         "pixlcms-wrapper": "^1.0.14",
+        "prismjs": "^1.29.0",
         "qs": "^6.10.3",
         "sass-brunch": "^3.0.1",
         "vue": "^3.2.39",
