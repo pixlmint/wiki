@@ -59,7 +59,7 @@ export default defineComponent({
         authStore.loadToken();
         configureStores(authStore, useLoadingStore());
         const settings = useUserSettings().loadUserSettings();
-        useUserSettings().setCurrentTheme(settings.theme);
+        useUserSettings().setCurrentTheme();
         this.init();
         this.loadMainContent();
         window.addEventListener('keydown', this.keyListener);

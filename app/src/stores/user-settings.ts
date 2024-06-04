@@ -27,7 +27,7 @@ export const useUserSettings = defineStore('userSettings', {
                 return this.settings;
             }
             this.settings = JSON.parse(storedUserSettingsString);
-            this.setCurrentTheme(this.settings.theme);
+            this.setCurrentTheme();
             return this.settings;
         },
         updateSettings(settings: Settings) {
@@ -40,10 +40,23 @@ export const useUserSettings = defineStore('userSettings', {
                 location.href = response.data.file;
             });
         },
-        setCurrentTheme(theme: string) {
+        setCurrentTheme() {
             document.documentElement.classList.remove('light');
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add(this.settings.theme);
+            const existingStylesheet = document.getElementById('prism-stylesheet');
+            if (existingStylesheet !== null) {
+                existingStylesheet.remove()
+            }
+            const linkElement = document.createElement('link');
+            linkElement.setAttribute('rel', 'stylesheet');
+            linkElement.setAttribute('id', 'prism-stylesheet');
+            let codeStylesheet = 'prism-material-dark.css';
+            if (this.settings.theme === 'light') {
+                codeStylesheet = 'prism-material-light.css';
+            }
+            linkElement.setAttribute('href', '/dist/assets/prismthemes/' + codeStylesheet);
+            document.getElementsByTagName("head")[0].appendChild(linkElement);
         },
     },
 })
