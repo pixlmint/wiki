@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import EntryHeading from "@/src/components/home/entry-heading.vue";
-import ActualHtmlContent from "@/src/components/home/actual-html-content.vue";
+import ActualHtmlContent from "@/src/components/home/basic-html-components/actual-html-content.vue";
 
 const props = defineProps({
     content: {

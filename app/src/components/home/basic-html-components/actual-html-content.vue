@@ -3,6 +3,7 @@
 <script lang="ts">
 import {h, onMounted, watchEffect, defineComponent} from "vue";
 import Highlighting from "@/src/components/pw/highlighting.vue";
+import BasicLink from "@/src/components/home/basic-html-components/basic-link.vue";
 
 export default defineComponent({
     props: {
@@ -26,7 +27,6 @@ export default defineComponent({
             } else if (node.nodeType === Node.ELEMENT_NODE) {
                 const children = Array.from(node.childNodes).map(child => walkNodes(child));
                 if (node.tagName === 'CODE' && node.parentNode && node.parentNode.tagName === 'PRE') {
-                    console.log(node.textContent);
                     return h(Highlighting, {
                         content: node.textContent,
                         language: getLangFromClass(node.classList),
@@ -36,7 +36,15 @@ export default defineComponent({
                 if (tagName === 'body') {
                     tagName = 'div';
                 }
-                return h(tagName, children);
+                const attrs = {};
+                for (let i = 0; i < node.attributes.length; i++) {
+                    const attr = node.attributes.item(i);
+                    attrs[attr.name] = attr.value;
+                }
+                if (tagName === 'a') {
+                    return h(BasicLink, {attrs: attrs, content: children[0]});
+                }
+                return h(tagName, attrs, children);
             }
         };
 

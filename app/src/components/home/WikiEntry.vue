@@ -15,8 +15,9 @@ import {defineComponent, h} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from "pixlcms-wrapper";
 import PDFContent from "@/src/components/home/PDFContent.vue";
-import BasicHtmlEntry from "@/src/components/home/BasicHtmlEntry.vue";
+import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/src/components/home/BoardView.vue";
+import InternalLink from "@/src/components/home/basic-html-components/internal-link.vue";
 // import Prism from "prismjs";
 // import "prismjs/themes/prism.css";
 
@@ -33,15 +34,6 @@ export default defineComponent({
         BoardView,
         BasicHtmlEntry,
     },
-    /*mounted() {
-        window.Prism = window.Prism || {};
-        window.Prism.manual = true;
-        Prism.highlightAll();
-    },*/
-    /*render(h) {
-        const renderFn = this.htmlToVue(this.content);
-        return renderFn.call(this, h);
-    },*/
     computed: {
         content() {
             window.setTimeout(() => {
