@@ -41,3 +41,31 @@ onMounted(() => {
     }
 });
 </script>
+
+<style lang="scss">
+::root {
+    --pw-code-bg: rgba(238, 221, 251, 0.2);
+}
+html.light {
+    @import 'prism-themes/themes/prism-vs';
+    --pw-code-bg: rgba(238, 221, 251, 0.2);
+}
+
+html.dark {
+    @import 'prism-themes/themes/prism-atom-dark';
+    --pw-code-bg: rgba(67, 58, 102, 0.25);
+}
+
+pre, li > code, p > code, h1 > code, h2 > code, h3 > code, h4 > code, h5 > code {
+    background-color: var(--pw-code-bg);
+}
+
+pre {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+[class*='language-'] {
+    font-family: unset !important;
+}
+</style>
