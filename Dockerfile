@@ -1,4 +1,4 @@
-FROM christiangroeber/php-server:8.1.2
+FROM pixlmint/php-server:8.3
 
 ARG UID=99
 ARG GID=100

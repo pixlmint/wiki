@@ -253,16 +253,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.5.9",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "8daa868a2552bf170c5cd0aa70bff57fd2eeca6f"
+                "reference": "90cb66fd6e7344220f73400d80cbc1940fdfb84b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/8daa868a2552bf170c5cd0aa70bff57fd2eeca6f",
-                "reference": "8daa868a2552bf170c5cd0aa70bff57fd2eeca6f",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/90cb66fd6e7344220f73400d80cbc1940fdfb84b",
+                "reference": "90cb66fd6e7344220f73400d80cbc1940fdfb84b",
                 "shasum": ""
             },
             "require": {
@@ -274,7 +274,7 @@
                 "symfony/yaml": "^5.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^11"
             },
             "type": "library",
             "autoload": {
@@ -296,9 +296,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.5.9"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.6.1"
             },
-            "time": "2024-05-04T16:55:42+00:00"
+            "time": "2024-06-07T21:06:05+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -356,16 +356,16 @@
         },
         {
             "name": "pixlmint/pixl-cms",
-            "version": "2.1.2",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixl-cms.git",
-                "reference": "9c05cac61d2260dd7ada0cd1d733762c71e9c7a0"
+                "reference": "7e5a8e260082d60bb0aadbb0d6d34bbcb2eb2ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/9c05cac61d2260dd7ada0cd1d733762c71e9c7a0",
-                "reference": "9c05cac61d2260dd7ada0cd1d733762c71e9c7a0",
+                "url": "https://api.github.com/repos/pixlmint/pixl-cms/zipball/7e5a8e260082d60bb0aadbb0d6d34bbcb2eb2ddb",
+                "reference": "7e5a8e260082d60bb0aadbb0d6d34bbcb2eb2ddb",
                 "shasum": ""
             },
             "require": {
@@ -383,22 +383,22 @@
             "description": "A lightweight CMS powered by Markdown and Nachos",
             "support": {
                 "issues": "https://github.com/pixlmint/pixl-cms/issues",
-                "source": "https://github.com/pixlmint/pixl-cms/tree/2.1.2"
+                "source": "https://github.com/pixlmint/pixl-cms/tree/2.2.0"
             },
-            "time": "2024-06-07T07:16:36+00:00"
+            "time": "2024-06-07T21:10:05+00:00"
         },
         {
             "name": "pixlmint/pixlcms-kanban-plugin",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-kanban-plugin.git",
-                "reference": "b1681ee8ec2904a57bfb0ca711ed91ee1356d64a"
+                "reference": "3d2154f60408f0438ad29d477225943c2a0d0e44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/b1681ee8ec2904a57bfb0ca711ed91ee1356d64a",
-                "reference": "b1681ee8ec2904a57bfb0ca711ed91ee1356d64a",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-kanban-plugin/zipball/3d2154f60408f0438ad29d477225943c2a0d0e44",
+                "reference": "3d2154f60408f0438ad29d477225943c2a0d0e44",
                 "shasum": ""
             },
             "require": {
@@ -419,9 +419,9 @@
             "description": "A Trello-like API Plugin for pixlcms",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-kanban-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.2"
+                "source": "https://github.com/pixlmint/pixlcms-kanban-plugin/tree/1.0.3"
             },
-            "time": "2024-03-11T19:24:34+00:00"
+            "time": "2024-06-07T21:16:50+00:00"
         },
         {
             "name": "pixlmint/pixlcms-media-plugin",
@@ -458,16 +458,16 @@
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
-            "version": "1.6.8",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
-                "reference": "4859e232d195e8ce088152fe24082ecc7509c52f"
+                "reference": "40246400dc3bf5d783c98179b6f98c9d86408e93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/4859e232d195e8ce088152fe24082ecc7509c52f",
-                "reference": "4859e232d195e8ce088152fe24082ecc7509c52f",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/40246400dc3bf5d783c98179b6f98c9d86408e93",
+                "reference": "40246400dc3bf5d783c98179b6f98c9d86408e93",
                 "shasum": ""
             },
             "require": {
@@ -489,9 +489,9 @@
             "description": "The official wiki plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.6.8"
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.7.0"
             },
-            "time": "2024-03-04T18:56:42+00:00"
+            "time": "2024-06-07T21:12:45+00:00"
         },
         {
             "name": "psr/container",
@@ -665,25 +665,25 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v6.4.8",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "4d37529150e7081c51b3c5d5718c55a04a9503f3"
+                "reference": "802e87002f919296c9f606457d9fa327a0b3d6b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/4d37529150e7081c51b3c5d5718c55a04a9503f3",
-                "reference": "4d37529150e7081c51b3c5d5718c55a04a9503f3",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/802e87002f919296c9f606457d9fa327a0b3d6b2",
+                "reference": "802e87002f919296c9f606457d9fa327a0b3d6b2",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-mbstring": "~1.8"
             },
             "require-dev": {
-                "symfony/process": "^5.4|^6.4|^7.0"
+                "symfony/process": "^6.4|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -711,7 +711,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v6.4.8"
+                "source": "https://github.com/symfony/filesystem/tree/v7.1.1"
             },
             "funding": [
                 {
@@ -727,7 +727,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T14:49:08+00:00"
+            "time": "2024-05-31T14:57:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -890,20 +890,20 @@
         },
         {
             "name": "symfony/process",
-            "version": "v6.4.8",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "8d92dd79149f29e89ee0f480254db595f6a6a2c5"
+                "reference": "febf90124323a093c7ee06fdb30e765ca3c20028"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/8d92dd79149f29e89ee0f480254db595f6a6a2c5",
-                "reference": "8d92dd79149f29e89ee0f480254db595f6a6a2c5",
+                "url": "https://api.github.com/repos/symfony/process/zipball/febf90124323a093c7ee06fdb30e765ca3c20028",
+                "reference": "febf90124323a093c7ee06fdb30e765ca3c20028",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "type": "library",
             "autoload": {
@@ -931,7 +931,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v6.4.8"
+                "source": "https://github.com/symfony/process/tree/v7.1.1"
             },
             "funding": [
                 {
@@ -947,7 +947,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T14:49:08+00:00"
+            "time": "2024-05-31T14:57:53+00:00"
         },
         {
             "name": "symfony/yaml",
