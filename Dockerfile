@@ -3,7 +3,7 @@ FROM pixlmint/php-server:8.3
 ARG UID=99
 ARG GID=100
 
-RUN apt update && apt install -y mediainfo cron ffmpeg python3 openssh-server vim nano
+RUN apt update && apt install -y mediainfo cron ffmpeg python3 openssh-server vim nano poppler-utils
 
 COPY ./ /var/www/html
 WORKDIR /var/www/html

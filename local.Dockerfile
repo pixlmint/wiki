@@ -18,7 +18,7 @@ RUN install-php-extensions zip
 RUN install-php-extensions opcache
 
 COPY docker /tmp/docker
-RUN apt update && apt install -y wget unzip
+RUN apt update && apt install -y wget unzip poppler-utils
 
 # configure apache2
 RUN a2dismod mpm_event && \
