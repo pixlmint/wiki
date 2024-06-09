@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div @mouseover="triggerRenderDropdown">
         <template v-if="isFolder">
             <el-sub-menu data-is-entry="false" :index="element.id">
                 <template #title>
@@ -25,7 +25,8 @@
                 </template>
                 <PWNavElement v-for="(childElement, myIndex) in element.children"
                               :key="myIndex"
-                              :element="childElement">
+                              :element="childElement"
+                              v-if="data.hoveredOverSubmenu">
                 </PWNavElement>
             </el-sub-menu>
         </template>
@@ -58,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed} from "vue";
+import {computed, reactive} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
@@ -85,6 +86,10 @@ const dialogStore = useDialogStore();
 const boardStore = useBoardStore();
 const authStore = useAuthStore();
 
+const data = reactive({
+    hoveredOverSubmenu: false,
+});
+
 const isFolder = computed(() => {
     return element && element.isFolder && element.kind === 'plain';
 });
@@ -104,6 +109,10 @@ const securitySwitchText = computed(() => {
         return 'Set Public';
     }
 });
+
+const triggerRenderDropdown = function () {
+    data.hoveredOverSubmenu = true;
+}
 
 const edit = function () {
     const currentRoute = location.pathname;
