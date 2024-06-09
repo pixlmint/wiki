@@ -5,7 +5,7 @@
                 <el-input v-model="loginForm.username"/>
             </el-form-item>
             <el-form-item label="Password">
-                <el-input type="password" v-model="loginForm.password"></el-input>
+                <el-input @change="submitLoginForm" type="password" v-model="loginForm.password"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -16,7 +16,7 @@
     </pm-dialog>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
