@@ -5,11 +5,13 @@
                 <div @click="hideMainNav" class="nav-toggle">
                     <pm-icon icon="caret-left"></pm-icon>
                 </div>
-                <el-menu @click="navClickListener" :router="false" class="main-nav">
+                <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
-                        <div>
-                            <pm-icon icon="house"></pm-icon>
-                        </div>
+                        <pw-nav-entry-title :element-id="0" :should-display-dropdown="false">
+                            <template #title>
+                                <pm-icon icon="house"></pm-icon>
+                            </template>
+                        </pw-nav-entry-title>
                     </el-menu-item>
                     <PWNavElement v-for="(childElement, myIndex) in nav.children"
                                   parentIndex="0"
@@ -55,7 +57,7 @@
 <script setup lang="ts">
 import {toRaw, computed} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
-import PWNavElement from "@/src/components/pw/nav-element.vue";
+import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import {useMainStore} from "@/src/stores/main";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {isMobile} from "@/src/helpers/mobile-detector";
@@ -94,6 +96,17 @@ if (isMobile()) {
 useWikiStore().loadNav();
 
 // methods
+const openSubmenu = function (menuId: string) {
+    wikiStore.openedSubmenus.push(menuId);
+}
+
+const closeSubmenu = function (menuId: string) {
+    wikiStore.openedSubmenus.splice(wikiStore.openedSubmenus.indexOf(menuId), 1);
+    if (wikiStore.openedSubmenus.includes(menuId)) {
+        closeSubmenu(menuId);
+    }
+}
+
 const settings = function () {
     dialogStore.showDialog('/settings');
 }
@@ -177,7 +190,7 @@ const nav = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@import '@/style/variables.scss';
+@import '@/style/variables';
 
 #nav {
     background-color: var(--el-bg-color);

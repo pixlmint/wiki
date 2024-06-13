@@ -1,48 +1,50 @@
 <template>
     <div @mouseover="triggerRenderDropdown">
         <template v-if="isFolder">
-            <el-sub-menu data-is-entry="false" :index="element.id">
+            <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
                 <template #title>
-                    <span class="submenu-title">{{ element.title }}</span>
-                    <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
-                    <el-dropdown v-if="canEdit">
-                        <el-button circle>
-                            <pm-icon icon="ellipsis"></pm-icon>
-                        </el-button>
-                        <template #dropdown>
-                            <el-dropdown-item @click="addPage"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
-                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
-                            <el-dropdown-item @click="addSubfolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
-                            <el-dropdown-item @click="addBoard"><pm-icon package="brands" icon="trello"></pm-icon>Add Board</el-dropdown-item>
-                            <el-dropdown-item @click="switchSecurity">
-                                <pm-icon v-if="isPublic" icon="lock"></pm-icon>
-                                <pm-icon v-else icon="unlock"></pm-icon>
-                                {{ securitySwitchText }}
-                            </el-dropdown-item>
-                            <el-dropdown-item class="danger" @click="deleteFolder"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
-                        </template>
-                    </el-dropdown>
+                <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id">
+                    <template #indicator>
+                        <pm-icon v-if="isSubmenuOpen" icon="caret-down"></pm-icon>
+                        <pm-icon v-else icon="caret-right"></pm-icon>
+                    </template>
+                    <template #title>
+                        <span class="submenu-title">{{ element.title }}</span>
+                        <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
+                    </template>
+                    <template #dropdown-options>
+                        <el-dropdown-item @click="addPage"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
+                        <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
+                        <el-dropdown-item @click="addSubfolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
+                        <el-dropdown-item @click="addBoard"><pm-icon package="brands" icon="trello"></pm-icon>Add Board</el-dropdown-item>
+                        <el-dropdown-item @click="switchSecurity">
+                            <pm-icon v-if="isPublic" icon="lock"></pm-icon>
+                            <pm-icon v-else icon="unlock"></pm-icon>
+                            {{ securitySwitchText }}
+                        </el-dropdown-item>
+                        <el-dropdown-item class="danger" @click="deleteFolder"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
+                    </template>
+                </pw-nav-entry-title>
                 </template>
-                <PWNavElement v-for="(childElement, myIndex) in element.children"
-                              :key="myIndex"
-                              :element="childElement"
-                              v-if="data.hoveredOverSubmenu">
-                </PWNavElement>
+                    <PWNavElement v-for="(childElement, myIndex) in element.children"
+                                  :key="myIndex"
+                                  :element="childElement"
+                                  v-if="data.hoveredOverSubmenu">
+                    </PWNavElement>
             </el-sub-menu>
         </template>
         <template v-else>
             <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
-                <div class="d-flex align-items-center gap-2">
-                    {{ element.title }}
-                    <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
-                    <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
-                    <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
-                </div>
-                <el-dropdown v-if="canEdit">
-                    <el-button circle>
-                        <pm-icon icon="ellipsis"></pm-icon>
-                    </el-button>
-                    <template #dropdown>
+                <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit">
+                    <template #title>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="submenu-title">{{ element.title }}</span>
+                            <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
+                            <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
+                            <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
+                        </div>
+                    </template>
+                    <template #dropdown-options>
                         <el-dropdown-item @click="edit"><pm-icon icon="pen"></pm-icon>Edit</el-dropdown-item>
                         <el-dropdown-item @click="rename"><pm-icon icon="pen-to-square"></pm-icon>Rename</el-dropdown-item>
                         <el-dropdown-item @click="switchSecurity">
@@ -52,7 +54,7 @@
                         </el-dropdown-item>
                         <el-dropdown-item class="danger" @click="deletePage"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
                     </template>
-                </el-dropdown>
+                </pw-nav-entry-title>
             </el-menu-item>
         </template>
     </div>
@@ -66,6 +68,7 @@ import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {useMainStore} from "@/src/stores/main";
 import {useBoardStore} from "@/src/stores/board";
 import {navigate} from "@/src/helpers/navigator";
+import PwNavEntryTitle from "@/src/components/pw/nav/nav-entry-title.vue";
 
 const {element} = defineProps<{
     element: NavElement,
@@ -88,6 +91,11 @@ const authStore = useAuthStore();
 
 const data = reactive({
     hoveredOverSubmenu: false,
+    submenuOpened: false,
+});
+
+const isSubmenuOpen = computed(() => {
+    return wikiStore.getOpenedSubmenus.indexOf(element.id) !== -1;
 });
 
 const isFolder = computed(() => {
@@ -236,5 +244,17 @@ export default defineComponent({
 
 .private-icon {
     color: var(--el-text-color-secondary);
+}
+</style>
+
+<style lang="scss">
+li.el-sub-menu {
+    .el-sub-menu__title > i.el-icon {
+        display: none;
+    }
+}
+
+.el-sub-menu__title * {
+    vertical-align: unset;
 }
 </style>

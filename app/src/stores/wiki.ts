@@ -29,6 +29,7 @@ interface State {
     currentEntry: WikiEntry | null,
     nav: Nav | null,
     editor: EditorState,
+    openedSubmenus: String[],
 }
 
 export const useWikiStore = defineStore('wikiStore', {
@@ -39,7 +40,8 @@ export const useWikiStore = defineStore('wikiStore', {
         editor: {
             lastSaved: null,
             editingUnsavedChanges: false,
-        }
+        },
+        openedSubmenus: [],
     }),
     getters: {
         getLoadedEntries: (state) => state.loadedEntries,
@@ -51,7 +53,8 @@ export const useWikiStore = defineStore('wikiStore', {
             }
 
             return state.currentEntry;
-        }
+        },
+        getOpenedSubmenus: state => state.openedSubmenus,
     },
     actions: {
         rebuildIndex() {
