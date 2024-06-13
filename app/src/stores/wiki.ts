@@ -162,8 +162,12 @@ export const useWikiStore = defineStore('wikiStore', {
             const request = buildRequest('/api/admin/entry/change-security', data, 'PUT');
             return send(request);
         },
-        loadNav() {
-            const request = buildRequest('/api/nav');
+        loadNav(forceReload: boolean = false) {
+            let url = '/api/nav';
+            if (forceReload) {
+                url += '?forceReload=true';
+            }
+            const request = buildRequest(url);
             return send(request).then(response => {
                 this.nav = response.data[0];
             });

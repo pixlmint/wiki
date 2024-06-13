@@ -253,16 +253,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.6.2",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/Nacho.git",
-                "reference": "46072fa38dcf0bc6a062695538ab615cb652c8a0"
+                "reference": "f2d10da08b30e41b82667d7117637ae9e1e3755c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/46072fa38dcf0bc6a062695538ab615cb652c8a0",
-                "reference": "46072fa38dcf0bc6a062695538ab615cb652c8a0",
+                "url": "https://api.github.com/repos/pixlmint/Nacho/zipball/f2d10da08b30e41b82667d7117637ae9e1e3755c",
+                "reference": "f2d10da08b30e41b82667d7117637ae9e1e3755c",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +296,9 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/Nacho/issues",
-                "source": "https://github.com/pixlmint/Nacho/tree/1.6.2"
+                "source": "https://github.com/pixlmint/Nacho/tree/1.6.3"
             },
-            "time": "2024-06-08T21:27:32+00:00"
+            "time": "2024-06-13T14:07:43+00:00"
         },
         {
             "name": "pixlmint/parsedown",
@@ -458,16 +458,16 @@
         },
         {
             "name": "pixlmint/pixlcms-wiki-plugin",
-            "version": "1.7.2",
+            "version": "1.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/pixlcms-wiki-plugin.git",
-                "reference": "5ba1aac2e2e2c8aba847a921513294533d6af7ed"
+                "reference": "5fd02a2d30758d4721b7e21030e14b51a75c46c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/5ba1aac2e2e2c8aba847a921513294533d6af7ed",
-                "reference": "5ba1aac2e2e2c8aba847a921513294533d6af7ed",
+                "url": "https://api.github.com/repos/pixlmint/pixlcms-wiki-plugin/zipball/5fd02a2d30758d4721b7e21030e14b51a75c46c9",
+                "reference": "5fd02a2d30758d4721b7e21030e14b51a75c46c9",
                 "shasum": ""
             },
             "require": {
@@ -490,9 +490,9 @@
             "description": "The official wiki plugin for PixlCMS",
             "support": {
                 "issues": "https://github.com/pixlmint/pixlcms-wiki-plugin/issues",
-                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.7.2"
+                "source": "https://github.com/pixlmint/pixlcms-wiki-plugin/tree/1.7.3"
             },
-            "time": "2024-06-09T08:49:31+00:00"
+            "time": "2024-06-13T14:17:09+00:00"
         },
         {
             "name": "psr/container",

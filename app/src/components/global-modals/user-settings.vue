@@ -20,11 +20,12 @@
             <el-form-item label="Download Backup">
                 <el-button @click="downloadBackup"><pm-icon icon="download"></pm-icon></el-button>
             </el-form-item>
+            <el-button @click="reloadNav">Reload Nav</el-button>
         </el-form>
         <template #footer>
-            PixlWiki Version <span @click="showVersionsPopup">{{ version }}</span>
+            <el-button text @click="showVersionsPopup">PixlWiki Version {{ version }}</el-button>
             |
-            <span @click="logout">Logout</span>
+            <el-button text @click="logout">Logout</el-button>
         </template>
     </pm-dialog>
 </template>
@@ -44,6 +45,7 @@ export default defineComponent({
     data() {
         return {
             userSettings: useUserSettings(),
+            wikiStore: useWikiStore(),
             settings: useUserSettings().getSettings,
             route: route,
         }
@@ -79,6 +81,9 @@ export default defineComponent({
             document.documentElement.classList.remove('light');
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add(theme);
+        },
+        reloadNav() {
+            this.wikiStore.loadNav(true);
         },
         showVersionsPopup() {
             ElMessageBox({
