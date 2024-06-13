@@ -3,7 +3,7 @@
         <template v-if="isFolder">
             <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
                 <template #title>
-                <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id">
+                <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id" :element-title="element.title">
                     <template #indicator>
                         <pm-icon v-if="isSubmenuOpen" icon="caret-down"></pm-icon>
                         <pm-icon v-else icon="caret-right"></pm-icon>
@@ -33,7 +33,7 @@
         </template>
         <template v-else>
             <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
-                <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit">
+                <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
                     <template #title>
                         <div class="d-flex align-items-center gap-2">
                             <span class="submenu-title">{{ element.title }}</span>

@@ -7,7 +7,7 @@
                 </div>
                 <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
-                        <pw-nav-entry-title :element-id="0" :should-display-dropdown="false">
+                        <pw-nav-entry-title :element-id="0" :should-display-dropdown="false" element-title="Home">
                             <template #title>
                                 <pm-icon icon="house"></pm-icon>
                             </template>

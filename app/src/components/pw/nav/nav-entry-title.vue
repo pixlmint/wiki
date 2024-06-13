@@ -3,7 +3,7 @@
         <span class="indicator">
             <slot name="indicator"></slot>
         </span>
-        <div class="nav-title">
+        <div class="nav-title" :title="elementTitle">
             <slot name="title"></slot>
         </div>
         <el-dropdown class="nav-dropdown" v-if="props.shouldDisplayDropdown">
@@ -21,7 +21,11 @@
 const props = defineProps({
     elementId: {
         type: [String, Number],
-        require: true,
+        required: true,
+    },
+    elementTitle: {
+        type: String,
+        required: true,
     },
     shouldDisplayDropdown: Boolean,
 });
