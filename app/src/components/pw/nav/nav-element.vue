@@ -26,11 +26,9 @@
                     </template>
                 </pw-nav-entry-title>
                 </template>
-                    <PWNavElement v-for="(childElement, myIndex) in element.children"
-                                  :key="myIndex"
-                                  :element="childElement"
-                                  v-if="data.hoveredOverSubmenu">
-                    </PWNavElement>
+                <template v-for="(childElement, myIndex) in element.children" :key="myIndex" v-if="data.hoveredOverSubmenu">
+                    <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+                </template>
             </el-sub-menu>
         </template>
         <template v-else>

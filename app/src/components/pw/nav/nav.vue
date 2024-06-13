@@ -13,12 +13,9 @@
                             </template>
                         </pw-nav-entry-title>
                     </el-menu-item>
-                    <PWNavElement v-for="(childElement, myIndex) in nav.children"
-                                  parentIndex="0"
-                                  :key="myIndex"
-                                  :element="childElement"
-                                  :index="myIndex">
-                    </PWNavElement>
+                    <template v-for="(childElement, myIndex) in nav.children" :key="myIndex">
+                        <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+                    </template>
                 </el-menu>
                 <el-dropdown class="full-width" v-if="canEdit">
                     <el-button class="full-width">
