@@ -1,5 +1,5 @@
 <template>
-    <div @mouseover="triggerRenderDropdown">
+    <div @click="triggerRenderDropdown">
         <template v-if="isFolder">
             <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
                 <template #title>
