@@ -60,12 +60,14 @@ const cards = computed(() => {
 
 
 const updateList = function (event: Event) {
+    console.log("handling event", event);
     if ('added' in event) {
         const newCard = event.added.element;
         props.list.children[newCard.id] = newCard;
-        boardStore.moveCard(props.list.meta.uid, newCard.meta.uid);
+        boardStore.moveCard(props.list.meta.uid, newCard.meta.uid).then(() => {
+            boardStore.refreshBoard();
+        });
     } else if ('removed' in event) {
-        console.log('handling removed event', event);
         delete props.list.children[event.removed.element.id];
     } else {
         console.log('I don\'t know what to do with this event', event);

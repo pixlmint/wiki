@@ -1,6 +1,6 @@
 <template>
     <pm-dialog title="Change Password">
-        <el-form v-model="form" @submit.prevent="submit">
+        <el-form v-model="form" label-width="auto" @submit.prevent="submit">
             <el-form-item label="Username">
                 <el-input v-model="form.username"/>
             </el-form-item>
@@ -13,7 +13,10 @@
             <el-form-item label="Repeat Password">
                 <el-input v-model="form.newPassword2" type="password"/>
             </el-form-item>
-            <el-button type="submit">Submit</el-button>
+            <el-form-item label="Logout Everywhere">
+                <el-switch v-model="form.logoutEverywhere"></el-switch>
+            </el-form-item>
+            <el-button @click="submit">Submit</el-button>
         </el-form>
     </pm-dialog>
 </template>
@@ -32,6 +35,7 @@ export default defineComponent({
                 currentPassword: "",
                 newPassword1: "",
                 newPassword2: "",
+                logoutEverywhere: false,
             },
             dialogStore: useDialogStore(),
         };

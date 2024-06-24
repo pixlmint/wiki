@@ -1,31 +1,48 @@
 <template>
     <pm-dialog class="user-settings-popup" title="Settings" :route="route">
         <el-form v-model="settings">
-            <el-form-item label="Auto save">
-                <el-switch v-model="settings.autoSave"/>
-            </el-form-item>
-            <el-form-item label="Theme">
-                <el-radio-group v-model="settings.theme">
-                    <el-radio label="dark">
-                        <pm-icon icon="moon"></pm-icon>
-                    </el-radio>
-                    <el-radio label="light">
-                        <pm-icon icon="sun"></pm-icon>
-                    </el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="Build Index">
-                <el-button @click="rebuildIndex"><pm-icon icon="rotate"></pm-icon></el-button>
-            </el-form-item>
-            <el-form-item label="Download Backup">
-                <el-button @click="downloadBackup"><pm-icon icon="download"></pm-icon></el-button>
-            </el-form-item>
-            <el-button @click="reloadNav">Reload Nav</el-button>
+            <el-tabs tab-position="left">
+                <el-tab-pane label="User">
+                    <el-form-item label="Auto save">
+                        <el-switch v-model="settings.autoSave"/>
+                    </el-form-item>
+                    <el-form-item label="Theme">
+                        <el-radio-group v-model="settings.theme">
+                            <el-radio label="dark">
+                                <pm-icon icon="moon"></pm-icon>
+                            </el-radio>
+                            <el-radio label="light">
+                                <pm-icon icon="sun"></pm-icon>
+                            </el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-tab-pane>
+                <el-tab-pane label="Security">
+                    <el-button @click="changePassword">Change Password</el-button>
+
+                </el-tab-pane>
+                <el-tab-pane label="Admin">
+                    <el-form-item label="Build Index">
+                        <el-button @click="rebuildIndex"><pm-icon icon="rotate"></pm-icon></el-button>
+                    </el-form-item>
+                    <el-form-item label="Download Backup">
+                        <el-button @click="downloadBackup"><pm-icon icon="download"></pm-icon></el-button>
+                    </el-form-item>
+                    <el-button @click="reloadNav">Reload Nav</el-button>
+                </el-tab-pane>
+            </el-tabs>
         </el-form>
         <template #footer>
-            <el-button text @click="showVersionsPopup">PixlWiki Version {{ version }}</el-button>
+            <el-button @click="showVersionsPopup">PixlWiki Version {{ version }}</el-button>
             |
-            <el-button text @click="logout">Logout</el-button>
+            <el-dropdown split-button @click="logout">
+                Logout
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item @click="logoutEverywhere">Logout Everywhere</el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
         </template>
     </pm-dialog>
 </template>
@@ -35,7 +52,7 @@ import {defineComponent, h, watch} from "vue";
 import {useUserSettings} from "@/src/stores/user-settings";
 import {useMainStore} from "@/src/stores/main";
 import {ElMessageBox, ElNotification} from "element-plus";
-import {useAuthStore} from "pixlcms-wrapper";
+import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {useWikiStore} from "@/src/stores/wiki";
 
 export const route = '/settings';
@@ -48,6 +65,7 @@ export default defineComponent({
             wikiStore: useWikiStore(),
             settings: useUserSettings().getSettings,
             route: route,
+            dialogStore: useDialogStore(),
         }
     },
     created() {
@@ -77,6 +95,10 @@ export default defineComponent({
             useAuthStore().logout();
             useWikiStore().loadNav();
         },
+        logoutEverywhere() {
+            useAuthStore().logout(true);
+            useWikiStore().loadNav();
+        },
         setTheme(theme: string) {
             document.documentElement.classList.remove('light');
             document.documentElement.classList.remove('dark');
@@ -94,6 +116,9 @@ export default defineComponent({
                     h('li', null, 'Frontend Version: '+ useMainStore().meta.frontendVersion),
                 ]),
             })
+        },
+        changePassword() {
+            this.dialogStore.showDialog('/auth/change-password');
         },
     },
 })
