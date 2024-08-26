@@ -1,6 +1,6 @@
 <template>
     <template v-if="isPdfContent">
-        <PDFContent :b64pdf="content"></PDFContent>
+        <PDFContent :pdfPath="pdfPath"></PDFContent>
     </template>
     <template v-else-if="isBoard">
         <BoardView :board-id="entryId"/>
@@ -17,9 +17,7 @@ import {useAuthStore} from "pixlcms-wrapper";
 import PDFContent from "@/src/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/src/components/home/BoardView.vue";
-import InternalLink from "@/src/components/home/basic-html-components/internal-link.vue";
-// import Prism from "prismjs";
-// import "prismjs/themes/prism.css";
+import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -52,6 +50,11 @@ export default defineComponent({
         },
         entryId() {
             return this.wikiStore.safeCurrentEntry.id;
+        },
+        pdfPath() {
+            const base = '/api/entry/load-pdf?';
+            const data = {p: this.entryId, pixltoken: this.authStore.token};
+            return base + queryFormatter(data);
         },
     },
 })
