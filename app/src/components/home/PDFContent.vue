@@ -11,7 +11,7 @@
         <div ref="pdfContainer">
                 <!-- <canvas v-for="n in totalPages" :key="n" :ref="'pdfCanvas' + n"></canvas> -->
                 <div v-for="page in pages" :key="page">
-                    <VuePDF :pdf="pdf" :page="page" text-layer />
+                    <VuePDF :pdf="pdf" :page="page" text-layer fit-parent />
                 </div>
         </div>
         </template>
