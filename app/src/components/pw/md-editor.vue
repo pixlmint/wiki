@@ -1,6 +1,11 @@
 <template>
     <div>
         <div class="md-editor" ref="editor"/>
+        <div class="toolbar-icons">
+            <div v-for="icon in toolbarIcons" class="toolbar-icon" :id="'tui_icons_' + icon" :key="icon">
+                <pm-icon :icon="icon"></pm-icon>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -10,6 +15,7 @@ import Editor, {EditorType} from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {useUserSettings} from "@/src/stores/user-settings";
+import { useDialogStore } from 'pixlcms-wrapper';
 
 const {modelValue, editorHeight} = defineProps<{
     modelValue: string;
@@ -23,19 +29,32 @@ const userSettingsStore = useUserSettings();
 
 let e: any;
 
-const createRefreshButton = () => {
+const toolbarIcons = ref(<string[]>[
+    'pen-ruler',
+    'rotate',
+]);
+
+const dialogStore = useDialogStore();
+
+const createToolbarButton = function (icon: string, onClick: () => any) {
     const button = document.createElement('button');
+    const iconEl = document.getElementById('tui_icons_' + icon);
+    let btnContent = "";
+    
+    if (iconEl === null) {
+       btnContent = "X"; 
+    } else {
+        btnContent = iconEl.innerHTML;
+    }
 
     button.className = 'toastui-editor-toolbar-icons last';
     button.style.backgroundImage = 'none';
     button.style.margin = '0';
-    button.innerHTML = `<span>Reload</span>`;
-    button.addEventListener('click', () => {
-        e.exec('refresh');
-    });
+    button.innerHTML = btnContent;
+    button.addEventListener('click', onClick);
 
     return button;
-};
+}
 
 onMounted(() => {
     e = new Editor({
@@ -55,7 +74,17 @@ onMounted(() => {
             ['code', 'codeblock'],
             [
                 {
-                    el: createRefreshButton(),
+                    el: createToolbarButton('pen-ruler', () => {
+                        dialogStore.showDialog('/draw');
+                    }),
+                    name: 'draw',
+                    command: 'draw',
+                    tooltip: 'Draw',
+                },
+                {
+                    el: createToolbarButton('rotate', () => {
+                        e.exec('refresh');
+                    }),
                     name: 'refresh',
                     command: 'refresh',
                     tooltip: 'Refresh',
@@ -100,3 +129,9 @@ onMounted(() => {
     })
 });
 </script>
+
+<style lang="scss" scoped>
+.toolbar-icons {
+    display: none;
+}
+</style>

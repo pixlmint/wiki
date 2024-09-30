@@ -58,6 +58,8 @@ html.dark {
 
 pre, li > code, p > code, h1 > code, h2 > code, h3 > code, h4 > code, h5 > code {
     background-color: var(--pw-code-bg);
+    border: 1px solid rgba(99, 99, 99, 0.1);
+    overflow-x: auto;
 }
 
 pre {

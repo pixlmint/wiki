@@ -137,6 +137,7 @@ export default defineComponent({
     border-bottom-right-radius: 2px;
     min-height: 100vh;
     padding: 5px;
+    box-sizing: border-box;
 
     &.small-nav {
         margin: 0 auto 0 $navSmallWidth;
@@ -191,14 +192,14 @@ export default defineComponent({
 @media screen and (min-width: 1300px) {
     .main-content {
         min-width: unset !important;
-        box-shadow: var(--box-shadow);
+        // box-shadow: var(--box-shadow);
 
         img {
-            max-width: 1000px !important;
+            max-width: 900px !important;
         }
 
         &.article-width {
-            max-width: 1000px !important;
+            max-width: 900px !important;
 
             &.small-nav {
                 margin: 0 auto 0 auto;

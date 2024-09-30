@@ -26,7 +26,7 @@ body {
 body {
     margin: 0;
     min-height: 100vh;
-    background-color: var(--el-bg-secondary);
+    // background-color: var(--el-bg-secondary);
     color: var(--el-text-color);
 }
 
@@ -40,10 +40,6 @@ body {
 
 a {
     color: var(--wiki-accent-color);
-}
-
-h1 {
-    font-size: 2.5rem;
 }
 
 li p {
