@@ -4,7 +4,6 @@ import VueAxios from 'vue-axios'
 import axios from 'axios'
 import {createPinia} from "pinia"
 import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
 import PWNav from '@/src/components/pw/nav/nav.vue';
 import PWLoading from '@/src/components/pw/loading.vue';
 import PWSearch from '@/src/components/pw/search.vue';

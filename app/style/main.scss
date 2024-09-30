@@ -1,3 +1,4 @@
+@import 'element-plus/dist/index.css';
 @import 'theme';
 @import 'variables';
 @import 'fonts';
@@ -44,6 +45,17 @@ a {
 
 li p {
     margin: 0;
+}
+
+.main-content {
+    li {
+        margin: 0.25rem 0;
+        line-height: 1.25rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
 }
 
 .danger {

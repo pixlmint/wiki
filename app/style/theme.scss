@@ -14,3 +14,9 @@ html.dark {
     --el-text-color: #e1e1e1;
     --wiki-accent-color: #6de3d5;
 }
+
+@media screen and (min-width: 1000px) {
+    :root {
+        --el-menu-item-height: 45px;
+    }
+}
