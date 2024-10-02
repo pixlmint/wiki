@@ -108,6 +108,11 @@ p {
     letter-spacing: 0.2px;
 }
 
+.el-dropdown-menu__item svg + span, 
+.el-button svg + span {
+    margin-left: 4px;
+}
+
 table {
     min-width: 100%;
     border-collapse: collapse;

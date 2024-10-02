@@ -18,30 +18,34 @@
                 <template #dropdown>
                     <el-dropdown-item v-if="props.displayViewMarkdownButton" @click="viewMarkdown" title="View">
                         <pm-icon icon="eye"></pm-icon>
-                        View
+                        <span>View</span>
                     </el-dropdown-item>
                     <el-dropdown-item v-if="props.displayEditButton" @click="editEntry" title="Edit">
                         <pm-icon icon="pen-to-square"></pm-icon>
-                        Edit
+                        <span>Edit</span>
                     </el-dropdown-item>
                     <el-dropdown-item v-if="props.displayDeleteButton" class="danger" @click="deleteEntry" title="Delete">
                         <pm-icon icon="trash"></pm-icon>
-                        Delete
+                        <span>Delete</span>
                     </el-dropdown-item>
                 </template>
             </el-dropdown>
             <div class="desktop-action-buttons">
-                <slot name="actions-extra"></slot>
-                <el-button v-if="props.displayViewMarkdownButton" circle @click="viewMarkdown">
-                    <pm-icon icon="eye"></pm-icon>
-                </el-button>
-                <el-button v-if="props.displayEditButton" @click="editEntry">
+                <el-dropdown split-button type="secondary" @click="editEntry">
                     <pm-icon icon="pen-to-square"></pm-icon>
-                    Edit
-                </el-button>
-                <el-button v-if="props.displayDeleteButton" type="danger" @click="deleteEntry" circle>
-                    <pm-icon icon="trash"></pm-icon>
-                </el-button>
+                    <span>Edit</span>
+                    <template #dropdown>
+                        <slot name="actions-extra"></slot>
+                        <el-dropdown-item v-if="props.displayViewMarkdownButton" @click="viewMarkdown" title="View">
+                            <pm-icon icon="eye"></pm-icon>
+                            <span>View</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item v-if="props.displayDeleteButton" class="danger" @click="deleteEntry" title="Delete">
+                            <pm-icon icon="trash"></pm-icon>
+                            <span>Delete</span>
+                        </el-dropdown-item>
+                    </template>
+                </el-dropdown>
             </div>
         </div>
     </div>

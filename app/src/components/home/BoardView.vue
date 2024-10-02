@@ -6,7 +6,10 @@
                     <el-tag><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
                 </template>
                 <template #actions-extra>
-                    <el-button @click="boardSettings"><pm-icon icon="gear"></pm-icon></el-button>
+                    <el-dropdown-item @click="boardSettings" title="Settings">
+                        <pm-icon icon="gear"></pm-icon>
+                        <span>Settings</span>
+                    </el-dropdown-item>
                 </template>
             </entry-heading>
         </template>
