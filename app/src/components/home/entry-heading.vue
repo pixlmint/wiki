@@ -17,8 +17,8 @@
                 </el-button>
                 <template #dropdown>
                     <el-dropdown-item v-if="props.displayViewMarkdownButton" @click="viewMarkdown" title="View">
-                        <pm-icon icon="eye"></pm-icon>
-                        <span>View</span>
+                        <pm-icon icon="markdown" package="brands"></pm-icon>
+                        <span>Show Markdown</span>
                     </el-dropdown-item>
                     <el-dropdown-item v-if="props.displayEditButton" @click="editEntry" title="Edit">
                         <pm-icon icon="pen-to-square"></pm-icon>
@@ -31,14 +31,13 @@
                 </template>
             </el-dropdown>
             <div class="desktop-action-buttons">
-                <el-dropdown split-button type="secondary" @click="editEntry">
+                <el-dropdown split-button type="secondary" trigger="click" @click="editEntry">
                     <pm-icon icon="pen-to-square"></pm-icon>
-                    <span>Edit</span>
                     <template #dropdown>
                         <slot name="actions-extra"></slot>
                         <el-dropdown-item v-if="props.displayViewMarkdownButton" @click="viewMarkdown" title="View">
-                            <pm-icon icon="eye"></pm-icon>
-                            <span>View</span>
+                            <pm-icon icon="markdown" package="brands"></pm-icon>
+                            <span>Show Markdown</span>
                         </el-dropdown-item>
                         <el-dropdown-item v-if="props.displayDeleteButton" class="danger" @click="deleteEntry" title="Delete">
                             <pm-icon icon="trash"></pm-icon>

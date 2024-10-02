@@ -1,22 +1,20 @@
 <template>
     <div>
         <el-row justify="space-between" align="middle">
-            <el-col :span="12">
-                <el-row align="middle" :gutter="20" class="editor-header">
-                    <el-col :span="4">
-                        <el-button circle @click="checkGoHome">
-                            <pm-icon icon="caret-left"></pm-icon>
-                        </el-button>
-                    </el-col>
-                    <!--<el-col :span="22">
-                        TODO: fix renaming
-                        <input class="title-editor" @change="rename" :value="title"/>
-                    </el-col>-->
-                    <el-col :span="20">
-                        <h1>{{ title }}</h1>
-                    </el-col>
-                </el-row>
-            </el-col>
+            <el-row align="middle" :gutter="20" class="editor-header">
+                <el-col :span="2">
+                    <el-button circle @click="checkGoHome">
+                        <pm-icon icon="caret-left"></pm-icon>
+                    </el-button>
+                </el-col>
+                <!--<el-col :span="22">
+                    TODO: fix renaming
+                    <input class="title-editor" @change="rename" :value="title"/>
+                </el-col>-->
+                <el-col :span="22">
+                    <h1>{{ title }}</h1>
+                </el-col>
+            </el-row>
         </el-row>
         <p class="last-edited">
             {{ lastSavedFormatted }}

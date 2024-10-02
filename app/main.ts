@@ -28,7 +28,7 @@ import {
     faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    faTrello
+    faTrello, faMarkdown
 } from "@fortawesome/free-brands-svg-icons";
 
 const pinia = createPinia();
@@ -53,6 +53,6 @@ app.component('pw-nav-entry-title', NavEntryTitle);
 library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle,
     faArrowRotateRight, faTimes, faPlus, faTrello, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
     faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faCaretDown, faHouse, faCirclePlus, faUser,
-    faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark);
+    faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark, faMarkdown);
 
 app.mount('#app')
