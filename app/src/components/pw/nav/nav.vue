@@ -200,11 +200,18 @@ const nav = computed(() => {
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 100;
+    border-right: 1px solid var(--el-menu-border-color);
 }
 
 @media screen and (max-width: $mobileBreakpoint) {
     #nav {
         width: 100%;
+    }
+
+    html.dark {
+        #nav {
+            background-color: rgb(20, 20, 20);
+        }
     }
 }
 
@@ -243,8 +250,9 @@ const nav = computed(() => {
     background-color: var(--el-bg-color);
     min-height: 100vh;
     bottom: 0;
-    width: 1.5rem;
+    width: $navSmallWidth;
     cursor: pointer;
+    border-right: var(--el-border);
 
     .nav-toggle-small {
         position: absolute;
@@ -300,6 +308,10 @@ const nav = computed(() => {
             background-color: var(--el-menu-hover-bg-color);
         }
     }
+}
+
+.el-menu {
+    border-right: unset;
 }
 
 .el-dropdown-menu__item {

@@ -144,7 +144,7 @@ export default defineComponent({
         width: calc(100vw - $navSmallWidth);
 
         img {
-            max-width: calc(100vw - $navSmallWidth);
+            max-width: calc(100vw - $navSmallWidth - 4 * 5px);
         }
     }
 
@@ -174,6 +174,10 @@ export default defineComponent({
 }
 
 @media screen and (min-width: 1600px) {
+    html.dark .main-content {
+        border-left: 1px solid var(--el-border-color);
+    }
+
     .main-content {
         &.large-nav.article-width {
             margin: 0 auto 0 auto;
@@ -190,12 +194,15 @@ export default defineComponent({
 }
 
 @media screen and (min-width: 1300px) {
+    html.dark .main-content {
+        border-right: 1px solid var(--el-border-color);
+    }
+
     .main-content {
         min-width: unset !important;
-        // box-shadow: var(--box-shadow);
 
         img {
-            max-width: 900px !important;
+            max-width: calc(900px - 4 * 5px) !important;
         }
 
         &.article-width {
