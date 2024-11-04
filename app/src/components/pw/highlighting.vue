@@ -14,6 +14,7 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-sql';
 
 const props = defineProps({
     content: {

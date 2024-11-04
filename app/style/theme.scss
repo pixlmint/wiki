@@ -20,6 +20,11 @@ html.dark {
     .el-dialog {
         --el-dialog-bg-color: rgb(20, 20, 20);
     }
+
+    .el-message-box {
+        --el-dialog-bg-color: rgb(20, 20, 20);
+        background-color: var(--el-dialog-bg-color);;
+    }
 }
 
 @media screen and (min-width: 1000px) {
