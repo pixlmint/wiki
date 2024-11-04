@@ -38,7 +38,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.18.7',
+        'version' => '1.18.8',
     ],
     'base' => [
         'debugEnabled' => false,

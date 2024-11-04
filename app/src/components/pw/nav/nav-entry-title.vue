@@ -7,7 +7,7 @@
             <slot name="title"></slot>
         </div>
         <el-dropdown class="nav-dropdown" v-if="props.shouldDisplayDropdown">
-            <el-button circle text>
+            <el-button class="nav-dropdown-button" circle text>
                 <pm-icon icon="ellipsis"></pm-icon>
             </el-button>
             <template #dropdown>
@@ -62,6 +62,15 @@ const props = defineProps({
 
     .nav-dropdown {
         width: 10%;
+    }
+}
+
+.nav-dropdown-button {
+    width: 25px;
+    height: 25px;
+
+    &:focus-visible {
+        outline: unset !important;
     }
 }
 </style>

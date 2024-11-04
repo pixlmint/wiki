@@ -327,9 +327,3 @@ const nav = computed(() => {
 }
 </style>
 
-<style lang="scss">
-button.is-circle, .el-button.is-circle {
-    height: 2rem;
-    width: 2rem;
-}
-</style>
