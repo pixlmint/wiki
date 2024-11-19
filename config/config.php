@@ -6,6 +6,12 @@ use App\Hooks\InitHook;
 return [
     "plugins" => [
         [
+            'name' => 'pixl-cms',
+            'install_method' => 'composer',
+            'enabled' => true,
+            'config' => require_once('vendor/pixlmint/pixl-cms/config/config.php'),
+        ],
+        [
             'name' => 'pixlcms-wiki-plugin',
             'install_method' => 'composer',
             'enabled' => true,
@@ -38,7 +44,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.18.8',
+        'version' => '1.18.9',
     ],
     'base' => [
         'debugEnabled' => false,
