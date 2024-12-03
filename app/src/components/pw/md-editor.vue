@@ -3,7 +3,7 @@
         <div class="md-editor" ref="editor"/>
         <div class="toolbar-icons">
             <div v-for="icon in toolbarIcons" class="toolbar-icon" :id="'tui_icons_' + icon" :key="icon">
-                <pm-icon :icon="icon"></pm-icon>
+                <pm-icon class="pw-icon-in-tui-toolbar" :icon="icon"></pm-icon>
             </div>
         </div>
     </div>
@@ -32,6 +32,7 @@ let e: any;
 const toolbarIcons = ref(<string[]>[
     'pen-ruler',
     'rotate',
+    'table',
 ]);
 
 const dialogStore = useDialogStore();
@@ -40,9 +41,9 @@ const createToolbarButton = function (icon: string, onClick: () => any) {
     const button = document.createElement('button');
     const iconEl = document.getElementById('tui_icons_' + icon);
     let btnContent = "";
-    
+
     if (iconEl === null) {
-       btnContent = "X"; 
+        btnContent = "X"; 
     } else {
         btnContent = iconEl.innerHTML;
     }
@@ -69,10 +70,20 @@ onMounted(() => {
         useCommandShortcut: false,
         toolbarItems: [
             ['heading', 'bold', 'italic', 'strike'],
-            ['hr', 'quote'],
-            ['ul', 'ol', 'task'],
-            ['code', 'codeblock'],
             [
+                {
+                    el: createToolbarButton('table', () => {
+                        dialogStore.showDialog({
+                            route: '/table-editor',
+                            closeCallback: () => {
+                                emit('refresh');
+                            },
+                        });
+                    }),
+                    name: 'table',
+                    command: 'table',
+                    tooltip: 'Table',
+                },
                 {
                     el: createToolbarButton('pen-ruler', () => {
                         dialogStore.showDialog('/draw');
@@ -81,6 +92,9 @@ onMounted(() => {
                     command: 'draw',
                     tooltip: 'Draw',
                 },
+            ],
+            ['quote', 'ol', 'task', 'codeblock'],
+            [
                 {
                     el: createToolbarButton('rotate', () => {
                         e.exec('refresh');
@@ -125,7 +139,7 @@ onMounted(() => {
     if (modelValue) {
         e.setMarkdown(modelValue);
     }
-    window.addEventListener('resize', (event) => {
+    window.addEventListener('resize', () => {
     })
 });
 </script>
@@ -133,5 +147,9 @@ onMounted(() => {
 <style lang="scss" scoped>
 .toolbar-icons {
     display: none;
+}
+
+.pw-icon-in-tui-toolbar {
+    color: var(--el-text-color);
 }
 </style>

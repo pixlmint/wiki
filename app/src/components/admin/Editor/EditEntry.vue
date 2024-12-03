@@ -75,7 +75,6 @@ export default defineComponent({
         refresh() {
             this.wikiStore.fetchEntry(this.wikiStore.safeCurrentEntry.id);
             this.componentKey += 1;
-            console.log("hello refresh");
         },
         updateContent(md: string) {
             if (!this.wikiStore.currentEntry) {

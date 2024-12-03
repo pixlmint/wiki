@@ -1,0 +1,320 @@
+{
+  "context": "/home/christian/Code/php/wiki",
+  "entry": {
+    "app": "./app/main.ts"
+  },
+  "output": {
+    "path": "/home/christian/Code/php/wiki/dist",
+    "publicPath": "/",
+    "filename": "js/[name].js",
+    "chunkFilename": "js/[name].js"
+  },
+  "resolve": {
+    "alias": {
+      "@": "/home/christian/Code/php/wiki/app",
+      "vue": "/home/christian/Code/php/wiki/node_modules/vue"
+    },
+    "symlinks": true,
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".vue",
+      ".json"
+    ]
+  },
+  "plugins": [
+    {},
+    {
+      "options": {},
+      "logger": {
+        "log": "function () { [native code] }",
+        "warn": "function () { [native code] }",
+        "dir": "function () { [native code] }",
+        "time": "function () { [native code] }",
+        "timeEnd": "function () { [native code] }",
+        "timeLog": "function () { [native code] }",
+        "trace": "function () { [native code] }",
+        "assert": "function () { [native code] }",
+        "clear": "function () { [native code] }",
+        "count": "function () { [native code] }",
+        "countReset": "function () { [native code] }",
+        "group": "function () { [native code] }",
+        "groupEnd": "function () { [native code] }",
+        "table": "function () { [native code] }",
+        "debug": "function () { [native code] }",
+        "info": "function () { [native code] }",
+        "dirxml": "function () { [native code] }",
+        "error": "function () { [native code] }",
+        "groupCollapsed": "function () { [native code] }",
+        "Console": "function Console(options /* or: stdout, stderr, ignoreErrors = true */) {\n  // We have to test new.target here to see if this function is called\n  // with new, because we need to define a custom instanceof to accommodate\n  // the global console.\n  if (new.target === undefined) {\n    return ReflectConstruct(Console, arguments);\n  }\n\n  if (!options || typeof options.write === 'function') {\n    options = {\n      stdout: options,\n      stderr: arguments[1],\n      ignoreErrors: arguments[2],\n    };\n  }\n\n  const {\n    stdout,\n    stderr = stdout,\n    ignoreErrors = true,\n    colorMode = 'auto',\n    inspectOptions,\n    groupIndentation,\n  } = options;\n\n  if (!stdout || typeof stdout.write !== 'function') {\n    throw new ERR_CONSOLE_WRITABLE_STREAM('stdout');\n  }\n  if (!stderr || typeof stderr.write !== 'function') {\n    throw new ERR_CONSOLE_WRITABLE_STREAM('stderr');\n  }\n\n  validateOneOf(colorMode, 'colorMode', ['auto', true, false]);\n\n  if (groupIndentation !== undefined) {\n    validateInteger(groupIndentation, 'groupIndentation',\n                    0, kMaxGroupIndentation);\n  }\n\n  if (inspectOptions !== undefined) {\n    validateObject(inspectOptions, 'options.inspectOptions');\n\n    if (inspectOptions.colors !== undefined &&\n        options.colorMode !== undefined) {\n      throw new ERR_INCOMPATIBLE_OPTION_PAIR(\n        'options.inspectOptions.color', 'colorMode');\n    }\n    optionsMap.set(this, inspectOptions);\n  }\n\n  // Bind the prototype functions to this Console instance\n  ArrayPrototypeForEach(ObjectKeys(Console.prototype), (key) => {\n    // We have to bind the methods grabbed from the instance instead of from\n    // the prototype so that users extending the Console can override them\n    // from the prototype chain of the subclass.\n    this[key] = FunctionPrototypeBind(this[key], this);\n    ObjectDefineProperty(this[key], 'name', {\n      __proto__: null,\n      value: key,\n    });\n  });\n\n  this[kBindStreamsEager](stdout, stderr);\n  this[kBindProperties](ignoreErrors, colorMode, groupIndentation);\n}",
+        "profile": "function profile() { [native code] }",
+        "profileEnd": "function profileEnd() { [native code] }",
+        "timeStamp": "function timeStamp() { [native code] }",
+        "context": "function context() { [native code] }",
+        "createTask": "function createTask() { [native code] }"
+      },
+      "pathCache": {},
+      "fsOperations": 0,
+      "primed": false
+    },
+    {
+      "userOptions": {
+        "template": "/home/christian/Code/php/wiki/public/index.html",
+        "templateParameters": {
+          "NODE_ENV": "development",
+          "PUBLIC_PATH": "/"
+        }
+      },
+      "version": 5,
+      "options": {
+        "template": "/home/christian/Code/php/wiki/public/index.html",
+        "templateContent": false,
+        "templateParameters": {
+          "NODE_ENV": "development",
+          "PUBLIC_PATH": "/"
+        },
+        "filename": "index.html",
+        "publicPath": "auto",
+        "hash": false,
+        "inject": "head",
+        "scriptLoading": "defer",
+        "compile": true,
+        "favicon": false,
+        "minify": "auto",
+        "cache": true,
+        "showErrors": true,
+        "chunks": "all",
+        "excludeChunks": [],
+        "chunksSortMode": "auto",
+        "meta": {},
+        "base": false,
+        "title": "Webpack App",
+        "xhtml": false
+      }
+    },
+    {
+      "patterns": [
+        {
+          "from": "/home/christian/Code/php/wiki/public",
+          "toType": "dir",
+          "globOptions": {
+            "ignore": [
+              ".DS_Store",
+              "**/index.html"
+            ]
+          },
+          "noErrorOnMissing": true
+        }
+      ],
+      "options": {}
+    },
+    {
+      "definitions": {
+        "__VUE_OPTIONS_API__": "true",
+        "__VUE_PROD_DEVTOOLS__": "false",
+        "process.env": {
+          "NODE_ENV": "\"development\"",
+          "PUBLIC_PATH": "\"/\""
+        }
+      }
+    }
+  ],
+  "module": {
+    "noParse": {},
+    "rules": [
+      {
+        "test": {},
+        "loader": "vue-loader"
+      },
+      {
+        "test": {},
+        "exclude": "(file) => {\n          // always transpile js in vue files\n          if (/\\.vue\\.jsx?$/.test(file)) {\n            return false\n          }\n          // Don't transpile node_modules\n          return /node_modules/.test(file)\n        }",
+        "use": [
+          "thread-loader",
+          "babel-loader"
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          "thread-loader",
+          "babel-loader",
+          {
+            "loader": "ts-loader",
+            "options": {
+              "transpileOnly": true,
+              "appendTsSuffixTo": [
+                "\\.vue$"
+              ],
+              "happyPackMode": true
+            }
+          }
+        ]
+      },
+      {
+        "test": {},
+        "type": "asset",
+        "generator": {
+          "filename": "img/[contenthash:8][ext][query]"
+        }
+      },
+      {
+        "test": {},
+        "type": "asset/resource",
+        "generator": {
+          "filename": "img/[contenthash:8][ext][query]"
+        }
+      },
+      {
+        "test": {},
+        "type": "asset",
+        "generator": {
+          "filename": "media/[contenthash:8][ext][query]"
+        }
+      },
+      {
+        "test": {},
+        "type": "asset",
+        "generator": {
+          "filename": "fonts/[contenthash:8][ext][query]"
+        }
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "vue-style-loader"
+          },
+          {
+            "loader": "css-loader",
+            "options": {
+              "importLoaders": 2,
+              "esModule": false
+            }
+          },
+          {
+            "loader": "postcss-loader",
+            "options": {
+              "postcssOptions": {
+                "plugins": [
+                  "function plugin(...reqs) {\n  let options\n  if (reqs.length === 1 && isPlainObject(reqs[0])) {\n    options = reqs[0]\n    reqs = undefined\n  } else if (reqs.length === 0 || (reqs.length === 1 && !reqs[0])) {\n    reqs = undefined\n  } else if (reqs.length <= 2 && (Array.isArray(reqs[0]) || !reqs[0])) {\n    options = reqs[1]\n    reqs = reqs[0]\n  } else if (typeof reqs[reqs.length - 1] === 'object') {\n    options = reqs.pop()\n  }\n\n  if (!options) {\n    options = {}\n  }\n\n  if (options.browser) {\n    throw new Error(\n      'Change `browser` option to `overrideBrowserslist` in Autoprefixer'\n    )\n  } else if (options.browserslist) {\n    throw new Error(\n      'Change `browserslist` option to `overrideBrowserslist` in Autoprefixer'\n    )\n  }\n\n  if (options.overrideBrowserslist) {\n    reqs = options.overrideBrowserslist\n  } else if (options.browsers) {\n    if (typeof console !== 'undefined' && console.warn) {\n      console.warn(\n        pico.red(WARNING.replace(/`[^`]+`/g, i => pico.yellow(i.slice(1, -1))))\n      )\n    }\n    reqs = options.browsers\n  }\n\n  let brwlstOpts = {\n    env: options.env,\n    ignoreUnknownVersions: options.ignoreUnknownVersions,\n    stats: options.stats\n  }\n\n  function loadPrefixes(opts) {\n    let d = autoprefixerData\n    let browsers = new Browsers(d.browsers, reqs, opts, brwlstOpts)\n    let key = browsers.selected.join(', ') + JSON.stringify(options)\n\n    if (!cache.has(key)) {\n      cache.set(key, new Prefixes(d.prefixes, browsers, options))\n    }\n\n    return cache.get(key)\n  }\n\n  return {\n    browsers: reqs,\n\n    info(opts) {\n      opts = opts || {}\n      opts.from = opts.from || process.cwd()\n      return getInfo(loadPrefixes(opts))\n    },\n\n    options,\n\n    postcssPlugin: 'autoprefixer',\n    prepare(result) {\n      let prefixes = loadPrefixes({\n        env: options.env,\n        from: result.opts.from\n      })\n\n      return {\n        OnceExit(root) {\n          timeCapsule(result, prefixes)\n          if (options.remove !== false) {\n            prefixes.processor.remove(root, result)\n          }\n          if (options.add !== false) {\n            prefixes.processor.add(root, result)\n          }\n        }\n      }\n    }\n  }\n}"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "vue-style-loader"
+          },
+          {
+            "loader": "css-loader",
+            "options": {
+              "importLoaders": 2,
+              "esModule": false
+            }
+          },
+          {
+            "loader": "postcss-loader",
+            "options": {
+              "postcssOptions": {
+                "plugins": [
+                  "function plugin(...reqs) {\n  let options\n  if (reqs.length === 1 && isPlainObject(reqs[0])) {\n    options = reqs[0]\n    reqs = undefined\n  } else if (reqs.length === 0 || (reqs.length === 1 && !reqs[0])) {\n    reqs = undefined\n  } else if (reqs.length <= 2 && (Array.isArray(reqs[0]) || !reqs[0])) {\n    options = reqs[1]\n    reqs = reqs[0]\n  } else if (typeof reqs[reqs.length - 1] === 'object') {\n    options = reqs.pop()\n  }\n\n  if (!options) {\n    options = {}\n  }\n\n  if (options.browser) {\n    throw new Error(\n      'Change `browser` option to `overrideBrowserslist` in Autoprefixer'\n    )\n  } else if (options.browserslist) {\n    throw new Error(\n      'Change `browserslist` option to `overrideBrowserslist` in Autoprefixer'\n    )\n  }\n\n  if (options.overrideBrowserslist) {\n    reqs = options.overrideBrowserslist\n  } else if (options.browsers) {\n    if (typeof console !== 'undefined' && console.warn) {\n      console.warn(\n        pico.red(WARNING.replace(/`[^`]+`/g, i => pico.yellow(i.slice(1, -1))))\n      )\n    }\n    reqs = options.browsers\n  }\n\n  let brwlstOpts = {\n    env: options.env,\n    ignoreUnknownVersions: options.ignoreUnknownVersions,\n    stats: options.stats\n  }\n\n  function loadPrefixes(opts) {\n    let d = autoprefixerData\n    let browsers = new Browsers(d.browsers, reqs, opts, brwlstOpts)\n    let key = browsers.selected.join(', ') + JSON.stringify(options)\n\n    if (!cache.has(key)) {\n      cache.set(key, new Prefixes(d.prefixes, browsers, options))\n    }\n\n    return cache.get(key)\n  }\n\n  return {\n    browsers: reqs,\n\n    info(opts) {\n      opts = opts || {}\n      opts.from = opts.from || process.cwd()\n      return getInfo(loadPrefixes(opts))\n    },\n\n    options,\n\n    postcssPlugin: 'autoprefixer',\n    prepare(result) {\n      let prefixes = loadPrefixes({\n        env: options.env,\n        from: result.opts.from\n      })\n\n      return {\n        OnceExit(root) {\n          timeCapsule(result, prefixes)\n          if (options.remove !== false) {\n            prefixes.processor.remove(root, result)\n          }\n          if (options.add !== false) {\n            prefixes.processor.add(root, result)\n          }\n        }\n      }\n    }\n  }\n}"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "vue-style-loader"
+          },
+          {
+            "loader": "css-loader",
+            "options": {
+              "importLoaders": 2,
+              "esModule": false
+            }
+          },
+          {
+            "loader": "postcss-loader",
+            "options": {
+              "postcssOptions": {
+                "plugins": [
+                  "function plugin(...reqs) {\n  let options\n  if (reqs.length === 1 && isPlainObject(reqs[0])) {\n    options = reqs[0]\n    reqs = undefined\n  } else if (reqs.length === 0 || (reqs.length === 1 && !reqs[0])) {\n    reqs = undefined\n  } else if (reqs.length <= 2 && (Array.isArray(reqs[0]) || !reqs[0])) {\n    options = reqs[1]\n    reqs = reqs[0]\n  } else if (typeof reqs[reqs.length - 1] === 'object') {\n    options = reqs.pop()\n  }\n\n  if (!options) {\n    options = {}\n  }\n\n  if (options.browser) {\n    throw new Error(\n      'Change `browser` option to `overrideBrowserslist` in Autoprefixer'\n    )\n  } else if (options.browserslist) {\n    throw new Error(\n      'Change `browserslist` option to `overrideBrowserslist` in Autoprefixer'\n    )\n  }\n\n  if (options.overrideBrowserslist) {\n    reqs = options.overrideBrowserslist\n  } else if (options.browsers) {\n    if (typeof console !== 'undefined' && console.warn) {\n      console.warn(\n        pico.red(WARNING.replace(/`[^`]+`/g, i => pico.yellow(i.slice(1, -1))))\n      )\n    }\n    reqs = options.browsers\n  }\n\n  let brwlstOpts = {\n    env: options.env,\n    ignoreUnknownVersions: options.ignoreUnknownVersions,\n    stats: options.stats\n  }\n\n  function loadPrefixes(opts) {\n    let d = autoprefixerData\n    let browsers = new Browsers(d.browsers, reqs, opts, brwlstOpts)\n    let key = browsers.selected.join(', ') + JSON.stringify(options)\n\n    if (!cache.has(key)) {\n      cache.set(key, new Prefixes(d.prefixes, browsers, options))\n    }\n\n    return cache.get(key)\n  }\n\n  return {\n    browsers: reqs,\n\n    info(opts) {\n      opts = opts || {}\n      opts.from = opts.from || process.cwd()\n      return getInfo(loadPrefixes(opts))\n    },\n\n    options,\n\n    postcssPlugin: 'autoprefixer',\n    prepare(result) {\n      let prefixes = loadPrefixes({\n        env: options.env,\n        from: result.opts.from\n      })\n\n      return {\n        OnceExit(root) {\n          timeCapsule(result, prefixes)\n          if (options.remove !== false) {\n            prefixes.processor.remove(root, result)\n          }\n          if (options.add !== false) {\n            prefixes.processor.add(root, result)\n          }\n        }\n      }\n    }\n  }\n}"
+                ]
+              }
+            }
+          },
+          {
+            "loader": "sass-loader"
+          }
+        ]
+      }
+    ]
+  },
+  "mode": "development",
+  "devtool": "eval-cheap-module-source-map",
+  "watchOptions": {
+    "followSymlinks": true,
+    "ignored": {}
+  },
+  "devServer": {
+    "historyApiFallback": {
+      "rewrites": [
+        {
+          "from": {},
+          "to": "/index.html"
+        }
+      ]
+    },
+    "devMiddleware": {
+      "publicPath": "/"
+    },
+    "hot": true,
+    "client": {
+      "overlay": true,
+      "webSocketURL": "auto://0.0.0.0:0/ws"
+    },
+    "open": false,
+    "host": "0.0.0.0",
+    "port": 8080,
+    "liveReload": true,
+    "proxy": {
+      "/api": {
+        "target": "http://127.0.0.1:94",
+        "pathRewrite": {
+          "^/api": "/api"
+        }
+      },
+      "/backup": {
+        "target": "http://127.0.0.1:94",
+        "pathRewrite": {
+          "^/backup": "/backup"
+        }
+      },
+      "/media": {
+        "target": "http://127.0.0.1:94",
+        "pathRewrite": {
+          "^/media": "/media"
+        }
+      }
+    }
+  },
+  "infrastructureLogging": {
+    "level": "warn"
+  },
+  "stats": {
+    "assets": true,
+    "modules": true,
+    "reasons": true
+  }
+}
