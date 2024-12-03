@@ -4,6 +4,7 @@
 import {h, onMounted, watchEffect, defineComponent} from "vue";
 import Highlighting from "@/src/components/pw/highlighting.vue";
 import BasicLink from "@/src/components/home/basic-html-components/basic-link.vue";
+import Table from "@/src/components/home/basic-html-components/table.vue";
 
 export default defineComponent({
     props: {
@@ -43,6 +44,10 @@ export default defineComponent({
                 }
                 if (tagName === 'a') {
                     return h(BasicLink, {attrs: attrs, content: children[0]});
+                }
+                if (tagName === 'table') {
+                    // @ts-ignore
+                    return h(Table, { table: node.outerHTML });
                 }
                 return h(tagName, attrs, children);
             }
