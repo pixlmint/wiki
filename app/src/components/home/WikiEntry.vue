@@ -5,18 +5,22 @@
     <template v-else-if="isBoard">
         <BoardView :board-id="entryId"/>
     </template>
+    <template v-else-if="isTable">
+        <TableView></TableView>
+    </template>
     <template v-else>
         <BasicHtmlEntry :content="content"></BasicHtmlEntry>
     </template>
 </template>
 
 <script lang="ts">
-import {defineComponent, h} from "vue";
+import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from "pixlcms-wrapper";
 import PDFContent from "@/src/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/src/components/home/BoardView.vue";
+import TableView from "@/src/components/home/TableView.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
 
 export default defineComponent({
@@ -31,6 +35,7 @@ export default defineComponent({
         PDFContent,
         BoardView,
         BasicHtmlEntry,
+        TableView,
     },
     computed: {
         content() {
@@ -47,6 +52,14 @@ export default defineComponent({
         },
         isBoard() {
             return 'board' === this.wikiStore.safeCurrentEntry.meta.kind;
+        },
+        isTable() {
+            const content = this.wikiStore.safeCurrentEntry;
+            const html = document.createElement('html');
+            html.innerHTML = content.content;
+            const body = html.children[1];
+
+            return body.childNodes.length === 1 && body.childNodes[0].nodeName === 'TABLE';
         },
         entryId() {
             return this.wikiStore.safeCurrentEntry.id;
