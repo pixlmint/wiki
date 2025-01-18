@@ -57,8 +57,8 @@ const finalConfig = merge(baseWebpackConfig, cssWebpackConfig, {
     },
 
     stats: {
-        assets: true,
-        modules: true,
+        assets: false,
+        modules: false,
     },
 })
 
