@@ -9,6 +9,7 @@
         <TableView></TableView>
     </template>
     <template v-else>
+        <!--<ExcalidrawWrapper width="1000" height="1000" />-->
         <BasicHtmlEntry :content="content"></BasicHtmlEntry>
     </template>
 </template>
@@ -22,6 +23,7 @@ import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtm
 import BoardView from "@/src/components/home/BoardView.vue";
 import TableView from "@/src/components/home/TableView.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
+import ExcalidrawWrapper from "@/src/components/drawing/excalidraw.vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -36,6 +38,7 @@ export default defineComponent({
         BoardView,
         BasicHtmlEntry,
         TableView,
+        ExcalidrawWrapper,
     },
     computed: {
         content() {

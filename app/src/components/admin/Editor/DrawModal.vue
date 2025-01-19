@@ -1,5 +1,5 @@
 <template>
-    <pm-dialog :fullscreen="true" :route="route">
+    <pm-dialog class="drawing-dialog" style="padding: 0" :fullscreen="true" :route="route">
         <!--<d3-canvas @save="save" :width="width" :height="height"></d3-canvas>-->
         <ExcalidrawWrapper @save="save" :width="width" :height="height"/>
     </pm-dialog>
@@ -26,20 +26,19 @@ export default defineComponent({
         const wikiStore = useWikiStore();
 
         const width = computed(() => {
-            return (window.innerWidth - 100).toString();
+            return (window.innerWidth).toString();
         });
 
         const height = computed(() => {
             return (window.innerHeight - 100).toString();
         });
 
-        const save = (drawing: any) => {
-            console.log(drawing)
+        const save = (svg: any, svgData: any) => {
             const data = {
                 files: [
                     {
                         name: new Date().valueOf() + ".svg",
-                        data: drawing,
+                        data: svg,
                         type: "image/svg+xml",
                     },
                 ],
@@ -53,12 +52,11 @@ export default defineComponent({
                 if (drawings === undefined || drawings === null) {
                     wikiStore.safeCurrentEntry.meta.drawings = [];
                 }
-                emit('imagesave', path);
-                //drawing.svg = path;
-                //const svgRequest = buildRequest('/api/admin/svg/store-data', {drawing: JSON.stringify(drawing)}, 'POST');
-                //send(svgRequest).then((response: Response) => {
-                //    emit('imagesave', path);
-                //});
+                // emit('imagesave', path);
+                const svgRequest = buildRequest('/api/admin/svg/store-data', {drawing: svgData}, 'POST');
+                send(svgRequest).then((response: Response) => {
+                    emit('imagesave', path);
+                });
             });
         };
 
@@ -66,3 +64,15 @@ export default defineComponent({
     }
 });
 </script>
+
+<style lang="scss">
+.drawing-dialog {
+    header {
+        padding: 0;
+    }
+
+    .el-dialog__body {
+        margin-top: 50px;
+    }
+}
+</style>

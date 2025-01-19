@@ -1,13 +1,13 @@
 <template>
-    <el-button @click="exportDrawing">Export</el-button>
     <div :style="'width: ' + props.width + 'px; height: ' + props.height + 'px'">
         <ExcalidrawComponent :excalidrawAPI="onReady" :ref="onReady" :theme="theme" />
     </div>
-    <svg ref="mycanvas"></svg>
+    <el-button @click="exportDrawing">Export</el-button>
+    <el-button @click="excalidrawAPI.refresh()">Refresh</el-button>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { applyPureReactInVue } from 'veaury';
 import { Excalidraw, exportToCanvas, exportToSvg } from '@excalidraw/excalidraw';
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
@@ -51,9 +51,15 @@ const exportDrawing = async function() {
         },
         files: excalidrawAPI.value.getFiles(),
     }).then((svg: HTMLSVGElement) => {
-            emit("save", svg.outerHTML)
+            emit("save", svg.outerHTML, JSON.stringify(elements))
         });
 }
+
+onMounted(() => {
+    window.setTimeout(() => {
+        excalidrawAPI.value.refresh();
+    }, 100);
+});
 
 const ExcalidrawComponent = applyPureReactInVue(Excalidraw);
 
