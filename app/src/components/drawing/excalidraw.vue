@@ -1,15 +1,19 @@
 <template>
     <div :style="'width: ' + props.width + 'px; height: ' + props.height + 'px'">
-        <ExcalidrawComponent :excalidrawAPI="onReady" :ref="onReady" :theme="theme" />
+        <ExcalidrawComponent :excalidrawAPI="onReady" :ref="onReady" :theme="theme">
+            <MainMenuComponent>
+                <el-button @click="exportDrawing()" text><pm-icon icon="save" /><span>Save</span></el-button>
+                <el-button @click="excalidrawAPI.refresh()" text><pm-icon icon="rotate"></pm-icon><span>Refresh</span></el-button>
+            </MainMenuComponent>
+        </ExcalidrawComponent>
     </div>
     <el-button @click="exportDrawing">Export</el-button>
-    <el-button @click="excalidrawAPI.refresh()">Refresh</el-button>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { applyPureReactInVue } from 'veaury';
-import { Excalidraw, exportToCanvas, exportToSvg } from '@excalidraw/excalidraw';
+import { Excalidraw, MainMenu, exportToCanvas, exportToSvg } from '@excalidraw/excalidraw';
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
 import { useUserSettings } from "@/src/stores/user-settings";
 
@@ -27,6 +31,16 @@ const emit = defineEmits(["save"])
 
 const mycanvas = ref(null);
 
+const storeLocally = function() {
+    if (!excalidrawAPI) {
+        return
+    }
+    const elements = excalidrawAPI.value.getSceneElements();
+    if (!elements || !elements.length) {
+        return
+    }
+}
+
 const exportDrawing = async function() {
     if (!excalidrawAPI) {
         return
@@ -35,14 +49,6 @@ const exportDrawing = async function() {
     if (!elements || !elements.length) {
         return
     }
-    //const canvas = await exportToCanvas({
-    //    elements,
-    //    appState: {
-    //        exportWithDarkMode: false,
-    //    },
-    //    files: excalidrawAPI.value.getFiles(),
-    //    getDimensions: () => { return {width: 350, height: 350}}
-    //});
 
     exportToSvg({
         elements,
@@ -62,6 +68,7 @@ onMounted(() => {
 });
 
 const ExcalidrawComponent = applyPureReactInVue(Excalidraw);
+const MainMenuComponent = applyPureReactInVue(MainMenu);
 
 const excalidrawAPI = ref<ExcalidrawImperativeAPI | null>(null);
 
@@ -69,16 +76,5 @@ const onReady = (api: ExcalidrawImperativeAPI) => {
     excalidrawAPI.value = api;
 };
 </script>
-
-<style lang="scss" scoped>
-// .excalidraw {
-//     width: 100%;
-//     height: 100%;
-//
-//     .el-dialog {
-//         padding: 0;
-//     }
-// }
-</style>
 
 
