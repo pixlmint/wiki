@@ -33,6 +33,7 @@ const toolbarIcons = ref(<string[]>[
     'pen-ruler',
     'rotate',
     'table',
+    'save',
 ]);
 
 const dialogStore = useDialogStore();
@@ -96,8 +97,16 @@ onMounted(() => {
             ['quote', 'ol', 'task', 'codeblock'],
             [
                 {
+                    el: createToolbarButton('save', () => {
+                        e.exec('save');
+                    }),
+                    name: 'save',
+                    command: 'save',
+                    tooltip: 'Save',
+                },
+                {
                     el: createToolbarButton('rotate', () => {
-                        e.exec('refresh');
+                        emit('save', e.getMarkdown());
                     }),
                     name: 'refresh',
                     command: 'refresh',
