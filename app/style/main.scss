@@ -109,7 +109,8 @@ p {
 }
 
 .el-dropdown-menu__item svg + span, 
-.el-button svg + span {
+.el-button svg + span,
+.el-button svg + #text {
     margin-left: 4px;
 }
 

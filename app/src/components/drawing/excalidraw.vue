@@ -9,7 +9,6 @@
             </MainMenuComponent>
         </ExcalidrawComponent>
     </div>
-    <el-button @click="exportDrawing">Export</el-button>
 </template>
 
 <script setup lang="ts">
@@ -58,6 +57,7 @@ const exportDrawing = async function() {
     if (!elements || !elements.length) {
         return
     }
+    storeLocally();
 
     exportToSvg({
         elements,
