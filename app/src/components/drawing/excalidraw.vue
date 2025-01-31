@@ -4,6 +4,8 @@
             <MainMenuComponent>
                 <el-button @click="exportDrawing()" text><pm-icon icon="save" /><span>Save</span></el-button>
                 <el-button @click="excalidrawAPI.refresh()" text><pm-icon icon="rotate"></pm-icon><span>Refresh</span></el-button>
+                <el-button @click="storeLocally()" text><pm-icon icon="save" /><span>Cache</span></el-button>
+                <el-button @click="restoreFromLocal" text><span>Restore</span></el-button>
             </MainMenuComponent>
         </ExcalidrawComponent>
     </div>
@@ -35,10 +37,17 @@ const storeLocally = function() {
     if (!excalidrawAPI) {
         return
     }
-    const elements = excalidrawAPI.value.getSceneElements();
-    if (!elements || !elements.length) {
-        return
+    const data = {
+        elements: excalidrawAPI.value.getSceneElements(),
+        appState: excalidrawAPI.value.getAppState()
     }
+    localStorage.setItem("currentDrawing", JSON.stringify(data));
+}
+
+const restoreFromLocal = function() {
+    const data = JSON.parse(localStorage.getItem("currentDrawing"));
+    data.collaborators = [];
+    excalidrawAPI.value.updateScene(data)
 }
 
 const exportDrawing = async function() {
