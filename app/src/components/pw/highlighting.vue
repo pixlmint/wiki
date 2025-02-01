@@ -44,16 +44,17 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+@use 'prism-themes/themes/prism-vs';
+@use 'prism-themes/themes/prism-atom-dark';
+
 ::root {
     --pw-code-bg: rgba(238, 221, 251, 0.2);
 }
 html.light {
-    @import 'prism-themes/themes/prism-vs';
     --pw-code-bg: rgba(238, 221, 251, 0.2);
 }
 
 html.dark {
-    @import 'prism-themes/themes/prism-atom-dark';
     --pw-code-bg: rgba(67, 58, 102, 0.25);
 }
 

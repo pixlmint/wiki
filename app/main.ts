@@ -4,13 +4,13 @@ import VueAxios from 'vue-axios'
 import axios from 'axios'
 import {createPinia} from "pinia"
 import ElementPlus from 'element-plus'
-import PWNav from '@/src/components/pw/nav/nav.vue';
-import PWLoading from '@/src/components/pw/loading.vue';
-import PWSearch from '@/src/components/pw/search.vue';
-import PWMDEditor from '@/src/components/pw/md-editor.vue';
-import ViewPage from '@/src/components/pw/view-page.vue';
-import Highlighting from '@/src/components/pw/highlighting.vue';
-import NavEntryTitle from '@/src/components/pw/nav/nav-entry-title.vue';
+import PWNav from '@/components/pw/nav/nav.vue';
+import PWLoading from '@/components/pw/loading.vue';
+import PWSearch from '@/components/pw/search.vue';
+import PWMDEditor from '@/components/pw/md-editor.vue';
+import ViewPage from '@/components/pw/view-page.vue';
+import Highlighting from '@/components/pw/highlighting.vue';
+import NavEntryTitle from '@/components/pw/nav/nav-entry-title.vue';
 import VueDiff from 'vue-diff';
 import {main, Dialog, Icon} from "pixlcms-wrapper";
 import {library} from "@fortawesome/fontawesome-svg-core";

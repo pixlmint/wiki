@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import {computed} from "vue";
-import {hexToHsl} from "@/src/helpers/color";
+import {hexToHsl} from "@/helpers/color";
 
 const props = defineProps({
     label: {

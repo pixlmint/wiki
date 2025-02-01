@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 // @ts-ignore
-import { readTable, Table } from '@/src/helpers/htmlTableData';
+import { readTable, Table } from '@/helpers/htmlTableData';
 const props = defineProps(["table"]);
 
 const table = ref<Table|null>(null);

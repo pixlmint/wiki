@@ -1,4 +1,4 @@
-import {HSL, RGB} from "@/src/contracts/Color";
+import {type HSL, type RGB} from "@/contracts/Color";
 import Color from 'colorjs.io';
 
 export function generatePleasingColor(): string {

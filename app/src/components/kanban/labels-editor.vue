@@ -29,10 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-import {CardLabel as iCardLabel} from "@/src/contracts/Kanban";
+import {CardLabel as iCardLabel} from "@/contracts/Kanban";
 import {reactive} from "vue";
-import {generatePleasingColor, randomizeColor} from "@/src/helpers/color";
-import CardLabel from "@/src/components/kanban/card-label.vue";
+import {generatePleasingColor, randomizeColor} from "@/helpers/color";
+import CardLabel from "@/components/kanban/card-label.vue";
 
 const data = reactive({
     isAddingLabel: false,

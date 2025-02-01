@@ -1,13 +1,13 @@
-@import 'element-plus/dist/index.css';
-@import 'theme';
-@import 'variables';
-@import 'fonts';
-@import 'responsive';
-@import 'font-awesome';
-@import 'flex.scss';
-@import 'buttons';
-@import 'bootstrap/dist/css/bootstrap-utilities.css';
-@import '@tato30/vue-pdf/style.css';
+@use 'element-plus/dist/index.css';
+@use 'theme';
+@use 'variables';
+@use 'fonts';
+@use 'responsive';
+@use 'font-awesome';
+@use 'flex.scss';
+@use 'buttons';
+@use 'bootstrap/dist/css/bootstrap-utilities.css';
+@use '@tato30/vue-pdf/style.css';
 
 html,
 body {

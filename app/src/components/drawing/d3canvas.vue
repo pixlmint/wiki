@@ -65,7 +65,7 @@
 <script lang="ts" setup>
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import * as d3 from 'd3';
-import {Vector, PaintStroke, PaintStrokePoint, Drawing, DrawingMode} from "@/src/contracts/Canvas";
+import {Vector, PaintStroke, PaintStrokePoint, Drawing, DrawingMode} from "@/contracts/Canvas";
 import {BaseType, Selection} from "d3";
 
 const svgContainer = ref(null);

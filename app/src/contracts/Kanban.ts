@@ -1,5 +1,4 @@
-import {EntryMeta, WikiEntry} from "@/src/contracts/WikiBase";
-import {RGB} from "@/src/contracts/Color";
+import {type EntryMeta, type WikiEntry} from "@/contracts/WikiBase";
 
 export interface BaseBoardItemResponse extends WikiEntry {
     meta: BaseBoardItemMeta,

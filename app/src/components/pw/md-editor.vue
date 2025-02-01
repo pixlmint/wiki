@@ -14,7 +14,7 @@ import {ref, onMounted} from 'vue';
 import Editor, {EditorType} from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
-import {useUserSettings} from "@/src/stores/user-settings";
+import {useUserSettings} from "@/stores/user-settings";
 import { useDialogStore } from 'pixlcms-wrapper';
 
 const {modelValue, editorHeight} = defineProps<{

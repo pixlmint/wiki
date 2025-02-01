@@ -51,10 +51,10 @@
 </template>
 <script setup lang="ts">
 import {computed} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 import {useAuthStore} from "pixlcms-wrapper";
-import {queryFormatter} from "@/src/helpers/queryFormatter";
-import {navigate} from "@/src/helpers/navigator";
+import {queryFormatter} from "@/helpers/queryFormatter";
+import {navigate} from "@/helpers/navigator";
 
 const props = defineProps({
     displayEditButton: {

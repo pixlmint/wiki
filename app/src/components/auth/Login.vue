@@ -18,9 +18,9 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useMainStore} from "@/src/stores/main";
+import {useMainStore} from "@/stores/main";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 
 export const route = '/auth/login';
 

@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive } from 'vue';
-import { readTable } from '@/src/helpers/htmlTableData';
+import { readTable } from '@/helpers/htmlTableData';
 
 const props = defineProps(["tables"])
 const emit = defineEmits(["select"]);

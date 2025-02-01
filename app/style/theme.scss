@@ -1,5 +1,5 @@
 @use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
-@import '@/style/variables';
+@use '@style/variables';
 
 :root {
     --el-bg-secondary: rgb(243, 243, 243);

@@ -12,18 +12,18 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useMainStore} from "@/src/stores/main";
+import {useMainStore} from "@/stores/main";
 import {configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/src/stores/wiki";
-import {useUserSettings} from "@/src/stores/user-settings";
-import {AxiosResponse} from "axios";
+import {useWikiStore} from "@/stores/wiki";
+import {useUserSettings} from "@/stores/user-settings";
+import {type AxiosResponse} from "axios";
 import {ElNotification} from "element-plus";
-import {dialogs} from '@/src/dialogs';
-import Debug from "@/src/components/debug/debug.vue";
-import WikiEntry from "@/src/components/home/WikiEntry.vue";
-import {isMobile} from "@/src/helpers/mobile-detector";
-import {navigate} from "@/src/helpers/navigator";
-import Editor from "@/src/components/admin/Editor/Editor.vue";
+import {dialogs} from '@/dialogs';
+import Debug from "@/components/debug/debug.vue";
+import WikiEntry from "@/components/home/WikiEntry.vue";
+import {isMobile} from "@/helpers/mobile-detector";
+import {navigate} from "@/helpers/navigator";
+import Editor from "@/components/admin/Editor/Editor.vue";
 
 export default defineComponent({
     name: "App",
@@ -129,7 +129,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import './style/main.scss';
+@use '@style/main.scss';
 
 .main-content {
     background-color: var(--el-bg-color);

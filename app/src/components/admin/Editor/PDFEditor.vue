@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import {defineComponent, ref} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 import {ElNotification} from "element-plus";
 import {buildRequest, send} from "pixlcms-wrapper";
 

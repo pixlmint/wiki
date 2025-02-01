@@ -1,8 +1,7 @@
 <template>
     <div @click="triggerRenderDropdown">
-        <template v-if="isFolder">
-            <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
-                <template #title>
+        <el-sub-menu v-if="isFolder" class="pw-submenu" data-is-entry="false" :index="element.id">
+            <template #title>
                 <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id" :element-title="element.title">
                     <template #indicator>
                         <pm-icon v-if="isSubmenuOpen" icon="caret-down"></pm-icon>
@@ -25,48 +24,45 @@
                         <el-dropdown-item class="danger" @click="deleteFolder"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
                     </template>
                 </pw-nav-entry-title>
+            </template>
+            <template v-for="(childElement, myIndex) in element.children" :key="myIndex" v-if="data.hoveredOverSubmenu">
+                <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+            </template>
+        </el-sub-menu>
+        <el-menu-item v-else :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
+            <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
+                <template #title>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="submenu-title">{{ element.title }}</span>
+                        <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
+                        <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
+                        <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
+                    </div>
                 </template>
-                <template v-for="(childElement, myIndex) in element.children" :key="myIndex" v-if="data.hoveredOverSubmenu">
-                    <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+                <template #dropdown-options>
+                    <el-dropdown-item @click="edit"><pm-icon icon="pen"></pm-icon>Edit</el-dropdown-item>
+                    <el-dropdown-item @click="rename"><pm-icon icon="pen-to-square"></pm-icon>Rename</el-dropdown-item>
+                    <el-dropdown-item @click="switchSecurity">
+                        <pm-icon v-if="isPublic" icon="lock"></pm-icon>
+                        <pm-icon v-else icon="unlock"></pm-icon>
+                        {{ securitySwitchText }}
+                    </el-dropdown-item>
+                    <el-dropdown-item class="danger" @click="deletePage"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
                 </template>
-            </el-sub-menu>
-        </template>
-        <template v-else>
-            <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
-                <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
-                    <template #title>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="submenu-title">{{ element.title }}</span>
-                            <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
-                            <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
-                            <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
-                        </div>
-                    </template>
-                    <template #dropdown-options>
-                        <el-dropdown-item @click="edit"><pm-icon icon="pen"></pm-icon>Edit</el-dropdown-item>
-                        <el-dropdown-item @click="rename"><pm-icon icon="pen-to-square"></pm-icon>Rename</el-dropdown-item>
-                        <el-dropdown-item @click="switchSecurity">
-                            <pm-icon v-if="isPublic" icon="lock"></pm-icon>
-                            <pm-icon v-else icon="unlock"></pm-icon>
-                            {{ securitySwitchText }}
-                        </el-dropdown-item>
-                        <el-dropdown-item class="danger" @click="deletePage"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
-                    </template>
-                </pw-nav-entry-title>
-            </el-menu-item>
-        </template>
+            </pw-nav-entry-title>
+        </el-menu-item>
     </div>
 </template>
 
 <script lang="ts" setup>
 import {computed, reactive} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 import {ElMessageBox} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {useMainStore} from "@/src/stores/main";
-import {useBoardStore} from "@/src/stores/board";
-import {navigate} from "@/src/helpers/navigator";
-import PwNavEntryTitle from "@/src/components/pw/nav/nav-entry-title.vue";
+import {useMainStore} from "@/stores/main";
+import {useBoardStore} from "@/stores/board";
+import {navigate} from "@/helpers/navigator";
+import PwNavEntryTitle from "@/components/pw/nav/nav-entry-title.vue";
 
 const {element} = defineProps<{
     element: NavElement,
@@ -137,10 +133,10 @@ const rename = function () {
         cancelButtonText: 'Cancel',
         inputValue: element.title,
     }).then(name => {
-        wikiStore.renameEntry(name.value).then(() => {
-            wikiStore.loadNav();
-        });
-    })
+            wikiStore.renameEntry(name.value).then(() => {
+                wikiStore.loadNav();
+            });
+        })
 }
 
 const deletePage = function () {
@@ -149,10 +145,10 @@ const deletePage = function () {
         cancelButtonText: 'No',
         type: 'warning',
     }).then(() => {
-        wikiStore.deleteEntry(element.id).then(() => {
-            wikiStore.loadNav();
+            wikiStore.deleteEntry(element.id).then(() => {
+                wikiStore.loadNav();
+            });
         });
-    });
 }
 
 const switchSecurity = function () {
@@ -169,10 +165,10 @@ const deleteFolder = function () {
         cancelButtonText: 'No',
         type: 'warning',
     }).then(() => {
-        wikiStore.deleteFolder(element.id, token).then(() => {
-            wikiStore.loadNav();
+            wikiStore.deleteFolder(element.id, token).then(() => {
+                wikiStore.loadNav();
+            });
         });
-    });
 }
 
 const addPage = function () {
@@ -180,10 +176,10 @@ const addPage = function () {
         confirmButtonText: 'Ok',
         cancelButtonText: 'Cancel',
     }).then(name => {
-        wikiStore.addEntry(element.id, name.value).then(() => {
-            wikiStore.loadNav();
+            wikiStore.addEntry(element.id, name.value).then(() => {
+                wikiStore.loadNav();
+            });
         });
-    });
 }
 
 const addBoard = function () {
@@ -191,10 +187,10 @@ const addBoard = function () {
         confirmButtonText: 'Ok',
         cancelButtonText: 'Cancel',
     }).then(name => {
-        boardStore.createBoard(element.id, name.value).then(() => {
-            wikiStore.loadNav();
+            boardStore.createBoard(element.id, name.value).then(() => {
+                wikiStore.loadNav();
+            });
         });
-    });
 }
 
 const addPdf = function () {
@@ -206,10 +202,10 @@ const addSubfolder = function () {
         confirmButtonText: 'Ok',
         cancelButtonText: 'Cancel',
     }).then(name => {
-        wikiStore.addFolder(element.id, name.value).then(() => {
-            wikiStore.loadNav();
+            wikiStore.addFolder(element.id, name.value).then(() => {
+                wikiStore.loadNav();
+            });
         });
-    });
 }
 </script>
 

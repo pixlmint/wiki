@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import {BaseType, Selection} from "d3";
+import {type BaseType, type Selection} from "d3";
 
 export interface Vector {
     x: number,

@@ -24,12 +24,12 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {useWikiStore} from '@/src/stores/wiki';
+import {useWikiStore} from '@/stores/wiki';
 import {ArrowLeft} from "@element-plus/icons-vue";
-import {useMainStore} from "@/src/stores/main";
+import {useMainStore} from "@/stores/main";
 import {ElMessageBox} from "element-plus";
 import {useDialogStore} from "pixlcms-wrapper";
-import {navigate} from "@/src/helpers/navigator";
+import {navigate} from "@/helpers/navigator";
 
 export default defineComponent({
     name: "EditorHead",

@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useMainStore} from "@/src/stores/main";
+import {useMainStore} from "@/stores/main";
 import {useAuthStore} from "pixlcms-wrapper";
 
 export const route = "/auth/restore-password";

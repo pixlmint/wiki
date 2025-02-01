@@ -8,30 +8,30 @@
                 <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
                         <pw-nav-entry-title :element-id="0" :should-display-dropdown="false" element-title="Home">
-                            <template #title>
+                            <!--<template #title>
                                 <pm-icon icon="house"></pm-icon>
-                            </template>
+</template>-->
                         </pw-nav-entry-title>
                     </el-menu-item>
-                    <template v-for="(childElement, myIndex) in nav.children" :key="myIndex">
+                    <!--<template v-for="(childElement, myIndex) in nav.children" :key="myIndex">
                         <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
-                    </template>
+</template>-->
                 </el-menu>
                 <el-dropdown class="full-width" v-if="canEdit">
                     <el-button class="full-width">
                         <pm-icon icon="circle-plus"></pm-icon>
                     </el-button>
-                    <template #dropdown>
+                    <!--<template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
                             <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
                             <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
                         </el-dropdown-menu>
-                    </template>
+</template>-->
                 </el-dropdown>
             </div>
             <div class="user-nav">
-                <template v-if="!isLoggedIn">
+                <!--<template v-if="!isLoggedIn">
                     <el-button @click="login" class="user-button">Login</el-button>
                 </template>
                 <template v-else>
@@ -39,7 +39,7 @@
                         <pm-icon icon="user"></pm-icon>
                         <span class="text">Admin</span>
                     </el-button>
-                </template>
+</template>-->
             </div>
         </div>
         <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
@@ -53,13 +53,13 @@
 
 <script setup lang="ts">
 import {toRaw, computed} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
-import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
-import {useMainStore} from "@/src/stores/main";
+import {useWikiStore} from "@/stores/wiki";
+import PWNavElement from "@/components/pw/nav/nav-element.vue";
+import {useMainStore} from "@/stores/main";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {isMobile} from "@/src/helpers/mobile-detector";
+import {isMobile} from "@/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
-import {navigate} from "@/src/helpers/navigator";
+import {navigate} from "@/helpers/navigator";
 
 const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
@@ -187,7 +187,7 @@ const nav = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@import '@/style/variables';
+@import '@style/variables';
 
 #nav {
     background-color: var(--el-bg-color);

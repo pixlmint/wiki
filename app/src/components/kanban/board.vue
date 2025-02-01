@@ -15,10 +15,10 @@
 
 <script lang="ts" setup>
 import {ref, reactive, computed} from "vue";
-import List from "@/src/components/kanban/list.vue";
-import {useWikiStore} from "@/src/stores/wiki";
-import {useBoardStore} from "@/src/stores/board";
-import {useMainStore} from "@/src/stores/main";
+import List from "@/components/kanban/list.vue";
+import {useWikiStore} from "@/stores/wiki";
+import {useBoardStore} from "@/stores/board";
+import {useMainStore} from "@/stores/main";
 
 const addItemInput = ref(null);
 

@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 import {useDialogStore} from "pixlcms-wrapper";
-import {route} from '@/src/components/kanban/card-modal.vue';
-import CardLabel from "@/src/components/kanban/card-label.vue";
+import {route} from '@/components/kanban/card-modal.vue';
+import CardLabel from "@/components/kanban/card-label.vue";
 import {computed} from "vue";
 
 const dialogStore = useDialogStore();

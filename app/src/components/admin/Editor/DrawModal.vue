@@ -6,11 +6,11 @@
 </template>
 
 <script lang="ts">
-import {useWikiStore} from "@/src/stores/wiki";
-import {Drawing} from "@/src/contracts/Canvas";
+import {useWikiStore} from "@/stores/wiki";
+import {Drawing} from "@/contracts/Canvas";
 import {useDialogStore, buildRequest, send} from "pixlcms-wrapper";
 // import D3Canvas from "@/src/components/drawing/d3canvas.vue";
-import ExcalidrawWrapper from "@/src/components/drawing/excalidraw.vue";
+import ExcalidrawWrapper from "@/components/drawing/excalidraw.vue";
 import {computed, defineComponent} from "vue";
 
 export const route = '/draw';

@@ -1,34 +1,34 @@
-<template>
-    <pm-dialog title="Board Settings" :route="route">
-        <el-form @submit="killSubmit" :model="settings">
-            <el-form-item label="Background">
-                <el-upload :on-success="onSuccessUploading" action="/api/admin/gallery/upload" :headers="uploadHeaders"
-                           :data="{gallery: currentBoardId}" accept="image/*" v-model:file-list="settings.background">
+<pm-dialog title="Board Settings" :route="route">
+    <el-form @submit="killSubmit" :model="settings">
+        <el-form-item label="Background">
+            <el-upload :on-success="onSuccessUploading" action="/api/admin/gallery/upload" :headers="uploadHeaders"
+                :data="{gallery: currentBoardId}" accept="image/*" v-model:file-list="settings.background">
+                <template>
                     <el-button type="primary">
                         <pm-icon icon="upload" class="me-2"></pm-icon>
                         Click to Upload
                     </el-button>
-                    <template #tip>
-                        jpg/png files
-                    </template>
-                </el-upload>
-            </el-form-item>
+                </template>
+                <template #tip>
+                    jpg/png files
+                </template>
+            </el-upload>
+        </el-form-item>
 
-            <el-form-item label="Labels">
-                <labels-editor @change="updateLabels" :labels="boardLabels"></labels-editor>
-                <el-button v-if="settings.labelsChanged" @click="saveLabels"><pm-icon icon="save"></pm-icon></el-button>
-            </el-form-item>
-        </el-form>
-    </pm-dialog>
-</template>
+        <el-form-item label="Labels">
+            <labels-editor @change="updateLabels" :labels="boardLabels"></labels-editor>
+            <el-button v-if="settings.labelsChanged" @click="saveLabels"><pm-icon icon="save"></pm-icon></el-button>
+        </el-form-item>
+    </el-form>
+</pm-dialog>
 
 <script lang="ts" setup>
 import {reactive, computed} from "vue";
-import {useBoardStore} from "@/src/stores/board";
+import {useBoardStore} from "@/stores/board";
 import {useAuthStore} from "pixlcms-wrapper";
 import {UploadFile, UploadFiles} from "element-plus";
-import {CardLabel} from "@/src/contracts/Kanban";
-import LabelsEditor from "@/src/components/kanban/labels-editor.vue";
+import {CardLabel} from "@/contracts/Kanban";
+import LabelsEditor from "@/components/kanban/labels-editor.vue";
 
 interface UploadFileResponse {
     message: string,

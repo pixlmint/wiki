@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import {computed} from "vue";
-import InternalLink from "@/src/components/home/basic-html-components/internal-link.vue";
+import InternalLink from "@/components/home/basic-html-components/internal-link.vue";
 
 const props = defineProps({
     attrs: {

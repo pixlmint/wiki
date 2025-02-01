@@ -20,10 +20,10 @@
 
 <script lang="ts" setup>
 import draggable from "vuedraggable";
-import {useBoardStore} from "@/src/stores/board";
+import {useBoardStore} from "@/stores/board";
 import {AxiosResponse} from "axios";
 import {reactive, computed, ref} from "vue";
-import Card from "@/src/components/kanban/card.vue";
+import Card from "@/components/kanban/card.vue";
 
 const props = defineProps({
     list: {

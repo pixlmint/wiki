@@ -1,5 +1,5 @@
 <template>
-    <template v-if="isPdfContent">
+    <!--<template v-if="isPdfContent">
         <PDFContent :pdfPath="pdfPath"></PDFContent>
     </template>
     <template v-else-if="isBoard">
@@ -10,20 +10,20 @@
     </template>
     <template v-else>
         <!--<ExcalidrawWrapper width="1000" height="1000" />-->
-        <BasicHtmlEntry :content="content"></BasicHtmlEntry>
-    </template>
+        <!--<BasicHtmlEntry :content="content"></BasicHtmlEntry>
+</template>-->
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useWikiStore} from '@/src/stores/wiki'
+import {useWikiStore} from '@/stores/wiki'
 import {useAuthStore} from "pixlcms-wrapper";
-import PDFContent from "@/src/components/home/PDFContent.vue";
-import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
-import BoardView from "@/src/components/home/BoardView.vue";
-import TableView from "@/src/components/home/TableView.vue";
+import PDFContent from "@/components/home/PDFContent.vue";
+import BasicHtmlEntry from "@/components/home/basic-html-components/BasicHtmlEntry.vue";
+import BoardView from "@/components/home/BoardView.vue";
+import TableView from "@/components/home/TableView.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
-import ExcalidrawWrapper from "@/src/components/drawing/excalidraw.vue";
+import ExcalidrawWrapper from "@/components/drawing/excalidraw.vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -77,7 +77,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../../style/variables.scss';
+@use '@style/variables';
 
 .article-body {
     margin: 5px;

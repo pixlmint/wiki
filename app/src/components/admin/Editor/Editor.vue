@@ -1,62 +1,49 @@
 <template>
     <view-page>
+        <template></template>
         <template #heading>
             <EditorHead/>
         </template>
         <template #content>
-        <div v-if="isEntryLoaded">
-            <PDFEditor v-if="isPdf"></PDFEditor>
-            <EditEntry v-else></EditEntry>
-        </div>
+            <div v-if="isEntryLoaded">
+                <PDFEditor v-if="isPdf"></PDFEditor>
+                <EditEntry v-else></EditEntry>
+            </div>
         </template>
     </view-page>
 </template>
 
-<script lang="ts">
-import EditEntry from "./EditEntry.vue";
-import EditorHead from './EditorHead.vue';
-import {defineComponent} from "vue";
-import {useAuthStore} from 'pixlcms-wrapper'
-import {useWikiStore} from "@/src/stores/wiki";
-import {useMainStore} from "@/src/stores/main";
-import PDFEditor from "@/src/components/admin/Editor/PDFEditor.vue";
-import ViewPage from "@/src/components/pw/view-page.vue";
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import EditEntry from "./EditEntry.vue"
+import EditorHead from './EditorHead.vue'
+import { useAuthStore } from 'pixlcms-wrapper'
+import { useWikiStore } from "@/stores/wiki"
+import { useMainStore } from "@/stores/main"
+import PDFEditor from "@/components/admin/Editor/PDFEditor.vue"
+import ViewPage from "@/components/pw/view-page.vue"
 
-export default defineComponent({
-    components: {
-        PDFEditor,
-        EditorHead,
-        EditEntry,
-        ViewPage,
-    },
-    data: function () {
-        return {
-            isEntryLoaded: false,
-            wikiStore: useWikiStore(),
-            title: "Edit " + this.entry,
-        }
-    },
-    computed: {
-        isPdf() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
-                return false;
-            }
-            return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
-        },
-    },
-    created() {
-        if (!useAuthStore().haveEditRights()) {
-            throw new Error('You are not allowed to edit entries');
-        }
-        let entry = new URLSearchParams(location.search).get('p');
-        if (entry === null) {
-            entry = '';
-        }
-        this.wikiStore.fetchEntry(entry).then(() => {
-            this.isEntryLoaded = true;
-            this.title = "Edit " + this.wikiStore.safeCurrentEntry.meta.title;
-            useMainStore().setTitle(this.title)
-        });
-    },
+const isEntryLoaded = ref(false)
+const wikiStore = useWikiStore()
+const mainStore = useMainStore()
+const authStore = useAuthStore()
+
+const isPdf = computed(() => {
+    return 'renderer' in wikiStore.safeCurrentEntry.meta && 
+        wikiStore.safeCurrentEntry.meta.renderer === 'pdf'
+})
+
+onMounted(async () => {
+    if (!authStore.haveEditRights()) {
+        throw new Error('You are not allowed to edit entries')
+    }
+
+    const params = new URLSearchParams(location.search)
+    const entry = params.get('p') ?? ''
+
+    await wikiStore.fetchEntry(entry)
+    isEntryLoaded.value = true
+    const title = `Edit ${wikiStore.safeCurrentEntry.meta.title}`
+    mainStore.setTitle(title)
 })
 </script>

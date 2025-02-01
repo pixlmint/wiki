@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
-import {BoardResponse, CardLabel} from "@/src/contracts/Kanban";
+import {type BoardResponse, type CardLabel} from "@/contracts/Kanban";
 import {buildRequest, send} from "pixlcms-wrapper";
-import {useWikiStore} from '@/src/stores/wiki';
-const {DateTime} = require ('luxon');
+import {useWikiStore} from '@/stores/wiki';
+import { DateTime } from 'luxon';
 
 interface State {
     loadedBoard: BoardResponse | null

@@ -16,7 +16,7 @@ import { ref, computed, onMounted } from 'vue';
 import { applyPureReactInVue } from 'veaury';
 import { Excalidraw, MainMenu, exportToCanvas, exportToSvg } from '@excalidraw/excalidraw';
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
-import { useUserSettings } from "@/src/stores/user-settings";
+import { useUserSettings } from "@/stores/user-settings";
 
 const props = defineProps({
     height: String,

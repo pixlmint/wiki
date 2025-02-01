@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref, watch} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 import 'vue-diff/dist/index.css';
 
 const wikiStore = useWikiStore();

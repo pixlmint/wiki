@@ -11,11 +11,11 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useWikiStore} from '@/src/stores/wiki'
-import {useMainStore} from "@/src/stores/main";
-import {useUserSettings} from "@/src/stores/user-settings";
-import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
-import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
+import {useWikiStore} from '@/stores/wiki'
+import {useMainStore} from "@/stores/main";
+import {useUserSettings} from "@/stores/user-settings";
+import DrawModal from "@/components/admin/Editor/DrawModal.vue";
+import CurrentFileDiffModal from "@/components/admin/Editor/CurrentFileDiffModal.vue";
 import {useDialogStore} from "pixlcms-wrapper";
 import {DateTime} from "luxon";
 

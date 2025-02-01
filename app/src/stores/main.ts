@@ -1,4 +1,4 @@
-import {AxiosResponse} from 'axios';
+import {type AxiosResponse} from 'axios';
 import {defineStore} from "pinia";
 import {useAuthStore, buildRequest, send} from "pixlcms-wrapper";
 

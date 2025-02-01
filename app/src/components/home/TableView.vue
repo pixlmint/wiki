@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts" setup>
-import EntryHeading from "@/src/components/home/entry-heading.vue";
-import { useWikiStore } from '@/src/stores/wiki';
+import EntryHeading from "@/components/home/entry-heading.vue";
+import { useWikiStore } from '@/stores/wiki';
 import { ref } from "vue";
-import { readTable, Table } from '@/src/helpers/htmlTableData';
-import TableDisplay from '@/src/components/home/basic-html-components/table.vue';
+import { readTable, Table } from '@/helpers/htmlTableData';
+import TableDisplay from '@/components/home/basic-html-components/table.vue';
 
 const wikiStore = useWikiStore();
 

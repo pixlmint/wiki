@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import {defineComponent, shallowRef} from "vue";
-import DialogsMonitor from "@/src/components/debug/dialogs-monitor.vue";
+import DialogsMonitor from "@/components/debug/dialogs-monitor.vue";
 
 export default defineComponent({
     name: 'Debug',

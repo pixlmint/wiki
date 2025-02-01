@@ -1,8 +1,8 @@
 import {defineStore} from 'pinia'
 import {buildRequest, send} from "pixlcms-wrapper";
 import {ElNotification} from "element-plus";
-import {WikiEntry} from "@/src/contracts/WikiBase";
-import {BoardResponse} from "@/src/contracts/Kanban";
+import {type WikiEntry} from "@/contracts/WikiBase";
+import {type BoardResponse} from "@/contracts/Kanban";
 
 interface Nav extends Array<NavElement> {
 }

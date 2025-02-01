@@ -18,7 +18,7 @@
 import { ref } from "vue";
 import {useDialogStore, buildRequest, send} from "pixlcms-wrapper";
 import {ElNotification} from "element-plus";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 
 const route = '/nav/new-pdf';
 

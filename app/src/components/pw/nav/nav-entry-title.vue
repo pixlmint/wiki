@@ -10,9 +10,9 @@
             <el-button class="nav-dropdown-button" circle text>
                 <pm-icon icon="ellipsis"></pm-icon>
             </el-button>
-            <template #dropdown>
+            <!--<template #dropdown>
                 <slot name="dropdown-options"></slot>
-            </template>
+</template>-->
         </el-dropdown>
     </div>
 </template>

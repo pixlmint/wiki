@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Table, readTable } from '@/src/helpers/htmlTableData';
+import { Table, readTable } from '@/helpers/htmlTableData';
 import { reactive } from '@vue/reactivity';
 import { useDialogStore } from 'pixlcms-wrapper';
 import { onMounted, onUnmounted, ref } from 'vue';

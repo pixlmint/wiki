@@ -49,11 +49,11 @@
 
 <script lang="ts">
 import {defineComponent, h, watch} from "vue";
-import {useUserSettings} from "@/src/stores/user-settings";
-import {useMainStore} from "@/src/stores/main";
+import {useUserSettings} from "@/stores/user-settings";
+import {useMainStore} from "@/stores/main";
 import {ElMessageBox, ElNotification} from "element-plus";
 import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useWikiStore} from "@/stores/wiki";
 
 export const route = '/settings';
 

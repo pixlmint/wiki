@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
-import {useMainStore} from "@/src/stores/main";
+import {useWikiStore} from "@/stores/wiki";
+import {useMainStore} from "@/stores/main";
 
 export default defineComponent({
     name: 'PWSearch',
@@ -46,7 +46,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "@/style/variables";
+@use "@style/variables";
 
 .search-wrapper {
     display: flex;

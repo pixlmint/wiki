@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import ViewPage from "@/src/components/pw/view-page.vue";
-import EntryHeading from "@/src/components/home/entry-heading.vue";
+import ViewPage from "@/components/pw/view-page.vue";
+import EntryHeading from "@/components/home/entry-heading.vue";
 import { VuePDF, usePDF } from "@tato30/vue-pdf";
 
 

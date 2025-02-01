@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import { useUserSettings } from "@/src/stores/user-settings";
+import { useUserSettings } from "@/stores/user-settings";
 import { ElNotification } from "element-plus";
 
 export const route = "/board/card/view";
@@ -33,10 +33,10 @@ export default defineComponent({
 <script setup lang="ts">
 import {computed, ref, reactive, toRaw} from "vue";
 import {buildRequest, send, useDialogStore} from "pixlcms-wrapper";
-import {useBoardStore} from "@/src/stores/board";
-import {useWikiStore} from "@/src/stores/wiki";
+import {useBoardStore} from "@/stores/board";
+import {useWikiStore} from "@/stores/wiki";
 import {DateTime} from "luxon";
-import {BoardResponse, CardLabel} from "@/src/contracts/Kanban";
+import {BoardResponse, CardLabel} from "@/contracts/Kanban";
 
 const dialogStore = useDialogStore();
 const boardStore = useBoardStore();

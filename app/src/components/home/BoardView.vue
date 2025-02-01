@@ -20,13 +20,13 @@
 </template>
 
 <script lang="ts" setup>
-import board from '@/src/components/kanban/board.vue';
-import EntryHeading from "@/src/components/home/entry-heading.vue";
+import board from '@/components/kanban/board.vue';
+import EntryHeading from "@/components/home/entry-heading.vue";
 import PmIcon from "pixlcms-wrapper/src/components/icon.vue";
 import {useDialogStore} from "pixlcms-wrapper";
-import {route} from "@/src/components/kanban/board-settings.vue";
+import {route} from "@/components/kanban/board-settings.vue";
 import {computed} from "vue";
-import {useBoardStore} from "@/src/stores/board";
+import {useBoardStore} from "@/stores/board";
 
 const props = defineProps(['boardId']);
 

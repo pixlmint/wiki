@@ -1,4 +1,4 @@
-import {Drawing} from "@/src/contracts/Canvas";
+import {type Drawing} from "@/contracts/Canvas";
 
 export interface WikiEntry {
     raw_content: string,
