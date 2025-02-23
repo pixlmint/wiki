@@ -8,6 +8,7 @@ import NewPdf, {route as newPdfRoute} from "@/src/components/global-modals/new-p
 import BoardSettings, {route as boardSettingsRoute} from "@/src/components/kanban/board-settings.vue";
 import CardModal, {route as cardModalRoute} from "@/src/components/kanban/card-modal.vue";
 import TableEditorModal, {route as tableEditorRoute} from "@/src/components/admin/Editor/tables/TableEditorModal.vue";
+import MediaModal, { route as mediaRoute } from "@/src/components/admin/Editor/media/MediaModal.vue";
 import {defineDialogs} from "pixlcms-wrapper";
 
 export const dialogs = defineDialogs([
@@ -50,5 +51,9 @@ export const dialogs = defineDialogs([
     {
         route: tableEditorRoute,
         component: TableEditorModal,
+    },
+    {
+        route: mediaRoute,
+        component: MediaModal,
     },
 ]);

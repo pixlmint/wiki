@@ -15,7 +15,8 @@ import Editor, {EditorType} from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {useUserSettings} from "@/src/stores/user-settings";
-import { useDialogStore } from 'pixlcms-wrapper';
+import { useDialogStore, useMediaStore, type MediaStore } from 'pixlcms-wrapper';
+import { useWikiStore } from '@/src/stores/wiki';
 
 const {modelValue, editorHeight} = defineProps<{
     modelValue: string;
@@ -34,9 +35,12 @@ const toolbarIcons = ref(<string[]>[
     'rotate',
     'table',
     'save',
+    'image',
 ]);
 
 const dialogStore = useDialogStore();
+const mediaStore: MediaStore = useMediaStore();
+const wikiStore = useWikiStore();
 
 const createToolbarButton = function (icon: string, onClick: () => any) {
     const button = document.createElement('button');
@@ -72,6 +76,15 @@ onMounted(() => {
         toolbarItems: [
             ['heading', 'bold', 'italic', 'strike'],
             [
+                {
+                    el: createToolbarButton('image', () => {
+                        mediaStore.loadMediaForEntry(wikiStore.safeCurrentEntry.id);
+                        dialogStore.showDialog('/media');
+                    }),
+                    name: 'media',
+                    command: 'media',
+                    tooltip: 'Media',
+                },
                 {
                     el: createToolbarButton('table', () => {
                         dialogStore.showDialog({

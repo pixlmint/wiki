@@ -24,10 +24,6 @@ import {DateTime} from "luxon";
 
 let saveTimeout: number | null = null;
 
-const isTimeoutSet = () => {
-    return saveTimeout !== null;
-}
-
 export default defineComponent({
     components: {DrawModal, CurrentFileDiffModal},
     data: function () {
@@ -84,7 +80,7 @@ export default defineComponent({
             this.mainStore.setHasUnsavedChanges(true);
             this.wikiStore.currentEntry.raw_content = md;
 
-            if (this.userSettings.getSettings.autoSave && !isTimeoutSet()) {
+            if (this.userSettings.getSettings.autoSave && saveTimeout === null) {
                 saveTimeout = window.setTimeout(() => {
                     saveTimeout = null;
                     this.save();
@@ -92,11 +88,7 @@ export default defineComponent({
             }
         },
         imageSave(imgPath: string) {
-            let md = this.wikiStore.safeCurrentEntry.raw_content;
-            md += "![painting](" + imgPath + ")";
-            this.wikiStore.safeCurrentEntry.raw_content = md;
-            this.dialogStore.hideDialog('/draw');
-            this.save();
+            console.log("imageSave", imgPath);
         },
         showDiff() {
             this.diffKey += 1;
@@ -104,7 +96,7 @@ export default defineComponent({
         },
         save() {
             this.wikiStore.fetchLastChanged(this.wikiStore.safeCurrentEntry.id).then(lastChanged => {
-                if (isTimeoutSet()) {
+                if (saveTimeout !== null) {
                     window.clearTimeout(saveTimeout);
                 }
                 const localLastChanged = new Date(this.wikiStore.safeCurrentEntry.meta.dateUpdated);
@@ -115,15 +107,6 @@ export default defineComponent({
                     return this.wikiStore.saveCurrentEntry();
                 }
             });
-        },
-        checkGoHome() {
-            /*if (this.mainStore.editingUnsavedChanges && confirm('You\'ve go unsaved changes. Save first?')) {
-                this.save().then(() => {
-                    this.doGoHome();
-                });
-            } else {
-                this.doGoHome();
-            }*/
         },
     },
 })

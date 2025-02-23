@@ -5,7 +5,8 @@
                 <el-button @click="exportDrawing()" text><pm-icon icon="save" /><span>Save</span></el-button>
                 <el-button @click="excalidrawAPI.refresh()" text><pm-icon icon="rotate"></pm-icon><span>Refresh</span></el-button>
                 <el-button @click="storeLocally()" text><pm-icon icon="save" /><span>Cache</span></el-button>
-                <el-button @click="restoreFromLocal" text><span>Restore</span></el-button>
+                <el-button @click="restoreFromLocal" text><pm-icon icon="upload" /><span>Restore</span></el-button>
+                <el-button @click="close" text><pm-icon icon="xmark" /><span>Close</span></el-button>
             </MainMenuComponent>
         </ExcalidrawComponent>
     </div>
@@ -14,13 +15,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { applyPureReactInVue } from 'veaury';
-import { Excalidraw, MainMenu, exportToCanvas, exportToSvg } from '@excalidraw/excalidraw';
+import { Excalidraw, MainMenu, exportToSvg } from '@excalidraw/excalidraw';
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
 import { useUserSettings } from "@/src/stores/user-settings";
 
 const props = defineProps({
     height: String,
     width: String,
+    data: Object,
 });
 const userSettings = useUserSettings();
 
@@ -28,9 +30,7 @@ const theme = computed(() => {
     return userSettings.getSettings.theme;
 })
 
-const emit = defineEmits(["save"])
-
-const mycanvas = ref(null);
+const emit = defineEmits(["save", "close"])
 
 const storeLocally = function() {
     if (!excalidrawAPI) {
@@ -65,13 +65,20 @@ const exportDrawing = async function() {
             exportWithDarkMode: false,
         },
         files: excalidrawAPI.value.getFiles(),
-    }).then((svg: HTMLSVGElement) => {
-            emit("save", svg.outerHTML, JSON.stringify(elements))
+    }).then((svg: SVGSVGElement) => {
+            emit("save", svg.outerHTML, JSON.stringify({elements: elements, appstate: excalidrawAPI.value.getAppState()}));
         });
+}
+
+const close = function() {
+    emit("close");
 }
 
 onMounted(() => {
     window.setTimeout(() => {
+        if (props.data && Object.keys(props.data).length > 0) {
+            excalidrawAPI.value.updateScene(props.data);
+        }
         excalidrawAPI.value.refresh();
     }, 100);
 });
@@ -79,7 +86,8 @@ onMounted(() => {
 const ExcalidrawComponent = applyPureReactInVue(Excalidraw);
 const MainMenuComponent = applyPureReactInVue(MainMenu);
 
-const excalidrawAPI = ref<ExcalidrawImperativeAPI | null>(null);
+// @ts-ignore
+const excalidrawAPI = ref<ExcalidrawImperativeAPI>(null);
 
 const onReady = (api: ExcalidrawImperativeAPI) => {
     excalidrawAPI.value = api;
