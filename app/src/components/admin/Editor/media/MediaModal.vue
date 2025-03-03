@@ -87,7 +87,7 @@ const uploadFiles = function() {
 }
 
 const copyMedia = function(media: any) {
-    const md = `![uploaded file ${media.default}](${media.default})`;
+    const md = `![uploaded file](${encodeURI(media.default)})`;
     copyTextToClipboard(md).then(success => {
         const text = success ? 'Copied url to clipboard' : 'Error copying url to clipboard';
         const type = success ? 'success' : 'warning';
