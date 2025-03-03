@@ -1,4 +1,4 @@
-FROM pixlmint/php-server:8.3
+FROM pixlmint/php-server:8.4
 
 ARG UID=99
 ARG GID=100

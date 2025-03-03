@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 ARG UID=1000
 ARG GID=1000
@@ -11,7 +11,7 @@ RUN install-php-extensions gd
 RUN install-php-extensions dbase
 RUN install-php-extensions ssh2
 RUN install-php-extensions bcmath
-RUN install-php-extensions xdebug-3.3.2
+RUN install-php-extensions xdebug
 RUN install-php-extensions exif
 RUN install-php-extensions @composer
 RUN install-php-extensions zip
