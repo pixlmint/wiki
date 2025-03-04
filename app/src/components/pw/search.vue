@@ -53,6 +53,7 @@ export default defineComponent({
     align-items: center;
     position: absolute;
     width: calc(100vw - $navSmallWidth);
+    z-index: 100;
 
     .search {
         width: 100%;

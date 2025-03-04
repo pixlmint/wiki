@@ -19,7 +19,6 @@
                 </el-tab-pane>
                 <el-tab-pane label="Security">
                     <el-button @click="changePassword">Change Password</el-button>
-
                 </el-tab-pane>
                 <el-tab-pane label="Admin">
                     <el-form-item label="Build Index">
@@ -29,6 +28,7 @@
                         <el-button @click="downloadBackup"><pm-icon icon="download"></pm-icon></el-button>
                     </el-form-item>
                     <el-button @click="reloadNav">Reload Nav</el-button>
+                    <el-button @click="dumpAlternateContent">Dump Alternate Content into files</el-button>
                 </el-tab-pane>
             </el-tabs>
         </el-form>
@@ -119,6 +119,13 @@ export default defineComponent({
         },
         changePassword() {
             this.dialogStore.showDialog('/auth/change-password');
+        },
+        dumpAlternateContent() {
+            useWikiStore().dumpAlternateContent().then(response => {
+                ElNotification({
+                    title: "Dumped alternate content",
+                });
+            });
         },
     },
 })
