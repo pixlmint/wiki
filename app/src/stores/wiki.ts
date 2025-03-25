@@ -102,6 +102,12 @@ export const useWikiStore = defineStore('wikiStore', {
                 return new Date(response.data.lastChanged);
             });
         },
+        async addLink(link: {title: string, domain: string, parentFolder: string}) {
+            const request = buildRequest('/api/admin/link/add', link, 'POST');
+            return send(request).then(response => {
+                console.log(response);
+            })
+        },
         async getCurrentEntryFromServer() {
             const request = buildRequest('/api/entry/view', {p: this.safeCurrentEntry.id});
             let response = await send(request);

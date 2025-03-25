@@ -22,12 +22,24 @@
                             <pm-icon v-else icon="unlock"></pm-icon>
                             {{ securitySwitchText }}
                         </el-dropdown-item>
+                        <el-dropdown-item @click="addLink">Add Link</el-dropdown-item>
                         <el-dropdown-item class="danger" @click="deleteFolder"><pm-icon icon="trash"></pm-icon>Delete</el-dropdown-item>
                     </template>
                 </pw-nav-entry-title>
                 </template>
-                <template v-for="(childElement, myIndex) in element.children" :key="myIndex" v-if="data.hoveredOverSubmenu">
-                    <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+                <template v-if="data.hoveredOverSubmenu">
+                    <template v-for="(linkTitle, linkDomain) in element.links" :key="linkDomain">
+                        <el-menu-item class="pw-menu-item" :index="linkDomain" @click="loadLink(linkDomain)">
+                            <pw-nav-entry-title :elementId="linkDomain" :elementTitle="linkTitle">
+                                <template #title>
+                                    <span class="submenu-title">{{ linkTitle }}</span>
+                                </template>
+                            </pw-nav-entry-title>
+                        </el-menu-item>
+                    </template>
+                    <template v-for="(childElement, myIndex) in element.children" :key="myIndex">
+                        <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+                    </template>
                 </template>
             </el-sub-menu>
         </template>
@@ -79,6 +91,7 @@ type NavElement = {
     id: string,
     title: string,
     children: NavElement[],
+    links: object[],
 };
 
 const wikiStore = useWikiStore();
@@ -184,6 +197,14 @@ const addPage = function () {
             wikiStore.loadNav();
         });
     });
+}
+
+const addLink = function () {
+    dialogStore.showDialog({route: '/nav/create-link', data: {}, closeCallback: function () {
+        const data = dialogStore.getDialogData('/nav/create-link');
+
+        wikiStore.addLink({title: data.title, domain: data.domain, parentFolder: element.id});
+    }});
 }
 
 const addBoard = function () {
