@@ -5,7 +5,7 @@
                 <div @click="hideMainNav" class="nav-toggle">
                     <pm-icon icon="caret-left"></pm-icon>
                 </div>
-                <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
+                <el-menu v-if="data.isNavLoaded" ref="menu" @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
                         <pw-nav-entry-title :element-id="0" :should-display-dropdown="false" element-title="Home">
                             <template #title>
@@ -13,7 +13,7 @@
                             </template>
                         </pw-nav-entry-title>
                     </el-menu-item>
-                    <template v-for="(childElement, myIndex) in nav.children" :key="myIndex">
+                    <template v-for="(childElement, myIndex) in data.nav.children" :key="myIndex">
                         <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
                     </template>
                 </el-menu>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import {toRaw, computed} from "vue";
+import {toRaw, computed, ref, watch, reactive} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import {useMainStore} from "@/src/stores/main";
@@ -60,6 +60,11 @@ import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
 import {isMobile} from "@/src/helpers/mobile-detector";
 import {ElMessageBox} from "element-plus";
 import {navigate} from "@/src/helpers/navigator";
+
+const data = reactive({
+    nav: {},
+    isNavLoaded: false,
+});
 
 const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
@@ -85,23 +90,32 @@ const dialogStore = useDialogStore();
 const wikiStore = useWikiStore();
 const mainStore = useMainStore();
 const authStore = useAuthStore();
+const menu = ref();
 
 // created
 if (isMobile()) {
     useMainStore().toggleLargeNavShowing(false);
 }
-useWikiStore().loadNav();
+wikiStore.loadPreviouslyOpenedSubmenus().then(() => {
+    wikiStore.loadNav().then(() => {
+        data.nav = wikiStore.nav;
+        data.isNavLoaded = true;
+        window.setTimeout(function() {
+            wikiStore.openedSubmenus.map((menuId: string) => {
+                console.log(menuId);
+                menu.value.open(menuId);
+            });
+        }, 100);
+    });
+});
 
 // methods
 const openSubmenu = function (menuId: string) {
-    wikiStore.openedSubmenus.push(menuId);
+    wikiStore.handleSubmenuToggled(menuId, true);
 }
 
 const closeSubmenu = function (menuId: string) {
-    wikiStore.openedSubmenus.splice(wikiStore.openedSubmenus.indexOf(menuId), 1);
-    if (wikiStore.openedSubmenus.includes(menuId)) {
-        closeSubmenu(menuId);
-    }
+    wikiStore.handleSubmenuToggled(menuId, false);
 }
 
 const settings = function () {
@@ -175,13 +189,6 @@ const mainNavShowing = computed(() => {
 });
 const isLoggedIn = computed(() => {
     return useAuthStore().getToken !== null;
-});
-const nav = computed(() => {
-    const wikiStore = useWikiStore()
-    if (wikiStore.getNav === null) {
-        return {}
-    }
-    return toRaw(wikiStore.getNav);
 });
 
 </script>

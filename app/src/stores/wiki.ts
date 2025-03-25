@@ -4,6 +4,9 @@ import {ElNotification} from "element-plus";
 import {WikiEntry} from "@/src/contracts/WikiBase";
 import {BoardResponse} from "@/src/contracts/Kanban";
 
+
+const LOCALSTORAGE_PREV_OPEN_KEY = "NavPreviouslyOpened";
+
 interface Nav extends Array<NavElement> {
 }
 
@@ -175,6 +178,41 @@ export const useWikiStore = defineStore('wikiStore', {
             return send(request).then(response => {
                 this.nav = response.data[0];
             });
+        },
+        handleSubmenuToggled(elementId: string, action: boolean) {
+            if (action) {
+                this.openedSubmenus = this.openedSubmenus.filter((filterEl: String) => {
+                    return !filterEl.includes(elementId) && !elementId.includes(filterEl);
+                });
+                this.openedSubmenus.push(elementId);
+            } else {
+                this.openedSubmenus = this.openedSubmenus.filter((filterEl: String) => {
+                    return !filterEl.includes(elementId);
+                });
+                let opened = elementId.split('/');
+                opened.pop();
+                this.openedSubmenus.push(opened.join('/'));
+            }
+            this.storeOpenedSubmenus();
+        },
+        loadPreviouslyOpenedSubmenus() {
+            return new Promise((resolve: Function) => {
+                const stored = localStorage.getItem(LOCALSTORAGE_PREV_OPEN_KEY);
+                if (stored) {
+                    this.openedSubmenus = JSON.parse(stored);
+                } else {
+                    this.openedSubmenus = [];
+                }
+                resolve();
+            })
+        },
+        storeOpenedSubmenus() {
+            localStorage.setItem(LOCALSTORAGE_PREV_OPEN_KEY, JSON.stringify(this.openedSubmenus));
+        },
+        inPreviouslyOpened(elementId: string) {
+            return this.openedSubmenus.filter((filterEl: String) => {
+                return elementId.includes(filterEl);
+            }).length > 0;
         },
     }
 })

@@ -26,7 +26,7 @@
                     </template>
                 </pw-nav-entry-title>
                 </template>
-                <template v-for="(childElement, myIndex) in element.children" :key="myIndex" v-if="data.hoveredOverSubmenu">
+                <template v-for="(childElement, myIndex) in element.children" :key="myIndex" v-if="shouldRenderSubmenu">
                     <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
                 </template>
             </el-sub-menu>
@@ -92,6 +92,10 @@ const data = reactive({
     submenuOpened: false,
 });
 
+const isPreviouslyOpened = wikiStore.inPreviouslyOpened(element.id);
+//if (isPreviouslyOpened) {
+//    console.log(element.id);
+//}
 const isSubmenuOpen = computed(() => {
     return wikiStore.getOpenedSubmenus.indexOf(element.id) !== -1;
 });
@@ -106,6 +110,10 @@ const canEdit = computed(() => {
 
 const isPublic = computed(() => {
     return element && element.isPublic;
+});
+
+const shouldRenderSubmenu = computed(() => {
+    return isPreviouslyOpened || data.hoveredOverSubmenu;
 });
 
 const securitySwitchText = computed(() => {
