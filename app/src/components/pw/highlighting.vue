@@ -15,6 +15,7 @@ import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-json';
 
 const props = defineProps({
     content: {
