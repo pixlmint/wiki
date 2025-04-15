@@ -1,17 +1,24 @@
 <template>
     <pm-dialog @close="handleClose" :route="route" :title="dialogTitle">
-        <el-form>
+        <el-form label-width="auto">
             <el-form-item label="Labels">
-                <div class="d-flex gap-1">
+                <div class="d-flex gap-1 width-100">
                     <el-select @change="settings.labelsChanged = true" v-model="selectedLabels" multiple
-                               placeholder="Select Labels">
+                        placeholder="Select Labels">
                         <el-option v-for="(label) in labels" :key="label.title" :label="label.title"
-                                   :value="label.title"/>
+                            :value="label.title"/>
                     </el-select>
                     <el-button @click="saveSelectedLabels" v-show="settings.labelsChanged">
                         <pm-icon icon="save"></pm-icon>
                     </el-button>
-                    <pw-md-editor editorHeight="500px" v-if="settings.contentLoaded" @input="updateContent" @save="saveCardMdContent" v-model="cardMdContent"></pw-md-editor>
+                </div>
+            </el-form-item>
+            <el-form-item label="Description">
+                <pw-md-editor editorHeight="500px" v-if="settings.contentLoaded" @input="updateContent" @save="saveCardMdContent" v-model="cardMdContent"></pw-md-editor>
+            </el-form-item>
+            <el-form-item>
+                <div class="d-flex justify-content-end width-100">
+                    <el-button @click="deleteCard" type="danger"><pm-icon icon="trash" /></el-button>
                 </div>
             </el-form-item>
         </el-form>
@@ -21,7 +28,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import { useUserSettings } from "@/src/stores/user-settings";
-import { ElNotification } from "element-plus";
+import { ElMessageBox, ElNotification } from "element-plus";
 
 export const route = "/board/card/view";
 
@@ -141,6 +148,18 @@ const saveSelectedLabels = function () {
     send(request).then(() => {
         settings.labelsChanged = false;
     });
+}
+
+const deleteCard = function () {
+    ElMessageBox.confirm("Delete this card?", "Warning", {
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+    }).then(() => {
+            boardStore.deleteCard(viewingCard.value.meta.uid).then(() => {
+                handleClose();
+                dialogStore.hideDialog(route);
+            });
+        });
 }
 
 const handleClose = function () {

@@ -76,6 +76,12 @@ export const useBoardStore = defineStore('boardStore', {
             await this.loadBoard(boardId);
             return response;
         },
+        async deleteCard(cardUid: string) {
+            const request = buildRequest("/api/board/delete-card", {
+                cardUid: cardUid,
+            }, "DELETE");
+            return await send(request);
+        },
         refreshBoard() {
             this.loadBoard(this.safeCurrentBoard.id);
         },
