@@ -15,6 +15,7 @@ import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-json';
 
 const props = defineProps({
     content: {
@@ -33,13 +34,17 @@ const data = reactive({
 });
 
 onMounted(() => {
-    if (!props.language) {
-        data.code = Prism.highlight(props.content, Prism.languages['txt'], '');
-        data.lang = 'txt';
-    } else {
-        data.code = Prism.highlight(props.content, Prism.languages[props.language], props.language);
-        data.lang = props.language;
+    console.log(Prism.languages);
+    let language = 'txt';
+    if (props.language) {
+        if (props.language in Prism.languages) {
+            language = props.language;
+        } else if (props.language === 'c' || props.language === 'cpp') {
+            language = 'clike';
+        }
     }
+    data.code = Prism.highlight(props.content, Prism.languages[language], language);
+    data.lang = language;
 });
 </script>
 
