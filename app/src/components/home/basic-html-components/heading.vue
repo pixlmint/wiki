@@ -14,10 +14,18 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    id: {
+        type: String,
+        required: false,
+    }
 });
 
 const headingId = computed(() => {
-    return props.value.toLowerCase().replaceAll(' ', '-');
+    if (props.id) {
+        return props.id;
+    } else {
+        return props.value.toLowerCase().replaceAll(' ', '-');
+    }
 });
 
 </script>

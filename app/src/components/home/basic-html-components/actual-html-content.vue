@@ -54,7 +54,7 @@ export default defineComponent({
                 }
                 if (headingRegex.test(tagName)) {
                     // @ts-ignore
-                    return h(Heading, { tag: tagName, value: node.innerText });
+                    return h(Heading, { tag: tagName, value: node.innerText, id: node.id });
                 }
                 return h(tagName, attrs, children);
             }
