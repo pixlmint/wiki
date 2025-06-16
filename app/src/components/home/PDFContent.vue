@@ -1,7 +1,7 @@
 <template>
     <view-page>
         <template #heading>
-            <entry-heading>
+            <entry-heading :display-view-markdown-button="false" :display-media-buttons="false">
                 <template #title-extras>
                     <el-tag type="danger"><pm-icon icon="file-pdf"></pm-icon></el-tag>
                 </template>

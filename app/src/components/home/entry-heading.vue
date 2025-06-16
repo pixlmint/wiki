@@ -39,6 +39,14 @@
                             <pm-icon icon="markdown" package="brands"></pm-icon>
                             <span>Show Markdown</span>
                         </el-dropdown-item>
+                        <el-dropdown-item v-if="props.displayMediaButtons" @click="uploadMedia" title="Media">
+                            <pm-icon icon="image"></pm-icon>
+                            <span>Media</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item v-if="props.displayMediaButtons" @click="addDrawing" title="Add Drawing">
+                            <pm-icon icon="pen-ruler"></pm-icon>
+                            <span>Add Drawing</span>
+                        </el-dropdown-item>
                         <el-dropdown-item v-if="props.displayDeleteButton" class="danger" @click="deleteEntry" title="Delete">
                             <pm-icon icon="trash"></pm-icon>
                             <span>Delete</span>
@@ -48,13 +56,15 @@
             </div>
         </div>
     </div>
+    <DrawModal v-if="isDrawing"></DrawModal>
 </template>
 <script setup lang="ts">
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {useWikiStore} from "@/src/stores/wiki";
-import {useAuthStore} from "pixlcms-wrapper";
+import {useAuthStore, useDialogStore, useMediaStore} from "pixlcms-wrapper";
 import {queryFormatter} from "@/src/helpers/queryFormatter";
 import {navigate} from "@/src/helpers/navigator";
+import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 
 const props = defineProps({
     displayEditButton: {
@@ -62,6 +72,10 @@ const props = defineProps({
         default: true,
     },
     displayDeleteButton: {
+        type: Boolean,
+        default: true,
+    },
+    displayMediaButtons: {
         type: Boolean,
         default: true,
     },
@@ -73,6 +87,8 @@ const props = defineProps({
 
 const wikiStore = useWikiStore();
 const authStore = useAuthStore();
+const dialogStore = useDialogStore();
+const mediaStore = useMediaStore();
 
 const title = computed(() => {
     return wikiStore.safeCurrentEntry.meta.title;
@@ -97,6 +113,19 @@ const deleteEntry = function () {
         });
     }
 }
+
+const uploadMedia = function() {
+    mediaStore.loadMediaForEntry(wikiStore.safeCurrentEntry.id);
+    dialogStore.showDialog("/media"); 
+}
+
+const addDrawing = function() {
+    dialogStore.showDialog("/draw");
+}
+
+const isDrawing = computed(() => {
+    return dialogStore.isDialogShowing("/draw");
+});
 
 const isPublic = computed(() => {
     return wikiStore.safeCurrentEntry.meta.security !== 'private';
