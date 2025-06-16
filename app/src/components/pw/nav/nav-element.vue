@@ -8,8 +8,7 @@
                         <pm-icon v-if="isSubmenuOpen" icon="caret-down"></pm-icon>
                         <pm-icon v-else icon="caret-right"></pm-icon>
                     </template>
-                    <template #title>
-                        <span class="submenu-title">{{ element.title }}</span>
+                    <template #icons>
                         <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     </template>
                     <template #dropdown-options>
@@ -34,13 +33,10 @@
         <template v-else>
             <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
-                    <template #title>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="submenu-title">{{ element.title }}</span>
-                            <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
-                            <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
-                            <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
-                        </div>
+                    <template #icons>
+                        <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
+                        <el-tag type="danger" v-else-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
+                        <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     </template>
                     <template #dropdown-options>
                         <el-dropdown-item @click="edit"><pm-icon icon="pen"></pm-icon>Edit</el-dropdown-item>

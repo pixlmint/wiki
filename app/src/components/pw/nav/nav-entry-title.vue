@@ -3,8 +3,15 @@
         <span class="indicator">
             <slot name="indicator"></slot>
         </span>
-        <div class="nav-title" :title="elementTitle">
-            <slot name="title"></slot>
+        <div class="nav-title" ref="titleElement" :title="elementTitle">
+            <span class="submenu-title d-flex gap-2 align-items-center">
+                <span class="submenu-title-actual" :style="'max-width: ' + titleElementWidth.value + 'px; text-overflow: ellipsis; overflow: hidden;'">
+                    {{ title }}
+                </span>
+                <span ref="iconsWrapper">
+                    <slot name="icons"></slot>
+                </span>
+            </span>
         </div>
         <el-dropdown class="nav-dropdown" v-if="props.shouldDisplayDropdown">
             <el-button class="nav-dropdown-button" circle text>
@@ -18,6 +25,8 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, useSlots, ref, onMounted, reactive } from 'vue';
+
 const props = defineProps({
     elementId: {
         type: [String, Number],
@@ -28,6 +37,31 @@ const props = defineProps({
         required: true,
     },
     shouldDisplayDropdown: Boolean,
+});
+
+const slots = useSlots();
+
+const titleElement = ref<HTMLElement>();
+const iconsWrapper = ref<HTMLSpanElement>();
+
+const titleElementWidth = reactive({
+    value: 0,
+});
+
+const title = computed(() => {
+    return props.elementTitle;
+});
+
+const iconCount = computed(() => {
+    let cnt = 0;
+    if (slots.firstIcon !== null) cnt++;
+    if (slots.secondIcon !== null) cnt++;
+    return cnt;
+});
+
+onMounted(() => {
+    titleElementWidth.value = titleElement.value!.clientWidth;
+    titleElementWidth.value -= iconsWrapper.value!.clientWidth;
 });
 </script>
 
@@ -51,7 +85,6 @@ const props = defineProps({
 
     .indicator {
         width: 5%;
-
     }
 
     .nav-title {
