@@ -17,10 +17,8 @@ class InitHook implements InitFunction
     public function call(array $init): array
     {
         $frontendVersion = $this->config->getCustomConfig('wikiFrontend')['version'];
-        $debugEnabled = $this->config->getCustomConfig('base')['debugEnabled'];
 
         $init['frontendVersion'] = $frontendVersion;
-        $init['debugEnabled'] = $debugEnabled;
 
         return $init;
     }
