@@ -176,5 +176,16 @@ export const useWikiStore = defineStore('wikiStore', {
                 this.nav = response.data[0];
             });
         },
+        getEntryById(id: string): WikiEntry | null {
+            const entries = this.getLoadedEntries;
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i];
+                if (entry.id === id) {
+                    return entry;
+                }
+            }
+
+            return null;
+        },
     }
 })

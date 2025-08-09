@@ -14,6 +14,7 @@
                     <template #dropdown-options>
                         <el-dropdown-item @click="addPage"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
                         <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
+                        <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add Jupyter Notebook</el-dropdown-item>
                         <el-dropdown-item @click="addSubfolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
                         <el-dropdown-item @click="addBoard"><pm-icon package="brands" icon="trello"></pm-icon>Add Board</el-dropdown-item>
                         <el-dropdown-item @click="switchSecurity">
@@ -36,6 +37,7 @@
                     <template #icons>
                         <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
                         <el-tag type="danger" v-else-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
+                        <el-tag v-else-if="element.kind === 'ipynb'"><img width="12" heigth="12" src="/assets/jupyter.svg"></el-tag>
                         <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     </template>
                     <template #dropdown-options>
@@ -194,7 +196,28 @@ const addBoard = function () {
 }
 
 const addPdf = function () {
-    dialogStore.showDialog({route: '/nav/new-pdf', data: element.id});
+    dialogStore.showDialog({
+        route: '/nav/new-alternative-content',
+        data: {
+            id: element.id,
+            title: "New PDF",
+            mime: "application/pdf",
+            renderer: 'pdf'
+        }
+    });
+}
+
+const addJupyterNotebook = function () {
+    dialogStore.showDialog({
+        route: '/jupyter/modal',
+        data: {
+            id: element.id,
+            title: "New Notebook",
+            mime: "application/x-ipynb+json",
+            renderer: 'ipynb',
+            action: JupyterSetupAction.CreateNew,
+        }
+    });
 }
 
 const addSubfolder = function () {
@@ -211,6 +234,7 @@ const addSubfolder = function () {
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import { JupyterSetupAction } from "@/src/helpers/jupyter";
 
 export default defineComponent({
     name: 'PWNavElement',

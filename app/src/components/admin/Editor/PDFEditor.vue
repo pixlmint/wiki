@@ -1,50 +1,49 @@
 <template>
     <div>
         <p>Current PDF: {{ pdfPath }}</p>
-        <input type="file" accept="application/pdf" ref="upload"/>
-        <el-button @click="updatePdf" class="btn btn-primary">Update</el-button>
+        <alternative-content-upload-form
+                v-if="data.ready"
+                :isInitialUpload="false"
+                :entryId="entry.id" ,
+                :formData="data.formData"
+                @afterSave="afterSave"
+            >
+        </alternative-content-upload-form>
     </div>
 </template>
 
-<script lang="ts">
-import {defineComponent, ref} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
-import {ElNotification} from "element-plus";
-import {buildRequest, send} from "pixlcms-wrapper";
+<script setup lang="ts">
+import { computed, onMounted, reactive } from "vue";
+import { useWikiStore } from "@/src/stores/wiki";
+import AlternativeContentUploadForm from "@/src/components/forms/alternative-content-upload-form.vue";
+import { AlternativeContentForm } from "@/src/helpers/alternativeContentHelper";
+import { ElNotification } from "element-plus";
 
-export default defineComponent({
-    name: 'PDFEditor',
-    data() {
-        return {
-            wikiStore: useWikiStore(),
-            file: ref('upload'),
-        }
-    },
-    computed: {
-        pdfPath() {
-            return this.wikiStore.safeCurrentEntry.meta.pdf;
-        }
-    },
-    methods: {
-        updatePdf() {
-            const uploadField = this.$refs['upload'] as HTMLInputElement
-            const files = uploadField.files as FileList;
-            if (files.length === 0) {
-                ElNotification({
-                    type: "error",
-                    title: "Error",
-                    message: "Please select a file to upload",
-                });
-                return;
-            }
-            const newFile = files[0];
-            const formData = new FormData();
-            formData.append('entry', this.wikiStore.safeCurrentEntry.id);
-            formData.append('meta', JSON.stringify(this.wikiStore.safeCurrentEntry.meta));
-            formData.append('alternative_content', newFile);
-            const request = buildRequest('/api/admin/entry/update-alternative-content', formData, 'POST');
-            send(request);
-        }
-    },
+
+const wikiStore = useWikiStore();
+const entry = computed(() => wikiStore.safeCurrentEntry);
+const pdfPath = computed(() => entry.value.meta.alternative_content);
+
+const data = reactive<{ formData: AlternativeContentForm | null, ready: boolean }>({
+    formData: null,
+    ready: false,
+});
+
+onMounted(() => {
+    data.formData = new AlternativeContentForm({
+        renderer: 'pdf',
+        title: entry.value.meta.title,
+        mime: 'application/pdf'
+    });
+    data.ready = true;
 })
+
+const afterSave = function () {
+    ElNotification({
+        type: 'success',
+        title: 'Success',
+        message: 'Successfully updated',
+    });
+}
+
 </script>

@@ -9,6 +9,7 @@ import BoardSettings, {route as boardSettingsRoute} from "@/src/components/kanba
 import CardModal, {route as cardModalRoute} from "@/src/components/kanban/card-modal.vue";
 import TableEditorModal, {route as tableEditorRoute} from "@/src/components/admin/Editor/tables/TableEditorModal.vue";
 import MediaModal, { route as mediaRoute } from "@/src/components/admin/Editor/media/MediaModal.vue";
+import JupyterSetupModal, { route as jupyterSetupRoute } from "@/src/components/jupyter/jupyter-setup-modal.vue";
 import {defineDialogs} from "pixlcms-wrapper";
 
 export const dialogs = defineDialogs([
@@ -55,5 +56,9 @@ export const dialogs = defineDialogs([
     {
         route: mediaRoute,
         component: MediaModal,
+    },
+    {
+        route: jupyterSetupRoute,
+        component: JupyterSetupModal,
     },
 ]);

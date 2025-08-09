@@ -8,10 +8,10 @@
                     </el-form-item>
                     <el-form-item label="Theme">
                         <el-radio-group v-model="settings.theme">
-                            <el-radio label="dark">
+                            <el-radio value="dark">
                                 <pm-icon icon="moon"></pm-icon>
                             </el-radio>
-                            <el-radio label="light">
+                            <el-radio value="light">
                                 <pm-icon icon="sun"></pm-icon>
                             </el-radio>
                         </el-radio-group>

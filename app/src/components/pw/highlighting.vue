@@ -34,7 +34,7 @@ const data = reactive({
 });
 
 onMounted(() => {
-    console.log(Prism.languages);
+    // console.log(Prism.languages);
     let language = 'txt';
     if (props.language) {
         if (props.language in Prism.languages) {

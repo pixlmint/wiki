@@ -8,8 +8,10 @@
     <template v-else-if="isTable">
         <TableView></TableView>
     </template>
+    <!--<template v-else-if="isJupyterNotebookContent">
+        <Jupyter :notebook-path="ipynbPath"></Jupyter>
+    </template>-->
     <template v-else>
-        <!--<ExcalidrawWrapper width="1000" height="1000" />-->
         <BasicHtmlEntry :content="content"></BasicHtmlEntry>
     </template>
 </template>

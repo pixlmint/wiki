@@ -25,6 +25,7 @@
                         <el-dropdown-menu>
                             <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
                             <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
+                            <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add Jupyter Notebook</el-dropdown-item>
                             <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -129,7 +130,11 @@ const addSubEntry = function () {
 }
 const addPdf = function () {
     dialogStore.setPdfParentFolder('/');
-    dialogStore.showDialog('/nav/new-pdf');
+    dialogStore.showDialog({route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" }});
+}
+
+const addJupyterNotebook = function () {
+    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New Notebook", mime: "application/json" }});
 }
 const hideMainNav = function () {
     mainStore.toggleLargeNavShowing(false);
