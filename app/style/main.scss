@@ -1,4 +1,5 @@
 @import 'element-plus/dist/index.css';
+@import 'element-plus/theme-chalk/dark/css-vars.css';
 @import 'theme';
 @import 'variables';
 @import 'fonts';
@@ -59,10 +60,6 @@ li p {
 
 .danger {
     color: var(--el-color-danger) !important;
-}
-
-.editor-header {
-    min-height: 150px;
 }
 
 .full-width {
