@@ -3,9 +3,7 @@ import {buildRequest, send} from "pixlcms-wrapper";
 import {ElNotification} from "element-plus";
 import {WikiEntry} from "@/src/contracts/WikiBase";
 import {BoardResponse} from "@/src/contracts/Kanban";
-
-interface Nav extends Array<NavElement> {
-}
+import { Nav } from '../helpers/nav';
 
 interface NavElement {
     title: string,
@@ -21,11 +19,8 @@ interface EditorState {
     editingUnsavedChanges: boolean,
 }
 
-interface WikiEntryList extends Array<WikiEntry> {
-}
-
 interface State {
-    loadedEntries: WikiEntryList,
+    loadedEntries: WikiEntry[],
     currentEntry: WikiEntry | null,
     nav: Nav | null,
     editor: EditorState,
@@ -147,13 +142,7 @@ export const useWikiStore = defineStore('wikiStore', {
         },
         deleteEntry(entry: string) {
             const request = buildRequest('/api/admin/entry/delete', {entry: entry}, 'DELETE');
-            return send(request).then(() => {
-                ElNotification({
-                    type: 'success',
-                    title: 'Success',
-                    message: 'Successfully Deleted the Entry'
-                });
-            });
+            return send(request);
         },
         renameEntry(newName: string) {
             if (this.currentEntry === null) {
@@ -182,7 +171,7 @@ export const useWikiStore = defineStore('wikiStore', {
             }
             const request = buildRequest(url);
             return send(request).then(response => {
-                this.nav = response.data[0];
+                this.nav = Nav.create(response.data[0]);
             });
         },
         getEntryById(id: string): WikiEntry | null {

@@ -13,6 +13,7 @@ import Highlighting from '@/src/components/pw/highlighting.vue';
 import NavEntryTitle from '@/src/components/pw/nav/nav-entry-title.vue';
 import VueDiff from 'vue-diff';
 import {main, Dialog, Icon} from "pixlcms-wrapper";
+import { init } from "@/src/helpers/nav";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {
     faArrowRotateRight,
@@ -40,6 +41,7 @@ app.use(pinia)
 app.use(ElementPlus)
 app.use(VueDiff)
 app.use(main, {pinia});
+app.use(init, { pinia });
 
 app.component('pw-nav', PWNav);
 app.component('pw-loading', PWLoading);

@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div class="nav-wrapper">
         <div id="nav" class="print-invisible" v-show="mainNavShowing">
             <div>
                 <div @click="hideMainNav" class="nav-toggle">
                     <pm-icon icon="caret-left"></pm-icon>
                 </div>
-                <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
+                <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false"
+                    class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
                         <pw-nav-entry-title :element-id="0" :should-display-dropdown="false" element-title="Home">
                             <template #title>
@@ -13,7 +14,7 @@
                             </template>
                         </pw-nav-entry-title>
                     </el-menu-item>
-                    <template v-for="(childElement, myIndex) in nav.children" :key="myIndex">
+                    <template v-for="(childElement, myIndex) in nav.root.children" :key="myIndex">
                         <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
                     </template>
                 </el-menu>
@@ -23,10 +24,14 @@
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
-                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
-                            <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add Jupyter Notebook</el-dropdown-item>
-                            <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add
+                                Page</el-dropdown-item>
+                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add
+                                PDF</el-dropdown-item>
+                            <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add
+                                Jupyter Notebook</el-dropdown-item>
+                            <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add
+                                Subfolder</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -53,14 +58,14 @@
 </template>
 
 <script setup lang="ts">
-import {toRaw, computed} from "vue";
-import {useWikiStore} from "@/src/stores/wiki";
+import { toRaw, computed } from "vue";
+import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
-import {useMainStore} from "@/src/stores/main";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {isMobile} from "@/src/helpers/mobile-detector";
-import {ElMessageBox} from "element-plus";
-import {navigate} from "@/src/helpers/navigator";
+import { useMainStore } from "@/src/stores/main";
+import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
+import { isMobile } from "@/src/helpers/mobile-detector";
+import { ElMessageBox } from "element-plus";
+import { navigate } from "@/src/helpers/navigator";
 
 const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
@@ -131,11 +136,11 @@ const addSubEntry = function () {
 }
 const addPdf = function () {
     dialogStore.setPdfParentFolder('/');
-    dialogStore.showDialog({route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" }});
+    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" } });
 }
 
 const addJupyterNotebook = function () {
-    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New Notebook", mime: "application/json" }});
+    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New Notebook", mime: "application/json" } });
 }
 const hideMainNav = function () {
     mainStore.toggleLargeNavShowing(false);
@@ -185,133 +190,123 @@ const isLoggedIn = computed(() => {
 const nav = computed(() => {
     const wikiStore = useWikiStore()
     if (wikiStore.getNav === null) {
-        return {}
+        return { root: { children: [] } };
     }
     return toRaw(wikiStore.getNav);
 });
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import '@/style/variables';
 
-#nav {
-    background-color: var(--el-bg-color);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: fixed;
-    width: $navLargeWidth;
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 100;
-    border-right: 1px solid var(--el-menu-border-color);
-}
-
-@media screen and (max-width: $mobileBreakpoint) {
+.nav-wrapper {
     #nav {
+        background-color: var(--el-bg-color);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: fixed;
+        width: $navLargeWidth;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 100;
+        border-right: 1px solid var(--el-menu-border-color);
+    }
+
+    .user-nav .el-dropdown {
         width: 100%;
     }
 
-    html.dark {
-        #nav {
-            background-color: rgb(20, 20, 20);
-        }
-    }
-}
-
-.user-nav .el-dropdown {
-    width: 100%;
-}
-
-.user-button {
-    width: 100%;
-    height: 3rem;
-    border-radius: 5px;
-    margin: 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-    font-family: "JetBrains-Mono Regular", sans-serif;
-    outline: none !important;
-    border: none !important;
-    font-size: 1.1rem;
-
-    &:hover {
-        background-color: var(--el-menu-hover-bg-color);
-    }
-
-    svg {
-        padding-right: 5px;
-    }
-}
-
-#mobile-nav {
-    display: block;
-    position: fixed;
-    left: 0;
-    background-color: var(--el-bg-color);
-    min-height: 100vh;
-    bottom: 0;
-    width: $navSmallWidth;
-    cursor: pointer;
-    border-right: var(--el-border);
-
-    .nav-toggle-small {
-        position: absolute;
-        top: 10px;
-    }
-
-    .breadcrumbs {
-        transform: rotate(270deg) translate(-100%, 0);
-        width: 100vh;
-        transform-origin: top left;
-    }
-}
-
-.nav-toggle {
-    width: calc(100% - 40px);
-    padding: 20px 20px 20px 20px;
-    cursor: pointer;
-
-    &:hover {
-        background-color: var(--el-menu-hover-bg-color);
-    }
-}
-
-.nav-user-dropdown {
-    position: fixed;
-    bottom: 3rem;
-    left: 3rem;
-    box-shadow: var(--box-shadow);
-    min-width: 10%;
-    border-radius: 10px;
-
-    .nav-user-dropdown-button {
+    .user-button {
         width: 100%;
-        display: block;
-        outline: none;
-        border: none;
-        text-align: center;
-        padding: 10px 0;
-        cursor: pointer;
+        height: 3rem;
         border-radius: 5px;
-
-        &:first-of-type {
-            border-top-right-radius: 10px;
-            border-top-left-radius: 10px;
-        }
-
-        &:last-of-type {
-            border-bottom-right-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
+        margin: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        font-family: "JetBrains-Mono Regular", sans-serif;
+        outline: none !important;
+        border: none !important;
+        font-size: 1.1rem;
 
         &:hover {
             background-color: var(--el-menu-hover-bg-color);
+        }
+
+        svg {
+            padding-right: 5px;
+        }
+    }
+
+    #mobile-nav {
+        display: block;
+        position: fixed;
+        left: 0;
+        background-color: var(--el-bg-color);
+        min-height: 100vh;
+        bottom: 0;
+        width: $navSmallWidth;
+        cursor: pointer;
+        border-right: var(--el-border);
+
+        .nav-toggle-small {
+            position: absolute;
+            top: 10px;
+        }
+
+        .breadcrumbs {
+            transform: rotate(270deg) translate(-100%, 0);
+            width: 100vh;
+            transform-origin: top left;
+        }
+    }
+
+    .nav-toggle {
+        width: calc(100% - 40px);
+        padding: 20px 20px 20px 20px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--el-menu-hover-bg-color);
+        }
+    }
+
+    .nav-user-dropdown {
+        position: fixed;
+        bottom: 3rem;
+        left: 3rem;
+        box-shadow: var(--box-shadow);
+        min-width: 10%;
+        border-radius: 10px;
+
+        .nav-user-dropdown-button {
+            width: 100%;
+            display: block;
+            outline: none;
+            border: none;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+
+            &:first-of-type {
+                border-top-right-radius: 10px;
+                border-top-left-radius: 10px;
+            }
+
+            &:last-of-type {
+                border-bottom-right-radius: 10px;
+                border-bottom-left-radius: 10px;
+            }
+
+            &:hover {
+                background-color: var(--el-menu-hover-bg-color);
+            }
         }
     }
 }
@@ -331,10 +326,20 @@ const nav = computed(() => {
         margin-right: 5px;
     }
 }
-</style>
 
-<style lang="scss">
 .pw-submenu-title * {
     vertical-align: unset;
+}
+
+@media screen and (max-width: $mobileBreakpoint) {
+    #nav {
+        width: 100%;
+    }
+
+    html.dark {
+        #nav {
+            background-color: rgb(20, 20, 20);
+        }
+    }
 }
 </style>
