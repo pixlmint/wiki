@@ -155,7 +155,24 @@ class JupyterConnector {
     }
 
     close(notebookPath: string | null = null) {
-
+        if (notebookPath === null) {
+            for (const [notebookPath, session] of Object.entries(this.sessions)) {
+                this.close(notebookPath);
+            }
+        } else {
+            if (notebookPath in this.sessions) {
+                console.log(`Closing ${notebookPath}`);
+                this.sessions[notebookPath].close();
+                delete this.sessions[notebookPath];
+            } else {
+                console.error(`No such notebook session: ${notebookPath}`);
+            }
+            if (Object.keys(this.sessions).length === 0) {
+                this.isOpened = false;
+                const that = this;
+                removeEventListener('beforeunload', that.unloadHandler);
+            }
+        }
     }
 }
 
@@ -284,27 +301,6 @@ class RemoteJupyterConnector extends JupyterConnector {
             path: uniqueNotebookPath,
             type: 'notebook',
         }, { headers: headers });
-    }
-
-    close(notebookPath: string | null = null) {
-        if (notebookPath === null) {
-            for (const [notebookPath, session] of Object.entries(this.sessions)) {
-                this.close(notebookPath);
-            }
-        } else {
-            if (notebookPath in this.sessions) {
-                console.log(`Closing ${notebookPath}`);
-                this.sessions[notebookPath].close();
-                delete this.sessions[notebookPath];
-            } else {
-                console.error(`No such notebook session: ${notebookPath}`);
-            }
-            if (Object.keys(this.sessions).length === 0) {
-                this.isOpened = false;
-                const that = this;
-                removeEventListener('beforeunload', that.unloadHandler);
-            }
-        }
     }
 
     unloadHandler(event: Event) {

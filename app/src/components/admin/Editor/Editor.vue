@@ -56,7 +56,6 @@ export default defineComponent({
     },
     methods: {
         handleEditorClose() {
-            console.log("editor closed");
             this.isEntryLoaded = false;
             this.key++;
         },

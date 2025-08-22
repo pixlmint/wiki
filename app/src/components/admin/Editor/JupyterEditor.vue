@@ -5,7 +5,6 @@
 
 <script lang="ts" setup>
 import JupyterFrame from "@/src/components/jupyter/jupyter-frame.vue";
-// import JupyterSetup from "@/src/components/jupyter/jupyter-setup.vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import { createConnector, JupyterSession, JupyterConnector, RemoteJupyterConnector, type JupyterConnectorSettings, useJupyterConnectionsStore } from "@/src/helpers/jupyter";
@@ -59,7 +58,19 @@ const configure = async function (setup: JupyterConnectorSettings) {
 }
 
 const changeSettings = function () {
-    settings.setupModalShowing = true;
+    // settings.setupModalShowing = true;
+    dialogStore.showDialog({
+        route: "/jupyter/modal",
+        data: {
+            action: JupyterSetupAction.FixConnectorConfiguration,
+            entryId: wikiStore.safeCurrentEntry.id,
+            connectorSettings: {
+                baseUrl: settings.baseUrl,
+                sharedFolder: settings.sharedFolder,
+                authToken: settings.authToken,
+            }
+        },
+    });
 }
 
 onMounted(() => {
@@ -101,6 +112,10 @@ onUnmounted(() => {
     if (connector !== null) {
         connector.close(wikiStore.safeCurrentEntry.id);
     }
+    const id = wikiStore.safeCurrentEntry.id;
+    wikiStore.dumpAlternateContent(id).then(() => {
+        wikiStore.fetchEntry(id);
+    });
 });
 </script>
 

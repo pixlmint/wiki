@@ -61,8 +61,11 @@ export const useWikiStore = defineStore('wikiStore', {
             const request = buildRequest('/api/index');
             return send(request);
         },
-        dumpAlternateContent() {
-            const request = buildRequest('/api/admin/alternate/dump-file-into-content');
+        dumpAlternateContent(page: string | null = null) {
+            const data = {};
+            if (page !== null)
+                data.page = page;
+            const request = buildRequest('/api/admin/alternate/dump-file-into-content', data);
             return send(request);
         },
         search(query: string) {

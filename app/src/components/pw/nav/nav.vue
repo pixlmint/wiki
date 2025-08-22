@@ -95,6 +95,7 @@ useWikiStore().loadNav();
 
 // methods
 const openSubmenu = function (menuId: string) {
+    console.log(menuId);
     wikiStore.openedSubmenus.push(menuId);
 }
 

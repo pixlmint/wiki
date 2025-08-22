@@ -1,7 +1,7 @@
 <template>
     <div @click="triggerRenderDropdown">
         <template v-if="isFolder">
-            <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
+            <el-sub-menu class="pw-submenu" @click="console.log(this)" data-is-entry="false" :index="element.id">
                 <template #title>
                 <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id" :element-title="element.title">
                     <template #indicator>
@@ -32,7 +32,7 @@
             </el-sub-menu>
         </template>
         <template v-else>
-            <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
+            <el-menu-item :data-pw-entry-id="element.id" @click="console.log(this)" class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
                     <template #icons>
                         <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>

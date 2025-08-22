@@ -13,7 +13,7 @@
             </alternative-content-upload-form>
         </template>
         <template v-else-if="action === JupyterSetupAction.FixConnectorConfiguration">
-            <jupyter-setup @change="handleConnectorChange" @save="testAndStoreConnectorConfiugration" />
+            <jupyter-setup :settings="data.connectorSettings" @change="handleConnectorChange" @save="testAndStoreConnectorConfiugration" />
         </template>
         <template v-else>
             The Notebooks are out of sync, select an action to take
@@ -52,12 +52,14 @@ type SetupModalData = {
     formData: AlternativeContentForm | null;
     ready: boolean;
     entryId: string | null;
+    connectorSettings: JupyterConnectorSettings | null;
 };
 
 const data = reactive<SetupModalData>({
     formData: null,
     ready: false,
     entryId: null,
+    connectorSettings: null,
 });
 
 const connectorSettingsChanged = ref(false);
@@ -65,7 +67,6 @@ const connectorSettingsChanged = ref(false);
 const title = computed(() => dialogData.title);
 
 onMounted(() => {
-    console.log(dialogData);
     if ('action' in dialogData) {
         action.value = dialogData.action;
     }
@@ -80,6 +81,10 @@ onMounted(() => {
     } else if ('entryId' in dialogData) {
         data.entryId = dialogData.entryId;
     }
+
+    if ("connectorSettings" in dialogData) {
+        data.connectorSettings = dialogData['connectorSettings'];
+    }
 })
 
 const cancel = function () {
@@ -93,12 +98,10 @@ const confirm = function () {
 }
 
 const handleConnectorChange = function (connectorConfiguration: JupyterConnectorSettings) {
-    console.log(connectorConfiguration);
     connectorSettingsChanged.value = true;
 }
 
 const testAndStoreConnectorConfiugration = function (connectorConfiguration: JupyterConnectorSettings) {
-    console.log(connectorConfiguration);
     if (data.entryId !== null)
         connectionsStore.setConnectionForEntry(data.entryId, connectorConfiguration);
     if (action.value === JupyterSetupAction.FixConnectorConfiguration)

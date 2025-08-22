@@ -42,31 +42,25 @@ type FlatSettings = {
     readonly token?: string | undefined;
 };
 
-const props = defineProps({
-    baseUrl: { type: String, required: false },
-    localPath: { type: String, required: false },
-    sharedPath: { type: String, required: false },
-    token: { type: String, required: false },
-});
+const props = defineProps<{settings: JupyterConnectorSettings | null}>();
 
 const connectionsStore = useJupyterConnectionsStore();
 
 const form = reactive({
-    baseUrl: props.baseUrl,
+    baseUrl: props.settings?.baseUrl,
     isShared: true,
-    localPath: props.localPath,
-    sharedPath: props.sharedPath,
-    token: props.token,
+    localPath: props.settings?.sharedFolder?.local,
+    sharedPath: props.settings?.sharedFolder?.shared,
+    token: props.settings?.authToken,
     makeDefault: false,
 });
 
 
 onMounted(() => {
     const defaultConnection = connectionsStore.getDefaultConnection();
-    if (!props.baseUrl) {
+
+    if (!props.settings) {
         form.baseUrl = defaultConnection.baseUrl;
-    }
-    if (!props.localPath && !props.sharedPath) {
         if (defaultConnection.sharedFolder === null) {
             form.isShared = false;
         } else {
@@ -74,14 +68,14 @@ onMounted(() => {
             form.sharedPath = defaultConnection.sharedFolder.shared;
             form.isShared = true;
         }
-    }
-    if (!props.token) {
         form.token = defaultConnection.authToken ? defaultConnection.authToken : '';
+    } else {
+        form.isShared = props.settings.sharedFolder !== null;
     }
 });
 
 const handleChange = function () {
-    if (form.baseUrl !== props.baseUrl || form.localPath !== props.localPath || form.sharedPath !== props.sharedPath || form.token !== props.token || form.makeDefault) {
+    if (form.baseUrl !== props.settings?.baseUrl || form.localPath !== props.settings?.sharedFolder?.local || form.sharedPath !== props.settings?.sharedFolder?.shared || form.token !== props.settings?.authToken || form.makeDefault) {
         emit("change", form);
     } else {
         emit("unchanged", form);
@@ -108,13 +102,11 @@ const convertFlat2Settings = function (flatObj: FlatSettings): JupyterConnectorS
 const save = function () {
     const settings = convertFlat2Settings(form);
 
-    const originalSettings = convertFlat2Settings(props);
-
-    if (props.baseUrl === null) {
+    if (props.settings?.baseUrl === null) {
         // It's a new config
         // Nothing to do
     } else {
-        connectionsStore.updateConfiguration(originalSettings, settings);
+        connectionsStore.updateConfiguration(props.settings, settings);
     }
 
     if (form.makeDefault) {

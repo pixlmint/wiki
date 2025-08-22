@@ -56,5 +56,5 @@ return [
         ],
         'enabled_media_types' => ['img', 'svg'], // disable videos
     ],
-    'debug' => true,
+    'debug' => false,
 ];

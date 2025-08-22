@@ -8,9 +8,9 @@
     <template v-else-if="isTable">
         <TableView></TableView>
     </template>
-    <!--<template v-else-if="isJupyterNotebookContent">
-        <Jupyter :notebook-path="ipynbPath"></Jupyter>
-    </template>-->
+    <template v-else-if="isJupyterNotebook">
+        <JupyterContent :content="content" />
+    </template>
     <template v-else>
         <BasicHtmlEntry :content="content"></BasicHtmlEntry>
     </template>
@@ -24,6 +24,7 @@ import PDFContent from "@/src/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/src/components/home/BoardView.vue";
 import TableView from "@/src/components/home/TableView.vue";
+import JupyterContent from "@/src/components/home/basic-html-components/jupter-content.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
 import ExcalidrawWrapper from "@/src/components/drawing/excalidraw.vue";
 
@@ -41,6 +42,7 @@ export default defineComponent({
         BasicHtmlEntry,
         TableView,
         ExcalidrawWrapper,
+        JupyterContent,
     },
     computed: {
         content() {
@@ -54,6 +56,12 @@ export default defineComponent({
                 return false;
             }
             return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
+        },
+        isJupyterNotebook() {
+            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+                return false;
+            }
+            return 'ipynb' === this.wikiStore.safeCurrentEntry.meta.renderer;
         },
         isBoard() {
             return 'board' === this.wikiStore.safeCurrentEntry.meta.kind;
@@ -93,15 +101,15 @@ h2, h3, h4, h5, h6 {
     border-bottom: 1px solid var(--el-border-color);
 }
 
-.mobile-action-buttons {
+/*.mobile-action-buttons {
     display: block !important;
 }
 
 .desktop-action-buttons {
     display: none;
-}
+}*/
 
-@media screen and (min-width: $mobileBreakpoint) {
+/*@media screen and (min-width: $mobileBreakpoint) {
     .mobile-action-buttons {
         display: none !important;
     }
@@ -109,5 +117,5 @@ h2, h3, h4, h5, h6 {
     .desktop-action-buttons {
         display: block;
     }
-}
+}*/
 </style>

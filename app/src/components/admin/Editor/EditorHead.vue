@@ -1,16 +1,14 @@
 <template>
     <div>
-        <el-row justify="space-between" align="middle">
-            <el-row align="middle" :gutter="20" class="editor-header">
-                <el-col :span="2">
-                    <el-button circle @click="checkGoHome">
-                        <pm-icon icon="caret-left"></pm-icon>
-                    </el-button>
-                </el-col>
-                <el-col :span="22">
-                    <h1>{{ title }}</h1>
-                </el-col>
-            </el-row>
+        <el-row justify="space-between" align="middle" :gutter="20" class="editor-header">
+            <el-col :span="2">
+                <el-button circle @click="checkGoHome">
+                    <pm-icon icon="caret-left"></pm-icon>
+                </el-button>
+            </el-col>
+            <el-col :span="22">
+                <h1>{{ title }}</h1>
+            </el-col>
         </el-row>
         <p class="last-edited">
             {{ lastSavedFormatted }}
@@ -65,10 +63,6 @@ const updateNow = function () {
     data.now = new Date();
 }
 
-const save = function () {
-    return wikiStore.saveCurrentEntry();
-}
-
 const checkGoHome = function () {
     if (mainStore.editingUnsavedChanges) {
         ElMessageBox.confirm('You\'ve got unsaved changes, are you sure you want to go back?', 'Unsaved Changes', {
@@ -94,15 +88,11 @@ const checkGoHome = function () {
 <style lang="scss" scoped>
 .editor-header {
     padding: 0 1rem;
-}
-
-.title-editor {
-    background-color: transparent;
+    min-height: 80px;
 }
 
 p.last-edited {
-    margin: unset;
-    height: 10px;
+    margin: 0 0 10px 0;
     font-style: italic;
     color: var(--el-text-color-secondary);
     font-size: small;
