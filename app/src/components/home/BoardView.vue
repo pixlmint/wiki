@@ -1,7 +1,7 @@
 <template>
     <pw-view-page :style="additionalStyle" class="board-view-page" :full-width-page="true">
         <template #heading>
-            <entry-heading class="board-heading" :display-delete-button="true" :display-edit-button="false" :display-view-markdown-button="false">
+            <entry-heading class="board-heading" :display-delete-button="true" :display-media-buttons="false" :display-edit-button="false" :display-view-markdown-button="false">
                 <template #title-extras>
                     <el-tag><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
                 </template>

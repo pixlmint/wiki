@@ -44,10 +44,17 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.20.5',
+        'version' => '1.21.0',
     ],
     'base' => [
-        'debugEnabled' => false,
         'frontendController' => FrontendController::class,
-    ]
+    ],
+    'media' => [
+        'cache_duration' => [
+            'default' => 3600 * 24 * 30, // 1 month
+            'svg' => 3600, // 1 hour
+        ],
+        'enabled_media_types' => ['img', 'svg'], // disable videos
+    ],
+    'debug' => false,
 ];

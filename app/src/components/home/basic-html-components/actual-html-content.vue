@@ -5,6 +5,7 @@ import {h, onMounted, watchEffect, defineComponent} from "vue";
 import Highlighting from "@/src/components/pw/highlighting.vue";
 import BasicLink from "@/src/components/home/basic-html-components/basic-link.vue";
 import Table from "@/src/components/home/basic-html-components/table.vue";
+import Heading from "@/src/components/home/basic-html-components/heading.vue";
 
 export default defineComponent({
     props: {
@@ -21,6 +22,8 @@ export default defineComponent({
             const ret = walkNodes(doc.body);
             return ret;
         };
+
+        const headingRegex = /h[1-6]/;
 
         const walkNodes = (node: Node) => {
             if (node.nodeType === Node.TEXT_NODE) {
@@ -48,6 +51,10 @@ export default defineComponent({
                 if (tagName === 'table') {
                     // @ts-ignore
                     return h(Table, { table: node.outerHTML });
+                }
+                if (headingRegex.test(tagName)) {
+                    // @ts-ignore
+                    return h(Heading, { tag: tagName, value: node.innerText, id: node.id });
                 }
                 return h(tagName, attrs, children);
             }

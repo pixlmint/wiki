@@ -26,6 +26,7 @@ import {
     faVectorSquare, faTimes, faPlus, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
     faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faCaretDown, faHouse, faCirclePlus, faUser,
     faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark, faTable, faImage, faCopy,
+    faFileArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faTrello, faMarkdown
@@ -54,6 +55,6 @@ library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand
     faArrowRotateRight, faTimes, faPlus, faTrello, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
     faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faCaretDown, faHouse, faCirclePlus, faUser,
     faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark, faMarkdown, faTable, faImage,
-    faCopy);
+    faCopy, faFileArrowDown);
 
 app.mount('#app')

@@ -61,8 +61,11 @@ export const useWikiStore = defineStore('wikiStore', {
             const request = buildRequest('/api/index');
             return send(request);
         },
-        dumpAlternateContent() {
-            const request = buildRequest('/api/admin/alternate/dump-file-into-content');
+        dumpAlternateContent(page: string | null = null) {
+            const data = {};
+            if (page !== null)
+                data.page = page;
+            const request = buildRequest('/api/admin/alternate/dump-file-into-content', data);
             return send(request);
         },
         search(query: string) {
@@ -181,6 +184,17 @@ export const useWikiStore = defineStore('wikiStore', {
             return send(request).then(response => {
                 this.nav = response.data[0];
             });
+        },
+        getEntryById(id: string): WikiEntry | null {
+            const entries = this.getLoadedEntries;
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i];
+                if (entry.id === id) {
+                    return entry;
+                }
+            }
+
+            return null;
         },
     }
 })

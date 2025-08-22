@@ -51,7 +51,7 @@ export default defineComponent({
             return this.mainStore.meta.debugEnabled;
         },
         currentPath() {
-            return this.wikiStore.safeCurrentEntry.id;
+            return this.wikiStore.safeCurrentEntry.id + this.wikiStore.safeCurrentEntry.meta.dateUpdated;
         },
     },
     created() {

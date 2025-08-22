@@ -1,65 +1,48 @@
 <template>
-    <pm-dialog title="New PDF" :route="route">
-        <el-form onsubmit="return false">
-            <el-form-item>
-                <el-input onsubmit="return false" v-model="pdfTitle" type="text" placeholder="New Entry Title"/>
-            </el-form-item>
-            <el-form-item>
-                <input ref="file" type="file" accept="application/pdf"/>
-            </el-form-item>
-        </el-form>
-        <template #footer>
-            <el-button @click="uploadPdf" type="primary" class="btn btn-primary">Upload</el-button>
-        </template>
+    <pm-dialog :title="meta.title" :route="route">
+        <alternative-content-upload-form v-if="data.ready" :isInitialUpload="true" @afterSave="closeDialog"
+            :entryId="data.entryId" :formData="data.formData">
+        </alternative-content-upload-form>
     </pm-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import {useDialogStore, buildRequest, send} from "pixlcms-wrapper";
-import {ElNotification} from "element-plus";
-import {useWikiStore} from "@/src/stores/wiki";
+import { computed, onMounted, onUnmounted, reactive } from "vue";
+import { useDialogStore } from "pixlcms-wrapper";
+import AlternativeContentUploadForm from "@/src/components/forms/alternative-content-upload-form.vue";
+import { AlternativeContentForm } from "@/src/helpers/alternativeContentHelper";
 
-const route = '/nav/new-pdf';
+const route = '/nav/new-alternative-content';
 
 const dialogStore = useDialogStore();
-const wikiStore = useWikiStore();
 
-const pdfTitle = ref('');
-const file = ref(null);
+const meta = computed(() => dialogStore.getDialogData(route));
 
-const uploadPdf = function () {
-    const uploadField = file.value;
-    const files = uploadField.files as FileList;
-    if (files.length === 0) {
-        ElNotification({
-            type: "error",
-            title: "Error",
-            message: "Please select a file to upload",
-        });
-        return;
-    }
-    const newFile = files[0];
-    const formData = new FormData();
-    formData.append('title', pdfTitle.value);
-    formData.append('renderer', 'pdf');
-    formData.append('parentFolder', dialogStore.getDialogData(route));
-    formData.append('alternative_content', newFile);
-    const request = buildRequest('/api/admin/entry/upload-alternative-content', formData, 'POST');
-    send(request).then((response) => {
-        if (!response.data.success) {
-            ElNotification({
-                type: "error",
-                title: "Error",
-                message: "File was not able to upload",
-            });
-        }
-        wikiStore.loadNav();
-        dialogStore.hideDialog(route);
+const data = reactive<{ formData: AlternativeContentForm | null, ready: boolean, entryId: string | null }>({
+    formData: null,
+    ready: false,
+    entryId: null,
+});
+
+onMounted(() => {
+    console.log(meta.value);
+    data.formData = new AlternativeContentForm({
+        renderer: meta.value.renderer,
+        mime: meta.value.mime,
     });
+    data.entryId = meta.value.id;
+    data.ready = true;
+});
+
+onUnmounted(() => {
+    data.ready = false;
+})
+
+const closeDialog = function () {
+    dialogStore.hideDialog(route);
 }
 </script>
 
 <script lang="ts">
-export const route = "/nav/new-pdf";
+export const route = '/nav/new-alternative-content';
 </script>

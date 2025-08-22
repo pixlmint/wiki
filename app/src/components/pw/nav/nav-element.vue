@@ -1,20 +1,20 @@
 <template>
     <div @click="triggerRenderDropdown">
         <template v-if="isFolder">
-            <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
+            <el-sub-menu class="pw-submenu" @click="console.log(this)" data-is-entry="false" :index="element.id">
                 <template #title>
                 <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id" :element-title="element.title">
                     <template #indicator>
                         <pm-icon v-if="isSubmenuOpen" icon="caret-down"></pm-icon>
                         <pm-icon v-else icon="caret-right"></pm-icon>
                     </template>
-                    <template #title>
-                        <span class="submenu-title">{{ element.title }}</span>
+                    <template #icons>
                         <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     </template>
                     <template #dropdown-options>
                         <el-dropdown-item @click="addPage"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
                         <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
+                        <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add Jupyter Notebook</el-dropdown-item>
                         <el-dropdown-item @click="addSubfolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
                         <el-dropdown-item @click="addBoard"><pm-icon package="brands" icon="trello"></pm-icon>Add Board</el-dropdown-item>
                         <el-dropdown-item @click="switchSecurity">
@@ -44,15 +44,13 @@
             </el-sub-menu>
         </template>
         <template v-else>
-            <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true" :index="element.id">
+            <el-menu-item :data-pw-entry-id="element.id" @click="console.log(this)" class="pw-menu-item" data-is-entry="true" :index="element.id">
                 <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
-                    <template #title>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="submenu-title">{{ element.title }}</span>
-                            <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
-                            <el-tag type="danger" v-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
-                            <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
-                        </div>
+                    <template #icons>
+                        <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
+                        <el-tag type="danger" v-else-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
+                        <el-tag v-else-if="element.kind === 'ipynb'"><img width="12" heigth="12" src="/assets/jupyter.svg"></el-tag>
+                        <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     </template>
                     <template #dropdown-options>
                         <el-dropdown-item @click="edit"><pm-icon icon="pen"></pm-icon>Edit</el-dropdown-item>
@@ -219,7 +217,28 @@ const addBoard = function () {
 }
 
 const addPdf = function () {
-    dialogStore.showDialog({route: '/nav/new-pdf', data: element.id});
+    dialogStore.showDialog({
+        route: '/nav/new-alternative-content',
+        data: {
+            id: element.id,
+            title: "New PDF",
+            mime: "application/pdf",
+            renderer: 'pdf'
+        }
+    });
+}
+
+const addJupyterNotebook = function () {
+    dialogStore.showDialog({
+        route: '/jupyter/modal',
+        data: {
+            id: element.id,
+            title: "New Notebook",
+            mime: "application/x-ipynb+json",
+            renderer: 'ipynb',
+            action: JupyterSetupAction.CreateNew,
+        }
+    });
 }
 
 const addSubfolder = function () {
@@ -236,6 +255,7 @@ const addSubfolder = function () {
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import { JupyterSetupAction } from "@/src/helpers/jupyter";
 
 export default defineComponent({
     name: 'PWNavElement',
@@ -271,9 +291,5 @@ li.el-sub-menu {
     .el-sub-menu__title > i.el-icon {
         display: none;
     }
-}
-
-.el-sub-menu__title * {
-    vertical-align: unset;
 }
 </style>
