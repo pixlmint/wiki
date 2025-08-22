@@ -271,8 +271,4 @@ li.el-sub-menu {
         display: none;
     }
 }
-
-.el-sub-menu__title * {
-    vertical-align: unset;
-}
 </style>

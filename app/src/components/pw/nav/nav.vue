@@ -333,3 +333,8 @@ const nav = computed(() => {
 }
 </style>
 
+<style lang="scss">
+.pw-submenu-title * {
+    vertical-align: unset;
+}
+</style>
