@@ -62,10 +62,11 @@ import { toRaw, computed } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import { useMainStore } from "@/src/stores/main";
-import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
+import { useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
 import { isMobile } from "@/src/helpers/mobile-detector";
 import { ElMessageBox } from "element-plus";
 import { navigate } from "@/src/helpers/navigator";
+import { FolderNavElement, Nav, NavElement, navFactory } from "@/src/helpers/nav";
 
 const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
@@ -91,16 +92,16 @@ const dialogStore = useDialogStore();
 const wikiStore = useWikiStore();
 const mainStore = useMainStore();
 const authStore = useAuthStore();
+const cmsStore = useCmsStore();
 
 // created
 if (isMobile()) {
     useMainStore().toggleLargeNavShowing(false);
 }
-useWikiStore().loadNav();
+cmsStore.loadNav(false, navFactory);
 
 // methods
 const openSubmenu = function (menuId: string) {
-    console.log(menuId);
     wikiStore.openedSubmenus.push(menuId);
 }
 
@@ -119,8 +120,8 @@ const addSubFolder = function () {
         confirmButtonText: 'Ok',
         cancelButtonText: 'Cancel',
     }).then(name => {
-        wikiStore.addFolder('/', name.value).then(() => {
-            wikiStore.loadNav();
+        cmsStore.addFolder('/', name.value).then(() => {
+            cmsStore.loadNav(false, navFactory);
         });
     })
 }
@@ -129,8 +130,8 @@ const addSubEntry = function () {
         confirmButtonText: 'Ok',
         cancelButtonText: 'Cancel',
     }).then(name => {
-        wikiStore.addEntry('/', name.value).then(() => {
-            wikiStore.loadNav();
+        cmsStore.addEntry('/', name.value).then(() => {
+            cmsStore.loadNav(false, navFactory);
         });
     })
 }
@@ -158,6 +159,10 @@ const navClickListener = function (event: Event) {
     if (id === undefined || id === null) {
         throw 'No ID found';
     }
+
+    const nav = cmsStore.nav! as Nav;
+    console.log(nav.findEntryById(id));
+
     navigate(id);
 }
 const login = function () {
@@ -188,11 +193,10 @@ const isLoggedIn = computed(() => {
     return useAuthStore().getToken !== null;
 });
 const nav = computed(() => {
-    const wikiStore = useWikiStore()
-    if (wikiStore.getNav === null) {
+    if (cmsStore.nav === null) {
         return { root: { children: [] } };
     }
-    return toRaw(wikiStore.getNav);
+    return cmsStore.nav;
 });
 
 </script>

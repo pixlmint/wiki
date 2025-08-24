@@ -1,5 +1,5 @@
 <template>
-    <el-menu-item :data-pw-entry-id="element.id" @click="console.log(this)" class="pw-menu-item" data-is-entry="true"
+    <el-menu-item :data-pw-entry-id="element.id" class="pw-menu-item" data-is-entry="true"
         :index="element.id">
         <pw-nav-entry-title :element-id="element.id" :should-display-dropdown="canEdit" :element-title="element.title">
             <template #icons>

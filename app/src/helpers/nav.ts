@@ -1,5 +1,15 @@
 import { ElMessageBox, ElNotification } from "element-plus";
-import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
+import {
+    useAuthStore,
+    useBackendStore,
+    useDialogStore,
+    INav,
+    INavElement,
+    IFolderNavElement,
+    useCmsStore,
+    cmsStoreConfig,
+    walkPath
+} from "pixlcms-wrapper";
 import { useBoardStore } from "../stores/board";
 import { useMainStore } from "../stores/main";
 import { useWikiStore } from "../stores/wiki";
@@ -43,11 +53,21 @@ interface NavResponseElement {
     kind: EntryKind,
 }
 
-class Nav {
+class Nav implements INav {
     declare root: FolderNavElement;
 
     constructor(root: FolderNavElement) {
         this.root = root;
+    }
+
+    findEntryById(id: string): NavElement | null {
+        for (let navEl of this.root.walkElements()) {
+            if (navEl.id === id) {
+                return navEl;
+            }
+        }
+
+        return null;
     }
 
     static create(nav: NavResponseElement) {
@@ -57,7 +77,11 @@ class Nav {
     }
 }
 
-abstract class NavElement {
+function navFactory(navResponse: NavResponseElement) {
+    return Nav.create(navResponse);
+}
+
+abstract class NavElement implements INavElement {
     declare isPublic: boolean;
     declare kind: EntryKind;
     declare id: string;
@@ -91,6 +115,22 @@ abstract class NavElement {
         }
     }
 
+    *walkElements() {
+        function* recursiveWalk(el: NavElement): Generator<NavElement, any, unknown> {
+            yield el;
+            if ('getChildren' in el && typeof el.getChildren === 'function') {
+                const children: NavElement[] = el.getChildren();
+                for (let i = 0; i < children.length; i++) {
+                    yield * recursiveWalk(children[i]);
+                }
+            }
+        }
+
+        yield * recursiveWalk(this);
+    }
+
+    abstract delete: () => void;
+
     edit = () => {
         const currentRoute = location.pathname;
         navigate('/admin/edit?p=' + this.id);
@@ -123,7 +163,7 @@ abstract class NavElement {
     }
 }
 
-class FolderNavElement extends NavElement {
+class FolderNavElement extends NavElement implements IFolderNavElement {
     declare children: NavElement[];
 
     constructor(id: string, title: string, kind: EntryKind, isPublic: boolean = true, children: NavElement[] = []) {
@@ -131,7 +171,27 @@ class FolderNavElement extends NavElement {
         this.children = children;
     }
 
-    deleteFolder = () => {
+    getChildren = () => {
+        return this.children;
+    }
+
+    getChild = (id: string): null | NavElement => {
+        for (let i = 0; i < this.children.length; i++) {
+            const child = this.children[i];
+            if (child.id === id) {
+                return child;
+            } else if (child instanceof FolderNavElement) {
+                const childMatch = child.getChild(id);
+                if (childMatch !== null) {
+                    return childMatch;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    delete = () => {
         confirmDelete('Are you sure you want to delete this folder and everything within it?', this.id, false);
     }
 
@@ -227,28 +287,89 @@ const confirmDelete = function(text: string, entryId: string, isEntry: boolean =
 }
 
 class BasicEntryNavElement extends NavElement {
-    deletePage = () => {
+    delete = () => {
         confirmDelete('Are you sure you want to delete this page?', this.id);
     }
 }
 
 class BoardNavElement extends NavElement {
-    deletePage = () => {
+    delete = () => {
         confirmDelete('Are you sure you want to delete this board?', this.id);
     }
 }
 
 class AlternativeContentNavElement extends NavElement {
-    deletePage = () => {
+    delete = () => {
         confirmDelete(`Are you sure you want to delete this ${this.kind}?`, this.id);
     }
 }
 
 class LinkNavElement extends NavElement {
-    deletePage = () => {
+    declare linkRoot: FolderNavElement;
+
+    getChildren = () => {
+        return this.linkRoot.children;
+    }
+
+    loadRemoteNav = async () => {
+        const wikiStore = useWikiStore();
+        const backendStore = useBackendStore();
+        wikiStore.fetchEntry(this.id).then(() => {
+            const domain = wikiStore.safeCurrentEntry.meta.domain;
+            const linkedCmsStore = backendStore.getStoreForBackend(domain, 'cmsStore', cmsStoreConfig);
+            backendStore.initBackend(domain).then(response => {
+                linkedCmsStore.loadNav(true, navFactory).then(() => {
+                    const root = linkedCmsStore.nav!.root as FolderNavElement;
+                    function recursivePrependId(el: INavElement, prefix: string) {
+                        if ('children' in el && Array.isArray(el.children)) {
+                            for (let i = 0; i < el.children.length; i++) {
+                                recursivePrependId(el.children[i], prefix);
+                            }
+                        }
+                        el.id = prefix + el.id;
+                    }
+                    recursivePrependId(root, this.id);
+                    this.linkRoot = root;
+                });
+            });
+        });
+    }
+
+    delete = () => {
         confirmDelete(`Are you sure you want to delete this link?`, this.id);
+    }
+
+    addPage = () => this.linkRoot.addPage();
+
+    addPdf = () => this.linkRoot.addPdf();
+
+    addJupyterNotebook = () => this.linkRoot.addJupyterNotebook();
+
+    addSubfolder = () => this.linkRoot.addSubfolder();
+
+    addBoard = () => this.linkRoot.addBoard();
+
+    addLink = () => {
+        throw "Links cannot contain more links";
     }
 }
 
-export { init, Nav, NavElement, FolderNavElement, BasicEntryNavElement }
+const isParentLink = function (el: NavElement, nav: Nav): false | LinkNavElement {
+    const child = walkPath<LinkNavElement>(el.id, function(parent: string) {
+        const child = nav.findEntryById(parent);
+        if (child !== null && child.kind === 'link') {
+            return child;
+        } else {
+            return false;
+        }
+    })
+
+    if (typeof child !== 'undefined') {
+        return child;
+    } else {
+        return false;
+    }
+}
+
+export { init, Nav, NavElement, FolderNavElement, BasicEntryNavElement, LinkNavElement, navFactory, isParentLink }
 

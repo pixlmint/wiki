@@ -5,25 +5,27 @@
         <pw-nav></pw-nav>
         <WikiEntry v-if="mainContentLoaded && !isEditing" :key="currentPath"></WikiEntry>
         <Editor v-else-if="mainContentLoaded && isEditing"></Editor>
-        <Debug v-if="isDebugEnabled"/>
-        <Modals :dialog-components="dialogs"/>
+        <Debug v-if="isDebugEnabled" />
+        <Modals :dialog-components="dialogs" />
     </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useMainStore} from "@/src/stores/main";
-import {configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/src/stores/wiki";
-import {useUserSettings} from "@/src/stores/user-settings";
-import {AxiosResponse} from "axios";
-import {ElNotification} from "element-plus";
-import {dialogs} from '@/src/dialogs';
+import { defineComponent } from "vue";
+import { useMainStore } from "@/src/stores/main";
+import { configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore, useCmsStore, useBackendStore, cmsStoreConfig } from "pixlcms-wrapper";
+import { useWikiStore } from "@/src/stores/wiki";
+import { useUserSettings } from "@/src/stores/user-settings";
+import { AxiosResponse } from "axios";
+import { ElNotification } from "element-plus";
+import { dialogs } from '@/src/dialogs';
 import Debug from "@/src/components/debug/debug.vue";
 import WikiEntry from "@/src/components/home/WikiEntry.vue";
-import {isMobile} from "@/src/helpers/mobile-detector";
-import {navigate} from "@/src/helpers/navigator";
+import { isMobile } from "@/src/helpers/mobile-detector";
+import { navigate } from "@/src/helpers/navigator";
 import Editor from "@/src/components/admin/Editor/Editor.vue";
+import { isParentLink, Nav } from "./src/helpers/nav";
+import { link } from "d3";
 
 export default defineComponent({
     name: "App",
@@ -38,6 +40,7 @@ export default defineComponent({
             mainStore: useMainStore(),
             wikiStore: useWikiStore(),
             dialogStore: useDialogStore(),
+            cmsStore: useCmsStore(),
             mainContentLoaded: false,
             dialogs: dialogs(),
             isEditing: false,
@@ -51,7 +54,8 @@ export default defineComponent({
             return this.mainStore.meta.debugEnabled;
         },
         currentPath() {
-            return this.wikiStore.safeCurrentEntry.id + this.wikiStore.safeCurrentEntry.meta.dateUpdated;
+            // return this.wikiStore.safeCurrentEntry.id + this.wikiStore.safeCurrentEntry.meta.dateUpdated;
+            return '';
         },
     },
     created() {
@@ -84,7 +88,7 @@ export default defineComponent({
             this.loadMainContent();
         },
         loadMainContent() {
-            const path = location.pathname;
+            let path = location.pathname;
 
             const regex = /\/?admin\/.*/gm;
             const match = regex.exec(path);
@@ -96,20 +100,57 @@ export default defineComponent({
             } else {
                 this.isEditing = false;
             }
+            let entryCmsStore = this.cmsStore;
 
-            useWikiStore().fetchEntry(path).then(() => {
+            if (this.cmsStore.nav !== null) {
+                const nav = this.cmsStore.nav! as Nav;
+                const el = nav.findEntryById(path);
+                if (el !== null) {
+                    const linkParent = isParentLink(el, nav);
+
+                    if (linkParent !== false) {
+                        this.cmsStore.fetchEntry(linkParent.id).then(() => {
+                            const domain = this.cmsStore.safeCurrentEntry.meta.domain as string;
+                            entryCmsStore = useBackendStore().getStoreForBackend(domain, 'cmsStore', cmsStoreConfig);
+                            path = path.slice(this.cmsStore.safeCurrentEntry.id.length);
+                        });
+                    }
+                }
+            }
+            entryCmsStore.fetchEntry(path).then(() => {
+                const mainStore = useMainStore();
                 this.mainContentLoaded = true;
                 if (isMobile()) {
-                    useMainStore().toggleLargeNavShowing(false);
+                    mainStore.toggleLargeNavShowing(false);
                 }
-                useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
+                mainStore.setTitle(entryCmsStore.safeCurrentEntry.meta.title);
             })
+            // if (el !== null && isParentLink(el, nav)) {
+
+            // } else {
+            //     this.cmsStore.fetchEntry(path).then(success => {
+            //         const mainStore = useMainStore();
+            //         this.mainContentLoaded = true;
+            //         if (isMobile()) {
+            //             mainStore.toggleLargeNavShowing(false);
+            //         }
+            //         mainStore.setTitle(this.cmsStore.safeCurrentEntry.meta.title);
+            //     })
+            // }
+
+            /*return useWikiStore().fetchEntry(path).then(success => {
+                if (success) {
+                    this.mainContentLoaded = true;
+                    if (isMobile()) {
+                        useMainStore().toggleLargeNavShowing(false);
+                    }
+                    useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
+                }
+            });*/
         },
         init() {
-            const authStore = useAuthStore();
             const mainStore = useMainStore();
-            const token = authStore.getToken;
-            mainStore.init(token).then((response: AxiosResponse) => {
+            mainStore.init().then((response: AxiosResponse) => {
                 if (response.data.is_token_valid === 'token_invalid') {
                     this.dialogStore.showDialog('/auth/login');
                     ElNotification({

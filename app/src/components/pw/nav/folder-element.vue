@@ -1,6 +1,6 @@
 <template>
     <div @click="triggerRenderDropdown">
-        <el-sub-menu class="pw-submenu" @click="console.log(this)" data-is-entry="false" :index="element.id">
+        <el-sub-menu class="pw-submenu" data-is-entry="false" :index="element.id">
             <template #title>
                 <pw-nav-entry-title :should-display-dropdown="canEdit" :element-id="element.id"
                     :element-title="element.title">
@@ -43,8 +43,8 @@
                     </template>
                 </pw-nav-entry-title>
             </template>
-            <template v-if="data.hoveredOverSubmenu">
-                <template v-for="(childElement, myIndex) in element.children" :key="myIndex">
+            <template v-if="data.hoveredOverSubmenu && data.childrenLoaded">
+                <template v-for="(childElement, myIndex) in element.getChildren()" :key="myIndex">
                     <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
                 </template>
             </template>
@@ -53,18 +53,19 @@
 </template>
 
 <script lang="ts" setup>
-import { FolderNavElement } from "@/src/helpers/nav";
-import { computed, reactive } from "vue";
+import { FolderNavElement, LinkNavElement } from "@/src/helpers/nav";
+import { computed, onMounted, reactive, watch } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 
-const {element, canEdit} = defineProps<{ element: FolderNavElement, canEdit: boolean }>();
+const { element, canEdit } = defineProps<{ element: FolderNavElement | LinkNavElement, canEdit: boolean }>();
 
 const wikiStore = useWikiStore();
 
 const data = reactive({
     hoveredOverSubmenu: false,
     submenuOpened: false,
+    childrenLoaded: false,
 });
 
 const triggerRenderDropdown = function () {
@@ -74,6 +75,22 @@ const triggerRenderDropdown = function () {
 
 const isSubmenuOpen = computed(() => {
     return wikiStore.getOpenedSubmenus.indexOf(element.id) !== -1;
+});
+
+if (element instanceof LinkNavElement) {
+    watch(isSubmenuOpen, (val) => {
+        if (val && !data.childrenLoaded) {
+            element.loadRemoteNav().then(() => {
+                data.childrenLoaded = true;
+            });
+        }
+    });
+}
+
+onMounted(() => {
+    if (element instanceof FolderNavElement) {
+        data.childrenLoaded = true;
+    }
 });
 
 const securitySwitchText = computed(() => {

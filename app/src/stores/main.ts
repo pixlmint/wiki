@@ -1,6 +1,6 @@
 import {AxiosResponse} from 'axios';
 import {defineStore} from "pinia";
-import {useAuthStore, buildRequest, send} from "pixlcms-wrapper";
+import {useAuthStore, buildRequest, send, useBackendStore} from "pixlcms-wrapper";
 
 interface Meta {
     title: string,
@@ -41,13 +41,10 @@ export const useMainStore = defineStore('main', {
         getMeta: state => state.meta,
     },
     actions: {
-        init(token: string | null) {
-            const request = buildRequest('/api/init', {token: token}, 'POST');
-            // @ts-ignore
-            return send(request).then((response: AxiosResponse) => {
-                if (response.data.is_token_valid !== 'token_valid') {
-                    useAuthStore().logout();
-                }
+        async init() {
+            const backendStore = useBackendStore();
+    
+            return backendStore.initBackend().then(response => {
                 const data = response.data;
                 data.pluginVersion = data.wikiVersion;
                 data.cmsVersion = data.version;
@@ -55,6 +52,13 @@ export const useMainStore = defineStore('main', {
 
                 return response;
             });
+            // const request = buildRequest('/api/init', {token: token}, 'POST');
+            // // @ts-ignore
+            // return send(request).then((response: AxiosResponse) => {
+            //     if (response.data.is_token_valid !== 'token_valid') {
+            //         useAuthStore().logout();
+            //     }
+            // });
         },
         setHasUnsavedChanges(hasUnsavedChanges: boolean) {
             this.editingUnsavedChanges = hasUnsavedChanges;

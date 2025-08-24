@@ -6,7 +6,7 @@
 import { computed } from "vue";
 import { useAuthStore } from "pixlcms-wrapper";
 import FolderElement from "@/src/components/pw/nav/folder-element.vue";
-import { FolderNavElement, NavElement } from "@/src/helpers/nav";
+import { FolderNavElement, LinkNavElement, NavElement } from "@/src/helpers/nav";
 import EntryElement from "@/src/components/pw/nav/entry-element.vue";
 
 const { element } = defineProps<{
@@ -16,7 +16,7 @@ const { element } = defineProps<{
 const authStore = useAuthStore();
 
 const getComponent = function () {
-    if (element instanceof FolderNavElement) {
+    if (element instanceof FolderNavElement || element instanceof LinkNavElement) {
         return FolderElement;
     }
     return EntryElement;
