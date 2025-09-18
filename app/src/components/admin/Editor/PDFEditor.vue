@@ -1,13 +1,8 @@
 <template>
     <div>
         <p>Current PDF: {{ pdfPath }}</p>
-        <alternative-content-upload-form
-                v-if="data.ready"
-                :isInitialUpload="false"
-                :entryId="entry.id" ,
-                :formData="data.formData"
-                @afterSave="afterSave"
-            >
+        <alternative-content-upload-form v-if="data.ready" :isInitialUpload="false" :entryId="entry.id" ,
+            :formData="data.formData" @afterSave="afterSave">
         </alternative-content-upload-form>
     </div>
 </template>
@@ -21,7 +16,7 @@ import { ElNotification } from "element-plus";
 
 
 const wikiStore = useWikiStore();
-const entry = computed(() => wikiStore.safeCurrentEntry);
+const entry = computed(() => wikiStore.currentEntry);
 const pdfPath = computed(() => entry.value.meta.alternative_content);
 
 const data = reactive<{ formData: AlternativeContentForm | null, ready: boolean }>({

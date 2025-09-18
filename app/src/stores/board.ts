@@ -1,21 +1,12 @@
-import {defineStore} from "pinia";
-import {BoardResponse, CardLabel} from "@/src/contracts/Kanban";
-import {buildRequest, send} from "pixlcms-wrapper";
-import {useWikiStore} from '@/src/stores/wiki';
-const {DateTime} = require ('luxon');
+import { defineStore } from "pinia";
+import { BoardResponse, CardLabel } from "@/src/contracts/Kanban";
+import { useWikiStore } from '@/src/stores/wiki';
+import wikiServiceManager from "../services/wikiExtension";
+const { DateTime } = require('luxon');
 
 interface State {
     loadedBoard: BoardResponse | null
     lastRemovedItem: { listId: string, itemId: string } | null,
-}
-
-let wikiStore: any = null;
-
-function getWikiStore() {
-    if (wikiStore === null) {
-        wikiStore = useWikiStore();
-    }
-    return wikiStore;
 }
 
 export const useBoardStore = defineStore('boardStore', {
@@ -32,26 +23,21 @@ export const useBoardStore = defineStore('boardStore', {
         },
     },
     actions: {
+        service: () => wikiServiceManager.defaultInstance.kanban,
         async loadBoard(boardId: string) {
-            const request = buildRequest('/api/board/load', {board: boardId});
-            let response = await send(request);
-            this.loadedBoard = response.data.board;
-            return response;
+            return this.service().loadBoard(boardId).then(response => {
+                this.loadedBoard = response.data.board;
+                return response;
+            });
         },
         createBoard(parentFolder: string, boardName: string) {
-            const request = buildRequest('/api/board/create', {parentPage: parentFolder, name: boardName}, 'POST');
-            return send(request);
+            return this.service().createBoard(parentFolder, boardName);
         },
-        async createListItem(listId: string, name: String) {
-            const request = buildRequest('/api/board/list/card/create', {listId: listId, name: name}, 'POST');
-            return await send(request);
+        async createListItem(listId: string, name: string) {
+            return this.service().createListItem(listId, name);
         },
         async moveCard(targetListUid: string, cardUid: string) {
-            const request = buildRequest('/api/board/move-card', {
-                targetListUid: targetListUid,
-                cardUid: cardUid
-            }, 'PUT');
-            return await send(request);
+            return this.service().moveCard(targetListUid, cardUid);
         },
         async updateBoardMeta(newMeta: object) {
             const now = DateTime.now();
@@ -64,17 +50,16 @@ export const useBoardStore = defineStore('boardStore', {
 
             // @ts-ignore
             this.loadedBoard.meta = newMeta;
-            const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
-            return send(request);
+
+            return this.service().updateBoardMeta(data);
         },
         async createList(boardId: string, listName: string) {
             if (this.loadedBoard === null) {
                 throw 'no board';
             }
-            const request = buildRequest('/api/board/list/create', {boardId: boardId, name: listName}, 'POST');
-            let response = await send(request);
-            await this.loadBoard(boardId);
-            return response;
+            return this.service().createList(boardId, listName).then(() => {
+                return this.loadBoard(boardId);
+            });
         },
         refreshBoard() {
             this.loadBoard(this.safeCurrentBoard.id);

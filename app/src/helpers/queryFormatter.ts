@@ -1,4 +1,4 @@
-function queryFormatter(obj: any, prefix?: any): string {
+function queryFormatter(obj: Record<string | number, any>, prefix?: string): string {
   var str = [],
     p;
   for (p in obj) {

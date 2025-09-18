@@ -8,6 +8,7 @@ export interface WikiEntry {
     hidden: boolean,
     meta: EntryMeta,
     file: string,
+    domain?: string,
 }
 
 export interface EntryMeta {

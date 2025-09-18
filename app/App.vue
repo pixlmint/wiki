@@ -4,169 +4,177 @@
         <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>
         <WikiEntry v-if="mainContentLoaded && !isEditing" :key="currentPath"></WikiEntry>
-        <Editor v-else-if="mainContentLoaded && isEditing"></Editor>
+        <Editor v-else-if="isEditing"></Editor>
+        <div v-else>Unable to determine state</div>
         <Debug v-if="isDebugEnabled" />
         <Modals :dialog-components="dialogs" />
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, onUnmounted, ref } from "vue";
 import { useMainStore } from "@/src/stores/main";
 import { configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore, useCmsStore, useBackendStore, cmsStoreConfig } from "pixlcms-wrapper";
 import { useWikiStore } from "@/src/stores/wiki";
 import { useUserSettings } from "@/src/stores/user-settings";
 import { AxiosResponse } from "axios";
 import { ElNotification } from "element-plus";
-import { dialogs } from '@/src/dialogs';
 import Debug from "@/src/components/debug/debug.vue";
 import WikiEntry from "@/src/components/home/WikiEntry.vue";
-import { isMobile } from "@/src/helpers/mobile-detector";
-import { navigate } from "@/src/helpers/navigator";
+import { navigate } from "@/src/events";
 import Editor from "@/src/components/admin/Editor/Editor.vue";
-import { isParentLink, Nav } from "./src/helpers/nav";
-import { link } from "d3";
+import { dialogs as createDialogs } from '@/src/dialogs';
+import * as feService from "./src/services/feService";
 
-export default defineComponent({
-    name: "App",
-    components: {
-        Editor,
-        WikiEntry,
-        Debug,
-        Modals,
-    },
-    data: () => {
-        return {
-            mainStore: useMainStore(),
-            wikiStore: useWikiStore(),
-            dialogStore: useDialogStore(),
-            cmsStore: useCmsStore(),
-            mainContentLoaded: false,
-            dialogs: dialogs(),
-            isEditing: false,
+const mainStore = useMainStore();
+const wikiStore = useWikiStore();
+const dialogStore = useDialogStore();
+const authStore = useAuthStore();
+const userSettings = useUserSettings();
+const dialogs = createDialogs();
+
+const isEditing = computed(() => {
+    return wikiStore.isEditorActive;
+});
+
+const mainContentLoaded = computed(() => {
+    return wikiStore.currentEntry !== null;
+});
+
+const searchShowing = computed(() => {
+    return mainStore.isSearchShowing;
+});
+
+const isDebugEnabled = computed(() => {
+    return mainStore.meta.debugEnabled;
+});
+
+const currentPath = computed(() => {
+    return wikiStore.currentEntry!.id + wikiStore.currentEntry!.meta.dateUpdated;
+});
+
+const created = function () {
+    authStore.loadToken();
+    configureStores(useLoadingStore());
+    userSettings.loadUserSettings();
+    userSettings.setCurrentTheme();
+    mainStore.init().then((response: AxiosResponse) => {
+        if (response.data.is_token_valid === 'token_invalid') {
+            dialogStore.showDialog('/auth/login');
+            ElNotification({
+                title: 'Error',
+                message: 'Your token is invalid, please login again',
+                type: 'warning',
+            });
         }
-    },
-    computed: {
-        searchShowing() {
-            return useMainStore().isSearchShowing;
-        },
-        isDebugEnabled() {
-            return this.mainStore.meta.debugEnabled;
-        },
-        currentPath() {
-            // return this.wikiStore.safeCurrentEntry.id + this.wikiStore.safeCurrentEntry.meta.dateUpdated;
-            return '';
-        },
-    },
-    created() {
-        const authStore = useAuthStore();
-        authStore.loadToken();
-        configureStores(authStore, useLoadingStore());
-        const settings = useUserSettings().loadUserSettings();
-        useUserSettings().setCurrentTheme();
-        this.init();
-        this.loadMainContent();
-        window.addEventListener('keydown', this.keyListener);
-        window.addEventListener('popstate', this.popStateHandler);
-        window.addEventListener('pushstate', this.loadMainContent);
-    },
-    methods: {
-        keyListener(event: Event) {
-            if (event.ctrlKey && event.key === 'k') {
-                event.preventDefault();
-                useMainStore().isSearchShowing = true;
-                setTimeout(() => {
-                    document.getElementById('search-input').focus();
-                }, 200);
-            }
-            if (event.key === 'Escape') {
-                useMainStore().isSearchShowing = false;
-            }
-        },
-        popStateHandler(event: PopStateEvent) {
-            navigate(event.state.url);
-            this.loadMainContent();
-        },
-        loadMainContent() {
-            let path = location.pathname;
+        mainStore.setTitle(mainStore.getMeta.title);
+        if (!mainStore.meta.adminCreated) {
+            dialogStore.showDialog('/auth/create-admin');
+        }
+    })
+    loadMainContent();
 
-            const regex = /\/?admin\/.*/gm;
-            const match = regex.exec(path);
+    window.addEventListener('keydown', keyListener);
+    window.addEventListener('popstate', popStateHandler);
+    window.addEventListener('pushstate', loadMainContent);
+}
 
-            if (match !== null && match.length > 0) {
-                this.mainContentLoaded = true;
-                this.isEditing = true;
-                return;
-            } else {
-                this.isEditing = false;
-            }
-            let entryCmsStore = this.cmsStore;
-
-            if (this.cmsStore.nav !== null) {
-                const nav = this.cmsStore.nav! as Nav;
-                const el = nav.findEntryById(path);
-                if (el !== null) {
-                    const linkParent = isParentLink(el, nav);
-
-                    if (linkParent !== false) {
-                        this.cmsStore.fetchEntry(linkParent.id).then(() => {
-                            const domain = this.cmsStore.safeCurrentEntry.meta.domain as string;
-                            entryCmsStore = useBackendStore().getStoreForBackend(domain, 'cmsStore', cmsStoreConfig);
-                            path = path.slice(this.cmsStore.safeCurrentEntry.id.length);
-                        });
-                    }
-                }
-            }
-            entryCmsStore.fetchEntry(path).then(() => {
-                const mainStore = useMainStore();
-                this.mainContentLoaded = true;
-                if (isMobile()) {
-                    mainStore.toggleLargeNavShowing(false);
-                }
-                mainStore.setTitle(entryCmsStore.safeCurrentEntry.meta.title);
-            })
-            // if (el !== null && isParentLink(el, nav)) {
-
-            // } else {
-            //     this.cmsStore.fetchEntry(path).then(success => {
-            //         const mainStore = useMainStore();
-            //         this.mainContentLoaded = true;
-            //         if (isMobile()) {
-            //             mainStore.toggleLargeNavShowing(false);
-            //         }
-            //         mainStore.setTitle(this.cmsStore.safeCurrentEntry.meta.title);
-            //     })
-            // }
-
-            /*return useWikiStore().fetchEntry(path).then(success => {
-                if (success) {
-                    this.mainContentLoaded = true;
-                    if (isMobile()) {
-                        useMainStore().toggleLargeNavShowing(false);
-                    }
-                    useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
-                }
-            });*/
-        },
-        init() {
-            const mainStore = useMainStore();
-            mainStore.init().then((response: AxiosResponse) => {
-                if (response.data.is_token_valid === 'token_invalid') {
-                    this.dialogStore.showDialog('/auth/login');
-                    ElNotification({
-                        title: 'Error',
-                        message: 'Your token is invalid, please login again',
-                        type: 'warning',
-                    });
-                }
-                this.mainStore.setTitle(this.mainStore.getMeta.title);
-                if (!this.mainStore.meta.adminCreated) {
-                    this.dialogStore.showDialog('/auth/create-admin');
-                }
-            })
-        },
-    },
+onUnmounted(() => {
+    window.removeEventListener('keydown', keyListener);
+    window.removeEventListener('popstate', popStateHandler);
+    window.removeEventListener('pushstate', loadMainContent);
 })
+
+const keyListener = function (event: Event) {
+    if (event.ctrlKey && event.key === 'k') {
+        event.preventDefault();
+        useMainStore().isSearchShowing = true;
+        setTimeout(() => {
+            document.getElementById('search-input').focus();
+        }, 200);
+    }
+    if (event.key === 'Escape') {
+        mainStore.isSearchShowing = false;
+    }
+}
+const popStateHandler = function (event: PopStateEvent) {
+    console.log(event);
+    navigate(event.state.url);
+    loadMainContent();
+}
+
+
+const loadMainContent = function () {
+    let path = location.pathname;
+
+    // const regex = /\/?admin\/.*/gm;
+    // const match = regex.exec(path);
+
+    if (path === '/admin/edit') {
+        wikiStore.isEditorActive = true;
+        return;
+    } else {
+        wikiStore.isEditorActive = false;
+    }
+
+    feService.load(location.pathname + location.search).then(entry => {
+        wikiStore.currentEntry = entry;
+    });
+
+    // let entryCmsStore = this.cmsStore;
+    // wikiStore.fetchEntry(path).then(() => {
+    //     mainContentLoaded.value = true;
+    // });
+
+    /*if (this.cmsStore.nav !== null) {
+        const nav = this.cmsStore.nav! as Nav;
+        const el = nav.findEntryById(path);
+        if (el !== null) {
+            const linkParent = isParentLink(el, nav);
+
+            if (linkParent !== false) {
+                this.cmsStore.fetchEntry(linkParent.id).then(() => {
+                    const domain = this.cmsStore.safeCurrentEntry.meta.domain as string;
+                    entryCmsStore = useBackendStore().getStoreForBackend(domain, 'cmsStore', cmsStoreConfig);
+                    path = path.slice(this.cmsStore.safeCurrentEntry.id.length);
+                });
+            }
+        }
+    }*/
+    /*entryCmsStore.fetchEntry(path).then(() => {
+        const mainStore = useMainStore();
+        this.mainContentLoaded = true;
+        if (isMobile()) {
+            mainStore.toggleLargeNavShowing(false);
+        }
+        mainStore.setTitle(entryCmsStore.safeCurrentEntry.meta.title);
+    })*/
+    // if (el !== null && isParentLink(el, nav)) {
+
+    // } else {
+    //     this.cmsStore.fetchEntry(path).then(success => {
+    //         const mainStore = useMainStore();
+    //         this.mainContentLoaded = true;
+    //         if (isMobile()) {
+    //             mainStore.toggleLargeNavShowing(false);
+    //         }
+    //         mainStore.setTitle(this.cmsStore.safeCurrentEntry.meta.title);
+    //     })
+    // }
+
+    /*return useWikiStore().fetchEntry(path).then(success => {
+        if (success) {
+            this.mainContentLoaded = true;
+            if (isMobile()) {
+                useMainStore().toggleLargeNavShowing(false);
+            }
+            useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
+        }
+    });*/
+
+}
+
+created()
 </script>
 
 <style lang="scss">

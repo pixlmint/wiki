@@ -1,5 +1,5 @@
 <template>
-    <component v-bind:is="getComponent()" :element="element" :canEdit="canEdit" />
+    <component :data-pw-entry-id="element.id" v-bind:is="getComponent()" :element="element" :canEdit="canEdit" />
 </template>
 
 <script lang="ts" setup>

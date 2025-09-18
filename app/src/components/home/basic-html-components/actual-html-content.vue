@@ -6,6 +6,7 @@ import Highlighting from "@/src/components/pw/highlighting.vue";
 import BasicLink from "@/src/components/home/basic-html-components/basic-link.vue";
 import Table from "@/src/components/home/basic-html-components/table.vue";
 import Heading from "@/src/components/home/basic-html-components/heading.vue";
+import BasicImage from "@/src/components/home/basic-html-components/basic-image.vue";
 
 export default defineComponent({
     props: {
@@ -51,6 +52,9 @@ export default defineComponent({
                 if (tagName === 'table') {
                     // @ts-ignore
                     return h(Table, { table: node.outerHTML });
+                }
+                if (tagName === 'img') {
+                    return h(BasicImage, { el: node });
                 }
                 if (headingRegex.test(tagName)) {
                     // @ts-ignore

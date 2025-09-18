@@ -1,7 +1,7 @@
 <template>
     <view-page>
         <template #heading>
-            <entry-heading :display-view-markdown-button="false" :display-media-buttons="false">
+            <entry-heading :dropdownActions="PDF_ENTRY_ACTIONS">
                 <template #title-extras>
                     <el-tag type="danger"><pm-icon icon="file-pdf"></pm-icon></el-tag>
                 </template>
@@ -22,6 +22,7 @@
 import ViewPage from "@/src/components/pw/view-page.vue";
 import EntryHeading from "@/src/components/home/entry-heading.vue";
 import { VuePDF, usePDF } from "@tato30/vue-pdf";
+import { PDF_ENTRY_ACTIONS } from "@/src/helpers/entry-heading-dropdown-items";
 
 
 const props = defineProps(['pdfPath']);

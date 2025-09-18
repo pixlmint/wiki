@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
-import {navigate} from "@/src/helpers/navigator";
+import { navigate } from "@/src/events";
 
 const props = defineProps({
     attrs: {

@@ -32,6 +32,7 @@ import {
 import {
     faTrello, faMarkdown
 } from "@fortawesome/free-brands-svg-icons";
+import * as feService from "./src/services/feService";
 
 const pinia = createPinia();
 
@@ -42,6 +43,7 @@ app.use(ElementPlus)
 app.use(VueDiff)
 app.use(main, {pinia});
 app.use(init, { pinia });
+app.use(feService, { pinia });
 
 app.component('pw-nav', PWNav);
 app.component('pw-loading', PWLoading);

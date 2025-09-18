@@ -15,3 +15,4 @@ export class PushStateEvent extends Event {
         this.newUrl = newUrl;
     }
 }
+

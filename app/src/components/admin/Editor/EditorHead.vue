@@ -21,7 +21,8 @@ import { computed, reactive } from 'vue'
 import { useWikiStore } from '@/src/stores/wiki';
 import { useMainStore } from "@/src/stores/main";
 import { ElMessageBox } from "element-plus";
-import { navigate } from "@/src/helpers/navigator";
+import { navigate } from "@/src/events";
+import * as feService from "@/src/services/feService";
 
 const emit = defineEmits(["editorClose"]);
 
@@ -70,17 +71,16 @@ const checkGoHome = function () {
             cancelButtonText: 'Cancel',
             confirmButtonText: 'Proceed'
         }).then(() => {
-            wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
-            const id = wikiStore.safeCurrentEntry.id;
+            // wikiStore.fetchEntry(wikiStore.currentEntry.id);
+            // const id = wikiStore.currentEntry.id;
             emit('editorClose');
-            navigate(id);
+            feService.view(wikiStore.currentEntry!);
+            // navigate(id);
         }).catch(() => {
         })
     } else {
-        wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
-        const id = wikiStore.safeCurrentEntry.id;
         emit('editorClose');
-        navigate(id);
+        feService.view(wikiStore.currentEntry!);
     }
 }
 </script>

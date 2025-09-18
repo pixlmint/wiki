@@ -12,6 +12,7 @@
         <JupyterContent :content="content" />
     </template>
     <template v-else>
+        <el-button style="z-index: 100; position: absolute; top: 20px; left: 100px;" @click="showLastChanged">Show last changed</el-button>
         <BasicHtmlEntry :content="content"></BasicHtmlEntry>
     </template>
 </template>
@@ -47,27 +48,29 @@ export default defineComponent({
     computed: {
         content() {
             window.setTimeout(() => {
-                MathJax.typeset();
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typeset();
+                }
             }, 50);
-            return this.wikiStore.safeCurrentEntry.content;
+            return this.wikiStore.currentEntry!.content;
         },
         isPdfContent() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!('renderer' in this.wikiStore.currentEntry!.meta)) {
                 return false;
             }
-            return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return 'pdf' === this.wikiStore.currentEntry!.meta.renderer;
         },
         isJupyterNotebook() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!('renderer' in this.wikiStore.currentEntry!.meta)) {
                 return false;
             }
-            return 'ipynb' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return 'ipynb' === this.wikiStore.currentEntry!.meta.renderer;
         },
         isBoard() {
-            return 'board' === this.wikiStore.safeCurrentEntry.meta.kind;
+            return 'board' === this.wikiStore.currentEntry!.meta.kind;
         },
         isTable() {
-            const content = this.wikiStore.safeCurrentEntry;
+            const content = this.wikiStore.currentEntry!;
             const html = document.createElement('html');
             html.innerHTML = content.content;
             const body = html.children[1];
@@ -75,7 +78,7 @@ export default defineComponent({
             return body.childNodes.length === 1 && body.childNodes[0].nodeName === 'TABLE';
         },
         entryId() {
-            return this.wikiStore.safeCurrentEntry.id;
+            return this.wikiStore.currentEntry!.id;
         },
         pdfPath() {
             const base = '/api/entry/load-pdf?';
@@ -83,6 +86,13 @@ export default defineComponent({
             return base + queryFormatter(data);
         },
     },
+    methods: {
+        showLastChanged() {
+            this.wikiStore.fetchLastChanged(this.wikiStore.currentEntry.id).then(lastChanged => {
+                console.log(lastChanged);
+            });
+        }
+    }
 })
 </script>
 

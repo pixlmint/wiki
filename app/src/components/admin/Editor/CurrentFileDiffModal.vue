@@ -1,7 +1,7 @@
 <template>
     <pm-dialog :fullscreen="true" :route="route">
         <diff-editor @submit-merge="submitMerge" :modified-text="modifiedText"
-                     :original-text="originalText"></diff-editor>
+            :original-text="originalText"></diff-editor>
     </pm-dialog>
 </template>
 
@@ -16,9 +16,9 @@ const submitMerge = (merged: string) => {
 </script>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useDialogStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/src/stores/wiki";
+import { defineComponent } from "vue";
+import { useDialogStore } from "pixlcms-wrapper";
+import { useWikiStore } from "@/src/stores/wiki";
 import DiffEditor from "@/src/components/pw/diff-editor.vue";
 
 import 'diff2html/bundles/css/diff2html.min.css';
@@ -27,7 +27,7 @@ const route = "/diff";
 
 export default defineComponent({
     name: "CurrentFileDiffModal",
-    components: {DiffEditor},
+    components: { DiffEditor },
     data() {
         return {
             dialogStore: useDialogStore(),
@@ -38,13 +38,13 @@ export default defineComponent({
         }
     },
     mounted() {
-        useWikiStore().getCurrentEntryFromServer().then(c => {
+        this.wikiStore.loadEntry(this.wikiStore.currentEntry.id).then(c => {
             this.originalText = c;
         });
     },
     computed: {
         modifiedText() {
-            return this.wikiStore.safeCurrentEntry.raw_content;
+            return this.wikiStore.currentEntry.raw_content;
         },
     },
 });

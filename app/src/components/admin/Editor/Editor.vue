@@ -1,14 +1,14 @@
 <template>
     <view-page>
         <template #heading>
-            <EditorHead @editorClose="handleEditorClose"/>
+            <EditorHead @editorClose="handleEditorClose" />
         </template>
         <template #content>
-        <div v-if="isEntryLoaded" :key="key">
-            <PDFEditor v-if="isPdf"></PDFEditor>
-            <JupyterEditor v-else-if="isJupyterNotebook"></JupyterEditor>
-            <EditEntry v-else></EditEntry>
-        </div>
+            <div v-if="isEntryLoaded" :key="key">
+                <PDFEditor v-if="isPdf"></PDFEditor>
+                <JupyterEditor v-else-if="isJupyterNotebook"></JupyterEditor>
+                <EditEntry v-else></EditEntry>
+            </div>
         </template>
     </view-page>
 </template>
@@ -16,10 +16,11 @@
 <script lang="ts">
 import EditEntry from "./EditEntry.vue";
 import EditorHead from './EditorHead.vue';
-import {defineComponent} from "vue";
-import {useAuthStore} from 'pixlcms-wrapper'
-import {useWikiStore} from "@/src/stores/wiki";
-import {useMainStore} from "@/src/stores/main";
+import { defineComponent } from "vue";
+import { useAuthStore } from 'pixlcms-wrapper'
+import { useWikiStore } from "@/src/stores/wiki";
+import { useMainStore } from "@/src/stores/main";
+import * as feService from "@/src/services/feService";
 import PDFEditor from "@/src/components/admin/Editor/PDFEditor.vue";
 import JupyterEditor from "@/src/components/admin/Editor/JupyterEditor.vue";
 import ViewPage from "@/src/components/pw/view-page.vue";
@@ -42,16 +43,16 @@ export default defineComponent({
     },
     computed: {
         isPdf() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!('renderer' in this.wikiStore.currentEntry.meta)) {
                 return false;
             }
-            return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return 'pdf' === this.wikiStore.currentEntry.meta.renderer;
         },
         isJupyterNotebook() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!('renderer' in this.wikiStore.currentEntry.meta)) {
                 return false;
             }
-            return 'ipynb' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return 'ipynb' === this.wikiStore.currentEntry.meta.renderer;
         },
     },
     methods: {
@@ -64,13 +65,10 @@ export default defineComponent({
         if (!useAuthStore().haveEditRights()) {
             throw new Error('You are not allowed to edit entries');
         }
-        let entry = new URLSearchParams(location.search).get('p');
-        if (entry === null) {
-            entry = '';
-        }
-        this.wikiStore.fetchEntry(entry).then(() => {
+        feService.load(location.search).then((entry) => {
+            this.wikiStore.currentEntry = entry;
             this.isEntryLoaded = true;
-            this.title = "Edit " + this.wikiStore.safeCurrentEntry.meta.title;
+            this.title = "Edit " + this.wikiStore.currentEntry.meta.title;
             useMainStore().setTitle(this.title)
         });
     },

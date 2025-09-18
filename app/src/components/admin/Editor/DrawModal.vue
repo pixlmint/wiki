@@ -51,7 +51,7 @@ export default defineComponent({
                         type: "image/svg+xml",
                     },
                 ],
-                gallery: wikiStore.safeCurrentEntry.id,
+                gallery: wikiStore.currentEntry.id,
                 media: editingMediaId,
             };
 
@@ -67,9 +67,9 @@ export default defineComponent({
                 if (editingMediaId === null && response.data.files !== undefined) {
                     path = response.data.files[0].path;
                 }
-                const drawings = wikiStore.safeCurrentEntry.meta.drawings;
+                const drawings = wikiStore.currentEntry.meta.drawings;
                 if (drawings === undefined || drawings === null) {
-                    wikiStore.safeCurrentEntry.meta.drawings = [];
+                    wikiStore.currentEntry.meta.drawings = [];
                 }
                 const svgRequest = buildRequest('/api/admin/svg/store-data', {drawing: {data: svgData, svg: path}}, 'POST');
                 send(svgRequest).then(() => {

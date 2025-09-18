@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="md-editor" ref="editor"/>
+        <div class="md-editor" ref="editor" />
         <div class="toolbar-icons">
             <div v-for="icon in toolbarIcons" class="toolbar-icon" :id="'tui_icons_' + icon" :key="icon">
                 <pm-icon class="pw-icon-in-tui-toolbar" :icon="icon"></pm-icon>
@@ -10,15 +10,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
-import Editor, {EditorType} from '@toast-ui/editor';
+import { ref, onMounted } from 'vue';
+import Editor, { EditorType } from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
-import {useUserSettings} from "@/src/stores/user-settings";
+import { useUserSettings } from "@/src/stores/user-settings";
 import { useDialogStore, useMediaStore, type MediaStore } from 'pixlcms-wrapper';
 import { useWikiStore } from '@/src/stores/wiki';
 
-const {modelValue, editorHeight} = defineProps<{
+const { modelValue, editorHeight } = defineProps<{
     modelValue: string;
     editorHeight: string;
 }>();
@@ -48,7 +48,7 @@ const createToolbarButton = function (icon: string, onClick: () => any) {
     let btnContent = "";
 
     if (iconEl === null) {
-        btnContent = "X"; 
+        btnContent = "X";
     } else {
         btnContent = iconEl.innerHTML;
     }
@@ -130,8 +130,10 @@ onMounted(() => {
         events: {
             beforePreviewRender: (html: string) => {
                 window.setTimeout(() => {
-                    // @ts-ignore
-                    MathJax.typeset()
+                    if (typeof MathJax !== 'undefined') {
+                        // @ts-ignore
+                        MathJax.typeset();
+                    }
                 }, 20);
                 return html;
             },

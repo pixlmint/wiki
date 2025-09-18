@@ -1,23 +1,23 @@
 <template>
     <div>
         <div class="container">
-            <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save" @change="updateContent"
-                          v-model="markdown" :editorHeight="editorHeight"></pw-md-editor>
+            <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save"
+                @change="updateContent" v-model="markdown" :editorHeight="editorHeight"></pw-md-editor>
         </div>
         <DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>
-        <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
+        <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal>
     </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useWikiStore} from '@/src/stores/wiki'
-import {useMainStore} from "@/src/stores/main";
-import {useUserSettings} from "@/src/stores/user-settings";
+import { defineComponent } from "vue";
+import { useWikiStore } from '@/src/stores/wiki'
+import { useMainStore } from "@/src/stores/main";
+import { useUserSettings } from "@/src/stores/user-settings";
 import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
-import {useDialogStore} from "pixlcms-wrapper";
-import {DateTime} from "luxon";
+import { useDialogStore } from "pixlcms-wrapper";
+import { DateTime } from "luxon";
 
 
 // TODO: use lastChanged to detect which version of the content is newer
@@ -25,7 +25,7 @@ import {DateTime} from "luxon";
 let saveTimeout: number | null = null;
 
 export default defineComponent({
-    components: {DrawModal, CurrentFileDiffModal},
+    components: { DrawModal, CurrentFileDiffModal },
     data: function () {
         return {
             mainStore: useMainStore(),
@@ -48,7 +48,7 @@ export default defineComponent({
                 return this.wikiStore.currentEntry.raw_content;
             },
             set(newMarkdown: string) {
-                this.wikiStore.safeCurrentEntry.raw_content = newMarkdown;
+                this.wikiStore.currentEntry.raw_content = newMarkdown;
             }
         },
         isDrawing() {
@@ -63,13 +63,13 @@ export default defineComponent({
     },
     methods: {
         submitMerge(d: any) {
-            this.wikiStore.safeCurrentEntry.raw_content = d;
-            this.wikiStore.safeCurrentEntry.meta.dateUpdated = DateTime.now().toFormat("yyyy-LL-dd HH:mm")
+            this.wikiStore.currentEntry.raw_content = d;
+            this.wikiStore.currentEntry.meta.dateUpdated = DateTime.now().toFormat("yyyy-LL-dd HH:mm")
             this.wikiStore.saveCurrentEntry();
             this.dialogStore.hideDialog('/diff');
         },
         refresh() {
-            this.wikiStore.fetchEntry(this.wikiStore.safeCurrentEntry.id);
+            this.wikiStore.fetchEntry(this.wikiStore.currentEntry.id);
             this.componentKey += 1;
         },
         updateContent(md: string) {
@@ -95,11 +95,11 @@ export default defineComponent({
             this.dialogStore.showDialog('/diff');
         },
         save() {
-            this.wikiStore.fetchLastChanged(this.wikiStore.safeCurrentEntry.id).then(lastChanged => {
+            this.wikiStore.fetchLastChanged(this.wikiStore.currentEntry.id).then(lastChanged => {
                 if (saveTimeout !== null) {
                     window.clearTimeout(saveTimeout);
                 }
-                const localLastChanged = new Date(this.wikiStore.safeCurrentEntry.meta.dateUpdated);
+                const localLastChanged = new Date(this.wikiStore.currentEntry.meta.dateUpdated);
                 if (localLastChanged < lastChanged) {
                     this.showDiff();
                 } else {

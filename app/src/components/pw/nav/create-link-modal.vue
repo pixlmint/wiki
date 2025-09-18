@@ -21,8 +21,9 @@
 
 <script lang="ts" setup>
 import { useWikiStore } from '@/src/stores/wiki';
-import { authStoreOptions, useBackendStore, useDialogStore } from 'pixlcms-wrapper';
+import { useDialogStore } from 'pixlcms-wrapper';
 import { reactive } from 'vue';
+import wikiServiceManager from '@/src/services/wikiExtension';
 
 const dialogStore = useDialogStore();
 
@@ -38,12 +39,10 @@ function test() {
 }
 
 function save() {
+    const wiki = wikiServiceManager.getInstance(formData.domain);
     const data = dialogStore.getDialogData(route);
-    const backendStore = useBackendStore();
-    backendStore.registerBackend(formData);
-    const remoteAuthStore = backendStore.getStoreForBackend(formData.domain, 'authStore', authStoreOptions);
 
-    remoteAuthStore.login(formData).then(() => {
+    wiki.auth.login(formData).then(() => {
         data.title = formData.title;
         data.domain = formData.domain;
         data.username = formData.username;

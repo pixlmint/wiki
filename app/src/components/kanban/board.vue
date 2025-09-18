@@ -1,10 +1,11 @@
 <template>
-    <div :class="{board: true, draggingCard: data.isDraggingCard}">
-        <list @startDragging="data.isDraggingCard = true" @stopDragging="data.isDraggingCard = false" v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+    <div :class="{ board: true, draggingCard: data.isDraggingCard }">
+        <list @startDragging="data.isDraggingCard = true" @stopDragging="data.isDraggingCard = false"
+            v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
         <div class="board-list">
             <div class="d-flex justify-content-end">
-                <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList" v-on:keyup.enter="addList"
-                          v-model="data.newListName"></el-input>
+                <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList"
+                    v-on:keyup.enter="addList" v-model="data.newListName"></el-input>
                 <el-button v-show="!data.isAddingList" @click="toggleAddList">
                     <pm-icon icon="plus"></pm-icon>
                 </el-button>
@@ -14,11 +15,11 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive, computed} from "vue";
+import { ref, reactive, computed } from "vue";
 import List from "@/src/components/kanban/list.vue";
-import {useWikiStore} from "@/src/stores/wiki";
-import {useBoardStore} from "@/src/stores/board";
-import {useMainStore} from "@/src/stores/main";
+// import { useWikiStore } from "@/src/stores/wiki";
+import { useBoardStore } from "@/src/stores/board";
+import { useMainStore } from "@/src/stores/main";
 
 const addItemInput = ref(null);
 
@@ -28,7 +29,7 @@ const props = defineProps({
         required: true,
     },
 });
-const wikiStore = useWikiStore();
+// const wikiStore = useWikiStore();
 const boardStore = useBoardStore();
 const mainStore = useMainStore();
 

@@ -3,7 +3,7 @@
         <el-form @submit="killSubmit" :model="settings">
             <el-form-item label="Background">
                 <el-upload :on-success="onSuccessUploading" action="/api/admin/gallery/upload" :headers="uploadHeaders"
-                           :data="{gallery: currentBoardId}" accept="image/*" v-model:file-list="settings.background">
+                    :data="{ gallery: currentBoardId }" accept="image/*" v-model:file-list="settings.background">
                     <el-button type="primary">
                         <pm-icon icon="upload" class="me-2"></pm-icon>
                         Click to Upload
@@ -23,11 +23,10 @@
 </template>
 
 <script lang="ts" setup>
-import {reactive, computed} from "vue";
-import {useBoardStore} from "@/src/stores/board";
-import {useAuthStore} from "pixlcms-wrapper";
-import {UploadFile, UploadFiles} from "element-plus";
-import {CardLabel} from "@/src/contracts/Kanban";
+import { reactive, computed } from "vue";
+import { useBoardStore } from "@/src/stores/board";
+import { UploadFile, UploadFiles } from "element-plus";
+import { CardLabel } from "@/src/contracts/Kanban";
 import LabelsEditor from "@/src/components/kanban/labels-editor.vue";
 
 interface UploadFileResponse {
@@ -39,7 +38,8 @@ interface UploadFileResponse {
 }
 
 const boardStore = useBoardStore();
-const authStore = useAuthStore();
+
+const service = wikiServiceManager.defaultInstance;
 
 const settings = reactive({
     background: [],
@@ -59,7 +59,7 @@ const boardLabels = computed(() => {
 });
 
 const uploadHeaders = computed(() => {
-    return {pixltoken: authStore.token};
+    return { pixltoken: service.auth.token };
 });
 
 const updateMetaValue = function (key: string, value: any) {
@@ -89,7 +89,8 @@ const onSuccessUploading = function (response: UploadFileResponse, uploadFile: U
 </script>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
+import wikiServiceManager from "@/src/services/wikiExtension";
 
 export const route = "/board/settings";
 

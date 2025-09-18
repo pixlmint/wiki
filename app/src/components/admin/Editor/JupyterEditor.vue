@@ -43,10 +43,10 @@ const configure = async function (setup: JupyterConnectorSettings) {
     connector = createConnector(settings);
 
     try {
-        const newSession = await connector.open(wikiStore.safeCurrentEntry.id);
+        const newSession = await connector.open(wikiStore.currentEntry.id);
         if (connector instanceof RemoteJupyterConnector) {
             newSession.onUpdate(() => {
-                connector!.syncRemoteToLocal(newSession, wikiStore.safeCurrentEntry);
+                connector!.syncRemoteToLocal(newSession, wikiStore.currentEntry);
             })
         }
         session.value = newSession;
@@ -63,7 +63,7 @@ const changeSettings = function () {
         route: "/jupyter/modal",
         data: {
             action: JupyterSetupAction.FixConnectorConfiguration,
-            entryId: wikiStore.safeCurrentEntry.id,
+            entryId: wikiStore.currentEntry.id,
             connectorSettings: {
                 baseUrl: settings.baseUrl,
                 sharedFolder: settings.sharedFolder,
@@ -74,7 +74,7 @@ const changeSettings = function () {
 }
 
 onMounted(() => {
-    const configuredSettings = connectionsStore.getConnectionForEntry(wikiStore.safeCurrentEntry.id);
+    const configuredSettings = connectionsStore.getConnectionForEntry(wikiStore.currentEntry.id);
 
     console.log(configuredSettings);
 
@@ -82,7 +82,7 @@ onMounted(() => {
         dialogStore.showDialog({
             route: "/jupyter/modal",
             data: {
-                entryId: wikiStore.safeCurrentEntry.id,
+                entryId: wikiStore.currentEntry.id,
                 action: JupyterSetupAction.FixConnectorConfiguration,
             },
             closeCallback: onSetupDialogClose,
@@ -92,12 +92,12 @@ onMounted(() => {
     }
 });
 
-const onSetupDialogClose = function() {
-    const connection = connectionsStore.getConnectionForEntry(wikiStore.safeCurrentEntry.id);
+const onSetupDialogClose = function () {
+    const connection = connectionsStore.getConnectionForEntry(wikiStore.currentEntry.id);
     if (connection !== null)
         configure(connection);
     else
-        throw "No connection found for entry " + wikiStore.safeCurrentEntry.id;
+        throw "No connection found for entry " + wikiStore.currentEntry.id;
 }
 
 // onMounted(() => {
@@ -110,9 +110,9 @@ const onSetupDialogClose = function() {
 
 onUnmounted(() => {
     if (connector !== null) {
-        connector.close(wikiStore.safeCurrentEntry.id);
+        connector.close(wikiStore.currentEntry.id);
     }
-    const id = wikiStore.safeCurrentEntry.id;
+    const id = wikiStore.currentEntry.id;
     wikiStore.dumpAlternateContent(id).then(() => {
         wikiStore.fetchEntry(id);
     });

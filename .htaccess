@@ -2,7 +2,7 @@
     RewriteEngine On
 
     # Allow access to these directories and specific files
-    # RewriteCond %{REQUEST_URI} ^/media/.* [OR]
+    RewriteCond %{REQUEST_URI} ^/media/.* [OR]
     RewriteCond %{REQUEST_URI} ^/dist/.* [OR]
     RewriteCond %{REQUEST_URI} ^/public/.* [OR]
     RewriteCond %{REQUEST_URI} ^/backup/.* [OR]

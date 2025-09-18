@@ -1,6 +1,5 @@
-import {AxiosResponse} from 'axios';
-import {defineStore} from "pinia";
-import {useAuthStore, buildRequest, send, useBackendStore} from "pixlcms-wrapper";
+import { defineStore } from "pinia";
+import { useBackendStore } from "pixlcms-wrapper";
 
 interface Meta {
     title: string,
@@ -43,7 +42,7 @@ export const useMainStore = defineStore('main', {
     actions: {
         async init() {
             const backendStore = useBackendStore();
-    
+
             return backendStore.initBackend().then(response => {
                 const data = response.data;
                 data.pluginVersion = data.wikiVersion;

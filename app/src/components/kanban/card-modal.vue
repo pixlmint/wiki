@@ -4,14 +4,15 @@
             <el-form-item label="Labels">
                 <div class="d-flex gap-1">
                     <el-select @change="settings.labelsChanged = true" v-model="selectedLabels" multiple
-                               placeholder="Select Labels">
+                        placeholder="Select Labels">
                         <el-option v-for="(label) in labels" :key="label.title" :label="label.title"
-                                   :value="label.title"/>
+                            :value="label.title" />
                     </el-select>
                     <el-button @click="saveSelectedLabels" v-show="settings.labelsChanged">
                         <pm-icon icon="save"></pm-icon>
                     </el-button>
-                    <pw-md-editor editorHeight="500px" v-if="settings.contentLoaded" @input="updateContent" @save="saveCardMdContent" v-model="cardMdContent"></pw-md-editor>
+                    <pw-md-editor editorHeight="500px" v-if="settings.contentLoaded" @input="updateContent"
+                        @save="saveCardMdContent" v-model="cardMdContent"></pw-md-editor>
                 </div>
             </el-form-item>
         </el-form>
@@ -19,9 +20,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 import { useUserSettings } from "@/src/stores/user-settings";
 import { ElNotification } from "element-plus";
+import wikiServiceManager from "@/src/services/wikiExtension";
 
 export const route = "/board/card/view";
 
@@ -31,32 +33,33 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import {computed, ref, reactive, toRaw} from "vue";
-import {buildRequest, send, useDialogStore} from "pixlcms-wrapper";
-import {useBoardStore} from "@/src/stores/board";
-import {useWikiStore} from "@/src/stores/wiki";
-import {DateTime} from "luxon";
-import {BoardResponse, CardLabel} from "@/src/contracts/Kanban";
+import { computed, ref, reactive, toRaw } from "vue";
+import { buildRequest, send, useDialogStore } from "pixlcms-wrapper";
+import { useBoardStore } from "@/src/stores/board";
+import { useWikiStore } from "@/src/stores/wiki";
+import { DateTime } from "luxon";
+import { BoardResponse, CardLabel } from "@/src/contracts/Kanban";
 
 const dialogStore = useDialogStore();
 const boardStore = useBoardStore();
 const wikiStore = useWikiStore();
 const userSettings = useUserSettings();
 
+const service = wikiServiceManager.defaultInstance;
+
 const data = reactive({
     viewingCard: null as null | BoardResponse,
 });
 
-const request = buildRequest('/api/entry/view', {p: dialogStore.getDialogData(route).id});
-send(request).then(response => {
-    data.viewingCard = response.data;
+service.cms.fetchEntry(dialogStore.getDialogData(route).id).then(entry => {
+    data.viewingCard = entry;
     if (data.viewingCard !== null) {
         cardMdContent.value = data.viewingCard.raw_content;
         settings.contentLoaded = true;
     } else {
         console.error('data.viewingCard is null');
     }
-});
+})
 
 const settings = reactive({
     labelsChanged: false,
@@ -65,7 +68,7 @@ const settings = reactive({
 
 const selectedLabels = ref([]);
 const cardMdContent = ref('');
-let saveTimeout : null | number = null;
+let saveTimeout: null | number = null;
 
 const isTimeoutSet = function () {
     return saveTimeout !== null;
@@ -123,7 +126,7 @@ const saveSelectedLabels = function () {
     const newMeta = toRaw(data.viewingCard.meta);
     if (!('card' in newMeta)) {
         // @ts-ignore
-        newMeta['card'] = {labels: []};
+        newMeta['card'] = { labels: [] };
     }
     // @ts-ignore
     newMeta.card.labels = getSelectedLabels();
@@ -156,4 +159,3 @@ window.setTimeout(function () {
     }
 }, 50);
 </script>
-

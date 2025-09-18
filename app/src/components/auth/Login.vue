@@ -2,10 +2,10 @@
     <pm-dialog :route="route" title="Login">
         <el-form :model="loginForm">
             <el-form-item label="Username">
-                <el-input v-model="loginForm.username" />
+                <el-input v-model="form.username" />
             </el-form-item>
             <el-form-item label="Password">
-                <el-input @change="submitLoginForm" type="password" v-model="loginForm.password"></el-input>
+                <el-input @change="submitLoginForm" type="password" v-model="form.password"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -18,13 +18,13 @@
 
 <script lang="ts" setup>
 import { defineComponent, reactive } from "vue";
-import { authStoreOptions, cmsStoreConfig, useBackendStore, useDialogStore } from "pixlcms-wrapper";
+import { serviceManager, useDialogStore } from "pixlcms-wrapper";
 import { navFactory } from "@/src/helpers/nav";
 
 const dialogStore = useDialogStore();
 
 const dialogData = dialogStore.getDialogData(route);
-const domain = (typeof dialogData === 'object' && 'domain' in dialogData) ? dialogData.domain : null;
+const domain = (dialogData !== null && typeof dialogData === 'object' && 'domain' in dialogData) ? dialogData.domain : undefined;
 
 const form = reactive({
     username: '',
@@ -32,13 +32,11 @@ const form = reactive({
 });
 
 const submitLoginForm = function() {
-    const backendStore = useBackendStore();
-    const authStore = backendStore.getStoreForBackend(domain, 'authStore', authStoreOptions);
-    const cmsStore = backendStore.getStoreForBackend(domain, 'cmsStore', cmsStoreConfig);
+    const cmsService = serviceManager.getInstance(domain);
 
-    authStore.login(form).then(() => {
+    cmsService.auth.login(form).then(() => {
         dialogStore.hideDialog(route);
-        cmsStore.loadNav(false, navFactory);
+        cmsService.cms.loadNav(false, navFactory);
     });
 }
 </script>

@@ -14,7 +14,7 @@
                             </template>
                         </pw-nav-entry-title>
                     </el-menu-item>
-                    <template v-for="(childElement, myIndex) in nav.root.children" :key="myIndex">
+                    <template v-for="(childElement, myIndex) in elements" :key="myIndex">
                         <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
                     </template>
                 </el-menu>
@@ -24,14 +24,22 @@
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add
-                                Page</el-dropdown-item>
-                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add
-                                PDF</el-dropdown-item>
-                            <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add
-                                Jupyter Notebook</el-dropdown-item>
-                            <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add
-                                Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="addSubEntry">
+                                <pm-icon icon="file-circle-plus"></pm-icon>
+                                Add Page
+                            </el-dropdown-item>
+                            <el-dropdown-item @click="addPdf">
+                                <pm-icon icon="file-circle-plus"></pm-icon>
+                                Add PDF
+                            </el-dropdown-item>
+                            <el-dropdown-item @click="addJupyterNotebook">
+                                <pm-icon icon="file-circle-plus"></pm-icon>
+                                Add Jupyter Notebook
+                            </el-dropdown-item>
+                            <el-dropdown-item @click="addSubFolder">
+                                <pm-icon icon="folder-plus"></pm-icon>
+                                Add Subfolder
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -58,15 +66,15 @@
 </template>
 
 <script setup lang="ts">
-import { toRaw, computed } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import { useMainStore } from "@/src/stores/main";
-import { useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
+import { serviceManager, useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
 import { isMobile } from "@/src/helpers/mobile-detector";
 import { ElMessageBox } from "element-plus";
-import { navigate } from "@/src/helpers/navigator";
-import { FolderNavElement, Nav, NavElement, navFactory } from "@/src/helpers/nav";
+import { FolderNavElement, isFolder, isLink, Nav, NavElement, navFactory } from "@/src/helpers/nav";
+import * as feService from "@/src/services/feService";
 
 const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
@@ -78,31 +86,40 @@ const findListElement = (target: any): any => {
     return findListElement(target.parentElement);
 }
 
-const navElementIsFolder = (target: any) => {
-    const listElement = findListElement(target);
-    if (listElement.classList.contains('el-sub-menu')) {
-        return true;
-    }
-    if (listElement.classList.contains('el-menu-item')) {
-        return false;
-    }
-}
-
 const dialogStore = useDialogStore();
 const wikiStore = useWikiStore();
 const mainStore = useMainStore();
 const authStore = useAuthStore();
 const cmsStore = useCmsStore();
 
+const elements = computed(() => {
+    return wikiStore.nav === null ? [] : wikiStore.nav.root.getChildren();
+})
+const cms = serviceManager.defaultInstance.cms;
+
+onMounted(() => {
+    window.addEventListener('navreload', reloadNav);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('navreload', reloadNav);
+});
+
+cms.loadNav(false, navFactory);
+
 // created
 if (isMobile()) {
     useMainStore().toggleLargeNavShowing(false);
 }
-cmsStore.loadNav(false, navFactory);
 
 // methods
 const openSubmenu = function (menuId: string) {
     wikiStore.openedSubmenus.push(menuId);
+}
+
+const reloadNav = function () {
+    wikiStore.nav = cms.nav as Nav;
+    console.log('reloaded nav', wikiStore.nav);
 }
 
 const closeSubmenu = function (menuId: string) {
@@ -136,8 +153,9 @@ const addSubEntry = function () {
     })
 }
 const addPdf = function () {
-    dialogStore.setPdfParentFolder('/');
-    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" } });
+    console.error("todo");
+    // dialogStore.setPdfParentFolder('/');
+    // dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" } });
 }
 
 const addJupyterNotebook = function () {
@@ -150,23 +168,45 @@ const showMainNav = function () {
     mainStore.toggleLargeNavShowing(true);
 }
 const navClickListener = function (event: Event) {
-    const isFolder = navElementIsFolder(event.target);
-    if (isFolder) {
-        return;
-    }
-    const element = findElementWithTagName(event.target, 'LI');
-    const id = element.dataset.pwEntryId;
+    // const isFolder = navElementIsFolder(event.target);
+    // if (isFolder) {
+    //     return;
+    // }
+    // const element = findElementWithTagName(event.target, 'LI');
+    // const id = element.dataset.pwEntryId;
+    const id = findNavElementId(event.target as HTMLElement);
     if (id === undefined || id === null) {
         throw 'No ID found';
     }
+    const navElement = wikiStore.nav!.findEntryById(id);
 
-    const nav = cmsStore.nav! as Nav;
-    console.log(nav.findEntryById(id));
+    if (navElement === null) {
+        throw 'Unable to find entry ' + id;
+    }
 
-    navigate(id);
+    if (isLink(navElement)) {
+        console.log('open link', id);
+    } else if (isFolder(navElement)) {
+        console.log('expand folder', id);
+    } else {
+        console.log('load entry', id);
+        feService.view(navElement);
+        // navigate(id);
+    }
 }
 const login = function () {
     dialogStore.showDialog('/auth/login');
+}
+
+const findNavElementId = function (element: HTMLElement) {
+    let current: HTMLElement | null = element;
+    while (current !== null && current.tagName !== 'BODY') {
+        const id = current.dataset.pwEntryId;
+        if (typeof id !== 'undefined') {
+            return id;
+        }
+        current = current.parentElement;
+    }
 }
 const findElementWithTagName = function (element: HTMLElement, tagName: string): HTMLElement {
     if (element.tagName === tagName || element.parentElement === null) {
@@ -191,12 +231,6 @@ const mainNavShowing = computed(() => {
 });
 const isLoggedIn = computed(() => {
     return useAuthStore().getToken !== null;
-});
-const nav = computed(() => {
-    if (cmsStore.nav === null) {
-        return { root: { children: [] } };
-    }
-    return cmsStore.nav;
 });
 
 </script>

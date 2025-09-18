@@ -1,15 +1,9 @@
 <template>
     <pw-view-page :style="additionalStyle" class="board-view-page" :full-width-page="true">
         <template #heading>
-            <entry-heading class="board-heading" :display-delete-button="true" :display-media-buttons="false" :display-edit-button="false" :display-view-markdown-button="false">
+            <entry-heading class="board-heading" :dropdownActions="KANBAN_ENTRY_ACTIONS">
                 <template #title-extras>
                     <el-tag><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
-                </template>
-                <template #actions-extra>
-                    <el-dropdown-item @click="boardSettings" title="Settings">
-                        <pm-icon icon="gear"></pm-icon>
-                        <span>Settings</span>
-                    </el-dropdown-item>
                 </template>
             </entry-heading>
         </template>
@@ -23,14 +17,15 @@
 import board from '@/src/components/kanban/board.vue';
 import EntryHeading from "@/src/components/home/entry-heading.vue";
 import PmIcon from "pixlcms-wrapper/src/components/icon.vue";
-import {useDialogStore} from "pixlcms-wrapper";
-import {route} from "@/src/components/kanban/board-settings.vue";
-import {computed} from "vue";
-import {useBoardStore} from "@/src/stores/board";
+// import { useDialogStore } from "pixlcms-wrapper";
+// import { route } from "@/src/components/kanban/board-settings.vue";
+import { computed } from "vue";
+import { useBoardStore } from "@/src/stores/board";
+import { KANBAN_ENTRY_ACTIONS } from '@/src/helpers/entry-heading-dropdown-items';
 
-const props = defineProps(['boardId']);
+defineProps(['boardId']);
 
-const dialogStore = useDialogStore();
+// const dialogStore = useDialogStore();
 const boardStore = useBoardStore();
 
 const additionalStyle = computed(() => {
@@ -47,19 +42,24 @@ const additionalStyle = computed(() => {
     return 'background-image: url("' + meta.board.background + '");';
 });
 
-const boardSettings = function () {
+/*const boardSettings = function () {
     dialogStore.showDialog(route);
-}
+}*/
 </script>
 
 <style lang="scss">
 html.dark {
-    .board-view-page .board-heading, .board .board-list {
+
+    .board-view-page .board-heading,
+    .board .board-list {
         background-color: transparentize(#1a1a1a, 0.1);
     }
 }
+
 html:not(.dark) {
-    .board-view-page .board-heading, .board .board-list {
+
+    .board-view-page .board-heading,
+    .board .board-list {
         background-color: transparentize(rgb(243, 243, 243), 0.1);
     }
 }
