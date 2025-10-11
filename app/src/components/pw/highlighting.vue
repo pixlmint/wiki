@@ -16,6 +16,7 @@ import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-sql';
 import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-armasm';
 
 const props = defineProps({
     content: {
@@ -39,8 +40,19 @@ onMounted(() => {
     if (props.language) {
         if (props.language in Prism.languages) {
             language = props.language;
-        } else if (props.language === 'c' || props.language === 'cpp') {
-            language = 'clike';
+        } else {
+            switch (props.language) {
+                case 'c':
+                case 'cpp':
+                    language = 'clike';
+                    break;
+                case 'asm':
+                case 'armasm':
+                case 'arm-asm':
+                case 's':
+                    language = 'armasm';
+                    break;
+            }
         }
     }
     data.code = Prism.highlight(props.content, Prism.languages[language], language);
