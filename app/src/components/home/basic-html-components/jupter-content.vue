@@ -2,6 +2,9 @@
     <pw-view-page>
         <template #heading>
             <entry-heading>
+                <template #title-extras>
+                    <el-tag><img width="12" heigth="12" :src="JupyterIcon"></el-tag>
+                </template>
                 <template #actions-extra>
                     <el-dropdown-item @click="dumpJupyter" title="Jupyter">
                         <pm-icon icon="file-arrow-down" />
@@ -21,6 +24,7 @@ import EntryHeading from "@/src/components/home/entry-heading.vue";
 import ActualHtmlContent from "@/src/components/home/basic-html-components/actual-html-content.vue";
 import { useWikiStore } from '@/src/stores/wiki';
 import { ElMessage } from "element-plus";
+import JupyterIcon from "@/icon/jupyter.svg";
 
 const wikiStore = useWikiStore();
 

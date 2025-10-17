@@ -37,7 +37,7 @@
                     <template #icons>
                         <el-tag type="info" v-if="element.kind === 'board'"><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
                         <el-tag type="danger" v-else-if="element.kind === 'pdf'"><pm-icon icon="file-pdf"></pm-icon></el-tag>
-                        <el-tag v-else-if="element.kind === 'ipynb'"><img width="12" heigth="12" src="/assets/jupyter.svg"></el-tag>
+                        <el-tag v-else-if="element.kind === 'ipynb'"><img width="12" heigth="12" :src="JupyterIcon"></el-tag>
                         <pm-icon icon="lock" class="private-icon" v-if="!isPublic"></pm-icon>
                     </template>
                     <template #dropdown-options>
@@ -65,6 +65,7 @@ import {useMainStore} from "@/src/stores/main";
 import {useBoardStore} from "@/src/stores/board";
 import {navigate} from "@/src/helpers/navigator";
 import PwNavEntryTitle from "@/src/components/pw/nav/nav-entry-title.vue";
+import JupyterIcon from "@/icon/jupyter.svg";
 
 const {element} = defineProps<{
     element: NavElement,
