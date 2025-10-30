@@ -13,7 +13,7 @@
             <slot name="title-extras"></slot>
         </div>
         <div v-if="canEdit" class="print-invisible">
-            <el-dropdown split-button type="secondary" trigger="click" @click="editEntry">
+            <el-dropdown split-button trigger="click" @click="editEntry">
                 <pm-icon icon="pen-to-square"></pm-icon>
                 <template #dropdown>
                     <slot name="actions-extra"></slot>

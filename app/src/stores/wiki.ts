@@ -1,8 +1,8 @@
-import {defineStore} from 'pinia'
-import {buildRequest, send} from "pixlcms-wrapper";
-import {ElNotification} from "element-plus";
-import {WikiEntry} from "@/src/contracts/WikiBase";
-import {BoardResponse} from "@/src/contracts/Kanban";
+import { defineStore } from 'pinia'
+import { buildRequest, send } from "pixlcms-wrapper";
+import { ElNotification } from "element-plus";
+import { WikiEntry } from "@/src/contracts/WikiBase";
+import { BoardResponse } from "@/src/contracts/Kanban";
 
 interface Nav extends Array<NavElement> {
 }
@@ -69,15 +69,15 @@ export const useWikiStore = defineStore('wikiStore', {
             return send(request);
         },
         search(query: string) {
-            const request = buildRequest('/api/search', {q: query});
+            const request = buildRequest('/api/search', { q: query });
             return send(request);
         },
-        saveCurrentEntry() {
+        saveCurrentEntry(preventAutoRefresh: boolean = false) {
             const currentEntry = this.safeCurrentEntry;
             this.editor.editingUnsavedChanges = false;
-            return this.saveEntry(currentEntry);
+            return this.saveEntry(currentEntry, preventAutoRefresh);
         },
-        saveEntry(entry: WikiEntry | BoardResponse) {
+        saveEntry(entry: WikiEntry | BoardResponse, preventAutoRefresh: boolean = false) {
             const data = {
                 content: entry.raw_content,
                 meta: JSON.stringify(entry.meta),
@@ -88,25 +88,26 @@ export const useWikiStore = defineStore('wikiStore', {
             return send(request).then(response => {
                 this.editor.lastSaved = new Date();
                 this.safeCurrentEntry.meta.dateUpdated = response.data.lastUpdate;
-                this.fetchEntry(this.safeCurrentEntry.id);
+                if (!preventAutoRefresh)
+                    this.fetchEntry(this.safeCurrentEntry.id);
                 return response;
             });
         },
         fetchEntry(entry: string) {
-            const request = buildRequest('/api/entry/view', {p: entry});
+            const request = buildRequest('/api/entry/view', { p: entry });
             return send(request).then(response => {
                 this.currentEntry = response.data;
                 this.loadedEntries.push(response.data);
             });
         },
         fetchLastChanged(entry: string) {
-            const request = buildRequest('/api/admin/entry/fetch-last-changed', {entry: entry});
+            const request = buildRequest('/api/admin/entry/fetch-last-changed', { entry: entry });
             return send(request).then(response => {
                 return new Date(response.data.lastChanged);
             });
         },
         async getCurrentEntryFromServer() {
-            const request = buildRequest('/api/entry/view', {p: this.safeCurrentEntry.id});
+            const request = buildRequest('/api/entry/view', { p: this.safeCurrentEntry.id });
             let response = await send(request);
             return response.data.raw_content;
         },
@@ -136,11 +137,11 @@ export const useWikiStore = defineStore('wikiStore', {
             return send(request);
         },
         deleteFolder(folderName: string, token: string | null) {
-            const request = buildRequest('/api/admin/folder/delete', {entry: folderName}, 'DELETE');
+            const request = buildRequest('/api/admin/folder/delete', { entry: folderName }, 'DELETE');
             return send(request);
         },
         deleteEntry(entry: string) {
-            const request = buildRequest('/api/admin/entry/delete', {entry: entry}, 'DELETE');
+            const request = buildRequest('/api/admin/entry/delete', { entry: entry }, 'DELETE');
             return send(request).then(() => {
                 ElNotification({
                     type: 'success',
@@ -190,5 +191,42 @@ export const useWikiStore = defineStore('wikiStore', {
 
             return null;
         },
+        async handleCheckboxToggle(checkboxId: number, newState: boolean): Promise<void> {
+            const re = /^.*(\[\s?x?\s?\]).*$/gm;
+            let text = this.currentEntry!.raw_content;
+
+            const matches = [...text.matchAll(re)];
+
+            if (matches.length <= checkboxId) {
+                throw "Unable to find this checkbox";
+            }
+
+            // XXX: This won't work with multiple checkboxes in one line
+            const match = matches[checkboxId];
+            let line = match[0];
+
+            const newBox = newState ? '[x]' : '[ ]';
+            line = line.replace(match[1], newBox);
+            text = text.slice(0, match.index) + line + text.slice(match.index! + match[0].length);
+            
+            this.currentEntry!.raw_content = text;
+
+            const doc = new DOMParser().parseFromString('<root>' + this.safeCurrentEntry!.content + '</root>', "text/xml");
+            const boxes = doc.querySelectorAll('input[type="checkbox"]');
+
+            let reloadContent = false
+            if (boxes.length > checkboxId) {
+                const box = boxes[checkboxId];
+                if (newState) {
+                    box.setAttribute('checked', '1');
+                } else {
+                    box.removeAttribute('checked');
+                }
+                this.safeCurrentEntry!.content = doc.firstElementChild!.innerHTML
+            } else {
+                reloadContent = true;
+            }
+            await this.saveCurrentEntry(!reloadContent);
+        }
     }
 })

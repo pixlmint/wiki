@@ -12,7 +12,7 @@
         <JupyterContent :content="content" />
     </template>
     <template v-else>
-        <BasicHtmlEntry :content="content"></BasicHtmlEntry>
+        <BasicHtmlEntry :content="content" :entry-id="entryId"></BasicHtmlEntry>
     </template>
 </template>
 

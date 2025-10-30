@@ -5,7 +5,7 @@
             </entry-heading>
         </template>
         <template #content>
-            <ActualHtmlContent :content="props.content"></ActualHtmlContent>
+            <ActualHtmlContent :content="props.content" :entry-id="props.entryId"></ActualHtmlContent>
         </template>
     </pw-view-page>
 </template>
@@ -16,6 +16,10 @@ import ActualHtmlContent from "@/src/components/home/basic-html-components/actua
 
 const props = defineProps({
     content: {
+        type: String,
+        required: true,
+    },
+    entryId: {
         type: String,
         required: true,
     },
