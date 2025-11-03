@@ -4,7 +4,7 @@
             <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save" @change="updateContent"
                           v-model="markdown" :editorHeight="editorHeight"></pw-md-editor>
         </div>
-        <DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>
+        <!--<DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>-->
         <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
     </div>
 </template>
@@ -14,7 +14,7 @@ import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useMainStore} from "@/src/stores/main";
 import {useUserSettings} from "@/src/stores/user-settings";
-import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
+// import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
 import {useDialogStore} from "pixlcms-wrapper";
 import {DateTime} from "luxon";
@@ -25,7 +25,7 @@ import {DateTime} from "luxon";
 let saveTimeout: number | null = null;
 
 export default defineComponent({
-    components: {DrawModal, CurrentFileDiffModal},
+    components: {CurrentFileDiffModal},
     data: function () {
         return {
             mainStore: useMainStore(),

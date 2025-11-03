@@ -26,7 +26,6 @@ import BoardView from "@/src/components/home/BoardView.vue";
 import TableView from "@/src/components/home/TableView.vue";
 import JupyterContent from "@/src/components/home/basic-html-components/jupter-content.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
-import ExcalidrawWrapper from "@/src/components/drawing/excalidraw.vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -41,7 +40,6 @@ export default defineComponent({
         BoardView,
         BasicHtmlEntry,
         TableView,
-        ExcalidrawWrapper,
         JupyterContent,
     },
     computed: {
@@ -87,7 +85,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../../style/variables.scss';
+@use '../../../style/variables.scss';
 
 .article-body {
     margin: 5px;

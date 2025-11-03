@@ -129,7 +129,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import './style/main.scss';
+@use './style/main.scss';
+@use './style/variables' as *;
 
 .main-content {
     background-color: var(--el-bg-color);

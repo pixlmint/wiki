@@ -193,7 +193,7 @@ const nav = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@import '@/style/variables';
+@use '@/style/variables' as *;
 
 #nav {
     background-color: var(--el-bg-color);

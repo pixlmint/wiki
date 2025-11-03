@@ -1,7 +1,7 @@
 'use strict'
 
-const chalk = require('chalk')
-const stripAnsi = require('strip-ansi')
+const chalk = require('chalk').default
+const stripAnsi = require('strip-ansi').default
 const readline = require('readline')
 const EventEmitter = require('events')
 

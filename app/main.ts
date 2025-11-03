@@ -23,7 +23,7 @@ import {
     faPencil,
     faPenRuler,
     faSave,
-    faVectorSquare, faTimes, faPlus, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
+    faTimes, faPlus, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
     faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faCaretDown, faHouse, faCirclePlus, faUser,
     faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark, faTable, faImage, faCopy,
     faFileArrowDown,
@@ -51,7 +51,7 @@ app.component('pw-view-page', ViewPage);
 app.component('pw-highlighting', Highlighting);
 app.component('pw-nav-entry-title', NavEntryTitle);
 
-library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faVectorSquare, faCircle,
+library.add(faEraser, faPencil, faHighlighter, faSave, faPenRuler, faBug, faHand, faCircle,
     faArrowRotateRight, faTimes, faPlus, faTrello, faFolderPlus, faFilePdf, faFileCirclePlus, faLock, faUnlock,
     faPen, faPenToSquare, faTrash, faEllipsis, faCaretLeft, faCaretRight, faCaretDown, faHouse, faCirclePlus, faUser,
     faEye, faMoon, faSun, faDownload, faRotate, faGear, faUpload, faCheck, faXmark, faMarkdown, faTable, faImage,

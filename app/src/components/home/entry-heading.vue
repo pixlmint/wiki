@@ -38,7 +38,7 @@
             </el-dropdown>
         </div>
     </div>
-    <DrawModal v-if="isDrawing"></DrawModal>
+    <!--<DrawModal v-if="isDrawing"></DrawModal>-->
 </template>
 <script setup lang="ts">
 import { computed, ref } from "vue";
@@ -46,7 +46,7 @@ import { useWikiStore } from "@/src/stores/wiki";
 import { useAuthStore, useDialogStore, useMediaStore } from "pixlcms-wrapper";
 import { queryFormatter } from "@/src/helpers/queryFormatter";
 import { navigate } from "@/src/helpers/navigator";
-import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
+// import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 
 const props = defineProps({
     displayEditButton: {

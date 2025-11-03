@@ -53,14 +53,16 @@ const boardSettings = function () {
 </script>
 
 <style lang="scss">
+@use "sass:color";
+
 html.dark {
     .board-view-page .board-heading, .board .board-list {
-        background-color: transparentize(#1a1a1a, 0.1);
+        background-color: color.adjust(#1a1a1a, $alpha: -0.1);
     }
 }
 html:not(.dark) {
     .board-view-page .board-heading, .board .board-list {
-        background-color: transparentize(rgb(243, 243, 243), 0.1);
+        background-color: color.adjust(rgb(243, 243, 243), $alpha: -0.1);
     }
 }
 
