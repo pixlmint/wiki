@@ -44,7 +44,7 @@ return [
         ],
     ],
     'wikiFrontend' => [
-        'version' => '1.21.0',
+        'version' => '1.21.3',
     ],
     'base' => [
         'frontendController' => FrontendController::class,
