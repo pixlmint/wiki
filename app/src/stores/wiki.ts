@@ -111,5 +111,42 @@ export const useWikiStore = defineStore('wikiStore', {
             const request = buildRequest('/api/admin/entry/upload-alternative-content', data, 'POST');
             return send(request);
         },
+        async handleCheckboxToggle(checkboxId: number, newState: boolean): Promise<void> {
+            const re = /^.*(\[\s?x?\s?\]).*$/gm;
+            let text = this.currentEntry!.raw_content;
+
+            const matches = [...text.matchAll(re)];
+
+            if (matches.length <= checkboxId) {
+                throw "Unable to find this checkbox";
+            }
+
+            // XXX: This won't work with multiple checkboxes in one line
+            const match = matches[checkboxId];
+            let line = match[0];
+
+            const newBox = newState ? '[x]' : '[ ]';
+            line = line.replace(match[1], newBox);
+            text = text.slice(0, match.index) + line + text.slice(match.index! + match[0].length);
+            
+            this.currentEntry!.raw_content = text;
+
+            const doc = new DOMParser().parseFromString('<root>' + this.safeCurrentEntry!.content + '</root>', "text/xml");
+            const boxes = doc.querySelectorAll('input[type="checkbox"]');
+
+            let reloadContent = false
+            if (boxes.length > checkboxId) {
+                const box = boxes[checkboxId];
+                if (newState) {
+                    box.setAttribute('checked', '1');
+                } else {
+                    box.removeAttribute('checked');
+                }
+                this.safeCurrentEntry!.content = doc.firstElementChild!.innerHTML
+            } else {
+                reloadContent = true;
+            }
+            await this.saveCurrentEntry(!reloadContent);
+        }
     }
 })
