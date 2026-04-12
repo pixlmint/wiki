@@ -18,8 +18,8 @@ module.exports = merge(baseWebpackConfig, cssWebpackConfig, {
   },
 
   plugins: [
-      require('unplugin-auto-import/webpack').default({resolvers: [ElementPlusResolver()]}),
-      require('unplugin-vue-components/webpack').default({resolvers: [ElementPlusResolver()]}),
+      require('unplugin-auto-import/webpack')({resolvers: [ElementPlusResolver()]}),
+      require('unplugin-vue-components/webpack')({resolvers: [ElementPlusResolver()]}),
   ],
 
   optimization: {

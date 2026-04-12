@@ -4,20 +4,21 @@
             <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save"
                 @change="updateContent" v-model="markdown" :editorHeight="editorHeight"></pw-md-editor>
         </div>
-        <DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>
-        <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal>
+        <!--<DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>-->
+        <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useWikiStore } from '@/src/stores/wiki'
-import { useMainStore } from "@/src/stores/main";
-import { useUserSettings } from "@/src/stores/user-settings";
-import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
+import {defineComponent} from "vue";
+import {useWikiStore} from '@/src/stores/wiki'
+import {useMainStore} from "@/src/stores/main";
+import {useUserSettings} from "@/src/stores/user-settings";
+// import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/src/components/admin/Editor/CurrentFileDiffModal.vue";
 import { useDialogStore } from "pixlcms-wrapper";
 import { DateTime } from "luxon";
+import * as feService from "@/src/services/feService";
 
 
 // TODO: use lastChanged to detect which version of the content is newer
@@ -25,7 +26,7 @@ import { DateTime } from "luxon";
 let saveTimeout: number | null = null;
 
 export default defineComponent({
-    components: { DrawModal, CurrentFileDiffModal },
+    components: {CurrentFileDiffModal},
     data: function () {
         return {
             mainStore: useMainStore(),
@@ -65,7 +66,8 @@ export default defineComponent({
         submitMerge(d: any) {
             this.wikiStore.currentEntry.raw_content = d;
             this.wikiStore.currentEntry.meta.dateUpdated = DateTime.now().toFormat("yyyy-LL-dd HH:mm")
-            this.wikiStore.saveCurrentEntry();
+            // this.wikiStore.saveCurrentEntry();
+            feService.update(this.wikiStore.currentEntry);
             this.dialogStore.hideDialog('/diff');
         },
         refresh() {
@@ -95,7 +97,7 @@ export default defineComponent({
             this.dialogStore.showDialog('/diff');
         },
         save() {
-            this.wikiStore.fetchLastChanged(this.wikiStore.currentEntry.id).then(lastChanged => {
+            feService.fetchLastChanged(this.wikiStore.currentEntry).then(lastChanged => {
                 if (saveTimeout !== null) {
                     window.clearTimeout(saveTimeout);
                 }
@@ -104,7 +106,7 @@ export default defineComponent({
                     this.showDiff();
                 } else {
                     this.mainStore.setHasUnsavedChanges(false);
-                    return this.wikiStore.saveCurrentEntry();
+                    return feService.update(this.wikiStore.currentEntry);
                 }
             });
         },

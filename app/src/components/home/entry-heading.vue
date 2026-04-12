@@ -41,19 +41,22 @@
             </el-dropdown>
         </div>
     </div>
-    <DrawModal v-if="isDrawing"></DrawModal>
+    <!--<DrawModal v-if="isDrawing"></DrawModal>-->
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import { useAuthStore, useDialogStore, useMediaStore } from "pixlcms-wrapper";
 import { queryFormatter } from "@/src/helpers/queryFormatter";
-import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
+// import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import feService from "@/src/services/feService";
 import { DropdownConfig } from "@/src/helpers/entry-heading-dropdown-items";
 import EntryHeadingDropdownAction from '@/src/components/home/entry-heading-dropdown-action.vue';
+import { navigate } from "@/src/helpers/navigator";
 
 const props = defineProps<{ dropdownActions: DropdownConfig }>();
+
+console.log(props.dropdownActions)
 
 const handleClick = function() {
     props.dropdownActions.primaryAction.onClick(useWikiStore().currentEntry);

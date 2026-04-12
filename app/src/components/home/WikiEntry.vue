@@ -1,6 +1,6 @@
 <template>
     <template v-if="isPdfContent">
-        <PDFContent :pdfPath="pdfPath"></PDFContent>
+        <!--<PDFContent :pdfPath="pdfPath"></PDFContent>-->
     </template>
     <template v-else-if="isBoard">
         <BoardView :board-id="entryId"/>
@@ -13,7 +13,7 @@
     </template>
     <template v-else>
         <el-button style="z-index: 100; position: absolute; top: 20px; left: 100px;" @click="showLastChanged">Show last changed</el-button>
-        <BasicHtmlEntry :content="content"></BasicHtmlEntry>
+        <BasicHtmlEntry :content="content" :entry-id="entryId"></BasicHtmlEntry>
     </template>
 </template>
 
@@ -21,13 +21,12 @@
 import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
 import {useAuthStore} from "pixlcms-wrapper";
-import PDFContent from "@/src/components/home/PDFContent.vue";
+// import PDFContent from "@/src/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/src/components/home/BoardView.vue";
 import TableView from "@/src/components/home/TableView.vue";
 import JupyterContent from "@/src/components/home/basic-html-components/jupter-content.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
-import ExcalidrawWrapper from "@/src/components/drawing/excalidraw.vue";
 
 export default defineComponent({
     name: "WikiEntry",
@@ -38,11 +37,10 @@ export default defineComponent({
         }
     },
     components: {
-        PDFContent,
+        // PDFContent,
         BoardView,
         BasicHtmlEntry,
         TableView,
-        ExcalidrawWrapper,
         JupyterContent,
     },
     computed: {
@@ -97,7 +95,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../../style/variables.scss';
+@use '../../../style/variables.scss';
 
 .article-body {
     margin: 5px;

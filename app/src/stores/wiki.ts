@@ -43,18 +43,18 @@ export const useWikiStore = defineStore('wikiStore', {
             }
             return service.cms.fetchEntry(actualEntryId);
         },
-        getEntryDomain(entryId: string): string | undefined {
-            if (typeof cmsService.nav !== 'undefined') {
-                const nav = cmsService.nav as Nav;
+        // getEntryDomain(entryId: string): string | undefined {
+        //     if (typeof cmsService.nav !== 'undefined') {
+        //         const nav = cmsService.nav as Nav;
 
-                const el = nav!.findEntryById(entryId);
+        //         const el = nav!.findEntryById(entryId);
 
-                if (el !== null) {
-                    return el.domain;
-                }
-            }
+        //         if (el !== null) {
+        //             return el.domain;
+        //         }
+        //     }
 
-        },
+        // },
         _getActualEntryId(entryId: string): string {
             if (typeof cmsService.nav !== 'undefined') {
                 const nav = cmsService.nav as Nav;

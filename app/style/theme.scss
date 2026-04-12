@@ -1,4 +1,4 @@
-@import '@/style/variables';
+@use '@/style/variables' as *;
 
 :root {
     --el-bg-secondary: rgb(243, 243, 243);

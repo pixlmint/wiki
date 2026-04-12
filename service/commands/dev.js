@@ -4,7 +4,7 @@ const loadEnv = require('../utils/loadEnv')
 loadEnv()
 loadEnv('development')
 
-const chalk = require('chalk')
+const chalk = require('chalk').default
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 

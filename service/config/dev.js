@@ -1,6 +1,7 @@
 'use strict'
 
-const {merge} = require('webpack-merge')
+const { merge } = require('webpack-merge')
+const path = require('path')
 
 const baseWebpackConfig = require('./base')
 const cssWebpackConfig = require('./css')
@@ -13,17 +14,17 @@ const finalConfig = merge(baseWebpackConfig, cssWebpackConfig, {
     devtool: 'eval-cheap-module-source-map',
 
     resolve: {
-        symlinks: true,
+        symlinks: false,
     },
 
     watchOptions: {
         followSymlinks: true,
-        ignored: /node_modules\/(?!pixlcms-wrapper)/
+        // ignored: /node_modules\/(?!pixlcms-wrapper)/
     },
 
     devServer: {
         historyApiFallback: {
-            rewrites: [{from: /./, to: '/index.html'}],
+            rewrites: [{ from: /./, to: '/index.html' }],
         },
         devMiddleware: {
             publicPath: config.dev.publicPath,
@@ -32,20 +33,23 @@ const finalConfig = merge(baseWebpackConfig, cssWebpackConfig, {
         host: '0.0.0.0',
         port: config.dev.port,
         liveReload: true,
-        proxy: {
-            '/api': {
+        proxy: [
+            {
+                context: '/api',
                 target: 'http://127.0.0.1:94',
-                pathRewrite: {'^/api': '/api'}
+                pathRewrite: { '^/api': '/api' }
             },
-            '/backup': {
+            {
+                context: '/backup',
                 target: 'http://127.0.0.1:94',
-                pathRewrite: {'^/backup': '/backup'}
+                pathRewrite: { '^/backup': '/backup' }
             },
-            '/media': {
+            {
+                context: '/media',
                 target: 'http://127.0.0.1:94',
-                pathRewrite: {'^/media': '/media'}
+                pathRewrite: { '^/media': '/media' }
             }
-        },
+        ],
     },
 
     //plugins: [

@@ -66,14 +66,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import { useMainStore } from "@/src/stores/main";
 import { serviceManager, useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
+import { type INav } from "pixlcms-wrapper";
 import { isMobile } from "@/src/helpers/mobile-detector";
 import { ElMessageBox } from "element-plus";
-import { FolderNavElement, isFolder, isLink, Nav, NavElement, navFactory } from "@/src/helpers/nav";
+import { findEntryById, isFolder, isLink, navFactory } from "@/src/helpers/nav";
 import * as feService from "@/src/services/feService";
 
 const findListElement = (target: any): any => {
@@ -93,7 +94,7 @@ const authStore = useAuthStore();
 const cmsStore = useCmsStore();
 
 const elements = computed(() => {
-    return wikiStore.nav === null ? [] : wikiStore.nav.root.getChildren();
+    return wikiStore.nav === null ? [] : wikiStore.nav.root.children;
 })
 const cms = serviceManager.defaultInstance.cms;
 
@@ -118,7 +119,7 @@ const openSubmenu = function (menuId: string) {
 }
 
 const reloadNav = function () {
-    wikiStore.nav = cms.nav as Nav;
+    wikiStore.nav = cms.nav as INav;
     console.log('reloaded nav', wikiStore.nav);
 }
 
@@ -178,7 +179,8 @@ const navClickListener = function (event: Event) {
     if (id === undefined || id === null) {
         throw 'No ID found';
     }
-    const navElement = wikiStore.nav!.findEntryById(id);
+    const navElement = findEntryById(wikiStore.nav, id);
+    console.log(navElement);
 
     if (navElement === null) {
         throw 'Unable to find entry ' + id;
@@ -236,7 +238,7 @@ const isLoggedIn = computed(() => {
 </script>
 
 <style lang="scss">
-@import '@/style/variables';
+@use '@/style/variables' as *;
 
 .nav-wrapper {
     #nav {

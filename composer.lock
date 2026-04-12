@@ -57,16 +57,16 @@
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v2.0.4",
+            "version": "v2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "b352cf0534aa1ae6b4d825d1e762e35d43f8a841"
+                "reference": "038ce42edee619599a1debb7e81d7b3759492819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/b352cf0534aa1ae6b4d825d1e762e35d43f8a841",
-                "reference": "b352cf0534aa1ae6b4d825d1e762e35d43f8a841",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/038ce42edee619599a1debb7e81d7b3759492819",
+                "reference": "038ce42edee619599a1debb7e81d7b3759492819",
                 "shasum": ""
             },
             "require": {
@@ -114,24 +114,24 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2025-03-19T13:51:03+00:00"
+            "time": "2025-10-09T13:42:30+00:00"
         },
         {
             "name": "mhor/php-mediainfo",
-            "version": "5.6.0",
+            "version": "5.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mhor/php-mediainfo.git",
-                "reference": "c0b31474d6fdfadf44e7cbf3af718b68d35c8695"
+                "reference": "d0996533f18c389a1402b329ff37d8e4d81fc96e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mhor/php-mediainfo/zipball/c0b31474d6fdfadf44e7cbf3af718b68d35c8695",
-                "reference": "c0b31474d6fdfadf44e7cbf3af718b68d35c8695",
+                "url": "https://api.github.com/repos/mhor/php-mediainfo/zipball/d0996533f18c389a1402b329ff37d8e4d81fc96e",
+                "reference": "d0996533f18c389a1402b329ff37d8e4d81fc96e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2",
+                "php": ">=7.4",
                 "symfony/filesystem": "~3.4|~4.0|~5.0|~6.0|~7.0",
                 "symfony/process": "~3.4|~4.0|~5.0|~6.0|~7.0"
             },
@@ -169,22 +169,22 @@
             ],
             "support": {
                 "issues": "https://github.com/mhor/php-mediainfo/issues",
-                "source": "https://github.com/mhor/php-mediainfo/tree/5.6.0"
+                "source": "https://github.com/mhor/php-mediainfo/tree/5.7.0"
             },
-            "time": "2024-02-14T22:37:38+00:00"
+            "time": "2025-10-21T20:22:34+00:00"
         },
         {
             "name": "php-di/invoker",
-            "version": "2.3.6",
+            "version": "2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/Invoker.git",
-                "reference": "59f15608528d8a8838d69b422a919fd6b16aa576"
+                "reference": "3c1ddfdef181431fbc4be83378f6d036d59e81e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/Invoker/zipball/59f15608528d8a8838d69b422a919fd6b16aa576",
-                "reference": "59f15608528d8a8838d69b422a919fd6b16aa576",
+                "url": "https://api.github.com/repos/PHP-DI/Invoker/zipball/3c1ddfdef181431fbc4be83378f6d036d59e81e1",
+                "reference": "3c1ddfdef181431fbc4be83378f6d036d59e81e1",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
                 "mnapoli/hard-mode": "~0.3.0",
-                "phpunit/phpunit": "^9.0"
+                "phpunit/phpunit": "^9.0 || ^10 || ^11 || ^12"
             },
             "type": "library",
             "autoload": {
@@ -218,7 +218,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-DI/Invoker/issues",
-                "source": "https://github.com/PHP-DI/Invoker/tree/2.3.6"
+                "source": "https://github.com/PHP-DI/Invoker/tree/2.3.7"
             },
             "funding": [
                 {
@@ -226,7 +226,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-17T12:49:27+00:00"
+            "time": "2025-08-30T10:22:22+00:00"
         },
         {
             "name": "php-di/php-di",
@@ -303,16 +303,16 @@
         },
         {
             "name": "pixlmint/nacho",
-            "version": "1.6.16",
+            "version": "1.6.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/nacho.git",
-                "reference": "9ba95468ffadc1f2d72d4828dedb6618f880aed0"
+                "reference": "80355d4ac9e33b0e04af096ace3e50c214b20e96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/nacho/zipball/9ba95468ffadc1f2d72d4828dedb6618f880aed0",
-                "reference": "9ba95468ffadc1f2d72d4828dedb6618f880aed0",
+                "url": "https://api.github.com/repos/pixlmint/nacho/zipball/80355d4ac9e33b0e04af096ace3e50c214b20e96",
+                "reference": "80355d4ac9e33b0e04af096ace3e50c214b20e96",
                 "shasum": ""
             },
             "require": {
@@ -346,22 +346,22 @@
             "description": "My own Lightweight PHP Framework",
             "support": {
                 "issues": "https://github.com/pixlmint/nacho/issues",
-                "source": "https://github.com/pixlmint/nacho/tree/1.6.16"
+                "source": "https://github.com/pixlmint/nacho/tree/1.6.17"
             },
-            "time": "2025-08-22T11:31:49+00:00"
+            "time": "2025-08-26T20:44:01+00:00"
         },
         {
             "name": "pixlmint/parsedown",
-            "version": "1.4",
+            "version": "1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pixlmint/parsedown.git",
-                "reference": "b0d464a12aa00a0421075b4dd029558370542866"
+                "reference": "e881dc7e168769096c04946ccb211881ccb11fbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pixlmint/parsedown/zipball/b0d464a12aa00a0421075b4dd029558370542866",
-                "reference": "b0d464a12aa00a0421075b4dd029558370542866",
+                "url": "https://api.github.com/repos/pixlmint/parsedown/zipball/e881dc7e168769096c04946ccb211881ccb11fbc",
+                "reference": "e881dc7e168769096c04946ccb211881ccb11fbc",
                 "shasum": ""
             },
             "require": {
@@ -400,9 +400,9 @@
                 "parser"
             ],
             "support": {
-                "source": "https://github.com/pixlmint/parsedown/tree/1.4"
+                "source": "https://github.com/pixlmint/parsedown/tree/1.6"
             },
-            "time": "2025-06-16T12:36:03+00:00"
+            "time": "2025-10-18T19:56:21+00:00"
         },
         {
             "name": "pixlmint/pixl-cms",
@@ -1014,16 +1014,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.3.0",
+            "version": "v7.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "40c295f2deb408d5e9d2d32b8ba1dd61e36f05af"
+                "reference": "f24f8f316367b30810810d4eb30c543d7003ff3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/40c295f2deb408d5e9d2d32b8ba1dd61e36f05af",
-                "reference": "40c295f2deb408d5e9d2d32b8ba1dd61e36f05af",
+                "url": "https://api.github.com/repos/symfony/process/zipball/f24f8f316367b30810810d4eb30c543d7003ff3b",
+                "reference": "f24f8f316367b30810810d4eb30c543d7003ff3b",
                 "shasum": ""
             },
             "require": {
@@ -1055,7 +1055,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.3.0"
+                "source": "https://github.com/symfony/process/tree/v7.3.4"
             },
             "funding": [
                 {
@@ -1067,11 +1067,15 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-17T09:11:12+00:00"
+            "time": "2025-09-11T10:12:26+00:00"
         },
         {
             "name": "symfony/yaml",

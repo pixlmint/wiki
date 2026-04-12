@@ -14,7 +14,8 @@ import EntryHeading from "@/src/components/home/entry-heading.vue";
 import ActualHtmlContent from "@/src/components/home/basic-html-components/actual-html-content.vue";
 import { IPYNB_ENTRY_ACTIONS } from "@/src/helpers/entry-heading-dropdown-items";
 import { useWikiStore } from '@/src/stores/wiki';
-// import { ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
+import JupyterIcon from "@/icon/jupyter.svg";
 
 // const wikiStore = useWikiStore();
 

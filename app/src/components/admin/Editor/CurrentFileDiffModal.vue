@@ -20,6 +20,7 @@ import { defineComponent } from "vue";
 import { useDialogStore } from "pixlcms-wrapper";
 import { useWikiStore } from "@/src/stores/wiki";
 import DiffEditor from "@/src/components/pw/diff-editor.vue";
+import * as feService from "@/src/services/feService";
 
 import 'diff2html/bundles/css/diff2html.min.css';
 
@@ -38,7 +39,7 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.wikiStore.loadEntry(this.wikiStore.currentEntry.id).then(c => {
+        feService.load(this.wikiStore.currentEntry.id).then(c => {
             this.originalText = c;
         });
     },

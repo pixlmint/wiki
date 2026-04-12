@@ -4,13 +4,12 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useWikiStore } from '@/src/stores/wiki';
+import { getTheEntryId } from '@/src/services/feService';
 
 const props = defineProps<{ el: HTMLImageElement }>();
 
-const wikiStore = useWikiStore();
-
-const domain = wikiStore.getEntryDomain(location.pathname);
+const entryIdentifier = getTheEntryId(location.pathname);
+const domain = entryIdentifier.domain;
 
 const _url = document.createElement('a');
 _url.href = props.el.src;

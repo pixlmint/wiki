@@ -4,7 +4,7 @@
             <entry-heading :dropdownActions="PLAIN_ENTRY_ACTIONS"></entry-heading>
         </template>
         <template #content>
-            <ActualHtmlContent :content="props.content"></ActualHtmlContent>
+            <ActualHtmlContent :content="props.content" :entry-id="props.entryId"></ActualHtmlContent>
         </template>
     </pw-view-page>
 </template>
@@ -14,5 +14,5 @@ import EntryHeading from "@/src/components/home/entry-heading.vue";
 import ActualHtmlContent from "@/src/components/home/basic-html-components/actual-html-content.vue";
 import { PLAIN_ENTRY_ACTIONS } from "@/src/helpers/entry-heading-dropdown-items";
 
-const props = defineProps<{ content: string }>();
+const props = defineProps<{ content: string, entryId: string }>();
 </script>

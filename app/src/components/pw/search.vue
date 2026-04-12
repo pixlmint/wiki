@@ -46,13 +46,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "@/style/variables";
+@use "@/style/variables";
 
 .search-wrapper {
     display: flex;
     align-items: center;
     position: absolute;
-    width: calc(100vw - $navSmallWidth);
+    width: calc(100vw - variables.$navSmallWidth);
     z-index: 100;
 
     .search {

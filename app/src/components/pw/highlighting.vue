@@ -16,6 +16,7 @@ import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-sql';
 import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-armasm';
 
 const props = defineProps({
     content: {
@@ -39,8 +40,19 @@ onMounted(() => {
     if (props.language) {
         if (props.language in Prism.languages) {
             language = props.language;
-        } else if (props.language === 'c' || props.language === 'cpp') {
-            language = 'clike';
+        } else {
+            switch (props.language) {
+                case 'c':
+                case 'cpp':
+                    language = 'clike';
+                    break;
+                case 'asm':
+                case 'armasm':
+                case 'arm-asm':
+                case 's':
+                    language = 'armasm';
+                    break;
+            }
         }
     }
     data.code = Prism.highlight(props.content, Prism.languages[language], language);
@@ -52,14 +64,15 @@ onMounted(() => {
 ::root {
     --pw-code-bg: rgba(238, 221, 251, 0.2);
 }
+
 html.light {
-    @import 'prism-themes/themes/prism-vs';
     --pw-code-bg: rgba(238, 221, 251, 0.2);
+    @nested-import 'prism-themes/themes/prism-vs';
 }
 
 html.dark {
-    @import 'prism-themes/themes/prism-atom-dark';
     --pw-code-bg: rgba(67, 58, 102, 0.25);
+    @nested-import 'prism-themes/themes/prism-atom-dark';
 }
 
 pre, li > code, p > code, h1 > code, h2 > code, h3 > code, h4 > code, h5 > code {

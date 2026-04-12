@@ -48,19 +48,17 @@ const additionalStyle = computed(() => {
 </script>
 
 <style lang="scss">
-html.dark {
+@use "sass:color";
 
-    .board-view-page .board-heading,
-    .board .board-list {
-        background-color: transparentize(#1a1a1a, 0.1);
+html.dark {
+    .board-view-page .board-heading, .board .board-list {
+        background-color: color.adjust(#1a1a1a, $alpha: -0.1);
     }
 }
 
 html:not(.dark) {
-
-    .board-view-page .board-heading,
-    .board .board-list {
-        background-color: transparentize(rgb(243, 243, 243), 0.1);
+    .board-view-page .board-heading, .board .board-list {
+        background-color: color.adjust(rgb(243, 243, 243), $alpha: -0.1);
     }
 }
 

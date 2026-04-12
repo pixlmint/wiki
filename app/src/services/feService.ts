@@ -1,9 +1,10 @@
-import { dispatchNavReload, Entry, useDialogStore } from "pixlcms-wrapper";
+import { Entry, INavElement, useDialogStore, isNavElement, INav, IFolderNavElement } from "pixlcms-wrapper";
 import { navigate } from "../events";
-import { LinkNavElement, Nav, NavElement, navFactory } from "../helpers/nav";
+import { findEntryById, ILinkNavElement, loadRemoteNav, navFactory } from "../helpers/nav";
 import { queryFormatter } from "../helpers/queryFormatter";
 import { useWikiStore } from "../stores/wiki";
 import wikiServiceManager, { Wiki } from "./wikiExtension";
+import { dispatchNavChanged } from "pixlcms-wrapper/src/events";
 
 
 type EntryIdentifier = {
@@ -12,12 +13,12 @@ type EntryIdentifier = {
     relativeRoot?: string;
 }
 
-type InputEntry = string | Entry | NavElement;
+type InputEntry = string | Entry | INavElement;
 
 
 function getTheEntryId(entry: InputEntry): EntryIdentifier {
     let entryId: EntryIdentifier;
-    console.log(entry);
+    // console.log(entry);
 
     if (typeof entry === 'string') {
         if (entry.includes('?')) {
@@ -37,7 +38,8 @@ function getTheEntryId(entry: InputEntry): EntryIdentifier {
             entryId.domain = params.get('domain')!;
         }
         return entryId;
-    } else if (entry instanceof NavElement) {
+    } else if (isNavElement(entry)) {
+        console.error("Why are we receiving NavElement instances?", entry);
         entryId = {
             entry: entry.id,
         }
@@ -59,6 +61,10 @@ function getTheEntryId(entry: InputEntry): EntryIdentifier {
         if (typeof entry.domain !== 'undefined') {
             entryId.domain = entry.domain;
         }
+
+        if (typeof entry.originalId !== 'undefined') {
+            entryId.entry = entry.originalId;
+        }
         return entryId;
     } else {
         console.error(entry);
@@ -79,6 +85,7 @@ async function load(entry: InputEntry) {
 
 async function view(entry: InputEntry, forceReload: boolean = true) {
     const entryId = getTheEntryId(entry);
+    console.log(entryId);
 
     wikiStore!.isEditorActive = false;
 
@@ -105,12 +112,16 @@ function showMarkdown(entry: InputEntry) {
 
 }
 
-function update(updatedEntry: Entry) {
-
+async function update(updatedEntry: Entry) {
+    const entryId = getTheEntryId(updatedEntry);
+    const service = wikiServiceManager.getInstance(entryId.domain);
+    return await service!.cms.saveEntry(updatedEntry);
 }
 
-function deleteEntry(entry: InputEntry) {
-
+async function deleteEntry(entry: InputEntry) {
+    const entryId = getTheEntryId(entry);
+    const service = wikiServiceManager.getInstance(entryId.domain);
+    return await service!.cms.deleteEntry(entryId.entry);
 }
 
 function openMediaDialog(forEntry: Entry) {
@@ -120,36 +131,50 @@ function openDrawingDialog(forEntry: Entry) {
 
 }
 
-function reloadNav(entry: EntryIdentifier) {
-    if (typeof entry.relativeRoot === 'undefined' && typeof entry.domain === 'undefined') {
-        wikiServiceManager.defaultInstance.cms.loadNav(false, navFactory);
-    } else {
-        const nav = wikiServiceManager.defaultInstance.cms.nav as Nav;
-        let linkId: string;
+async function fetchLastChanged(entry: InputEntry) {
+    const entryId = getTheEntryId(entry);
+    const service = wikiServiceManager.getInstance(entryId.domain);
+    return await service!.cms.fetchLastChanged(entryId.entry);
+}
 
-        if (typeof entry.relativeRoot === 'undefined') {
-            linkId = entry.entry;
-        } else {
-            linkId = entry.relativeRoot;
-        }
-        const linkEl = nav.root.getChild(linkId) as LinkNavElement;
+function reloadNav(entry: EntryIdentifier) {
+    console.log(entry);
+    if (/*typeof entry.relativeRoot === 'undefined' &&*/ typeof entry.domain === 'undefined') {
+        return wikiServiceManager.defaultInstance.cms.loadNav(false, navFactory);
+    } else {
+        const nav = wikiServiceManager.getInstance(entry.domain).cms.nav as INav;
+        // const nav = wikiServiceManager.defaultInstance.cms.nav as Nav;
+        // let linkId: string;
+        //
+        // if (typeof entry.relativeRoot === 'undefined') {
+        //     linkId = entry.entry;
+        // } else {
+        //     linkId = entry.relativeRoot;
+        // }
+        // console.log('entry', entry, 'nav', nav, 'linkId', linkId);
+
+        // loadRemoteNav(nav);
+        // const linkEl = nav.root.getChild(linkId) as LinkNavElement;
+        const linkEl = findEntryById(wikiServiceManager.defaultInstance.cms.nav!, nav.root.id.replace(/\/$/g, '')) as ILinkNavElement;
 
         console.log(linkEl);
 
-        linkEl.loadRemoteNav();
+        return loadRemoteNav(linkEl);
     }
 }
 
-async function addPage(folder: NavElement | Entry, title: string) {
+async function addPage(folder: INavElement | Entry, title: string) {
     const entry = getTheEntryId(folder);
     const wiki = wikiServiceManager.getInstance(entry.domain);
     return wiki.cms.addEntry(entry.entry, title).then(response => {
-        reloadNav(entry);
+        reloadNav(entry).then(() => {
+            dispatchNavChanged(folder.id);
+        });
         return response;
     });
 }
 
-function addLink(folder: NavElement | Entry) {
+function addLink(folder: INavElement | Entry) {
     return new Promise<{ message: string } | void>((resolve, reject) => {
         const dialogStore = useDialogStore();
 
@@ -191,4 +216,18 @@ function install(app, options = {}) {
 }
 
 
-export { edit, view, showMarkdown, update, deleteEntry as delete, openMediaDialog, openDrawingDialog, install, getTheEntryId, load, addPage, addLink };
+export {
+    edit,
+    view,
+    showMarkdown,
+    update,
+    deleteEntry as delete,
+    openMediaDialog,
+    openDrawingDialog,
+    install,
+    getTheEntryId,
+    load,
+    addPage,
+    addLink,
+    fetchLastChanged,
+};

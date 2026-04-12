@@ -7,6 +7,8 @@ import BasicLink from "@/src/components/home/basic-html-components/basic-link.vu
 import Table from "@/src/components/home/basic-html-components/table.vue";
 import Heading from "@/src/components/home/basic-html-components/heading.vue";
 import BasicImage from "@/src/components/home/basic-html-components/basic-image.vue";
+import Checkbox from "@/src/components/home/basic-html-components/checkbox.vue";
+import { useAuthStore } from "pixlcms-wrapper";
 
 export default defineComponent({
     props: {
@@ -14,8 +16,13 @@ export default defineComponent({
             type: String,
             required: true,
         },
+        entryId: {
+            type: String,
+            required: true,
+        },
     },
     setup(props: {content: string}) {
+        const canEdit = useAuthStore().haveEditRights();
         const htmlToVue = (html: string) => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
@@ -55,6 +62,10 @@ export default defineComponent({
                 }
                 if (tagName === 'img') {
                     return h(BasicImage, { el: node });
+                }
+                if (tagName === 'input') {
+                    const isChecked = typeof attrs.checked === 'undefined' || attrs.checked === 'false' ? false : true
+                    return h(Checkbox, { disabled: !canEdit, checkboxId: parseInt(attrs['data-checkbox-index']), checked: isChecked });
                 }
                 if (headingRegex.test(tagName)) {
                     // @ts-ignore

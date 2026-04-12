@@ -390,7 +390,7 @@ const modeFreehand = new BaseDrawingMode('Freehand', 'hand', (points: PaintStrok
         .attr("d", lineGenerator);
 });
 
-const modeRectangle = new BaseDrawingMode('Rectangle', 'vector-square', (points: PaintStrokePoint[]) => {
+const modeRectangle = new BaseDrawingMode('Rectangle', 'hand', (points: PaintStrokePoint[]) => {
     if (points.length < 2) {
         throw "At least 2 points required";
     }

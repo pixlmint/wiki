@@ -4,7 +4,7 @@ const loadEnv = require('../utils/loadEnv')
 loadEnv()
 loadEnv('production')
 
-const rm = require('rimraf')
+const { rimraf } = require('rimraf')
 const webpack = require('webpack')
 
 const { error, done } = require('../utils/logger')
@@ -16,9 +16,7 @@ const config = require('../project.config')
 
 logWithSpinner('Building for production...')
 
-rm(paths.resolve(config.outputDir), (err) => {
-  if (err) throw err
-
+rimraf(paths.resolve(config.outputDir)).then(() => {
   webpack(webpackConfig, (err, stats) => {
     stopSpinner(false)
 
@@ -41,4 +39,6 @@ rm(paths.resolve(config.outputDir), (err) => {
 
     done('Build complete.\n')
   })
+}).catch(err => {
+    throw err;
 })

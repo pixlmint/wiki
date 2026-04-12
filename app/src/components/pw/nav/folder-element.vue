@@ -43,7 +43,7 @@
                     </template>
                 </pw-nav-entry-title>
             </template>
-            <template v-if="data.hoveredOverSubmenu && data.childrenLoaded">
+            <template v-if="shouldRenderChildren">
                 <template v-for="(childElement, myIndex) in children" :key="myIndex">
                     <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
                 </template>
@@ -53,14 +53,19 @@
 </template>
 
 <script lang="ts" setup>
-import { FolderNavElement, LinkNavElement } from "@/src/helpers/nav";
-import { computed, onMounted, reactive, watch } from "vue";
+import { ILinkNavElement, isFolder, isLink, loadRemoteNav } from "@/src/helpers/nav";
+import { computed, onMounted, reactive, watch, onBeforeUnmount } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import * as feService from "@/src/services/feService";
 import { ElMessageBox } from "element-plus";
+import { IFolderNavElement } from "pixlcms-wrapper";
+import { NavChangedEvent } from "pixlcms-wrapper/src/events";
 
-const { element, canEdit } = defineProps<{ element: FolderNavElement | LinkNavElement, canEdit: boolean }>();
+
+// TODO: Still calling old-style element.xxx functions
+
+const { element, canEdit } = defineProps<{ element: IFolderNavElement | ILinkNavElement, canEdit: boolean }>();
 
 const wikiStore = useWikiStore();
 
@@ -69,6 +74,7 @@ const data = reactive({
     submenuOpened: false,
     childrenLoaded: false,
     loadingRemoteSubmenu: false,
+    navUpdateTriggers: 0,
 });
 
 const triggerRenderDropdown = function () {
@@ -76,19 +82,24 @@ const triggerRenderDropdown = function () {
     data.hoveredOverSubmenu = true;
 }
 
+
+const shouldRenderChildren = computed(() => (isLink(element) && data.hoveredOverSubmenu && data.childrenLoaded) || (isFolder(element) && data.hoveredOverSubmenu));
+
 const isSubmenuOpen = computed(() => {
     return wikiStore.openedSubmenus.indexOf(element.id) !== -1;
 });
 
 const children = computed(() => {
-    return element.getChildren();
+    data.navUpdateTriggers;
+    return element.children ?? []
 });
 
-if (element instanceof LinkNavElement) {
+//if (element instanceof LinkNavElement) {
+if (isLink(element)) {
     watch(isSubmenuOpen, (val) => {
         if (val && !data.childrenLoaded) {
             data.loadingRemoteSubmenu = true;
-            element.loadRemoteNav().then(() => {
+            loadRemoteNav(element).then(() => {
                 data.childrenLoaded = true;
                 data.loadingRemoteSubmenu = false;
             });
@@ -97,10 +108,26 @@ if (element instanceof LinkNavElement) {
 }
 
 onMounted(() => {
-    if (element instanceof FolderNavElement) {
+    window.addEventListener('navchanged', onNavChanged);
+    if (isFolder(element)) {
         data.childrenLoaded = true;
     }
 });
+
+
+onBeforeUnmount(() => {
+    window.removeEventListener('navchanged', onNavChanged);
+})
+
+
+function onNavChanged(event: NavChangedEvent) {
+    if (event.entry === element.id) {
+        console.log('onNavChanged', element.id);
+        data.navUpdateTriggers++;
+    } else {
+        console.log('notOnNavChanged', element.id);
+    }
+}
 
 const addPage = function () {
     ElMessageBox.prompt('New Page Title', 'Add Page', {

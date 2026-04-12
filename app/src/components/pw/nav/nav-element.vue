@@ -6,19 +6,23 @@
 import { computed } from "vue";
 import { useAuthStore } from "pixlcms-wrapper";
 import FolderElement from "@/src/components/pw/nav/folder-element.vue";
-import { FolderNavElement, LinkNavElement, NavElement } from "@/src/helpers/nav";
+import { type INavElement } from "pixlcms-wrapper";
+import { isFolder, isLink } from "@/src/helpers/nav";
 import EntryElement from "@/src/components/pw/nav/entry-element.vue";
 
 const { element } = defineProps<{
-    element: NavElement,
+    element: INavElement,
 }>();
 
 const authStore = useAuthStore();
 
 const getComponent = function () {
-    if (element instanceof FolderNavElement || element instanceof LinkNavElement) {
+    if (isFolder(element) || isLink(element)) {
         return FolderElement;
     }
+    // if (element instanceof FolderNavElement || element instanceof LinkNavElement) {
+    //     return FolderElement;
+    // }
     return EntryElement;
 }
 
