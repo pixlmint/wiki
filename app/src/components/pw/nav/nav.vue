@@ -23,24 +23,7 @@
                         <pm-icon icon="circle-plus"></pm-icon>
                     </el-button>
                     <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item @click="addSubEntry">
-                                <pm-icon icon="file-circle-plus"></pm-icon>
-                                Add Page
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="addPdf">
-                                <pm-icon icon="file-circle-plus"></pm-icon>
-                                Add PDF
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="addJupyterNotebook">
-                                <pm-icon icon="file-circle-plus"></pm-icon>
-                                Add Jupyter Notebook
-                            </el-dropdown-item>
-                            <el-dropdown-item @click="addSubFolder">
-                                <pm-icon icon="folder-plus"></pm-icon>
-                                Add Subfolder
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
+                        <dropdown-options :element="rootFolderElement" :create-actions="createRootFolderActions" />
                     </template>
                 </el-dropdown>
             </div>
@@ -70,12 +53,13 @@ import { computed, onMounted, onUnmounted } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import { useMainStore } from "@/src/stores/main";
-import { serviceManager, useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
+import { IFolderNavElement, serviceManager, useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
 import { type INav } from "pixlcms-wrapper";
 import { isMobile } from "@/src/helpers/mobile-detector";
-import { ElMessageBox } from "element-plus";
 import { findEntryById, isFolder, isLink, navFactory } from "@/src/helpers/nav";
 import * as feService from "@/src/services/feService";
+import { createRootFolderActions } from "@/src/services/dropdownElements";
+import DropdownOptions from "./dropdown-options.vue";
 
 const findListElement = (target: any): any => {
     if (target.nodeName === 'LI') {
@@ -97,6 +81,14 @@ const elements = computed(() => {
     return wikiStore.nav === null ? [] : wikiStore.nav.root.children;
 })
 const cms = serviceManager.defaultInstance.cms;
+
+const rootFolderElement: IFolderNavElement = {
+    id: '/',
+    title: 'home',
+    kind: 'plain',
+    children: elements,
+    isPublic: true,
+};
 
 onMounted(() => {
     window.addEventListener('navreload', reloadNav);
@@ -133,35 +125,7 @@ const closeSubmenu = function (menuId: string) {
 const settings = function () {
     dialogStore.showDialog('/settings');
 }
-const addSubFolder = function () {
-    ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
-        confirmButtonText: 'Ok',
-        cancelButtonText: 'Cancel',
-    }).then(name => {
-        cmsStore.addFolder('/', name.value).then(() => {
-            cmsStore.loadNav(false, navFactory);
-        });
-    })
-}
-const addSubEntry = function () {
-    ElMessageBox.prompt('New Page Title', 'Add Page', {
-        confirmButtonText: 'Ok',
-        cancelButtonText: 'Cancel',
-    }).then(name => {
-        cmsStore.addEntry('/', name.value).then(() => {
-            cmsStore.loadNav(false, navFactory);
-        });
-    })
-}
-const addPdf = function () {
-    console.error("todo");
-    // dialogStore.setPdfParentFolder('/');
-    // dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" } });
-}
 
-const addJupyterNotebook = function () {
-    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New Notebook", mime: "application/json" } });
-}
 const hideMainNav = function () {
     mainStore.toggleLargeNavShowing(false);
 }

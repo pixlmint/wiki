@@ -124,6 +124,18 @@ async function deleteEntry(entry: InputEntry) {
     return await service!.cms.deleteEntry(entryId.entry);
 }
 
+async function renameEntry(entry: InputEntry, newTitle: string) {
+    const entryId = getTheEntryId(entry);
+    const service = wikiServiceManager.getInstance(entryId.domain);
+    return await service!.cms.renameEntry(entryId.entry, newTitle);
+}
+
+async function setVisibility(entry: InputEntry, newVisibility: 'public' | 'private') {
+    const entryId = getTheEntryId(entry);
+    const service = wikiServiceManager.getInstance(entryId.domain);
+    return await service!.cms.setSecurityState(entryId.entry, newVisibility);
+}
+
 function openMediaDialog(forEntry: Entry) {
 }
 
@@ -161,6 +173,17 @@ function reloadNav(entry: EntryIdentifier) {
 
         return loadRemoteNav(linkEl);
     }
+}
+
+async function addFolder(parent: INavElement | Entry, title: string) {
+    const entry = getTheEntryId(parent);
+    const wiki = wikiServiceManager.getInstance(entry.domain);
+    return wiki.cms.addFolder(entry.entry, title).then(response => {
+        reloadNav(entry).then(() => {
+            dispatchNavChanged(parent.id);
+        });
+        return response;
+    })
 }
 
 async function addPage(folder: INavElement | Entry, title: string) {
@@ -222,11 +245,14 @@ export {
     showMarkdown,
     update,
     deleteEntry as delete,
+    renameEntry as rename,
+    setVisibility,
     openMediaDialog,
     openDrawingDialog,
     install,
     getTheEntryId,
     load,
+    addFolder,
     addPage,
     addLink,
     fetchLastChanged,

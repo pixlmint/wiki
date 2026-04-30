@@ -14,11 +14,11 @@
             </span>
         </div>
         <el-dropdown class="nav-dropdown" v-if="props.shouldDisplayDropdown">
-            <el-button class="nav-dropdown-button" circle text>
+            <el-button @mouseover="hoveredOverDropdown = true" class="nav-dropdown-button" circle text>
                 <pm-icon icon="ellipsis"></pm-icon>
             </el-button>
             <template #dropdown>
-                <slot name="dropdown-options"></slot>
+                <slot name="dropdown-options" v-if="hoveredOverDropdown"></slot>
             </template>
         </el-dropdown>
     </div>
@@ -43,6 +43,7 @@ const slots = useSlots();
 
 const titleElement = ref<HTMLElement>();
 const iconsWrapper = ref<HTMLSpanElement>();
+const hoveredOverDropdown = ref(false);
 
 const titleElementWidth = reactive({
     value: 0,

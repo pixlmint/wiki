@@ -9,6 +9,7 @@ import Heading from "@/src/components/home/basic-html-components/heading.vue";
 import BasicImage from "@/src/components/home/basic-html-components/basic-image.vue";
 import Checkbox from "@/src/components/home/basic-html-components/checkbox.vue";
 import { useAuthStore } from "pixlcms-wrapper";
+import { VNode } from "veaury";
 
 export default defineComponent({
     props: {
@@ -33,7 +34,7 @@ export default defineComponent({
 
         const headingRegex = /h[1-6]/;
 
-        const walkNodes = (node: Node) => {
+        const walkNodes = (node: Node): VNode | string | null | undefined => {
             if (node.nodeType === Node.TEXT_NODE) {
                 return node.textContent;
             } else if (node.nodeType === Node.ELEMENT_NODE) {
