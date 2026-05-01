@@ -10,9 +10,10 @@
                     </template>
                     <template #icons>
                         <pm-icon icon="lock" class="private-icon" v-if="!element.isPublic"></pm-icon>
+                        <pm-icon icon="link" v-if="element.kind === 'link'" />
                     </template>
                     <template #dropdown-options>
-                        <dropdown-options :element="element" :create-actions="createFolderActions" @start-loading="loading = true" @end-loading="loading = false" />
+                        <dropdown-options :element="element" :create-actions="createActions" @start-loading="loading = true" @end-loading="loading = false" />
                     </template>
                 </pw-nav-entry-title>
             </template>
@@ -32,7 +33,7 @@ import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import { IFolderNavElement } from "pixlcms-wrapper";
 import { NavChangedEvent } from "pixlcms-wrapper/src/events";
-import { createFolderActions } from "@/src/services/dropdownElements";
+import { createFolderActions, createLinkActions } from "@/src/services/dropdownElements";
 import dropdownOptions from "./dropdown-options.vue";
 
 const { element, canEdit } = defineProps<{ element: IFolderNavElement | ILinkNavElement, canEdit: boolean }>();
@@ -40,6 +41,9 @@ const { element, canEdit } = defineProps<{ element: IFolderNavElement | ILinkNav
 const wikiStore = useWikiStore();
 
 const loading = ref(false);
+
+
+const createActions = element.kind === 'link' ? createLinkActions : createFolderActions;
 
 const data = reactive({
     hoveredOverSubmenu: false,

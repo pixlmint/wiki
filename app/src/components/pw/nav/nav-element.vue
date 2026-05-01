@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useAuthStore } from "pixlcms-wrapper";
+import { authService, serviceManager, useAuthStore } from "pixlcms-wrapper";
 import FolderElement from "@/src/components/pw/nav/folder-element.vue";
 import { type INavElement } from "pixlcms-wrapper";
 import { isFolder, isLink } from "@/src/helpers/nav";
@@ -27,7 +27,8 @@ const getComponent = function () {
 }
 
 const canEdit = computed(() => {
-    return authStore.haveEditRights();
+    return serviceManager.getInstance(element.domain).auth.token !== null;
+    // return authStore.haveEditRights();
 });
 </script>
 

@@ -1,6 +1,6 @@
 <template>
     <pm-dialog :route="route" title="Login">
-        <el-form :model="loginForm">
+        <el-form :model="form">
             <el-form-item label="Username">
                 <el-input v-model="form.username" />
             </el-form-item>

@@ -188,6 +188,7 @@ async function addFolder(parent: INavElement | Entry, title: string) {
 
 async function addPage(folder: INavElement | Entry, title: string) {
     const entry = getTheEntryId(folder);
+    console.log(entry);
     const wiki = wikiServiceManager.getInstance(entry.domain);
     return wiki.cms.addEntry(entry.entry, title).then(response => {
         reloadNav(entry).then(() => {

@@ -59,6 +59,16 @@ const deleteElementAction = (element: INavElement | FolderElement, title: string
 }
 
 
+const linkElementAction = (element: INavElement | FolderElement, toggleLoading: (isLoading: boolean) => void) => {
+    return {
+        title: "New Link",
+        action: () => {
+            feService.addLink(element);
+        },
+    }
+}
+
+
 const coreFolderActions = (element: INavElement, _: (isLoading: boolean) => void) => [
     {
         title: "Add Page",
@@ -104,62 +114,70 @@ const coreFolderActions = (element: INavElement, _: (isLoading: boolean) => void
         action: () => {
         },
     },
+];
+
+export const createFolderActions = (element: INavElement, toggleLoading: (isLoading: boolean) => void): DropdownElementConfiguration[] => [
+    ...coreFolderActions(element, toggleLoading),
+    linkElementAction(element, toggleLoading),
+    toggleVisibilityAction(element, toggleLoading),
+    deleteElementAction(element, "Delete Folder", toggleLoading),
+];
+
+export const createLinkActions = (element: INavElement, toggleLoading: (isLoading: boolean) => void) => [
+    ...coreFolderActions(element, toggleLoading),
     {
-        title: "New Link",
+        title: "Login",
+        icon: "user",
         action: () => {
-            feService.addLink(element);
+            useDialogStore().showDialog("/auth/login");
         },
     },
 ];
 
-export const createFolderActions = (element: INavElement, toggleLoading: (isLoading: boolean) => void): DropdownElementConfiguration[] => {
-    return [
-        ...coreFolderActions(element, toggleLoading),
-        toggleVisibilityAction(element, toggleLoading),
-        deleteElementAction(element, "Delete Folder", toggleLoading),
-    ]
-}
-
 export const createRootFolderActions = (): DropdownElementConfiguration[] => {
-    return coreFolderActions({
+    const mockElement: INavElement = {
         isPublic: true,
         id: '/',
         title: '',
         kind: 'plain',
-    }, (_: boolean) => {});
-}
+    };
+    const mockFunc = (_: boolean) => { };
 
-export const createEntryActions = (element: INavElement, toggleLoading: (isLoading: boolean) => void): DropdownElementConfiguration[] => {
     return [
-        {
-            title: "Edit",
-            icon: "pen",
-            action: () => {
-                feService.edit(element.id);
-            },
-        },
-        {
-            title: "Rename",
-            icon: "pen-to-square",
-            action: () => {
-                ElMessageBox.prompt('Name', 'Tip', {
-                    inputValue: element.title,
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                })
-                    .then(async ({ value }) => {
-                        toggleLoading(true);
-                        await feService.rename(element, value);
-                        element.title = value;
-                        toggleLoading(false);
-                    })
-                    .catch(() => {
-                        toggleLoading(false);
-                    })
-            },
-        },
-        toggleVisibilityAction(element, toggleLoading),
-        deleteElementAction(element, "Delete Entry", toggleLoading),
+        ...coreFolderActions(mockElement, mockFunc),
+        linkElementAction(mockElement, mockFunc),
     ];
 }
+
+export const createEntryActions = (element: INavElement, toggleLoading: (isLoading: boolean) => void): DropdownElementConfiguration[] => [
+    {
+        title: "Edit",
+        icon: "pen",
+        action: () => {
+            feService.edit(element.id);
+        },
+    },
+    {
+        title: "Rename",
+        icon: "pen-to-square",
+        action: () => {
+            ElMessageBox.prompt('Name', 'Tip', {
+                inputValue: element.title,
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+            })
+                .then(async ({ value }) => {
+                    toggleLoading(true);
+                    await feService.rename(element, value);
+                    element.title = value;
+                    toggleLoading(false);
+                })
+                .catch(() => {
+                    toggleLoading(false);
+                })
+        },
+    },
+    toggleVisibilityAction(element, toggleLoading),
+    deleteElementAction(element, "Delete Entry", toggleLoading),
+];
 
