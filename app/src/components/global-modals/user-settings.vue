@@ -4,7 +4,7 @@
             <el-tabs tab-position="left">
                 <el-tab-pane label="User">
                     <el-form-item label="Auto save">
-                        <el-switch v-model="settings.autoSave"/>
+                        <el-switch v-model="settings.autoSave" />
                     </el-form-item>
                     <el-form-item label="Theme">
                         <el-radio-group v-model="settings.theme">
@@ -48,12 +48,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, h, watch} from "vue";
-import {useUserSettings} from "@/src/stores/user-settings";
-import {useMainStore} from "@/src/stores/main";
-import {ElMessageBox, ElNotification} from "element-plus";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/src/stores/wiki";
+import { defineComponent, h, watch } from "vue";
+import { useUserSettings } from "@/src/stores/user-settings";
+import { useMainStore } from "@/src/stores/main";
+import { ElMessageBox, ElNotification } from "element-plus";
+import { serviceManager, useDialogStore } from "pixlcms-wrapper";
+import { useWikiStore } from "@/src/stores/wiki";
+import { navFactory } from "@/src/helpers/nav";
 
 export const route = '/settings';
 
@@ -66,6 +67,7 @@ export default defineComponent({
             settings: useUserSettings().getSettings,
             route: route,
             dialogStore: useDialogStore(),
+            cms: serviceManager.defaultInstance.cms,
         }
     },
     created() {
@@ -92,12 +94,18 @@ export default defineComponent({
             })
         },
         logout() {
-            useAuthStore().logout();
-            useWikiStore().loadNav();
+            const wikiStore = useWikiStore();
+            wikiStore.isAuthenticated = false;
+            wikiStore.token = null;
+            serviceManager.defaultInstance.auth.logout();
+            this.cms.loadNav(false, navFactory);
         },
         logoutEverywhere() {
-            useAuthStore().logout(true);
-            useWikiStore().loadNav();
+            const wikiStore = useWikiStore();
+            wikiStore.isAuthenticated = false;
+            wikiStore.token = null;
+            serviceManager.defaultInstance.auth.logout(true);
+            this.cms.loadNav(false, navFactory);
         },
         setTheme(theme: string) {
             document.documentElement.classList.remove('light');
@@ -105,15 +113,15 @@ export default defineComponent({
             document.documentElement.classList.add(theme);
         },
         reloadNav() {
-            this.wikiStore.loadNav(true);
+            this.cms.loadNav(true, navFactory);
         },
         showVersionsPopup() {
             ElMessageBox({
                 title: 'Version Information',
                 message: h('ul', null, [
-                    h('li', null, 'Plugin Version: '+ useMainStore().meta.pluginVersion),
-                    h('li', null, 'CMS Version: '+ useMainStore().meta.cmsVersion),
-                    h('li', null, 'Frontend Version: '+ useMainStore().meta.frontendVersion),
+                    h('li', null, 'Plugin Version: ' + useMainStore().meta.pluginVersion),
+                    h('li', null, 'CMS Version: ' + useMainStore().meta.cmsVersion),
+                    h('li', null, 'Frontend Version: ' + useMainStore().meta.frontendVersion),
                 ]),
             })
         },

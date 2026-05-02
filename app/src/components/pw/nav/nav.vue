@@ -5,7 +5,7 @@
                 <div @click="hideMainNav" class="nav-toggle">
                     <pm-icon icon="caret-left"></pm-icon>
                 </div>
-                <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false"
+                <el-menu :key="navReloadCount" @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false"
                     class="main-nav">
                     <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
                         <pw-nav-entry-title :element-id="0" :should-display-dropdown="false" element-title="Home">
@@ -49,12 +49,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
 import PWNavElement from "@/src/components/pw/nav/nav-element.vue";
 import { useMainStore } from "@/src/stores/main";
-import { IFolderNavElement, serviceManager, useAuthStore, useCmsStore, useDialogStore } from "pixlcms-wrapper";
-import { type INav } from "pixlcms-wrapper";
+import { IFolderNavElement, serviceManager, useDialogStore } from "pixlcms-wrapper";
 import { isMobile } from "@/src/helpers/mobile-detector";
 import { findEntryById, isFolder, isLink, navFactory } from "@/src/helpers/nav";
 import * as feService from "@/src/services/feService";
@@ -74,12 +73,10 @@ const findListElement = (target: any): any => {
 const dialogStore = useDialogStore();
 const wikiStore = useWikiStore();
 const mainStore = useMainStore();
-const authStore = useAuthStore();
-const cmsStore = useCmsStore();
 
-const elements = computed(() => {
-    return wikiStore.nav === null ? [] : wikiStore.nav.root.children;
-})
+const navReloadCount = ref(0);
+
+const elements = computed(() => wikiStore.nav);
 const cms = serviceManager.defaultInstance.cms;
 
 const rootFolderElement: IFolderNavElement = {
@@ -111,7 +108,8 @@ const openSubmenu = function (menuId: string) {
 }
 
 const reloadNav = function () {
-    wikiStore.nav = cms.nav as INav;
+    wikiStore.nav = cms.nav!.root.children;
+    navReloadCount.value++;
     console.log('reloaded nav', wikiStore.nav);
 }
 
@@ -190,13 +188,15 @@ const currentTitleArray = computed(() => {
     return id.split('/');
 });
 const canEdit = computed(() => {
-    return authStore.haveEditRights();
+    return wikiStore.isAuthenticated;
+    // return authStore.haveEditRights();
 });
 const mainNavShowing = computed(() => {
     return mainStore.isLargeNavShowing;
 });
 const isLoggedIn = computed(() => {
-    return useAuthStore().getToken !== null;
+    return wikiStore.isAuthenticated;
+    // return seAuthStore().getToken !== null;
 });
 
 </script>

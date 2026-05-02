@@ -20,20 +20,18 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useWikiStore} from '@/src/stores/wiki'
-import {useAuthStore} from "pixlcms-wrapper";
 // import PDFContent from "@/src/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/src/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/src/components/home/BoardView.vue";
 import TableView from "@/src/components/home/TableView.vue";
 import JupyterContent from "@/src/components/home/basic-html-components/jupter-content.vue";
-import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
+import { queryFormatter } from "@/src/helpers/queryFormatter";
 
 export default defineComponent({
     name: "WikiEntry",
     data: () => {
         return {
             wikiStore: useWikiStore(),
-            authStore: useAuthStore(),
         }
     },
     components: {
@@ -80,7 +78,7 @@ export default defineComponent({
         },
         pdfPath() {
             const base = '/api/entry/load-pdf?';
-            const data = {p: this.entryId, pixltoken: this.authStore.token};
+            const data = {p: this.entryId, pixltoken: this.wikiStore.token};
             return base + queryFormatter(data);
         },
     },

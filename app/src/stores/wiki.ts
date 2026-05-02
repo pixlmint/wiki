@@ -13,6 +13,8 @@ interface State {
     openedSubmenus: string[],
     backendmap: Record<string, string | 'default'>,
     nav: Nav | null;
+    isAuthenticated: boolean,
+    token: string | null,
 }
 
 export const useWikiStore = defineStore('wikiStore', {
@@ -26,8 +28,18 @@ export const useWikiStore = defineStore('wikiStore', {
         openedSubmenus: [],
         backendmap: {},
         nav: null,
+        isAuthenticated: false,
+        token: null,
     }),
     actions: {
+        setNav(nav: any) {
+            if (this.nav === null) {
+                this.nav = nav;
+            } else {
+                const t = this.nav as [];
+                t.splice(0, t.length, ...nav);
+            }
+        },
         async fetchEntry(entryId: string) {
             return this.loadEntry(entryId).then(entry => {
                 this.currentEntry = entry;

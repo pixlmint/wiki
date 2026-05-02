@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
+import {serviceManager, useDialogStore} from "pixlcms-wrapper";
 
 export const route = "/auth/change-password";
 
@@ -38,11 +38,12 @@ export default defineComponent({
                 logoutEverywhere: false,
             },
             dialogStore: useDialogStore(),
+            auth: serviceManager.defaultInstance.auth,
         };
     },
     methods: {
         submit() {
-            useAuthStore().changePassword(this.form).then(() => {
+            this.auth.changePassword(this.form).then(() => {
                 this.dialogStore.hideDialog(route);
             });
         },

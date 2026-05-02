@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { computed, onUnmounted, ref } from "vue";
 import { useMainStore } from "@/src/stores/main";
-import { configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore, useCmsStore, useBackendStore, cmsStoreConfig } from "pixlcms-wrapper";
+import { configureStores, Modals, useDialogStore, useLoadingStore, useCmsStore, useBackendStore, cmsStoreConfig } from "pixlcms-wrapper";
 import { useWikiStore } from "@/src/stores/wiki";
 import { useUserSettings } from "@/src/stores/user-settings";
 import { AxiosResponse } from "axios";
@@ -29,7 +29,6 @@ import * as feService from "./src/services/feService";
 const mainStore = useMainStore();
 const wikiStore = useWikiStore();
 const dialogStore = useDialogStore();
-const authStore = useAuthStore();
 const userSettings = useUserSettings();
 const dialogs = createDialogs();
 
@@ -54,7 +53,6 @@ const currentPath = computed(() => {
 });
 
 const created = function () {
-    authStore.loadToken();
     configureStores(useLoadingStore());
     userSettings.loadUserSettings();
     userSettings.setCurrentTheme();

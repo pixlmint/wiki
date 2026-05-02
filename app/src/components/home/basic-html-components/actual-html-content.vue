@@ -8,8 +8,8 @@ import Table from "@/src/components/home/basic-html-components/table.vue";
 import Heading from "@/src/components/home/basic-html-components/heading.vue";
 import BasicImage from "@/src/components/home/basic-html-components/basic-image.vue";
 import Checkbox from "@/src/components/home/basic-html-components/checkbox.vue";
-import { useAuthStore } from "pixlcms-wrapper";
 import { VNode } from "veaury";
+import { useWikiStore } from "@/src/stores/wiki";
 
 export default defineComponent({
     props: {
@@ -23,7 +23,7 @@ export default defineComponent({
         },
     },
     setup(props: {content: string}) {
-        const canEdit = useAuthStore().haveEditRights();
+        const canEdit = useWikiStore().isAuthenticated;
         const htmlToVue = (html: string) => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');

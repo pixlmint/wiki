@@ -17,7 +17,6 @@
 import EditEntry from "./EditEntry.vue";
 import EditorHead from './EditorHead.vue';
 import { defineComponent } from "vue";
-import { useAuthStore } from 'pixlcms-wrapper'
 import { useWikiStore } from "@/src/stores/wiki";
 import { useMainStore } from "@/src/stores/main";
 import * as feService from "@/src/services/feService";
@@ -62,7 +61,7 @@ export default defineComponent({
         },
     },
     created() {
-        if (!useAuthStore().haveEditRights()) {
+        if (!this.wikiStore.isAuthenticated) {
             throw new Error('You are not allowed to edit entries');
         }
         feService.load(location.search).then((entry) => {

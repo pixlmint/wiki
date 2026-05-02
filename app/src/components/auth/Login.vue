@@ -20,6 +20,7 @@
 import { defineComponent, reactive } from "vue";
 import { serviceManager, useDialogStore } from "pixlcms-wrapper";
 import { navFactory } from "@/src/helpers/nav";
+import { useWikiStore } from "@/src/stores/wiki";
 
 const dialogStore = useDialogStore();
 
@@ -36,6 +37,9 @@ const submitLoginForm = function() {
 
     cmsService.auth.login(form).then(() => {
         dialogStore.hideDialog(route);
+        const wikiStore = useWikiStore();
+        wikiStore.isAuthenticated = true;
+        wikiStore.token = cmsService.auth.token;
         cmsService.cms.loadNav(false, navFactory);
     });
 }

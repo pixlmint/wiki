@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useWikiStore } from "@/src/stores/wiki";
-import { useAuthStore, useDialogStore, useMediaStore } from "pixlcms-wrapper";
+import { useDialogStore, useMediaStore } from "pixlcms-wrapper";
 import { queryFormatter } from "@/src/helpers/queryFormatter";
 // import DrawModal from "@/src/components/admin/Editor/DrawModal.vue";
 import feService from "@/src/services/feService";
@@ -83,7 +83,6 @@ const props = defineProps({
 });*/
 
 const wikiStore = useWikiStore();
-const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const mediaStore = useMediaStore();
 
@@ -91,17 +90,6 @@ const title = computed(() => {
     return wikiStore.currentEntry!.meta.title;
 });
 
-const editEntry = function () {
-    // const entry = wikiStore.currentEntry;
-    wikiStore.editEntry(wikiStore.currentEntry);
-    // console.log(entry);
-    // let id = entry.id;
-    // if (typeof entry.originalId !== 'undefined')
-    //     id = entry.originalId;
-    // else
-    //     id = entry.id;
-    // navigate('/admin/edit?p=' + id);
-}
 
 /*
 const viewMarkdown = function () {
@@ -146,6 +134,7 @@ const currentTitleArray = computed(() => {
 });
 
 const canEdit = computed(() => {
-    return authStore.haveEditRights();
+    return wikiStore.isAuthenticated;
+    // return authStore.haveEditRights();
 });
 </script>

@@ -1,5 +1,4 @@
 import {
-    useAuthStore,
     useBackendStore,
     useDialogStore,
     INav,
@@ -15,12 +14,10 @@ import wikiServiceManager from "../services/wikiExtension";
 type WikiStore = ReturnType<typeof useWikiStore>;
 type DialogStore = ReturnType<typeof useDialogStore>;
 type BoardStore = ReturnType<typeof useBoardStore>;
-type AuthStore = ReturnType<typeof useAuthStore>;
 
 let wikiStore: WikiStore;
 let dialogStore: DialogStore;
 let boardStore: BoardStore;
-let authStore: AuthStore;
 
 const init = {
     install: function(app, options = {}) {
@@ -29,12 +26,9 @@ const init = {
 
         wikiStore = useWikiStore(pinia);
         dialogStore = useDialogStore(pinia);
-        authStore = useAuthStore(pinia);
         boardStore = useBoardStore(pinia);
     }
 }
-
-const getToken = () => authStore.token;
 
 type EntryKind = 'plain' | 'pdf' | 'ipynb' | 'board' | 'link' | 'card';
 

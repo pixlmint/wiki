@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
+import { serviceManager } from "pixlcms-wrapper";
 import {defineComponent} from "vue";
-import {useAuthStore} from "pixlcms-wrapper";
 
 export const route = "/auth/request-new-password";
 
@@ -19,11 +19,12 @@ export default defineComponent({
     data: () => {
         return {
             username: "",
+            auth: serviceManager.defaultInstance.auth,
         };
     },
     methods: {
         submit() {
-            useAuthStore().requestNewPassword({username: this.username});
+            this.auth.requestNewPassword({ username: this.username });
         },
     },
 })

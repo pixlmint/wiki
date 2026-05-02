@@ -1,6 +1,6 @@
 import { ElMessageBox } from "element-plus";
 import * as feService from "@/src/services/feService";
-import { IFolderNavElement, INavElement, useDialogStore } from "pixlcms-wrapper";
+import { cmsService, IFolderNavElement, INavElement, serviceManager, useDialogStore } from "pixlcms-wrapper";
 import { ILinkNavElement } from "../helpers/nav";
 import { computed, h } from "vue";
 import type { ComputedRef } from "vue";
@@ -144,16 +144,35 @@ export const createLinkActions = (
     element: INavElement,
     toggleLoading: LoadingFunction
 ) => {
-    return [
-        ...coreFolderActions(element, toggleLoading),
-        {
+    const isSignedIn = serviceManager.getInstance(element.domain).auth.token !== null;
+
+    const ret: DropdownElementConfiguration[] = [];
+
+    if (isSignedIn) {
+        ret.push(...coreFolderActions(element, toggleLoading));
+    } else {
+        ret.push({
             title: "Login",
             icon: "user",
             action: () => {
-                useDialogStore().showDialog("/auth/login");
+                useDialogStore().showDialog({
+                    route: "/auth/login",
+                    data: {
+                        domain: element.domain,
+                    },
+                });
             },
+        });
+    }
+
+    ret.push({
+        title: "Reload Nav",
+        action: () => {
+
         },
-    ];
+    });
+
+    return ret;
 }
 
 export const createRootFolderActions = (): DropdownElementConfiguration[] => {

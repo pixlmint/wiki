@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
+import {serviceManager, useDialogStore} from "pixlcms-wrapper";
 
 export const route = '/auth/create-admin';
 
@@ -29,17 +29,16 @@ export default defineComponent({
             },
             dialogStore: useDialogStore(),
             route: route,
+            auth: serviceManager.defaultInstance.auth,
         }
     },
     methods: {
         submit() {
-            useAuthStore()
-                .createAdmin(this.adminForm)
-                .then((response) => {
-                    if (response.data.adminCreated) {
-                        this.dialogStore.showDialog('/auth/login');
-                    }
-                })
+            this.auth.createAdmin(this.adminForm).then(response => {
+                if (response.data.adminCreated) {
+                    this.dialogStore.showDialog('/auth/login');
+                };
+            })
         }
     }
 })

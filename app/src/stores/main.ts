@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { useBackendStore } from "pixlcms-wrapper";
+import { serviceManager, useBackendStore } from "pixlcms-wrapper";
+import { useWikiStore } from "./wiki";
 
 interface Meta {
     title: string,
@@ -44,6 +45,9 @@ export const useMainStore = defineStore('main', {
             const backendStore = useBackendStore();
 
             return backendStore.initBackend().then(response => {
+                const wikiStore = useWikiStore();
+                wikiStore.isAuthenticated = serviceManager.defaultInstance.auth.token !== null;
+                wikiStore.token = serviceManager.defaultInstance.auth.token;
                 const data = response.data;
                 data.pluginVersion = data.wikiVersion;
                 data.cmsVersion = data.version;
@@ -51,13 +55,6 @@ export const useMainStore = defineStore('main', {
 
                 return response;
             });
-            // const request = buildRequest('/api/init', {token: token}, 'POST');
-            // // @ts-ignore
-            // return send(request).then((response: AxiosResponse) => {
-            //     if (response.data.is_token_valid !== 'token_valid') {
-            //         useAuthStore().logout();
-            //     }
-            // });
         },
         setHasUnsavedChanges(hasUnsavedChanges: boolean) {
             this.editingUnsavedChanges = hasUnsavedChanges;

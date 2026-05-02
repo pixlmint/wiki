@@ -4,17 +4,15 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
-import { authService, serviceManager, useAuthStore } from "pixlcms-wrapper";
 import FolderElement from "@/src/components/pw/nav/folder-element.vue";
 import { type INavElement } from "pixlcms-wrapper";
 import { isFolder, isLink } from "@/src/helpers/nav";
 import EntryElement from "@/src/components/pw/nav/entry-element.vue";
+import { useWikiStore } from "@/src/stores/wiki";
 
 const { element } = defineProps<{
     element: INavElement,
 }>();
-
-const authStore = useAuthStore();
 
 const getComponent = function () {
     if (isFolder(element) || isLink(element)) {
@@ -27,8 +25,7 @@ const getComponent = function () {
 }
 
 const canEdit = computed(() => {
-    return serviceManager.getInstance(element.domain).auth.token !== null;
-    // return authStore.haveEditRights();
+    return useWikiStore().isAuthenticated;
 });
 </script>
 
