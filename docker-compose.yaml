@@ -11,7 +11,7 @@ services:
         ports:
             - '94:80'
         volumes:
-            - ./:/var/www/html
+            - ./backend:/var/www/html
         environment:
             INI_ZEND_EXTENSION: xdebug.so
             OPCACHE_MAX_WASTED_PERCENTAGE: 20
@@ -37,7 +37,7 @@ services:
       ports:
         - "8888:8888"
       volumes:
-        - ./content:/home/pixlmint/notebooks/wiki
+        - ./backend/content:/home/pixlmint/notebooks/wiki
         - ./docker/jupyter:/home/pixlmint/config
       environment:
         - JUPYTER_TOKEN=asdf
