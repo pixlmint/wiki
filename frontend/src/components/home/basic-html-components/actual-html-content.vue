@@ -4,7 +4,7 @@
 import {h, onMounted, watchEffect, defineComponent} from "vue";
 import Highlighting from "@/components/pw/highlighting.vue";
 import BasicLink from "@/components/home/basic-html-components/basic-link.vue";
-import Table from "@/components/home/basic-html-components/table.vue";
+import Table from "@/components/home/basic-html-components/table-content.vue";
 import Heading from "@/components/home/basic-html-components/heading.vue";
 import Checkbox from "@/components/home/basic-html-components/checkbox.vue";
 import { useAuthStore } from "pixlcms-wrapper";

@@ -90,6 +90,7 @@ declare module 'vue' {
     RestorePassword: typeof import('./src/components/auth/RestorePassword.vue')['default']
     Search: typeof import('./src/components/pw/search.vue')['default']
     Table: typeof import('./src/components/admin/Editor/tables/Table.vue')['default']
+    TableContent: typeof import('./src/components/home/basic-html-components/table-content.vue')['default']
     TableCreator: typeof import('./src/components/admin/Editor/tables/TableCreator.vue')['default']
     TableEditorModal: typeof import('./src/components/admin/Editor/tables/TableEditorModal.vue')['default']
     TableSelector: typeof import('./src/components/admin/Editor/tables/TableSelector.vue')['default']

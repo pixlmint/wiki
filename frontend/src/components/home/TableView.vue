@@ -16,9 +16,7 @@
 <script lang="ts" setup>
 import EntryHeading from "@/components/home/entry-heading.vue";
 import { useWikiStore } from '@/stores/wiki';
-import { ref } from "vue";
-import { readTable, Table } from '@/helpers/htmlTableData';
-import TableDisplay from '@/components/home/basic-html-components/table.vue';
+import TableDisplay from '@/components/home/basic-html-components/table-content.vue';
 
 const wikiStore = useWikiStore();
 
