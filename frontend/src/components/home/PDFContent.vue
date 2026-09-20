@@ -1,31 +1,37 @@
 <template>
-    <view-page>
-        <template #heading>
-            <entry-heading :display-view-markdown-button="false" :display-media-buttons="false">
-                <template #title-extras>
-                    <el-tag type="danger"><pm-icon icon="file-pdf"></pm-icon></el-tag>
-                </template>
-            </entry-heading>
+  <view-page>
+    <template #heading>
+      <entry-heading
+        :display-view-markdown-button="false"
+        :display-media-buttons="false"
+      >
+        <template #title-extras>
+          <el-tag type="danger"><pm-icon icon="file-pdf"></pm-icon></el-tag>
         </template>
-        <template #content>
-        <div ref="pdfContainer">
-                <!-- <canvas v-for="n in totalPages" :key="n" :ref="'pdfCanvas' + n"></canvas> -->
-                <div v-for="page in pages" :key="page">
-                    <VuePDF :pdf="pdf" :page="page" text-layer fit-parent />
-                </div>
-        </div>
-        </template>
-    </view-page>
+      </entry-heading>
+    </template>
+    <template #content>
+      <div ref="pdfContainer">
+        <object
+          class="pdf-container"
+          :data="props.pdfPath"
+          type="application/pdf"
+          width="100%"
+        />
+      </div>
+    </template>
+  </view-page>
 </template>
 
 <script lang="ts" setup>
 import ViewPage from "@/components/pw/view-page.vue";
 import EntryHeading from "@/components/home/entry-heading.vue";
-import { VuePDF, usePDF } from "@tato30/vue-pdf";
 
-
-const props = defineProps(['pdfPath']);
-
-
-const {pdf, pages, info} = usePDF(props.pdfPath);
+const props = defineProps(["pdfPath"]);
 </script>
+
+<style lang="scss" scoped>
+.pdf-container {
+  height: calc(100vh - 2.5rem - 1rem - 50px);
+}
+</style>
