@@ -1,11 +1,13 @@
 <template>
     <pw-view-page>
         <template #heading>
-            <entry-heading>
-            </entry-heading>
+            <entry-heading> </entry-heading>
         </template>
         <template #content>
-            <ActualHtmlContent :content="props.content" :entry-id="props.entryId"></ActualHtmlContent>
+            <ActualHtmlContent
+                :content="props.content"
+                :entry-id="props.entryId"
+            ></ActualHtmlContent>
         </template>
     </pw-view-page>
 </template>

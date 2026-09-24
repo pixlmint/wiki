@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import { useWikiStore } from "@/stores/wiki";
-import {navigate} from "@/helpers/navigator";
+import { navigate } from "@/helpers/navigator";
 
 const props = defineProps({
     attrs: {
@@ -22,7 +22,7 @@ const wikiStore = useWikiStore();
 const linkUrl = props.attrs.href;
 
 const entryId = computed(() => {
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = props.attrs.href;
     return a.pathname;
 });
@@ -35,5 +35,5 @@ const handleClick = function (event: MouseEvent) {
         wikiStore.fetchEntry(entryId.value);
         navigate(entryId.value);
     }
-}
+};
 </script>

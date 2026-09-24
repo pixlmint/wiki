@@ -1,14 +1,24 @@
 {
-    "name": "wiki",
-    "version": "1.0.0",
-    "description": "Your very own personal Knowledgebase",
-    "private": true,
-    "workspaces": [
-        "frontend"
-    ],
-    "scripts": {
-        "dev": "npm run dev --workspace frontend",
-        "build": "npm run build --workspace frontend",
-        "typecheck": "npm run typecheck --workspace frontend"
-    }
+  "name": "wiki",
+  "version": "1.0.0",
+  "description": "Your very own personal Knowledgebase",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "typecheck": "npm run typecheck --workspace frontend"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{vue,ts,js,mjs,cjs}": "prettier --write"
+  },
+  "devDependencies": {
+    "lint-staged": "^17.5.1",
+    "prettier": "^3.9.9"
+  }
 }

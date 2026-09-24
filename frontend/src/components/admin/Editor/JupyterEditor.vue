@@ -7,7 +7,14 @@
 import JupyterFrame from "@/components/jupyter/jupyter-frame.vue";
 import { useWikiStore } from "@/stores/wiki";
 import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
-import { createConnector, JupyterSession, JupyterConnector, RemoteJupyterConnector, type JupyterConnectorSettings, useJupyterConnectionsStore } from "@/helpers/jupyter";
+import {
+    createConnector,
+    JupyterSession,
+    JupyterConnector,
+    RemoteJupyterConnector,
+    type JupyterConnectorSettings,
+    useJupyterConnectionsStore,
+} from "@/helpers/jupyter";
 import { useDialogStore } from "pixlcms-wrapper";
 import { JupyterSetupAction } from "@/helpers/jupyter";
 
@@ -23,7 +30,7 @@ const session = ref<JupyterSession | null>(null);
 const settings = reactive({
     setupModalShowing: true,
     isReady: false,
-    baseUrl: '',
+    baseUrl: "",
     sharedFolder: null,
     authToken: null,
 });
@@ -46,8 +53,11 @@ const configure = async function (setup: JupyterConnectorSettings) {
         const newSession = await connector.open(wikiStore.safeCurrentEntry.id);
         if (connector instanceof RemoteJupyterConnector) {
             newSession.onUpdate(() => {
-                connector!.syncRemoteToLocal(newSession, wikiStore.safeCurrentEntry);
-            })
+                connector!.syncRemoteToLocal(
+                    newSession,
+                    wikiStore.safeCurrentEntry,
+                );
+            });
         }
         session.value = newSession;
 
@@ -55,7 +65,7 @@ const configure = async function (setup: JupyterConnectorSettings) {
     } catch (e) {
         console.error(e);
     }
-}
+};
 
 const changeSettings = function () {
     // settings.setupModalShowing = true;
@@ -68,13 +78,15 @@ const changeSettings = function () {
                 baseUrl: settings.baseUrl,
                 sharedFolder: settings.sharedFolder,
                 authToken: settings.authToken,
-            }
+            },
         },
     });
-}
+};
 
 onMounted(() => {
-    const configuredSettings = connectionsStore.getConnectionForEntry(wikiStore.safeCurrentEntry.id);
+    const configuredSettings = connectionsStore.getConnectionForEntry(
+        wikiStore.safeCurrentEntry.id,
+    );
 
     console.log(configuredSettings);
 
@@ -92,13 +104,13 @@ onMounted(() => {
     }
 });
 
-const onSetupDialogClose = function() {
-    const connection = connectionsStore.getConnectionForEntry(wikiStore.safeCurrentEntry.id);
-    if (connection !== null)
-        configure(connection);
-    else
-        throw "No connection found for entry " + wikiStore.safeCurrentEntry.id;
-}
+const onSetupDialogClose = function () {
+    const connection = connectionsStore.getConnectionForEntry(
+        wikiStore.safeCurrentEntry.id,
+    );
+    if (connection !== null) configure(connection);
+    else throw "No connection found for entry " + wikiStore.safeCurrentEntry.id;
+};
 
 // onMounted(() => {
 //     configure({

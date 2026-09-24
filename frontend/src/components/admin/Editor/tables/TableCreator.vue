@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const emit = defineEmits(["create"]);
 
@@ -21,7 +21,6 @@ const tableSpec = ref({
 });
 
 function create() {
-    emit('create', tableSpec.value);
+    emit("create", tableSpec.value);
 }
 </script>
-

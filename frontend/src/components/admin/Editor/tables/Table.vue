@@ -1,13 +1,33 @@
 <template>
-    <el-table :data="data.tableData" @cell-contextmenu="contextMenu" @header-contextmenu="headerContextMenu">
-        <el-table-column v-for="(col, index) in data.tableHead" :key="index" :prop="col" :label="col" sortable>
+    <el-table
+        :data="data.tableData"
+        @cell-contextmenu="contextMenu"
+        @header-contextmenu="headerContextMenu"
+    >
+        <el-table-column
+            v-for="(col, index) in data.tableHead"
+            :key="index"
+            :prop="col"
+            :label="col"
+            sortable
+        >
             <template #default="scope">
                 <el-input v-model="scope.row[col]" />
             </template>
         </el-table-column>
     </el-table>
 
-    <el-button-group v-show="contextMenuOptions.visible" :style="'top: ' + contextMenuOptions.y + 'px; left: ' + contextMenuOptions.x + 'px'" class="row-context-menu">
+    <el-button-group
+        v-show="contextMenuOptions.visible"
+        :style="
+            'top: ' +
+            contextMenuOptions.y +
+            'px; left: ' +
+            contextMenuOptions.x +
+            'px'
+        "
+        class="row-context-menu"
+    >
         <el-button @click="addRowBefore">Add Row Above</el-button>
         <el-button @click="addRowAfter">Add Row Below</el-button>
         <el-button @click="deleteRow">Delete Row</el-button>
@@ -15,7 +35,7 @@
     </el-button-group>
 
     <div v-show="mdShowing">
-        <textarea>{{mdContent}}</textarea>
+        <textarea>{{ mdContent }}</textarea>
     </div>
 
     <el-button v-if="!mdShowing" @click="printMd">Show Markdown</el-button>
@@ -24,30 +44,29 @@
 </template>
 
 <script lang="ts" setup>
-import { Table, readTable } from '@/helpers/htmlTableData';
-import { reactive } from '@vue/reactivity';
-import { useDialogStore } from 'pixlcms-wrapper';
-import { onMounted, onUnmounted, ref } from 'vue';
-
+import { Table, readTable } from "@/helpers/htmlTableData";
+import { reactive } from "@vue/reactivity";
+import { useDialogStore } from "pixlcms-wrapper";
+import { onMounted, onUnmounted, ref } from "vue";
 
 interface ReactiveTable {
-    table: HTMLTableElement | null,
-    tbody: HTMLTableSectionElement | null,
-    rowCount: number,
-    colCount: number,
-    tableData: Array<Object>,
-    tableHead: Array<string>,
-    hasHeading: boolean,
-    tableHash: number,
+    table: HTMLTableElement | null;
+    tbody: HTMLTableSectionElement | null;
+    rowCount: number;
+    colCount: number;
+    tableData: Array<Object>;
+    tableHead: Array<string>;
+    hasHeading: boolean;
+    tableHash: number;
 }
 
 interface ContextMenu {
-    visible: boolean,
-    x: number,
-    y: number,
-    currentRowIndex: number,
-    currentCellIndex: number,
-    mode: 'header' | 'cell',
+    visible: boolean;
+    x: number;
+    y: number;
+    currentRowIndex: number;
+    currentCellIndex: number;
+    mode: "header" | "cell";
 }
 
 const mdShowing = ref(false);
@@ -72,19 +91,18 @@ const contextMenuOptions = ref<ContextMenu>({
     y: 0,
     currentRowIndex: -1,
     currentCellIndex: -1,
-    mode: 'cell',
+    mode: "cell",
 });
-
 
 const dialogStore = useDialogStore();
 
 onMounted(() => {
     _init();
-    document.addEventListener('click', documentClickHandler);
+    document.addEventListener("click", documentClickHandler);
 });
 
 onUnmounted(() => {
-    document.removeEventListener('click', documentClickHandler);
+    document.removeEventListener("click", documentClickHandler);
 });
 
 function documentClickHandler() {
@@ -107,8 +125,8 @@ function printMd() {
 }
 
 function save() {
-    console.log('saving');
-    emit('save', generateMarkdown(), data.tableHash);
+    console.log("saving");
+    emit("save", generateMarkdown(), data.tableHash);
 }
 
 function headerContextMenu(column: any, event: MouseEvent) {
@@ -116,15 +134,21 @@ function headerContextMenu(column: any, event: MouseEvent) {
     console.log(column);
 }
 
-function contextMenu(row: any, column: any, cell: HTMLTableCellElement, event: MouseEvent) {
+function contextMenu(
+    row: any,
+    column: any,
+    cell: HTMLTableCellElement,
+    event: MouseEvent,
+) {
     event.preventDefault();
     console.log(row, column);
     contextMenuOptions.value.visible = true;
-    const dialogEl = document.getElementById('table-editor-modal');
+    const dialogEl = document.getElementById("table-editor-modal");
     // @ts-ignore
     contextMenuOptions.value.x = event.pageX - dialogEl.offsetLeft;
     // @ts-ignore
-    contextMenuOptions.value.y = event.y + dialogStore.getDialogScrollHeight - dialogEl.offsetTop;
+    contextMenuOptions.value.y =
+        event.y + dialogStore.getDialogScrollHeight - dialogEl.offsetTop;
     contextMenuOptions.value.currentRowIndex = rowIndexOf(row);
     contextMenuOptions.value.currentCellIndex = column.no;
 }
@@ -155,7 +179,12 @@ function generateEmptyRow() {
 
 function insertRowIntoTable(index: number) {
     if (data.tableData.length < index) {
-        throw new Error("Invalid index " + index + " for table of length " + data.tableData.length);
+        throw new Error(
+            "Invalid index " +
+                index +
+                " for table of length " +
+                data.tableData.length,
+        );
     }
     data.tableData = [
         ...data.tableData.slice(0, index),
@@ -178,7 +207,12 @@ function deleteRow() {
     const index = contextMenuOptions.value.currentRowIndex;
     console.log("delete row " + index);
     if (data.tableData.length - 1 < index) {
-        throw new Error("Invalid index " + index + " for table of length " + data.tableData.length);
+        throw new Error(
+            "Invalid index " +
+                index +
+                " for table of length " +
+                data.tableData.length,
+        );
     }
 
     data.tableData = [
@@ -258,7 +292,6 @@ function generateMarkdown() {
 
     return md;
 }
-
 </script>
 
 <style lang="scss" scoped>

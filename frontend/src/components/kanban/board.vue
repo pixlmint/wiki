@@ -1,10 +1,22 @@
 <template>
-    <div :class="{board: true, draggingCard: data.isDraggingCard}">
-        <list @startDragging="data.isDraggingCard = true" @stopDragging="data.isDraggingCard = false" v-if="data.boardLoaded" v-for="list in boardLists" :key="list.id" :list="list"></list>
+    <div :class="{ board: true, draggingCard: data.isDraggingCard }">
+        <list
+            @startDragging="data.isDraggingCard = true"
+            @stopDragging="data.isDraggingCard = false"
+            v-if="data.boardLoaded"
+            v-for="list in boardLists"
+            :key="list.id"
+            :list="list"
+        ></list>
         <div class="board-list">
             <div class="d-flex justify-content-end">
-                <el-input ref="addItemInput" v-show="data.isAddingList" v-on:keyup.esc="cancelAddList" v-on:keyup.enter="addList"
-                          v-model="data.newListName"></el-input>
+                <el-input
+                    ref="addItemInput"
+                    v-show="data.isAddingList"
+                    v-on:keyup.esc="cancelAddList"
+                    v-on:keyup.enter="addList"
+                    v-model="data.newListName"
+                ></el-input>
                 <el-button v-show="!data.isAddingList" @click="toggleAddList">
                     <pm-icon icon="plus"></pm-icon>
                 </el-button>
@@ -14,11 +26,11 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive, computed} from "vue";
+import { ref, reactive, computed } from "vue";
 import List from "@/components/kanban/list.vue";
-import {useWikiStore} from "@/stores/wiki";
-import {useBoardStore} from "@/stores/board";
-import {useMainStore} from "@/stores/main";
+import { useWikiStore } from "@/stores/wiki";
+import { useBoardStore } from "@/stores/board";
+import { useMainStore } from "@/stores/main";
 
 const addItemInput = ref(null);
 
@@ -67,28 +79,27 @@ const boardLists = computed(() => {
 });
 
 const log = function (event: Event) {
-    console.log(event)
-}
+    console.log(event);
+};
 const addList = function () {
     if (data.newListName === null) {
-        throw 'List name cannot be null';
+        throw "List name cannot be null";
     }
     boardStore.createList(props.boardId, data.newListName).then(() => {
         data.isAddingList = false;
         data.newListName = null;
     });
-}
+};
 const cancelAddList = function () {
     data.isAddingList = false;
     data.newListName = null;
-}
+};
 const toggleAddList = function () {
     data.isAddingList = true;
     if (addItemInput.value) {
         addItemInput.value.focus();
     }
-}
-
+};
 </script>
 
 <style lang="scss">

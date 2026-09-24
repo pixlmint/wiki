@@ -2,10 +2,14 @@
     <pm-dialog>
         <el-form @submit.prevent="submit">
             <div class="form-row">
-                <input placeholder="Username" v-model="username" type="text"/>
+                <input placeholder="Username" v-model="username" type="text" />
             </div>
             <div class="form-row">
-                <input placeholder="New Password" v-model="password1" type="password"/>
+                <input
+                    placeholder="New Password"
+                    v-model="password1"
+                    type="password"
+                />
             </div>
             <div class="form-row">
                 <input
@@ -20,9 +24,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useMainStore} from "@/stores/main";
-import {useAuthStore} from "pixlcms-wrapper";
+import { defineComponent } from "vue";
+import { useMainStore } from "@/stores/main";
+import { useAuthStore } from "pixlcms-wrapper";
 
 export const route = "/auth/restore-password";
 
@@ -35,21 +39,23 @@ export default defineComponent({
         };
     },
     created() {
-        useMainStore().setTitle('Restore Password - Wiki')
+        useMainStore().setTitle("Restore Password - Wiki");
     },
     methods: {
         submit() {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            useAuthStore().restorePassword({
-                username: this.username,
-                password1: this.password1,
-                password2: this.password2,
-                token: urlParams.get('token') as string
-            }).then(() => {
-                // useRouter().push('/');
-            });
+            useAuthStore()
+                .restorePassword({
+                    username: this.username,
+                    password1: this.password1,
+                    password2: this.password2,
+                    token: urlParams.get("token") as string,
+                })
+                .then(() => {
+                    // useRouter().push('/');
+                });
         },
     },
-})
+});
 </script>

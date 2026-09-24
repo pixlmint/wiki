@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const props = defineProps({
     tag: {
@@ -17,15 +17,14 @@ const props = defineProps({
     id: {
         type: String,
         required: false,
-    }
+    },
 });
 
 const headingId = computed(() => {
     if (props.id) {
         return props.id;
     } else {
-        return props.value.toLowerCase().replaceAll(' ', '-');
+        return props.value.toLowerCase().replaceAll(" ", "-");
     }
 });
-
 </script>

@@ -1,38 +1,36 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 import { buildRequest, send } from "pixlcms-wrapper";
 import { ElNotification } from "element-plus";
 import { WikiEntry } from "@/contracts/WikiBase";
 import { BoardResponse } from "@/contracts/Kanban";
 
-interface Nav extends Array<NavElement> {
-}
+interface Nav extends Array<NavElement> {}
 
 interface NavElement {
-    title: string,
-    id: string,
-    url: string,
-    showing: boolean,
-    children: Nav,
-    isPublic: boolean,
+    title: string;
+    id: string;
+    url: string;
+    showing: boolean;
+    children: Nav;
+    isPublic: boolean;
 }
 
 interface EditorState {
-    lastSaved: Date | null,
-    editingUnsavedChanges: boolean,
+    lastSaved: Date | null;
+    editingUnsavedChanges: boolean;
 }
 
-interface WikiEntryList extends Array<WikiEntry> {
-}
+interface WikiEntryList extends Array<WikiEntry> {}
 
 interface State {
-    loadedEntries: WikiEntryList,
-    currentEntry: WikiEntry | null,
-    nav: Nav | null,
-    editor: EditorState,
-    openedSubmenus: String[],
+    loadedEntries: WikiEntryList;
+    currentEntry: WikiEntry | null;
+    nav: Nav | null;
+    editor: EditorState;
+    openedSubmenus: String[];
 }
 
-export const useWikiStore = defineStore('wikiStore', {
+export const useWikiStore = defineStore("wikiStore", {
     state: (): State => ({
         loadedEntries: [],
         currentEntry: null,
@@ -46,30 +44,32 @@ export const useWikiStore = defineStore('wikiStore', {
     getters: {
         getLoadedEntries: (state) => state.loadedEntries,
         getCurrentEntry: (state) => state.currentEntry,
-        getNav: state => state.nav,
-        safeCurrentEntry: state => {
+        getNav: (state) => state.nav,
+        safeCurrentEntry: (state) => {
             if (state.currentEntry === null) {
-                throw new Error('currentEntry is null');
+                throw new Error("currentEntry is null");
             }
 
             return state.currentEntry;
         },
-        getOpenedSubmenus: state => state.openedSubmenus,
+        getOpenedSubmenus: (state) => state.openedSubmenus,
     },
     actions: {
         rebuildIndex() {
-            const request = buildRequest('/api/index');
+            const request = buildRequest("/api/index");
             return send(request);
         },
         dumpAlternateContent(page: string | null = null) {
             const data: { page?: string } = {};
-            if (page !== null)
-                data.page = page;
-            const request = buildRequest('/api/admin/alternate/dump-file-into-content', data);
+            if (page !== null) data.page = page;
+            const request = buildRequest(
+                "/api/admin/alternate/dump-file-into-content",
+                data,
+            );
             return send(request);
         },
         search(query: string) {
-            const request = buildRequest('/api/search', { q: query });
+            const request = buildRequest("/api/search", { q: query });
             return send(request);
         },
         saveCurrentEntry(preventAutoRefresh: boolean = false) {
@@ -77,37 +77,48 @@ export const useWikiStore = defineStore('wikiStore', {
             this.editor.editingUnsavedChanges = false;
             return this.saveEntry(currentEntry, preventAutoRefresh);
         },
-        saveEntry(entry: WikiEntry | BoardResponse, preventAutoRefresh: boolean = false) {
+        saveEntry(
+            entry: WikiEntry | BoardResponse,
+            preventAutoRefresh: boolean = false,
+        ) {
             const data = {
                 content: entry.raw_content,
                 meta: JSON.stringify(entry.meta),
                 entry: entry.id,
                 lastUpdate: entry.meta.dateUpdated,
-            }
-            const request = buildRequest('/api/admin/entry/edit', data, 'PUT');
-            return send(request).then(response => {
+            };
+            const request = buildRequest("/api/admin/entry/edit", data, "PUT");
+            return send(request).then((response) => {
                 this.editor.lastSaved = new Date();
-                this.safeCurrentEntry.meta.dateUpdated = response.data.lastUpdate;
+                this.safeCurrentEntry.meta.dateUpdated =
+                    response.data.lastUpdate;
                 if (!preventAutoRefresh)
                     this.fetchEntry(this.safeCurrentEntry.id);
                 return response;
             });
         },
         fetchEntry(entry: string) {
-            const request = buildRequest('/api/entry/view', { p: entry });
-            return send(request).then(response => {
+            const request = buildRequest("/api/entry/view", { p: entry });
+            return send(request).then((response) => {
                 this.currentEntry = response.data;
                 this.loadedEntries.push(response.data);
             });
         },
         fetchLastChanged(entry: string) {
-            const request = buildRequest('/api/admin/entry/fetch-last-changed', { entry: entry });
-            return send(request).then(response => {
+            const request = buildRequest(
+                "/api/admin/entry/fetch-last-changed",
+                {
+                    entry: entry,
+                },
+            );
+            return send(request).then((response) => {
                 return new Date(response.data.lastChanged);
             });
         },
         async getCurrentEntryFromServer() {
-            const request = buildRequest('/api/entry/view', { p: this.safeCurrentEntry.id });
+            const request = buildRequest("/api/entry/view", {
+                p: this.safeCurrentEntry.id,
+            });
             let response = await send(request);
             return response.data.raw_content;
         },
@@ -116,16 +127,20 @@ export const useWikiStore = defineStore('wikiStore', {
                 parentFolder: parentFolder,
                 title: title,
             };
-            const request = buildRequest('/api/admin/entry/add', data, 'POST');
+            const request = buildRequest("/api/admin/entry/add", data, "POST");
             return send(request);
         },
         addPdf(parentFolder: string, title: string) {
             const data = {
                 parentFolder: parentFolder,
                 title: title,
-                renderer: 'pdf',
+                renderer: "pdf",
             };
-            const request = buildRequest('/api/admin/entry/upload-alternative-content', data, 'POST');
+            const request = buildRequest(
+                "/api/admin/entry/upload-alternative-content",
+                data,
+                "POST",
+            );
             return send(request);
         },
         addFolder(parentFolder: string, folderName: any) {
@@ -133,50 +148,66 @@ export const useWikiStore = defineStore('wikiStore', {
                 parentFolder: parentFolder,
                 folderName: folderName,
             };
-            const request = buildRequest('/api/admin/folder/add', data, 'POST');
+            const request = buildRequest("/api/admin/folder/add", data, "POST");
             return send(request);
         },
         deleteFolder(folderName: string, token: string | null) {
-            const request = buildRequest('/api/admin/folder/delete', { entry: folderName }, 'DELETE');
+            const request = buildRequest(
+                "/api/admin/folder/delete",
+                { entry: folderName },
+                "DELETE",
+            );
             return send(request);
         },
         deleteEntry(entry: string) {
-            const request = buildRequest('/api/admin/entry/delete', { entry: entry }, 'DELETE');
+            const request = buildRequest(
+                "/api/admin/entry/delete",
+                { entry: entry },
+                "DELETE",
+            );
             return send(request).then(() => {
                 ElNotification({
-                    type: 'success',
-                    title: 'Success',
-                    message: 'Successfully Deleted the Entry'
+                    type: "success",
+                    title: "Success",
+                    message: "Successfully Deleted the Entry",
                 });
             });
         },
         renameEntry(newName: string) {
             if (this.currentEntry === null) {
-                throw 'Current Entry is not defined';
+                throw "Current Entry is not defined";
             }
             this.currentEntry.meta.title = newName;
             const data = {
-                'new-title': newName,
+                "new-title": newName,
                 entry: this.currentEntry.id,
-            }
-            const request = buildRequest('/api/admin/entry/rename', data, 'PUT');
+            };
+            const request = buildRequest(
+                "/api/admin/entry/rename",
+                data,
+                "PUT",
+            );
             return send(request);
         },
         setSecurityState(entry: string, newState: string) {
             const data = {
                 entry: entry,
                 new_state: newState,
-            }
-            const request = buildRequest('/api/admin/entry/change-security', data, 'PUT');
+            };
+            const request = buildRequest(
+                "/api/admin/entry/change-security",
+                data,
+                "PUT",
+            );
             return send(request);
         },
         loadNav(forceReload: boolean = false) {
-            let url = '/api/nav';
+            let url = "/api/nav";
             if (forceReload) {
-                url += '?forceReload=true';
+                url += "?forceReload=true";
             }
             const request = buildRequest(url);
-            return send(request).then(response => {
+            return send(request).then((response) => {
                 this.nav = response.data[0];
             });
         },
@@ -191,7 +222,10 @@ export const useWikiStore = defineStore('wikiStore', {
 
             return null;
         },
-        async handleCheckboxToggle(checkboxId: number, newState: boolean): Promise<void> {
+        async handleCheckboxToggle(
+            checkboxId: number,
+            newState: boolean,
+        ): Promise<void> {
             const re = /^.*(\[\s?x?\s?\]).*$/gm;
             let text = this.currentEntry!.raw_content;
 
@@ -205,28 +239,35 @@ export const useWikiStore = defineStore('wikiStore', {
             const match = matches[checkboxId];
             let line = match[0];
 
-            const newBox = newState ? '[x]' : '[ ]';
+            const newBox = newState ? "[x]" : "[ ]";
             line = line.replace(match[1], newBox);
-            text = text.slice(0, match.index) + line + text.slice(match.index! + match[0].length);
-            
+            text =
+                text.slice(0, match.index) +
+                line +
+                text.slice(match.index! + match[0].length);
+
             this.currentEntry!.raw_content = text;
 
-            const doc = new DOMParser().parseFromString('<root>' + this.safeCurrentEntry!.content + '</root>', "text/xml");
+            const doc = new DOMParser().parseFromString(
+                "<root>" + this.safeCurrentEntry!.content + "</root>",
+                "text/xml",
+            );
             const boxes = doc.querySelectorAll('input[type="checkbox"]');
 
-            let reloadContent = false
+            let reloadContent = false;
             if (boxes.length > checkboxId) {
                 const box = boxes[checkboxId];
                 if (newState) {
-                    box.setAttribute('checked', '1');
+                    box.setAttribute("checked", "1");
                 } else {
-                    box.removeAttribute('checked');
+                    box.removeAttribute("checked");
                 }
-                this.safeCurrentEntry!.content = doc.firstElementChild!.innerHTML
+                this.safeCurrentEntry!.content =
+                    doc.firstElementChild!.innerHTML;
             } else {
                 reloadContent = true;
             }
             await this.saveCurrentEntry(!reloadContent);
-        }
-    }
-})
+        },
+    },
+});

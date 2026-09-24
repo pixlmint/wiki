@@ -2,10 +2,14 @@
     <pm-dialog title="Create Admin" :route="route">
         <el-form v-model="adminForm">
             <el-form-item label="Username">
-                <el-input type="text" v-model="adminForm.username"/>
+                <el-input type="text" v-model="adminForm.username" />
             </el-form-item>
             <el-form-item label="Password">
-                <el-input class="uk-input" type="text" v-model="adminForm.password"/>
+                <el-input
+                    class="uk-input"
+                    type="text"
+                    v-model="adminForm.password"
+                />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -15,21 +19,21 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
+import { defineComponent } from "vue";
+import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
 
-export const route = '/auth/create-admin';
+export const route = "/auth/create-admin";
 
 export default defineComponent({
     data() {
         return {
             adminForm: {
-                username: '',
-                password: '',
+                username: "",
+                password: "",
             },
             dialogStore: useDialogStore(),
             route: route,
-        }
+        };
     },
     methods: {
         submit() {
@@ -37,10 +41,10 @@ export default defineComponent({
                 .createAdmin(this.adminForm)
                 .then((response) => {
                     if (response.data.adminCreated) {
-                        this.dialogStore.showDialog('/auth/login');
+                        this.dialogStore.showDialog("/auth/login");
                     }
-                })
-        }
-    }
-})
+                });
+        },
+    },
+});
 </script>

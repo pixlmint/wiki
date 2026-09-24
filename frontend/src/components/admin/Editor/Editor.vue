@@ -1,25 +1,25 @@
 <template>
     <view-page>
         <template #heading>
-            <EditorHead @editorClose="handleEditorClose"/>
+            <EditorHead @editorClose="handleEditorClose" />
         </template>
         <template #content>
-        <div v-if="isEntryLoaded" :key="key">
-            <PDFEditor v-if="isPdf"></PDFEditor>
-            <JupyterEditor v-else-if="isJupyterNotebook"></JupyterEditor>
-            <EditEntry v-else></EditEntry>
-        </div>
+            <div v-if="isEntryLoaded" :key="key">
+                <PDFEditor v-if="isPdf"></PDFEditor>
+                <JupyterEditor v-else-if="isJupyterNotebook"></JupyterEditor>
+                <EditEntry v-else></EditEntry>
+            </div>
         </template>
     </view-page>
 </template>
 
 <script lang="ts">
 import EditEntry from "./EditEntry.vue";
-import EditorHead from './EditorHead.vue';
-import {defineComponent} from "vue";
-import {useAuthStore} from 'pixlcms-wrapper'
-import {useWikiStore} from "@/stores/wiki";
-import {useMainStore} from "@/stores/main";
+import EditorHead from "./EditorHead.vue";
+import { defineComponent } from "vue";
+import { useAuthStore } from "pixlcms-wrapper";
+import { useWikiStore } from "@/stores/wiki";
+import { useMainStore } from "@/stores/main";
 import PDFEditor from "@/components/admin/Editor/PDFEditor.vue";
 import JupyterEditor from "@/components/admin/Editor/JupyterEditor.vue";
 import ViewPage from "@/components/pw/view-page.vue";
@@ -38,20 +38,20 @@ export default defineComponent({
             wikiStore: useWikiStore(),
             title: "Edit " + this.entry,
             key: 0,
-        }
+        };
     },
     computed: {
         isPdf() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!("renderer" in this.wikiStore.safeCurrentEntry.meta)) {
                 return false;
             }
-            return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return "pdf" === this.wikiStore.safeCurrentEntry.meta.renderer;
         },
         isJupyterNotebook() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!("renderer" in this.wikiStore.safeCurrentEntry.meta)) {
                 return false;
             }
-            return 'ipynb' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return "ipynb" === this.wikiStore.safeCurrentEntry.meta.renderer;
         },
     },
     methods: {
@@ -62,17 +62,17 @@ export default defineComponent({
     },
     created() {
         if (!useAuthStore().haveEditRights()) {
-            throw new Error('You are not allowed to edit entries');
+            throw new Error("You are not allowed to edit entries");
         }
-        let entry = new URLSearchParams(location.search).get('p');
+        let entry = new URLSearchParams(location.search).get("p");
         if (entry === null) {
-            entry = '';
+            entry = "";
         }
         this.wikiStore.fetchEntry(entry).then(() => {
             this.isEntryLoaded = true;
             this.title = "Edit " + this.wikiStore.safeCurrentEntry.meta.title;
-            useMainStore().setTitle(this.title)
+            useMainStore().setTitle(this.title);
         });
     },
-})
+});
 </script>

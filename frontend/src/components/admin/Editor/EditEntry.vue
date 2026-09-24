@@ -1,31 +1,41 @@
 <template>
     <div>
         <div class="container">
-            <pw-md-editor @refresh="refresh" :key="componentKey" @input="updateContent" @save="save" @change="updateContent"
-                          v-model="markdown" :editorHeight="editorHeight"></pw-md-editor>
+            <pw-md-editor
+                @refresh="refresh"
+                :key="componentKey"
+                @input="updateContent"
+                @save="save"
+                @change="updateContent"
+                v-model="markdown"
+                :editorHeight="editorHeight"
+            ></pw-md-editor>
         </div>
         <!--<DrawModal v-if="isDrawing" @imagesave="imageSave"></DrawModal>-->
-        <CurrentFileDiffModal v-if="isDiffing" @submitMerge="submitMerge" :key="diffKey"></CurrentFileDiffModal >
+        <CurrentFileDiffModal
+            v-if="isDiffing"
+            @submitMerge="submitMerge"
+            :key="diffKey"
+        ></CurrentFileDiffModal>
     </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useWikiStore} from '@/stores/wiki'
-import {useMainStore} from "@/stores/main";
-import {useUserSettings} from "@/stores/user-settings";
+import { defineComponent } from "vue";
+import { useWikiStore } from "@/stores/wiki";
+import { useMainStore } from "@/stores/main";
+import { useUserSettings } from "@/stores/user-settings";
 // import DrawModal from "@/components/admin/Editor/DrawModal.vue";
 import CurrentFileDiffModal from "@/components/admin/Editor/CurrentFileDiffModal.vue";
-import {useDialogStore} from "pixlcms-wrapper";
-import {DateTime} from "luxon";
-
+import { useDialogStore } from "pixlcms-wrapper";
+import { DateTime } from "luxon";
 
 // TODO: use lastChanged to detect which version of the content is newer
 
 let saveTimeout: number | null = null;
 
 export default defineComponent({
-    components: {CurrentFileDiffModal},
+    components: { CurrentFileDiffModal },
     data: function () {
         return {
             mainStore: useMainStore(),
@@ -34,7 +44,7 @@ export default defineComponent({
             dialogStore: useDialogStore(),
             componentKey: 0,
             diffKey: 0,
-        }
+        };
     },
     created() {
         this.wikiStore.editor.lastSaved = new Date();
@@ -43,30 +53,31 @@ export default defineComponent({
         markdown: {
             get() {
                 if (this.wikiStore.currentEntry === null) {
-                    return '';
+                    return "";
                 }
                 return this.wikiStore.currentEntry.raw_content;
             },
             set(newMarkdown: string) {
                 this.wikiStore.safeCurrentEntry.raw_content = newMarkdown;
-            }
+            },
         },
         isDrawing() {
-            return this.dialogStore.isDialogShowing('/draw');
+            return this.dialogStore.isDialogShowing("/draw");
         },
         isDiffing() {
-            return this.dialogStore.isDialogShowing('/diff');
+            return this.dialogStore.isDialogShowing("/diff");
         },
         editorHeight() {
-            return window.innerHeight - 200 + 'px';
-        }
+            return window.innerHeight - 200 + "px";
+        },
     },
     methods: {
         submitMerge(d: any) {
             this.wikiStore.safeCurrentEntry.raw_content = d;
-            this.wikiStore.safeCurrentEntry.meta.dateUpdated = DateTime.now().toFormat("yyyy-LL-dd HH:mm")
+            this.wikiStore.safeCurrentEntry.meta.dateUpdated =
+                DateTime.now().toFormat("yyyy-LL-dd HH:mm");
             this.wikiStore.saveCurrentEntry();
-            this.dialogStore.hideDialog('/diff');
+            this.dialogStore.hideDialog("/diff");
         },
         refresh() {
             this.wikiStore.fetchEntry(this.wikiStore.safeCurrentEntry.id);
@@ -74,13 +85,16 @@ export default defineComponent({
         },
         updateContent(md: string) {
             if (!this.wikiStore.currentEntry) {
-                console.error('Not editing an entry');
-                return '';
+                console.error("Not editing an entry");
+                return "";
             }
             this.mainStore.setHasUnsavedChanges(true);
             this.wikiStore.currentEntry.raw_content = md;
 
-            if (this.userSettings.getSettings.autoSave && saveTimeout === null) {
+            if (
+                this.userSettings.getSettings.autoSave &&
+                saveTimeout === null
+            ) {
                 saveTimeout = window.setTimeout(() => {
                     saveTimeout = null;
                     this.save();
@@ -92,24 +106,28 @@ export default defineComponent({
         },
         showDiff() {
             this.diffKey += 1;
-            this.dialogStore.showDialog('/diff');
+            this.dialogStore.showDialog("/diff");
         },
         save() {
-            this.wikiStore.fetchLastChanged(this.wikiStore.safeCurrentEntry.id).then(lastChanged => {
-                if (saveTimeout !== null) {
-                    window.clearTimeout(saveTimeout);
-                }
-                const localLastChanged = new Date(this.wikiStore.safeCurrentEntry.meta.dateUpdated);
-                if (localLastChanged < lastChanged) {
-                    this.showDiff();
-                } else {
-                    this.mainStore.setHasUnsavedChanges(false);
-                    return this.wikiStore.saveCurrentEntry();
-                }
-            });
+            this.wikiStore
+                .fetchLastChanged(this.wikiStore.safeCurrentEntry.id)
+                .then((lastChanged) => {
+                    if (saveTimeout !== null) {
+                        window.clearTimeout(saveTimeout);
+                    }
+                    const localLastChanged = new Date(
+                        this.wikiStore.safeCurrentEntry.meta.dateUpdated,
+                    );
+                    if (localLastChanged < lastChanged) {
+                        this.showDiff();
+                    } else {
+                        this.mainStore.setHasUnsavedChanges(false);
+                        return this.wikiStore.saveCurrentEntry();
+                    }
+                });
         },
     },
-})
+});
 </script>
 
 <style scoped lang="scss">

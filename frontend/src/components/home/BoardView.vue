@@ -1,9 +1,21 @@
 <template>
-    <pw-view-page :style="additionalStyle" class="board-view-page" :full-width-page="true">
+    <pw-view-page
+        :style="additionalStyle"
+        class="board-view-page"
+        :full-width-page="true"
+    >
         <template #heading>
-            <entry-heading class="board-heading" :display-delete-button="true" :display-media-buttons="false" :display-edit-button="false" :display-view-markdown-button="false">
+            <entry-heading
+                class="board-heading"
+                :display-delete-button="true"
+                :display-media-buttons="false"
+                :display-edit-button="false"
+                :display-view-markdown-button="false"
+            >
                 <template #title-extras>
-                    <el-tag><pm-icon icon="trello" package="brands"></pm-icon></el-tag>
+                    <el-tag
+                        ><pm-icon icon="trello" package="brands"></pm-icon
+                    ></el-tag>
                 </template>
                 <template #actions-extra>
                     <el-dropdown-item @click="boardSettings" title="Settings">
@@ -20,28 +32,28 @@
 </template>
 
 <script lang="ts" setup>
-import board from '@/components/kanban/board.vue';
+import board from "@/components/kanban/board.vue";
 import EntryHeading from "@/components/home/entry-heading.vue";
 import PmIcon from "pixlcms-wrapper/src/components/icon.vue";
-import {useDialogStore} from "pixlcms-wrapper";
-import {route} from "@/components/kanban/board-settings.vue";
-import {computed} from "vue";
-import {useBoardStore} from "@/stores/board";
+import { useDialogStore } from "pixlcms-wrapper";
+import { route } from "@/components/kanban/board-settings.vue";
+import { computed } from "vue";
+import { useBoardStore } from "@/stores/board";
 
-const props = defineProps(['boardId']);
+const props = defineProps(["boardId"]);
 
 const dialogStore = useDialogStore();
 const boardStore = useBoardStore();
 
 const additionalStyle = computed(() => {
     if (boardStore.loadedBoard === null) {
-        return '';
+        return "";
     }
 
     const meta = boardStore.loadedBoard.meta;
 
     if (meta.board.background === undefined) {
-        return '';
+        return "";
     }
 
     return 'background-image: url("' + meta.board.background + '");';
@@ -49,25 +61,27 @@ const additionalStyle = computed(() => {
 
 const boardSettings = function () {
     dialogStore.showDialog(route);
-}
+};
 </script>
 
 <style lang="scss">
 @use "sass:color";
 
 html.dark {
-    .board-view-page .board-heading, .board .board-list {
+    .board-view-page .board-heading,
+    .board .board-list {
         background-color: color.adjust(#1a1a1a, $alpha: -0.1);
     }
 }
 html:not(.dark) {
-    .board-view-page .board-heading, .board .board-list {
+    .board-view-page .board-heading,
+    .board .board-list {
         background-color: color.adjust(rgb(243, 243, 243), $alpha: -0.1);
     }
 }
 
 h1 {
-    margin: .5rem 0;
+    margin: 0.5rem 0;
 }
 
 .board-view-page {

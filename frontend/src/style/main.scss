@@ -1,13 +1,13 @@
-@use 'element-plus/dist/index.css';
-@use 'element-plus/theme-chalk/dark/css-vars.css';
-@use 'theme';
-@use 'variables';
-@use 'fonts';
-@use 'responsive';
-@use 'font-awesome';
-@use 'buttons';
-@use 'bootstrap/dist/css/bootstrap-utilities.css';
-@use '@tato30/vue-pdf/style.css';
+@use "element-plus/dist/index.css";
+@use "element-plus/theme-chalk/dark/css-vars.css";
+@use "theme";
+@use "variables";
+@use "fonts";
+@use "responsive";
+@use "font-awesome";
+@use "buttons";
+@use "bootstrap/dist/css/bootstrap-utilities.css";
+@use "@tato30/vue-pdf/style.css";
 
 html,
 body {
@@ -104,7 +104,7 @@ p {
     letter-spacing: 0.2px;
 }
 
-.el-dropdown-menu__item svg + span, 
+.el-dropdown-menu__item svg + span,
 .el-button svg + span,
 .el-button svg + #text {
     margin-left: 4px;

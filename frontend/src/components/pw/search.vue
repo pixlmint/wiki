@@ -1,8 +1,12 @@
 <template>
     <div class="search-wrapper">
         <div class="search">
-            <el-input id="search-input" v-model="searchQuery" @input="search"/>
-            <div @click="openEntry(item)" class="search-result" v-for="item in searchResults">
+            <el-input id="search-input" v-model="searchQuery" @input="search" />
+            <div
+                @click="openEntry(item)"
+                class="search-result"
+                v-for="item in searchResults"
+            >
                 {{ item }}
             </div>
         </div>
@@ -10,15 +14,15 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useWikiStore} from "@/stores/wiki";
-import {useMainStore} from "@/stores/main";
+import { defineComponent } from "vue";
+import { useWikiStore } from "@/stores/wiki";
+import { useMainStore } from "@/stores/main";
 
 export default defineComponent({
-    name: 'PWSearch',
+    name: "PWSearch",
     data() {
         return {
-            searchQuery: '',
+            searchQuery: "",
             searchResults: [],
             timeoutTimer: 0,
         };
@@ -37,12 +41,14 @@ export default defineComponent({
             window.setTimeout(this.doSearch, 250);
         },
         doSearch() {
-            useWikiStore().search(this.searchQuery).then(response => {
-                this.searchResults = response.data;
-            });
+            useWikiStore()
+                .search(this.searchQuery)
+                .then((response) => {
+                    this.searchResults = response.data;
+                });
         },
-    }
-})
+    },
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,8 +1,12 @@
 function countColumns(table: HTMLTableElement): number {
-    if (table.tBodies.length === 0 || table.tBodies[0].rows.length === 0 || table.tBodies[0].rows[0].cells.length === 0) {
+    if (
+        table.tBodies.length === 0 ||
+        table.tBodies[0].rows.length === 0 ||
+        table.tBodies[0].rows[0].cells.length === 0
+    ) {
         return 0;
     } else {
-       return table.tBodies[0].rows[0].cells.length; 
+        return table.tBodies[0].rows[0].cells.length;
     }
 }
 
@@ -10,7 +14,7 @@ export class Table {
     thead: Array<string>;
     data: Array<Object>;
 
-    constructor () {
+    constructor() {
         this.thead = [];
         this.data = [];
     }
@@ -23,7 +27,7 @@ export class Table {
         return this.data.length;
     }
 
-    spliceRows (start: number, end: number | null = null): Table {
+    spliceRows(start: number, end: number | null = null): Table {
         let deleteCount;
         if (end !== null) {
             deleteCount = end - start;
@@ -34,7 +38,7 @@ export class Table {
         return this;
     }
 
-    spliceColumns (start: number, end: number | null = null): Table {
+    spliceColumns(start: number, end: number | null = null): Table {
         let deleteCount;
 
         if (end !== null) {
@@ -46,7 +50,7 @@ export class Table {
         this.thead.splice(start, deleteCount);
         const self = this;
 
-        this.data = this.data.map(row => {
+        this.data = this.data.map((row) => {
             const ret = {};
             for (const th of self.thead) {
                 if (row[th]) {
@@ -54,16 +58,16 @@ export class Table {
                 }
             }
             return ret;
-        })
+        });
 
         return this;
     }
 }
 
 export const readTable = function (htmlString: string): Table {
-    const el = document.createElement('html');
+    const el = document.createElement("html");
     el.innerHTML = htmlString;
-    const html = el.getElementsByTagName('table')[0];
+    const html = el.getElementsByTagName("table")[0];
     const table = new Table();
     if (html.tHead !== null && html.tHead.rows.length > 0) {
         for (const cell of html.tHead.rows[0].cells) {
@@ -77,7 +81,7 @@ export const readTable = function (htmlString: string): Table {
 
     for (const tBody of html.tBodies) {
         for (const row of tBody.rows) {
-            const newRow =  {};
+            const newRow = {};
             let cellIndex = 0;
             for (const cell of row.cells) {
                 newRow[table.thead[cellIndex]] = cell.innerText;
@@ -88,4 +92,4 @@ export const readTable = function (htmlString: string): Table {
     }
 
     return table;
-}
+};

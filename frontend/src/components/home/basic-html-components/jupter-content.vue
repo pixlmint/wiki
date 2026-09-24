@@ -3,7 +3,9 @@
         <template #heading>
             <entry-heading>
                 <template #title-extras>
-                    <el-tag><img width="12" heigth="12" :src="JupyterIcon"></el-tag>
+                    <el-tag
+                        ><img width="12" heigth="12" :src="JupyterIcon"
+                    /></el-tag>
                 </template>
                 <template #actions-extra>
                     <el-dropdown-item @click="dumpJupyter" title="Jupyter">
@@ -22,7 +24,7 @@
 <script lang="ts" setup>
 import EntryHeading from "@/components/home/entry-heading.vue";
 import ActualHtmlContent from "@/components/home/basic-html-components/actual-html-content.vue";
-import { useWikiStore } from '@/stores/wiki';
+import { useWikiStore } from "@/stores/wiki";
 import { ElMessage } from "element-plus";
 import JupyterIcon from "@/icon/jupyter.svg";
 
@@ -36,11 +38,13 @@ const props = defineProps({
 });
 
 const dumpJupyter = function () {
-    wikiStore.dumpAlternateContent(wikiStore.safeCurrentEntry.id).then(response => {
-        ElMessage({
-            message: 'Success',
+    wikiStore
+        .dumpAlternateContent(wikiStore.safeCurrentEntry.id)
+        .then((response) => {
+            ElMessage({
+                message: "Success",
+            });
+            wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
         });
-        wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
-    });
-}
+};
 </script>

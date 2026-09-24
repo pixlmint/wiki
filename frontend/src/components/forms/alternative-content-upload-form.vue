@@ -1,9 +1,13 @@
 <template>
-    <el-form onsubmit="return false">
+    <el-form onsubmit="return false;">
         <slot name="form-base">
             <el-form-item>
-                <el-input onsubmit="return false" v-model="fileTitle" type="text"
-                    placeholder="New Entry Title" />
+                <el-input
+                    onsubmit="return false;"
+                    v-model="fileTitle"
+                    type="text"
+                    placeholder="New Entry Title"
+                />
             </el-form-item>
             <el-form-item>
                 <input ref="file" type="file" :accept="mime" />
@@ -16,20 +20,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ElNotification } from 'element-plus';
-import { send } from 'pixlcms-wrapper';
-import { ref, toRefs, watch } from 'vue';
+import { ElNotification } from "element-plus";
+import { send } from "pixlcms-wrapper";
+import { ref, toRefs, watch } from "vue";
 import { useWikiStore } from "@/stores/wiki";
-import { AlternativeContentForm } from '@/helpers/alternativeContentHelper';
+import { AlternativeContentForm } from "@/helpers/alternativeContentHelper";
 
-const emit = defineEmits(['beforeSave', 'afterSave']);
+const emit = defineEmits(["beforeSave", "afterSave"]);
 
 const wikiStore = useWikiStore();
 
 const props = defineProps<{
-    entryId: string,
-    isInitialUpload: boolean,
-    formData: AlternativeContentForm,
+    entryId: string;
+    isInitialUpload: boolean;
+    formData: AlternativeContentForm;
 }>();
 
 const file = ref(null);
@@ -37,12 +41,12 @@ const fileTitle = ref(props.formData.formData.title);
 const mime = ref(props.formData.mime);
 
 watch(fileTitle, (newFileTitle: string) => {
-    setFormDataValue('title', newFileTitle);
+    setFormDataValue("title", newFileTitle);
 });
 
 const setFormDataValue = function (key: string, value: string) {
     props.formData.setValue(key, value);
-}
+};
 
 const save = function () {
     const uploadField = file.value;
@@ -60,20 +64,20 @@ const save = function () {
 
     let request;
 
-    formData.setValue('alternative_content', newFile);
+    formData.setValue("alternative_content", newFile);
 
     if (props.isInitialUpload) {
-        formData.setValue('parentFolder', props.entryId);
+        formData.setValue("parentFolder", props.entryId);
         request = formData.buildUploadForm();
     } else {
         const entry = wikiStore.getEntryById(props.entryId);
         entry.meta.title = fileTitle.value;
-        formData.setValue('entry', entry.id);
-        formData.setValue('meta', JSON.stringify(entry.meta))
+        formData.setValue("entry", entry.id);
+        formData.setValue("meta", JSON.stringify(entry.meta));
         request = formData.buildUpdateForm();
     }
 
-    emit('beforeSave', request);
+    emit("beforeSave", request);
 
     /** @ts-ignore */
     send(request).then((response) => {
@@ -87,7 +91,7 @@ const save = function () {
         }
         wikiStore.loadNav();
 
-        emit('afterSave', response);
+        emit("afterSave", response);
     });
-}
+};
 </script>

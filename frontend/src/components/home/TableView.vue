@@ -1,7 +1,12 @@
 <template>
     <pw-view-page :full-width-page="true">
         <template #heading>
-            <entry-heading class="board-heading" :display-delete-button="true" :display-edit-button="false" :display-view-markdown-button="false">
+            <entry-heading
+                class="board-heading"
+                :display-delete-button="true"
+                :display-edit-button="false"
+                :display-view-markdown-button="false"
+            >
                 <template #title-extras>
                     <el-tag><pm-icon icon="table"></pm-icon></el-tag>
                 </template>
@@ -15,8 +20,8 @@
 
 <script lang="ts" setup>
 import EntryHeading from "@/components/home/entry-heading.vue";
-import { useWikiStore } from '@/stores/wiki';
-import TableDisplay from '@/components/home/basic-html-components/table-content.vue';
+import { useWikiStore } from "@/stores/wiki";
+import TableDisplay from "@/components/home/basic-html-components/table-content.vue";
 
 const wikiStore = useWikiStore();
 

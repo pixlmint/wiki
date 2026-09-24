@@ -3,20 +3,20 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, reactive, onMounted} from 'vue';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-markup-templating';
-import 'prismjs/components/prism-java';
-import 'prismjs/components/prism-php';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-markup';
-import 'prismjs/components/prism-css';
-import 'prismjs/components/prism-sql';
-import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-armasm';
+import { defineProps, reactive, onMounted } from "vue";
+import Prism from "prismjs";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-markup-templating";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-php";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-sql";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-armasm";
 
 const props = defineProps({
     content: {
@@ -25,37 +25,41 @@ const props = defineProps({
     },
     language: {
         type: String,
-        default: '',
+        default: "",
     },
 });
 
 const data = reactive({
-    code: '',
-    lang: '',
+    code: "",
+    lang: "",
 });
 
 onMounted(() => {
     // console.log(Prism.languages);
-    let language = 'txt';
+    let language = "txt";
     if (props.language) {
         if (props.language in Prism.languages) {
             language = props.language;
         } else {
             switch (props.language) {
-                case 'c':
-                case 'cpp':
-                    language = 'clike';
+                case "c":
+                case "cpp":
+                    language = "clike";
                     break;
-                case 'asm':
-                case 'armasm':
-                case 'arm-asm':
-                case 's':
-                    language = 'armasm';
+                case "asm":
+                case "armasm":
+                case "arm-asm":
+                case "s":
+                    language = "armasm";
                     break;
             }
         }
     }
-    data.code = Prism.highlight(props.content, Prism.languages[language], language);
+    data.code = Prism.highlight(
+        props.content,
+        Prism.languages[language],
+        language,
+    );
     data.lang = language;
 });
 </script>
@@ -75,7 +79,14 @@ html.dark {
     @nested-import 'prism-themes/themes/prism-atom-dark';
 }
 
-pre, li > code, p > code, h1 > code, h2 > code, h3 > code, h4 > code, h5 > code {
+pre,
+li > code,
+p > code,
+h1 > code,
+h2 > code,
+h3 > code,
+h4 > code,
+h5 > code {
     background-color: var(--pw-code-bg);
     border: 1px solid rgba(99, 99, 99, 0.1);
     overflow-x: auto;
@@ -86,7 +97,7 @@ pre {
     border-radius: 5px;
 }
 
-[class*='language-'] {
+[class*="language-"] {
     font-family: unset !important;
 }
 </style>

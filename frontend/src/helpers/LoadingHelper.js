@@ -1,21 +1,27 @@
 const defaultTime = 200;
 const defaultObject = {
-    url: '',
+    url: "",
     averageLoadingTime: 0,
     loadCount: 0,
-}
-const localStorageName = 'loadingTimes';
+};
+const localStorageName = "loadingTimes";
 
 function updateAverageLoadingTime(url, newTime) {
     const loadingTimeObject = getAverageLoadingTimeObject(url);
-    const newLoadingTime = calculateNewAverageLoadingTime(loadingTimeObject, newTime);
+    const newLoadingTime = calculateNewAverageLoadingTime(
+        loadingTimeObject,
+        newTime,
+    );
     const newLoadingTimeObject = {
         url: url,
         averageLoadingTime: newLoadingTime,
         loadCount: loadingTimeObject.loadCount + 1,
     };
 
-    const newArray = replaceTimeObjectsInArray(loadingTimeObject, newLoadingTimeObject);
+    const newArray = replaceTimeObjectsInArray(
+        loadingTimeObject,
+        newLoadingTimeObject,
+    );
     storeAverageLoadingTimes(newArray);
 
     return newLoadingTimeObject;
@@ -32,7 +38,11 @@ function getAverageLoadingTime(url) {
 }
 
 function calculateNewAverageLoadingTime(loadingTimeObject, newLoadingTime) {
-    return (loadingTimeObject.averageLoadingTime * loadingTimeObject.loadCount + newLoadingTime) / (loadingTimeObject.loadCount + 1)
+    return (
+        (loadingTimeObject.averageLoadingTime * loadingTimeObject.loadCount +
+            newLoadingTime) /
+        (loadingTimeObject.loadCount + 1)
+    );
 }
 
 function replaceTimeObjectsInArray(oldObject, newObject) {

@@ -4,7 +4,7 @@
             <el-tabs tab-position="left">
                 <el-tab-pane label="User">
                     <el-form-item label="Auto save">
-                        <el-switch v-model="settings.autoSave"/>
+                        <el-switch v-model="settings.autoSave" />
                     </el-form-item>
                     <el-form-item label="Theme">
                         <el-radio-group v-model="settings.theme">
@@ -18,28 +18,40 @@
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane label="Security">
-                    <el-button @click="changePassword">Change Password</el-button>
+                    <el-button @click="changePassword"
+                        >Change Password</el-button
+                    >
                 </el-tab-pane>
                 <el-tab-pane label="Admin">
                     <el-form-item label="Build Index">
-                        <el-button @click="rebuildIndex"><pm-icon icon="rotate"></pm-icon></el-button>
+                        <el-button @click="rebuildIndex"
+                            ><pm-icon icon="rotate"></pm-icon
+                        ></el-button>
                     </el-form-item>
                     <el-form-item label="Download Backup">
-                        <el-button @click="downloadBackup"><pm-icon icon="download"></pm-icon></el-button>
+                        <el-button @click="downloadBackup"
+                            ><pm-icon icon="download"></pm-icon
+                        ></el-button>
                     </el-form-item>
                     <el-button @click="reloadNav">Reload Nav</el-button>
-                    <el-button @click="dumpAlternateContent">Dump Alternate Content into files</el-button>
+                    <el-button @click="dumpAlternateContent"
+                        >Dump Alternate Content into files</el-button
+                    >
                 </el-tab-pane>
             </el-tabs>
         </el-form>
         <template #footer>
-            <el-button @click="showVersionsPopup">PixlWiki Version {{ version }}</el-button>
+            <el-button @click="showVersionsPopup"
+                >PixlWiki Version {{ version }}</el-button
+            >
             |
             <el-dropdown split-button @click="logout">
                 Logout
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item @click="logoutEverywhere">Logout Everywhere</el-dropdown-item>
+                        <el-dropdown-item @click="logoutEverywhere"
+                            >Logout Everywhere</el-dropdown-item
+                        >
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -48,14 +60,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, h, watch} from "vue";
-import {useUserSettings} from "@/stores/user-settings";
-import {useMainStore} from "@/stores/main";
-import {ElMessageBox, ElNotification} from "element-plus";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/stores/wiki";
+import { defineComponent, h, watch } from "vue";
+import { useUserSettings } from "@/stores/user-settings";
+import { useMainStore } from "@/stores/main";
+import { ElMessageBox, ElNotification } from "element-plus";
+import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
+import { useWikiStore } from "@/stores/wiki";
 
-export const route = '/settings';
+export const route = "/settings";
 
 export default defineComponent({
     name: "UserSettings",
@@ -66,7 +78,7 @@ export default defineComponent({
             settings: useUserSettings().getSettings,
             route: route,
             dialogStore: useDialogStore(),
-        }
+        };
     },
     created() {
         watch(this.settings, (value) => {
@@ -84,12 +96,17 @@ export default defineComponent({
             this.userSettings.downloadBackup();
         },
         rebuildIndex() {
-            useWikiStore().rebuildIndex().then(response => {
-                ElNotification({
-                    title: 'Rebuild Index',
-                    message: 'Built in ' + Math.round(response.data.indexTime * 1000) + "ms",
+            useWikiStore()
+                .rebuildIndex()
+                .then((response) => {
+                    ElNotification({
+                        title: "Rebuild Index",
+                        message:
+                            "Built in " +
+                            Math.round(response.data.indexTime * 1000) +
+                            "ms",
+                    });
                 });
-            })
         },
         logout() {
             useAuthStore().logout();
@@ -100,8 +117,8 @@ export default defineComponent({
             useWikiStore().loadNav();
         },
         setTheme(theme: string) {
-            document.documentElement.classList.remove('light');
-            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.remove("light");
+            document.documentElement.classList.remove("dark");
             document.documentElement.classList.add(theme);
         },
         reloadNav() {
@@ -109,26 +126,41 @@ export default defineComponent({
         },
         showVersionsPopup() {
             ElMessageBox({
-                title: 'Version Information',
-                message: h('ul', null, [
-                    h('li', null, 'Plugin Version: '+ useMainStore().meta.pluginVersion),
-                    h('li', null, 'CMS Version: '+ useMainStore().meta.cmsVersion),
-                    h('li', null, 'Frontend Version: '+ useMainStore().meta.frontendVersion),
+                title: "Version Information",
+                message: h("ul", null, [
+                    h(
+                        "li",
+                        null,
+                        "Plugin Version: " + useMainStore().meta.pluginVersion,
+                    ),
+                    h(
+                        "li",
+                        null,
+                        "CMS Version: " + useMainStore().meta.cmsVersion,
+                    ),
+                    h(
+                        "li",
+                        null,
+                        "Frontend Version: " +
+                            useMainStore().meta.frontendVersion,
+                    ),
                 ]),
-            })
-        },
-        changePassword() {
-            this.dialogStore.showDialog('/auth/change-password');
-        },
-        dumpAlternateContent() {
-            useWikiStore().dumpAlternateContent().then(response => {
-                ElNotification({
-                    title: "Dumped alternate content",
-                });
             });
         },
+        changePassword() {
+            this.dialogStore.showDialog("/auth/change-password");
+        },
+        dumpAlternateContent() {
+            useWikiStore()
+                .dumpAlternateContent()
+                .then((response) => {
+                    ElNotification({
+                        title: "Dumped alternate content",
+                    });
+                });
+        },
     },
-})
+});
 </script>
 
 <style lang="scss">

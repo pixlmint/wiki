@@ -1,9 +1,12 @@
 import { type AxiosRequestConfig } from "axios";
 import { buildRequest } from "pixlcms-wrapper";
 
-export interface AlternativeContentFormData extends Record<string, string | File | undefined> {
-    title: string,
-    renderer: string,
+export interface AlternativeContentFormData extends Record<
+    string,
+    string | File | undefined
+> {
+    title: string;
+    renderer: string;
 }
 
 type AlternativeContentFormArgs = {
@@ -16,7 +19,11 @@ export class AlternativeContentForm {
     declare mime: string;
     declare formData: AlternativeContentFormData;
 
-    constructor({ renderer, title = '', mime = "*/*" }: AlternativeContentFormArgs) {
+    constructor({
+        renderer,
+        title = "",
+        mime = "*/*",
+    }: AlternativeContentFormArgs) {
         this.mime = mime;
 
         this.formData = {
@@ -33,14 +40,22 @@ export class AlternativeContentForm {
         const formData = this._buildFormData();
 
         /** @ts-ignore */
-        return buildRequest('/api/admin/entry/upload-alternative-content', formData, 'POST');
+        return buildRequest(
+            "/api/admin/entry/upload-alternative-content",
+            formData,
+            "POST",
+        );
     }
 
     buildUpdateForm(): AxiosRequestConfig {
         const formData = this._buildFormData();
 
         /** @ts-ignore */
-        return buildRequest('/api/admin/entry/update-alternative-content', formData, 'POST');
+        return buildRequest(
+            "/api/admin/entry/update-alternative-content",
+            formData,
+            "POST",
+        );
     }
 
     _buildFormData(): FormData {
@@ -65,4 +80,3 @@ export class AlternativeContentForm {
         return formData;
     }
 }
-

@@ -1,4 +1,4 @@
-@use '@/style/variables' as *;
+@use "@/style/variables" as *;
 
 :root {
     --el-bg-secondary: rgb(243, 243, 243);
@@ -23,7 +23,7 @@ html.dark {
 
     .el-message-box {
         --el-dialog-bg-color: rgb(20, 20, 20);
-        background-color: var(--el-dialog-bg-color);;
+        background-color: var(--el-dialog-bg-color);
     }
 }
 

@@ -3,26 +3,35 @@
         <pw-loading></pw-loading>
         <pw-search v-show="searchShowing"></pw-search>
         <pw-nav></pw-nav>
-        <WikiEntry v-if="mainContentLoaded && !isEditing" :key="currentPath"></WikiEntry>
+        <WikiEntry
+            v-if="mainContentLoaded && !isEditing"
+            :key="currentPath"
+        ></WikiEntry>
         <Editor v-else-if="mainContentLoaded && isEditing"></Editor>
-        <Debug v-if="isDebugEnabled"/>
-        <Modals :dialog-components="dialogs"/>
+        <Debug v-if="isDebugEnabled" />
+        <Modals :dialog-components="dialogs" />
     </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useMainStore} from "@/stores/main";
-import {configureStores, useAuthStore, Modals, useDialogStore, useLoadingStore} from "pixlcms-wrapper";
-import {useWikiStore} from "@/stores/wiki";
-import {useUserSettings} from "@/stores/user-settings";
-import {AxiosResponse} from "axios";
-import {ElNotification} from "element-plus";
-import {dialogs} from '@/dialogs';
+import { defineComponent } from "vue";
+import { useMainStore } from "@/stores/main";
+import {
+    configureStores,
+    useAuthStore,
+    Modals,
+    useDialogStore,
+    useLoadingStore,
+} from "pixlcms-wrapper";
+import { useWikiStore } from "@/stores/wiki";
+import { useUserSettings } from "@/stores/user-settings";
+import { AxiosResponse } from "axios";
+import { ElNotification } from "element-plus";
+import { dialogs } from "@/dialogs";
 import Debug from "@/components/debug/debug.vue";
 import WikiEntry from "@/components/home/WikiEntry.vue";
-import {isMobile} from "@/helpers/mobile-detector";
-import {navigate} from "@/helpers/navigator";
+import { isMobile } from "@/helpers/mobile-detector";
+import { navigate } from "@/helpers/navigator";
 import Editor from "@/components/admin/Editor/Editor.vue";
 
 export default defineComponent({
@@ -41,7 +50,7 @@ export default defineComponent({
             mainContentLoaded: false,
             dialogs: dialogs(),
             isEditing: false,
-        }
+        };
     },
     computed: {
         searchShowing() {
@@ -51,7 +60,10 @@ export default defineComponent({
             return this.mainStore.meta.debugEnabled;
         },
         currentPath() {
-            return this.wikiStore.safeCurrentEntry.id + this.wikiStore.safeCurrentEntry.meta.dateUpdated;
+            return (
+                this.wikiStore.safeCurrentEntry.id +
+                this.wikiStore.safeCurrentEntry.meta.dateUpdated
+            );
         },
     },
     created() {
@@ -62,20 +74,20 @@ export default defineComponent({
         useUserSettings().setCurrentTheme();
         this.init();
         this.loadMainContent();
-        window.addEventListener('keydown', this.keyListener);
-        window.addEventListener('popstate', this.popStateHandler);
-        window.addEventListener('pushstate', this.loadMainContent);
+        window.addEventListener("keydown", this.keyListener);
+        window.addEventListener("popstate", this.popStateHandler);
+        window.addEventListener("pushstate", this.loadMainContent);
     },
     methods: {
         keyListener(event: Event) {
-            if (event.ctrlKey && event.key === 'k') {
+            if (event.ctrlKey && event.key === "k") {
                 event.preventDefault();
                 useMainStore().isSearchShowing = true;
                 setTimeout(() => {
-                    document.getElementById('search-input').focus();
+                    document.getElementById("search-input").focus();
                 }, 200);
             }
-            if (event.key === 'Escape') {
+            if (event.key === "Escape") {
                 useMainStore().isSearchShowing = false;
             }
         },
@@ -97,40 +109,44 @@ export default defineComponent({
                 this.isEditing = false;
             }
 
-            useWikiStore().fetchEntry(path).then(() => {
-                this.mainContentLoaded = true;
-                if (isMobile()) {
-                    useMainStore().toggleLargeNavShowing(false);
-                }
-                useMainStore().setTitle(useWikiStore().safeCurrentEntry.meta.title);
-            })
+            useWikiStore()
+                .fetchEntry(path)
+                .then(() => {
+                    this.mainContentLoaded = true;
+                    if (isMobile()) {
+                        useMainStore().toggleLargeNavShowing(false);
+                    }
+                    useMainStore().setTitle(
+                        useWikiStore().safeCurrentEntry.meta.title,
+                    );
+                });
         },
         init() {
             const authStore = useAuthStore();
             const mainStore = useMainStore();
             const token = authStore.getToken;
             mainStore.init(token).then((response: AxiosResponse) => {
-                if (response.data.is_token_valid === 'token_invalid') {
-                    this.dialogStore.showDialog('/auth/login');
+                if (response.data.is_token_valid === "token_invalid") {
+                    this.dialogStore.showDialog("/auth/login");
                     ElNotification({
-                        title: 'Error',
-                        message: 'Your token is invalid, please login again',
-                        type: 'warning',
+                        title: "Error",
+                        message: "Your token is invalid, please login again",
+                        type: "warning",
                     });
                 }
                 this.mainStore.setTitle(this.mainStore.getMeta.title);
                 if (!this.mainStore.meta.adminCreated) {
-                    this.dialogStore.showDialog('/auth/create-admin');
+                    this.dialogStore.showDialog("/auth/create-admin");
                 }
-            })
+            });
         },
     },
-})
+});
 </script>
 
 <style lang="scss">
-@use './style/main.scss';
-@use './style/variables' as *;
+@use "./style/main.scss";
+@use "./style/variables" as *;
 
 .main-content {
     background-color: var(--el-bg-color);

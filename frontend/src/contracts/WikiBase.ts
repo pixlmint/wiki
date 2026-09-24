@@ -1,24 +1,24 @@
-import {Drawing} from "@/contracts/Canvas";
+import { Drawing } from "@/contracts/Canvas";
 
 export interface WikiEntry {
-    raw_content: string,
-    content: string,
-    id: string,
-    url: string,
-    hidden: boolean,
-    meta: EntryMeta,
-    file: string,
+    raw_content: string;
+    content: string;
+    id: string;
+    url: string;
+    hidden: boolean;
+    meta: EntryMeta;
+    file: string;
 }
 
 export interface EntryMeta {
-    title: string,
-    date_formatted: string,
-    description: string | null,
-    author: string | null,
-    owner: string | null,
-    security: string | null,
-    dateUpdated: string | null,
-    dateCreated: string | null,
-    drawings: Drawing[] | null,
-    jupyter_last_modified?: string | null,
+    title: string;
+    date_formatted: string;
+    description: string | null;
+    author: string | null;
+    owner: string | null;
+    security: string | null;
+    dateUpdated: string | null;
+    dateCreated: string | null;
+    drawings: Drawing[] | null;
+    jupyter_last_modified?: string | null;
 }

@@ -5,16 +5,37 @@
                 <div @click="hideMainNav" class="nav-toggle">
                     <pm-icon icon="caret-left"></pm-icon>
                 </div>
-                <el-menu @open="openSubmenu" @close="closeSubmenu" @click="navClickListener" :router="false" class="main-nav">
-                    <el-menu-item class="pw-menu-item" data-pw-entry-id="/" data-is-entry="true" index="/">
-                        <pw-nav-entry-title :element-id="0" :should-display-dropdown="false" element-title="Home">
+                <el-menu
+                    @open="openSubmenu"
+                    @close="closeSubmenu"
+                    @click="navClickListener"
+                    :router="false"
+                    class="main-nav"
+                >
+                    <el-menu-item
+                        class="pw-menu-item"
+                        data-pw-entry-id="/"
+                        data-is-entry="true"
+                        index="/"
+                    >
+                        <pw-nav-entry-title
+                            :element-id="0"
+                            :should-display-dropdown="false"
+                            element-title="Home"
+                        >
                             <template #title>
                                 <pm-icon icon="house"></pm-icon>
                             </template>
                         </pw-nav-entry-title>
                     </el-menu-item>
-                    <template v-for="(childElement, myIndex) in nav.children" :key="myIndex">
-                        <PWNavElement :element="childElement" v-if="childElement.isPublic || canEdit"></PWNavElement>
+                    <template
+                        v-for="(childElement, myIndex) in nav.children"
+                        :key="myIndex"
+                    >
+                        <PWNavElement
+                            :element="childElement"
+                            v-if="childElement.isPublic || canEdit"
+                        ></PWNavElement>
                     </template>
                 </el-menu>
                 <el-dropdown class="full-width" v-if="canEdit">
@@ -23,17 +44,31 @@
                     </el-button>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item @click="addSubEntry"><pm-icon icon="file-circle-plus"></pm-icon>Add Page</el-dropdown-item>
-                            <el-dropdown-item @click="addPdf"><pm-icon icon="file-circle-plus"></pm-icon>Add PDF</el-dropdown-item>
-                            <el-dropdown-item @click="addJupyterNotebook"><pm-icon icon="file-circle-plus"></pm-icon>Add Jupyter Notebook</el-dropdown-item>
-                            <el-dropdown-item @click="addSubFolder"><pm-icon icon="folder-plus"></pm-icon>Add Subfolder</el-dropdown-item>
+                            <el-dropdown-item @click="addSubEntry"
+                                ><pm-icon icon="file-circle-plus"></pm-icon>Add
+                                Page</el-dropdown-item
+                            >
+                            <el-dropdown-item @click="addPdf"
+                                ><pm-icon icon="file-circle-plus"></pm-icon>Add
+                                PDF</el-dropdown-item
+                            >
+                            <el-dropdown-item @click="addJupyterNotebook"
+                                ><pm-icon icon="file-circle-plus"></pm-icon>Add
+                                Jupyter Notebook</el-dropdown-item
+                            >
+                            <el-dropdown-item @click="addSubFolder"
+                                ><pm-icon icon="folder-plus"></pm-icon>Add
+                                Subfolder</el-dropdown-item
+                            >
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
             </div>
             <div class="user-nav">
                 <template v-if="!isLoggedIn">
-                    <el-button @click="login" class="user-button">Login</el-button>
+                    <el-button @click="login" class="user-button"
+                        >Login</el-button
+                    >
                 </template>
                 <template v-else>
                     <el-button @click="settings" class="user-button">
@@ -46,41 +81,43 @@
         <div id="mobile-nav" v-show="!mainNavShowing" @click="showMainNav">
             <pm-icon class="nav-toggle-small" icon="caret-right"></pm-icon>
             <el-breadcrumb separator="/" class="breadcrumbs">
-                <el-breadcrumb-item v-for="item in currentTitleArray">{{ item }}</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="item in currentTitleArray">{{
+                    item
+                }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import {toRaw, computed} from "vue";
-import {useWikiStore} from "@/stores/wiki";
+import { toRaw, computed } from "vue";
+import { useWikiStore } from "@/stores/wiki";
 import PWNavElement from "@/components/pw/nav/nav-element.vue";
-import {useMainStore} from "@/stores/main";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
-import {isMobile} from "@/helpers/mobile-detector";
-import {ElMessageBox} from "element-plus";
-import {navigate} from "@/helpers/navigator";
+import { useMainStore } from "@/stores/main";
+import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
+import { isMobile } from "@/helpers/mobile-detector";
+import { ElMessageBox } from "element-plus";
+import { navigate } from "@/helpers/navigator";
 
 const findListElement = (target: any): any => {
-    if (target.nodeName === 'LI') {
+    if (target.nodeName === "LI") {
         return target;
     }
-    if (target.parentElement.nodeName === 'LI') {
+    if (target.parentElement.nodeName === "LI") {
         return target.parentElement;
     }
     return findListElement(target.parentElement);
-}
+};
 
 const navElementIsFolder = (target: any) => {
     const listElement = findListElement(target);
-    if (listElement.classList.contains('el-sub-menu')) {
+    if (listElement.classList.contains("el-sub-menu")) {
         return true;
     }
-    if (listElement.classList.contains('el-menu-item')) {
+    if (listElement.classList.contains("el-menu-item")) {
         return false;
     }
-}
+};
 
 const dialogStore = useDialogStore();
 const wikiStore = useWikiStore();
@@ -97,73 +134,85 @@ useWikiStore().loadNav();
 const openSubmenu = function (menuId: string) {
     console.log(menuId);
     wikiStore.openedSubmenus.push(menuId);
-}
+};
 
 const closeSubmenu = function (menuId: string) {
-    wikiStore.openedSubmenus.splice(wikiStore.openedSubmenus.indexOf(menuId), 1);
+    wikiStore.openedSubmenus.splice(
+        wikiStore.openedSubmenus.indexOf(menuId),
+        1,
+    );
     if (wikiStore.openedSubmenus.includes(menuId)) {
         closeSubmenu(menuId);
     }
-}
+};
 
 const settings = function () {
-    dialogStore.showDialog('/settings');
-}
+    dialogStore.showDialog("/settings");
+};
 const addSubFolder = function () {
-    ElMessageBox.prompt('New Subfolder', 'Add Subfolder', {
-        confirmButtonText: 'Ok',
-        cancelButtonText: 'Cancel',
-    }).then(name => {
-        wikiStore.addFolder('/', name.value).then(() => {
+    ElMessageBox.prompt("New Subfolder", "Add Subfolder", {
+        confirmButtonText: "Ok",
+        cancelButtonText: "Cancel",
+    }).then((name) => {
+        wikiStore.addFolder("/", name.value).then(() => {
             wikiStore.loadNav();
         });
-    })
-}
+    });
+};
 const addSubEntry = function () {
-    ElMessageBox.prompt('New Page Title', 'Add Page', {
-        confirmButtonText: 'Ok',
-        cancelButtonText: 'Cancel',
-    }).then(name => {
-        wikiStore.addEntry('/', name.value).then(() => {
+    ElMessageBox.prompt("New Page Title", "Add Page", {
+        confirmButtonText: "Ok",
+        cancelButtonText: "Cancel",
+    }).then((name) => {
+        wikiStore.addEntry("/", name.value).then(() => {
             wikiStore.loadNav();
         });
-    })
-}
+    });
+};
 const addPdf = function () {
-    dialogStore.setPdfParentFolder('/');
-    dialogStore.showDialog({route: '/nav/new-alternative-content', data: { id: '/', title: "New PDF", mime: "application/pdf" }});
-}
+    dialogStore.setPdfParentFolder("/");
+    dialogStore.showDialog({
+        route: "/nav/new-alternative-content",
+        data: { id: "/", title: "New PDF", mime: "application/pdf" },
+    });
+};
 
 const addJupyterNotebook = function () {
-    dialogStore.showDialog({ route: '/nav/new-alternative-content', data: { id: '/', title: "New Notebook", mime: "application/json" }});
-}
+    dialogStore.showDialog({
+        route: "/nav/new-alternative-content",
+        data: { id: "/", title: "New Notebook", mime: "application/json" },
+    });
+};
 const hideMainNav = function () {
     mainStore.toggleLargeNavShowing(false);
-}
+};
 const showMainNav = function () {
     mainStore.toggleLargeNavShowing(true);
-}
+};
 const navClickListener = function (event: Event) {
     const isFolder = navElementIsFolder(event.target);
     if (isFolder) {
         return;
     }
-    const element = findElementWithTagName(event.target, 'LI');
+    const element = findElementWithTagName(event.target, "LI");
     const id = element.dataset.pwEntryId;
     if (id === undefined || id === null) {
-        throw 'No ID found';
+        throw "No ID found";
     }
     navigate(id);
-}
+};
 const login = function () {
-    dialogStore.showDialog('/auth/login');
-}
-const findElementWithTagName = function (element: HTMLElement, tagName: string): HTMLElement {
+    dialogStore.showDialog("/auth/login");
+};
+const findElementWithTagName = function (
+    element: HTMLElement,
+    tagName: string,
+): HTMLElement {
     if (element.tagName === tagName || element.parentElement === null) {
         return element;
     }
     return findElementWithTagName(element.parentElement, tagName);
-}
+};
 
 // computed
 const currentTitleArray = computed(() => {
@@ -171,7 +220,7 @@ const currentTitleArray = computed(() => {
     if (!id) {
         return [];
     }
-    return id.split('/');
+    return id.split("/");
 });
 const canEdit = computed(() => {
     return authStore.haveEditRights();
@@ -183,17 +232,16 @@ const isLoggedIn = computed(() => {
     return useAuthStore().getToken !== null;
 });
 const nav = computed(() => {
-    const wikiStore = useWikiStore()
+    const wikiStore = useWikiStore();
     if (wikiStore.getNav === null) {
-        return {}
+        return {};
     }
     return toRaw(wikiStore.getNav);
 });
-
 </script>
 
 <style scoped lang="scss">
-@use '@/style/variables' as *;
+@use "@/style/variables" as *;
 
 #nav {
     background-color: var(--el-bg-color);

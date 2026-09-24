@@ -3,14 +3,28 @@
         <div v-for="(gall, index) in gallery" :key="index">
             <h2>{{ gall.name }}</h2>
             <div class="d-flex media-selector">
-                <div class="selectable-media" v-for="(media, mediaIndex) in gall.media" :key="mediaIndex">
-                    <div class="actual-media" v-if="gall.slug !== 'vid'" :style="`background-image: url('${media.default}?${(new Date()).toJSON()}`"></div>
-                    <video class="actual-media" v-else :src="media.default + '?' + (new Date()).toJSON()"></video>
+                <div
+                    class="selectable-media"
+                    v-for="(media, mediaIndex) in gall.media"
+                    :key="mediaIndex"
+                >
+                    <div
+                        class="actual-media"
+                        v-if="gall.slug !== 'vid'"
+                        :style="`background-image: url('${media.default}?${new Date().toJSON()}`"
+                    ></div>
+                    <video
+                        class="actual-media"
+                        v-else
+                        :src="media.default + '?' + new Date().toJSON()"
+                    ></video>
                     <div class="media-actions">
                         <el-button
                             v-if="gall.slug === 'svg'"
                             @click="editDrawing(media.default)"
-                            round text>
+                            round
+                            text
+                        >
                             <pm-icon icon="pen-ruler"></pm-icon>
                         </el-button>
 
@@ -26,22 +40,32 @@
                 v-model:file-list="fileList"
                 :auto-upload="false"
                 ref="uploadRef"
-                multiple>
+                multiple
+            >
                 <template #trigger>
                     <el-button type="primary">Select Files</el-button>
                 </template>
-                <el-button v-if="hasMediaToUpload" type="success" @click="uploadFiles">Upload</el-button>
+                <el-button
+                    v-if="hasMediaToUpload"
+                    type="success"
+                    @click="uploadFiles"
+                    >Upload</el-button
+                >
             </el-upload>
         </el-form>
     </pm-dialog>
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, ref } from 'vue';
-import { useDialogStore, useMediaStore, type MediaStore } from 'pixlcms-wrapper';
-import { UploadInstance, UploadUserFile, ElMessage } from 'element-plus';
-import { copyTextToClipboard } from '@/helpers/clipboard';
-import { useWikiStore } from '@/stores/wiki';
+import { computed, defineComponent, ref } from "vue";
+import {
+    useDialogStore,
+    useMediaStore,
+    type MediaStore,
+} from "pixlcms-wrapper";
+import { UploadInstance, UploadUserFile, ElMessage } from "element-plus";
+import { copyTextToClipboard } from "@/helpers/clipboard";
+import { useWikiStore } from "@/stores/wiki";
 
 const mediaStore: MediaStore = useMediaStore();
 const dialogStore = useDialogStore();
@@ -55,24 +79,27 @@ const hasMediaToUpload = computed(() => {
     return fileList.value.length > 0;
 });
 
-const uploadRef = ref<UploadInstance>()
-const fileList = ref<UploadUserFile[]>([])
+const uploadRef = ref<UploadInstance>();
+const fileList = ref<UploadUserFile[]>([]);
 
-const uploadFiles = function() {
+const uploadFiles = function () {
     let filesRemaining = fileList.value.length;
     for (const file of fileList.value) {
         const data = new FormData();
-        data.append('gallery', wikiStore.safeCurrentEntry.id);
+        data.append("gallery", wikiStore.safeCurrentEntry.id);
         // @ts-ignore
-        data.append('files', file.raw);
-        file.status = 'uploading';
-        mediaStore.uploadMedia(data).then(() => {
-            file.status = 'success';
-            file.percentage = 100;
-            filesRemaining--;
-        }).catch((error: any) => {
+        data.append("files", file.raw);
+        file.status = "uploading";
+        mediaStore
+            .uploadMedia(data)
+            .then(() => {
+                file.status = "success";
+                file.percentage = 100;
+                filesRemaining--;
+            })
+            .catch((error: any) => {
                 console.error(error);
-                file.status = 'fail';
+                file.status = "fail";
                 filesRemaining--;
             });
     }
@@ -82,26 +109,27 @@ const uploadFiles = function() {
             uploadRef.value!.clearFiles();
             window.clearInterval(checkUploadsInterval);
             mediaStore.loadMediaForEntry(wikiStore.safeCurrentEntry.id);
-        } 
+        }
     }, 100);
-}
+};
 
-const copyMedia = function(media: any) {
+const copyMedia = function (media: any) {
     const md = `![uploaded file](${encodeURI(media.default)})`;
-    copyTextToClipboard(md).then(success => {
-        const text = success ? 'Copied url to clipboard' : 'Error copying url to clipboard';
-        const type = success ? 'success' : 'warning';
+    copyTextToClipboard(md).then((success) => {
+        const text = success
+            ? "Copied url to clipboard"
+            : "Error copying url to clipboard";
+        const type = success ? "success" : "warning";
         ElMessage({
             message: text,
             type: type,
         });
     });
-}
+};
 
-const editDrawing = function(media: string) {
-    dialogStore.showDialog({route: "/draw", data: {media: media}});
-}
-
+const editDrawing = function (media: string) {
+    dialogStore.showDialog({ route: "/draw", data: { media: media } });
+};
 </script>
 
 <script lang="ts">

@@ -1,6 +1,11 @@
 <template>
     <div>
-        <el-row justify="space-between" align="middle" :gutter="20" class="editor-header">
+        <el-row
+            justify="space-between"
+            align="middle"
+            :gutter="20"
+            class="editor-header"
+        >
             <el-col :span="2">
                 <el-button circle @click="checkGoHome">
                     <pm-icon icon="caret-left"></pm-icon>
@@ -17,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import { useWikiStore } from '@/stores/wiki';
+import { computed, reactive } from "vue";
+import { useWikiStore } from "@/stores/wiki";
 import { useMainStore } from "@/stores/main";
 import { ElMessageBox } from "element-plus";
 import { navigate } from "@/helpers/navigator";
@@ -43,46 +48,53 @@ const lastSavedFormatted = computed(() => {
     if (!lastSaved) {
         lastSaved = new Date();
     }
-    const diffInSeconds = Math.floor((data.now.getTime() - lastSaved.getTime()) / 1000);
+    const diffInSeconds = Math.floor(
+        (data.now.getTime() - lastSaved.getTime()) / 1000,
+    );
 
     if (diffInSeconds <= 10) {
-        return 'Saved Just Now';
+        return "Saved Just Now";
     } else if (diffInSeconds < 60) {
         return `Saved ${diffInSeconds} seconds ago`;
     } else {
         const diffInMinutes = Math.floor(diffInSeconds / 60);
-        let mins = 'minutes'
+        let mins = "minutes";
         if (diffInMinutes === 1) {
-            mins = 'minute';
+            mins = "minute";
         }
         return `Saved ${diffInMinutes} ${mins} ago`;
     }
-})
+});
 
 const updateNow = function () {
     data.now = new Date();
-}
+};
 
 const checkGoHome = function () {
     if (mainStore.editingUnsavedChanges) {
-        ElMessageBox.confirm('You\'ve got unsaved changes, are you sure you want to go back?', 'Unsaved Changes', {
-            type: 'warning',
-            cancelButtonText: 'Cancel',
-            confirmButtonText: 'Proceed'
-        }).then(() => {
-            wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
-            const id = wikiStore.safeCurrentEntry.id;
-            emit('editorClose');
-            navigate(id);
-        }).catch(() => {
-        })
+        ElMessageBox.confirm(
+            "You've got unsaved changes, are you sure you want to go back?",
+            "Unsaved Changes",
+            {
+                type: "warning",
+                cancelButtonText: "Cancel",
+                confirmButtonText: "Proceed",
+            },
+        )
+            .then(() => {
+                wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
+                const id = wikiStore.safeCurrentEntry.id;
+                emit("editorClose");
+                navigate(id);
+            })
+            .catch(() => {});
     } else {
         wikiStore.fetchEntry(wikiStore.safeCurrentEntry.id);
         const id = wikiStore.safeCurrentEntry.id;
-        emit('editorClose');
+        emit("editorClose");
         navigate(id);
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

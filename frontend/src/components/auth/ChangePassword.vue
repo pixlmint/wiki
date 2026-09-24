@@ -2,16 +2,16 @@
     <pm-dialog title="Change Password">
         <el-form v-model="form" label-width="auto" @submit.prevent="submit">
             <el-form-item label="Username">
-                <el-input v-model="form.username"/>
+                <el-input v-model="form.username" />
             </el-form-item>
             <el-form-item label="Current Password">
-                <el-input type="password" v-model="form.currentPassword"/>
+                <el-input type="password" v-model="form.currentPassword" />
             </el-form-item>
             <el-form-item label="New Password">
-                <el-input v-model="form.newPassword1" type="password"/>
+                <el-input v-model="form.newPassword1" type="password" />
             </el-form-item>
             <el-form-item label="Repeat Password">
-                <el-input v-model="form.newPassword2" type="password"/>
+                <el-input v-model="form.newPassword2" type="password" />
             </el-form-item>
             <el-form-item label="Logout Everywhere">
                 <el-switch v-model="form.logoutEverywhere"></el-switch>
@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useAuthStore, useDialogStore} from "pixlcms-wrapper";
+import { defineComponent } from "vue";
+import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
 
 export const route = "/auth/change-password";
 
@@ -42,10 +42,12 @@ export default defineComponent({
     },
     methods: {
         submit() {
-            useAuthStore().changePassword(this.form).then(() => {
-                this.dialogStore.hideDialog(route);
-            });
+            useAuthStore()
+                .changePassword(this.form)
+                .then(() => {
+                    this.dialogStore.hideDialog(route);
+                });
         },
     },
-})
+});
 </script>

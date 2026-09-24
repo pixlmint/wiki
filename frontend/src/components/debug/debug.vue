@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="debug-open" v-show="!isShowing">
-            <el-button @click="openDebug"><pm-icon icon="bug"></pm-icon></el-button>
+            <el-button @click="openDebug"
+                ><pm-icon icon="bug"></pm-icon
+            ></el-button>
         </div>
         <div class="debug" v-show="isShowing">
             <el-row justify="space-between">
@@ -14,28 +16,28 @@
             </el-row>
             <div class="debug-view" v-for="(view, index) in views" :key="index">
                 <h3>{{ view.title }}</h3>
-                <component :is="view.component"/>
+                <component :is="view.component" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, shallowRef} from "vue";
+import { defineComponent, shallowRef } from "vue";
 import DialogsMonitor from "@/components/debug/dialogs-monitor.vue";
 
 export default defineComponent({
-    name: 'Debug',
+    name: "Debug",
     data() {
         return {
             views: [
                 {
-                    title: 'Dialogs',
+                    title: "Dialogs",
                     component: shallowRef(DialogsMonitor),
                 },
             ],
             isShowing: false,
-        }
+        };
     },
     methods: {
         closeDebug() {
@@ -43,7 +45,7 @@ export default defineComponent({
         },
         openDebug() {
             this.isShowing = true;
-        }
+        },
     },
 });
 </script>

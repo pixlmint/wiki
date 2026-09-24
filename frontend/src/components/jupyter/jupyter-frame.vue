@@ -10,8 +10,7 @@ import { ref } from "vue";
 const props = defineProps<{ notebookUrl: string }>();
 const jupyterFrame = ref();
 
-const emit = defineEmits(['change']);
-
+const emit = defineEmits(["change"]);
 </script>
 
 <style scoped>

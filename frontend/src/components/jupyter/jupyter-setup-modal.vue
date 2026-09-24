@@ -1,43 +1,78 @@
 <template>
     <pm-dialog :route="route" :title="title">
         <template v-if="action === JupyterSetupAction.CreateNew">
-            <alternative-content-upload-form v-if="data.ready" :isInitialUpload="true" @afterSave="closeDialog"
-                :entryId="data.entryId" :formData="data.formData">
+            <alternative-content-upload-form
+                v-if="data.ready"
+                :isInitialUpload="true"
+                @afterSave="closeDialog"
+                :entryId="data.entryId"
+                :formData="data.formData"
+            >
                 <template #form-extra>
                     <el-collapse v-model="connectorSetupShowing">
-                        <el-collapse-item title="Connector Configuration" :name="1">
-                            <jupyter-setup @change="handleConnectorChange" @save="testAndStoreConnectorConfiugration" />
+                        <el-collapse-item
+                            title="Connector Configuration"
+                            :name="1"
+                        >
+                            <jupyter-setup
+                                @change="handleConnectorChange"
+                                @save="testAndStoreConnectorConfiugration"
+                            />
                         </el-collapse-item>
                     </el-collapse>
                 </template>
             </alternative-content-upload-form>
         </template>
-        <template v-else-if="action === JupyterSetupAction.FixConnectorConfiguration">
-            <jupyter-setup :settings="data.connectorSettings" @change="handleConnectorChange" @save="testAndStoreConnectorConfiugration" />
+        <template
+            v-else-if="action === JupyterSetupAction.FixConnectorConfiguration"
+        >
+            <jupyter-setup
+                :settings="data.connectorSettings"
+                @change="handleConnectorChange"
+                @save="testAndStoreConnectorConfiugration"
+            />
         </template>
         <template v-else>
             The Notebooks are out of sync, select an action to take
             <el-radio-group v-model="action">
-                <el-radio :value="JupyterSetupAction.OverwriteRemote">Overwrite Remote</el-radio>
-                <el-radio :value="JupyterSetupAction.OverwriteLocal">Overwrite Local</el-radio>
-                <el-radio :value="JupyterSetupAction.OpenNotebook">Open</el-radio>
-                <el-radio :value="JupyterSetupAction.UpdateConfiguration">Change Connector Configuration</el-radio>
+                <el-radio :value="JupyterSetupAction.OverwriteRemote"
+                    >Overwrite Remote</el-radio
+                >
+                <el-radio :value="JupyterSetupAction.OverwriteLocal"
+                    >Overwrite Local</el-radio
+                >
+                <el-radio :value="JupyterSetupAction.OpenNotebook"
+                    >Open</el-radio
+                >
+                <el-radio :value="JupyterSetupAction.UpdateConfiguration"
+                    >Change Connector Configuration</el-radio
+                >
             </el-radio-group>
 
             <el-button @click="cancel">Cancel</el-button>
-            <el-button @click="confirm" v-if="!connectorSettingsChanged">Confirm</el-button>
+            <el-button @click="confirm" v-if="!connectorSettingsChanged"
+                >Confirm</el-button
+            >
             <el-button disabled @click="confirm" v-else>Confirm</el-button>
-            <jupyter-setup @change="handleConnectorChange" @save="testAndStoreConnectorConfiugration" v-if="action === JupyterSetupAction.UpdateConfiguration" />
+            <jupyter-setup
+                @change="handleConnectorChange"
+                @save="testAndStoreConnectorConfiugration"
+                v-if="action === JupyterSetupAction.UpdateConfiguration"
+            />
         </template>
     </pm-dialog>
 </template>
 
 <script lang="ts" setup>
-import { useDialogStore } from 'pixlcms-wrapper';
-import { JupyterConnectorSettings, JupyterSetupAction, useJupyterConnectionsStore } from '@/helpers/jupyter';
-import { computed, onMounted, reactive, ref } from 'vue';
-import { AlternativeContentForm } from '@/helpers/alternativeContentHelper';
-import JupyterSetup from './jupyter-setup.vue';
+import { useDialogStore } from "pixlcms-wrapper";
+import {
+    JupyterConnectorSettings,
+    JupyterSetupAction,
+    useJupyterConnectionsStore,
+} from "@/helpers/jupyter";
+import { computed, onMounted, reactive, ref } from "vue";
+import { AlternativeContentForm } from "@/helpers/alternativeContentHelper";
+import JupyterSetup from "./jupyter-setup.vue";
 import AlternativeContentUploadForm from "@/components/forms/alternative-content-upload-form.vue";
 
 const action = ref(JupyterSetupAction.OpenNotebook);
@@ -67,52 +102,56 @@ const connectorSettingsChanged = ref(false);
 const title = computed(() => dialogData.title);
 
 onMounted(() => {
-    if ('action' in dialogData) {
+    if ("action" in dialogData) {
         action.value = dialogData.action;
     }
 
     if (action.value === JupyterSetupAction.CreateNew) {
         data.formData = new AlternativeContentForm({
-            renderer: 'ipynb',
-            mime: "application/x-ipynb+json"
+            renderer: "ipynb",
+            mime: "application/x-ipynb+json",
         });
         data.entryId = dialogData.id;
         data.ready = true;
-    } else if ('entryId' in dialogData) {
+    } else if ("entryId" in dialogData) {
         data.entryId = dialogData.entryId;
     }
 
     if ("connectorSettings" in dialogData) {
-        data.connectorSettings = dialogData['connectorSettings'];
+        data.connectorSettings = dialogData["connectorSettings"];
     }
-})
+});
 
 const cancel = function () {
     dialogStore.getDialogData(route).action = JupyterSetupAction.Cancel;
     dialogStore.hideDialog(route);
-}
+};
 
 const confirm = function () {
     dialogStore.getDialogData(route).action = action.value;
     dialogStore.hideDialog(route);
-}
+};
 
-const handleConnectorChange = function (connectorConfiguration: JupyterConnectorSettings) {
+const handleConnectorChange = function (
+    connectorConfiguration: JupyterConnectorSettings,
+) {
     connectorSettingsChanged.value = true;
-}
+};
 
-const testAndStoreConnectorConfiugration = function (connectorConfiguration: JupyterConnectorSettings) {
+const testAndStoreConnectorConfiugration = function (
+    connectorConfiguration: JupyterConnectorSettings,
+) {
     if (data.entryId !== null)
-        connectionsStore.setConnectionForEntry(data.entryId, connectorConfiguration);
+        connectionsStore.setConnectionForEntry(
+            data.entryId,
+            connectorConfiguration,
+        );
     if (action.value === JupyterSetupAction.FixConnectorConfiguration)
         dialogStore.hideDialog(route);
-}
+};
 
-const closeDialog = function () {
-
-}
+const closeDialog = function () {};
 </script>
-
 
 <script lang="ts">
 export const route = "/jupyter/modal";

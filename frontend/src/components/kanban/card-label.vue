@@ -1,26 +1,36 @@
 <template>
-    <span class="card-label" :style="'border-color: ' + color + '; background-color: ' + backgroundColor + ';color: ' + fontColor">
+    <span
+        class="card-label"
+        :style="
+            'border-color: ' +
+            color +
+            '; background-color: ' +
+            backgroundColor +
+            ';color: ' +
+            fontColor
+        "
+    >
         {{ props.label.title }}
     </span>
 </template>
 
 <script lang="ts" setup>
-import {computed} from "vue";
-import {hexToHsl} from "@/helpers/color";
+import { computed } from "vue";
+import { hexToHsl } from "@/helpers/color";
 
 const props = defineProps({
     label: {
         type: Object,
         required: true,
-    }
+    },
 });
 
 const fontColor = computed(() => {
     const hsl = hexToHsl(props.label.color);
     if (hsl.l < 50) {
-        return 'white';
+        return "white";
     } else {
-        return 'black';
+        return "black";
     }
 });
 

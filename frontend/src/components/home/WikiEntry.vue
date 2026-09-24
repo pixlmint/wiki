@@ -3,7 +3,7 @@
         <PDFContent :pdfPath="pdfPath"></PDFContent>
     </template>
     <template v-else-if="isBoard">
-        <BoardView :board-id="entryId"/>
+        <BoardView :board-id="entryId" />
     </template>
     <template v-else-if="isTable">
         <TableView></TableView>
@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useWikiStore} from '@/stores/wiki'
-import {useAuthStore} from "pixlcms-wrapper";
+import { defineComponent } from "vue";
+import { useWikiStore } from "@/stores/wiki";
+import { useAuthStore } from "pixlcms-wrapper";
 import PDFContent from "@/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/components/home/basic-html-components/BasicHtmlEntry.vue";
 import BoardView from "@/components/home/BoardView.vue";
@@ -33,7 +33,7 @@ export default defineComponent({
         return {
             wikiStore: useWikiStore(),
             authStore: useAuthStore(),
-        }
+        };
     },
     components: {
         PDFContent,
@@ -50,42 +50,45 @@ export default defineComponent({
             return this.wikiStore.safeCurrentEntry.content;
         },
         isPdfContent() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!("renderer" in this.wikiStore.safeCurrentEntry.meta)) {
                 return false;
             }
-            return 'pdf' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return "pdf" === this.wikiStore.safeCurrentEntry.meta.renderer;
         },
         isJupyterNotebook() {
-            if (!('renderer' in this.wikiStore.safeCurrentEntry.meta)) {
+            if (!("renderer" in this.wikiStore.safeCurrentEntry.meta)) {
                 return false;
             }
-            return 'ipynb' === this.wikiStore.safeCurrentEntry.meta.renderer;
+            return "ipynb" === this.wikiStore.safeCurrentEntry.meta.renderer;
         },
         isBoard() {
-            return 'board' === this.wikiStore.safeCurrentEntry.meta.kind;
+            return "board" === this.wikiStore.safeCurrentEntry.meta.kind;
         },
         isTable() {
             const content = this.wikiStore.safeCurrentEntry;
-            const html = document.createElement('html');
+            const html = document.createElement("html");
             html.innerHTML = content.content;
             const body = html.children[1];
 
-            return body.childNodes.length === 1 && body.childNodes[0].nodeName === 'TABLE';
+            return (
+                body.childNodes.length === 1 &&
+                body.childNodes[0].nodeName === "TABLE"
+            );
         },
         entryId() {
             return this.wikiStore.safeCurrentEntry.id;
         },
         pdfPath() {
-            const base = '/api/entry/load-pdf?';
-            const data = {p: this.entryId, pixltoken: this.authStore.token};
+            const base = "/api/entry/load-pdf?";
+            const data = { p: this.entryId, pixltoken: this.authStore.token };
             return base + queryFormatter(data);
         },
     },
-})
+});
 </script>
 
 <style lang="scss">
-@use '@/style/variables.scss';
+@use "@/style/variables.scss";
 
 .article-body {
     margin: 5px;
@@ -95,7 +98,11 @@ h1 {
     margin-top: 0.5rem;
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
     border-bottom: 1px solid var(--el-border-color);
 }
 

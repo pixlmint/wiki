@@ -1,18 +1,18 @@
 <template>
-  <div :style="'width: ' + loadingWidth + '%'" class="loader"></div>
+    <div :style="'width: ' + loadingWidth + '%'" class="loader"></div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {useLoadingStore} from "pixlcms-wrapper";
+import { defineComponent } from "vue";
+import { useLoadingStore } from "pixlcms-wrapper";
 
 export default defineComponent({
-  name: "PWLoading",
-  computed: {
-    loadingWidth() {
-      return useLoadingStore().getEstimatedProgress;
+    name: "PWLoading",
+    computed: {
+        loadingWidth() {
+            return useLoadingStore().getEstimatedProgress;
+        },
     },
-  }
 });
 </script>
 

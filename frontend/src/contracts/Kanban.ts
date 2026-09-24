@@ -1,47 +1,43 @@
-import {EntryMeta, WikiEntry} from "@/contracts/WikiBase";
-import {RGB} from "@/contracts/Color";
+import { EntryMeta, WikiEntry } from "@/contracts/WikiBase";
+import { RGB } from "@/contracts/Color";
 
 export interface BaseBoardItemResponse extends WikiEntry {
-    meta: BaseBoardItemMeta,
+    meta: BaseBoardItemMeta;
 }
 
 export interface BoardResponse extends BaseBoardItemResponse {
-    meta: BoardMeta,
-    children: ListResponse[],
+    meta: BoardMeta;
+    children: ListResponse[];
 }
 
 export interface ListResponse extends BaseBoardItemResponse {
-    meta: ListMeta,
+    meta: ListMeta;
 }
 
 export interface BaseBoardItemMeta extends EntryMeta {
-    uid: string,
+    uid: string;
 }
 
 export interface BoardMeta extends BaseBoardItemMeta {
     board: {
-        lists: String[],
-        labels: CardLabel[],
-    },
+        lists: String[];
+        labels: CardLabel[];
+    };
 }
 
 export interface ListMeta extends BaseBoardItemMeta {
     list: {
-        cards: String[],
-    }
+        cards: String[];
+    };
 }
 
-interface BaseBoardItem {
-
-}
+interface BaseBoardItem {}
 
 export class Board implements BaseBoardItem {
-    fromResponse: Function = function (response: BaseBoardItemResponse) {
-
-    }
+    fromResponse: Function = function (response: BaseBoardItemResponse) {};
 }
 
 export interface CardLabel {
-    title: string,
-    color: string,
+    title: string;
+    color: string;
 }

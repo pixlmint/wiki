@@ -5,7 +5,14 @@
         </span>
         <div class="nav-title" ref="titleElement" :title="elementTitle">
             <span class="submenu-title d-flex gap-2 align-items-center">
-                <span class="submenu-title-actual" :style="'max-width: ' + titleElementWidth.value + 'px; text-overflow: ellipsis; overflow: hidden;'">
+                <span
+                    class="submenu-title-actual"
+                    :style="
+                        'max-width: ' +
+                        titleElementWidth.value +
+                        'px; text-overflow: ellipsis; overflow: hidden;'
+                    "
+                >
                     {{ title }}
                 </span>
                 <span ref="iconsWrapper">
@@ -25,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useSlots, ref, onMounted, reactive } from 'vue';
+import { computed, useSlots, ref, onMounted, reactive } from "vue";
 
 const props = defineProps({
     elementId: {
@@ -74,7 +81,8 @@ onMounted(() => {
     }
 }
 
-.el-menu-item, .el-sub-menu__title {
+.el-menu-item,
+.el-sub-menu__title {
     padding-right: 0 !important;
 }
 

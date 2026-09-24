@@ -1,35 +1,35 @@
-import {AxiosResponse} from 'axios';
-import {defineStore} from "pinia";
-import {useAuthStore, buildRequest, send} from "pixlcms-wrapper";
+import { AxiosResponse } from "axios";
+import { defineStore } from "pinia";
+import { useAuthStore, buildRequest, send } from "pixlcms-wrapper";
 
 interface Meta {
-    title: string,
-    pluginVersion: string,
-    cmsVersion: string,
-    frontendVersion: string,
-    adminCreated: boolean,
-    is_token_valid: string,
-    debugEnabled: boolean,
+    title: string;
+    pluginVersion: string;
+    cmsVersion: string;
+    frontendVersion: string;
+    adminCreated: boolean;
+    is_token_valid: string;
+    debugEnabled: boolean;
 }
 
 interface State {
-    pageTitle: string,
-    meta: Meta,
-    editingUnsavedChanges: boolean,
-    isLargeNavShowing: boolean,
-    isSearchShowing: boolean,
+    pageTitle: string;
+    meta: Meta;
+    editingUnsavedChanges: boolean;
+    isLargeNavShowing: boolean;
+    isSearchShowing: boolean;
 }
 
-export const useMainStore = defineStore('main', {
+export const useMainStore = defineStore("main", {
     state: (): State => ({
-        pageTitle: 'Wiki',
+        pageTitle: "Wiki",
         meta: {
-            title: 'Loading...',
-            frontendVersion: '0',
-            cmsVersion: '0',
-            pluginVersion: '0',
+            title: "Loading...",
+            frontendVersion: "0",
+            cmsVersion: "0",
+            pluginVersion: "0",
             adminCreated: false,
-            is_token_valid: 'token_not_set',
+            is_token_valid: "token_not_set",
             debugEnabled: false,
         },
         editingUnsavedChanges: false,
@@ -38,14 +38,14 @@ export const useMainStore = defineStore('main', {
     }),
     getters: {
         getPageTitle: (state) => state.pageTitle,
-        getMeta: state => state.meta,
+        getMeta: (state) => state.meta,
     },
     actions: {
         init(token: string | null) {
-            const request = buildRequest('/api/init', {token: token}, 'POST');
+            const request = buildRequest("/api/init", { token: token }, "POST");
             // @ts-ignore
             return send(request).then((response: AxiosResponse) => {
-                if (response.data.is_token_valid !== 'token_valid') {
+                if (response.data.is_token_valid !== "token_valid") {
                     useAuthStore().logout();
                 }
                 const data = response.data;
@@ -60,10 +60,10 @@ export const useMainStore = defineStore('main', {
             this.editingUnsavedChanges = hasUnsavedChanges;
         },
         setTitle(title: string) {
-            if (title === 'Wiki') {
-                document.title = 'Wiki';
+            if (title === "Wiki") {
+                document.title = "Wiki";
             } else {
-                document.title = title + ' · Wiki';
+                document.title = title + " · Wiki";
             }
             this.$state.pageTitle = title;
         },
@@ -71,4 +71,4 @@ export const useMainStore = defineStore('main', {
             this.isLargeNavShowing = isLargeNavShowing;
         },
     },
-})
+});

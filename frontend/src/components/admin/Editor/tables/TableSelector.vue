@@ -1,10 +1,23 @@
 <template>
     <div class="table-selector">
-        <div class="mini-table" v-for="table, hash in data.littleTables" :key="hash">
-            <div class="table-overlay" @click="selectTable(hash)" :data-table-hash="hash"></div>
+        <div
+            class="mini-table"
+            v-for="(table, hash) in data.littleTables"
+            :key="hash"
+        >
+            <div
+                class="table-overlay"
+                @click="selectTable(hash)"
+                :data-table-hash="hash"
+            ></div>
             <div class="table-wrapper">
                 <el-table :data="table.data">
-                    <el-table-column v-for="heading, hIndex in table.thead" :key="hIndex" :prop="heading" :label="heading" /> 
+                    <el-table-column
+                        v-for="(heading, hIndex) in table.thead"
+                        :key="hIndex"
+                        :prop="heading"
+                        :label="heading"
+                    />
                 </el-table>
             </div>
         </div>
@@ -12,10 +25,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue';
-import { readTable } from '@/helpers/htmlTableData';
+import { onMounted, reactive } from "vue";
+import { readTable } from "@/helpers/htmlTableData";
 
-const props = defineProps(["tables"])
+const props = defineProps(["tables"]);
 const emit = defineEmits(["select"]);
 
 const MAX_ROWS = 3;
@@ -26,7 +39,7 @@ const data = reactive({
 });
 
 function selectTable(hash: any) {
-    emit('select', hash);
+    emit("select", hash);
 }
 
 onMounted(() => {
@@ -36,7 +49,7 @@ onMounted(() => {
             tableData.spliceRows(MAX_ROWS);
         }
         if (tableData.width() > MAX_CELLS) {
-            tableData.spliceColumns(MAX_CELLS)
+            tableData.spliceColumns(MAX_CELLS);
         }
         data.littleTables[table.hash] = tableData;
     }
@@ -67,7 +80,6 @@ onMounted(() => {
         }
     }
 }
-
 
 @media screen and (min-width: 500px) {
     .table-selector {

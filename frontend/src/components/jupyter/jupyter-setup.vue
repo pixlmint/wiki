@@ -30,8 +30,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from 'vue';
-import { type JupyterConnectorSettings, useJupyterConnectionsStore } from "@/helpers/jupyter";
+import { onMounted, reactive, watch } from "vue";
+import {
+    type JupyterConnectorSettings,
+    useJupyterConnectionsStore,
+} from "@/helpers/jupyter";
 
 const emit = defineEmits(["save", "change", "unchanged"]);
 
@@ -42,7 +45,7 @@ type FlatSettings = {
     readonly token?: string | undefined;
 };
 
-const props = defineProps<{settings: JupyterConnectorSettings | null}>();
+const props = defineProps<{ settings: JupyterConnectorSettings | null }>();
 
 const connectionsStore = useJupyterConnectionsStore();
 
@@ -54,7 +57,6 @@ const form = reactive({
     token: props.settings?.authToken,
     makeDefault: false,
 });
-
 
 onMounted(() => {
     const defaultConnection = connectionsStore.getDefaultConnection();
@@ -68,36 +70,46 @@ onMounted(() => {
             form.sharedPath = defaultConnection.sharedFolder.shared;
             form.isShared = true;
         }
-        form.token = defaultConnection.authToken ? defaultConnection.authToken : '';
+        form.token = defaultConnection.authToken
+            ? defaultConnection.authToken
+            : "";
     } else {
         form.isShared = props.settings.sharedFolder !== null;
     }
 });
 
 const handleChange = function () {
-    if (form.baseUrl !== props.settings?.baseUrl || form.localPath !== props.settings?.sharedFolder?.local || form.sharedPath !== props.settings?.sharedFolder?.shared || form.token !== props.settings?.authToken || form.makeDefault) {
+    if (
+        form.baseUrl !== props.settings?.baseUrl ||
+        form.localPath !== props.settings?.sharedFolder?.local ||
+        form.sharedPath !== props.settings?.sharedFolder?.shared ||
+        form.token !== props.settings?.authToken ||
+        form.makeDefault
+    ) {
         emit("change", form);
     } else {
         emit("unchanged", form);
     }
-}
+};
 
-const convertFlat2Settings = function (flatObj: FlatSettings): JupyterConnectorSettings {
+const convertFlat2Settings = function (
+    flatObj: FlatSettings,
+): JupyterConnectorSettings {
     const settings: JupyterConnectorSettings = {
         baseUrl: flatObj.baseUrl!,
         sharedFolder: null,
         authToken: flatObj.token!,
-    }
+    };
 
     if (flatObj.isShared) {
         settings.sharedFolder = {
             local: flatObj.localPath!,
             shared: flatObj.sharedPath!,
-        }
+        };
     }
 
     return settings;
-}
+};
 
 const save = function () {
     const settings = convertFlat2Settings(form);
@@ -113,6 +125,6 @@ const save = function () {
         connectionsStore.setDefaultConnection(settings);
     }
 
-    emit('save', settings);
-}
+    emit("save", settings);
+};
 </script>

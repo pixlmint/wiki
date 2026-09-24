@@ -5,7 +5,6 @@ import { useWikiStore } from "../stores/wiki";
 import { WikiEntry } from "../contracts/WikiBase";
 import { defineStore } from "pinia";
 
-
 const MAXIMUM_CONSCECUTIVE_CONNECTION_FAILURES = 15;
 
 export enum JupyterSetupAction {
@@ -19,7 +18,6 @@ export enum JupyterSetupAction {
     FixConnectorConfiguration,
 }
 
-
 const generateHash = (string) => {
     let hash = 0;
     for (const char of string) {
@@ -29,15 +27,15 @@ const generateHash = (string) => {
     return hash;
 };
 
-
 type JupyterConnectorSettings = {
-    baseUrl: string,
-    sharedFolder: {  // if null that means there is no connection
-        local: string,  // Where jupyter notebooks are hosted (usually just [slash])
-        shared: string,  // Where the notebooks are accessible on the lab server
-    } | null,
-    authToken: string | null,
-}
+    baseUrl: string;
+    sharedFolder: {
+        // if null that means there is no connection
+        local: string; // Where jupyter notebooks are hosted (usually just [slash])
+        shared: string; // Where the notebooks are accessible on the lab server
+    } | null;
+    authToken: string | null;
+};
 
 class JupyterSession {
     notebookPath: string;
@@ -48,7 +46,10 @@ class JupyterSession {
     conscecutiveConnectionFailures: number = 0;
     entry: WikiEntry | null = null;
 
-    constructor(connector: JupyterConnector | RemoteJupyterConnector, notebookPath: string) {
+    constructor(
+        connector: JupyterConnector | RemoteJupyterConnector,
+        notebookPath: string,
+    ) {
         this.connector = connector;
         this.notebookPath = notebookPath;
     }
@@ -71,7 +72,10 @@ class JupyterSession {
         }
 
         const that = this;
-        this.watchInterval = window.setInterval(() => that.updateLastModified(), timeout);
+        this.watchInterval = window.setInterval(
+            () => that.updateLastModified(),
+            timeout,
+        );
     }
 
     updateLastModified() {
@@ -80,27 +84,40 @@ class JupyterSession {
         if (this.connector.settings.authToken !== null) {
             config.headers = {
                 Authorization: "token " + this.connector.settings.authToken,
-            }
+            };
         }
         const that = this;
-        axios.get(url, config).then(response => {
-            if (response.data.length === 0) {
-                that.conscecutiveConnectionFailures++;
-                return;
-            }
-            const lastCheckpointTime = DateTime.fromJSDate(new Date(response.data[0].last_modified));
-            if (that.lastModified === null || that.lastModified < lastCheckpointTime) {
-                if (that.lastModified !== null) {
-                    that.triggerUpdate();
+        axios
+            .get(url, config)
+            .then((response) => {
+                if (response.data.length === 0) {
+                    that.conscecutiveConnectionFailures++;
+                    return;
                 }
-                that.lastModified = lastCheckpointTime;
-            }
-            that.conscecutiveConnectionFailures = 0;
-        }).catch((e) => {
-            that.conscecutiveConnectionFailures++;
-        });
-        if (this.conscecutiveConnectionFailures >= MAXIMUM_CONSCECUTIVE_CONNECTION_FAILURES) {
-            console.error("Too many conscecutive connection failres, stopping checkpoint updates");
+                const lastCheckpointTime = DateTime.fromJSDate(
+                    new Date(response.data[0].last_modified),
+                );
+                if (
+                    that.lastModified === null ||
+                    that.lastModified < lastCheckpointTime
+                ) {
+                    if (that.lastModified !== null) {
+                        that.triggerUpdate();
+                    }
+                    that.lastModified = lastCheckpointTime;
+                }
+                that.conscecutiveConnectionFailures = 0;
+            })
+            .catch((e) => {
+                that.conscecutiveConnectionFailures++;
+            });
+        if (
+            this.conscecutiveConnectionFailures >=
+            MAXIMUM_CONSCECUTIVE_CONNECTION_FAILURES
+        ) {
+            console.error(
+                "Too many conscecutive connection failres, stopping checkpoint updates",
+            );
             clearInterval(this.watchInterval!);
             this.watchInterval = null;
         }
@@ -136,9 +153,7 @@ class JupyterConnector {
         this.settings = settings;
     }
 
-    createNotebook() {
-
-    }
+    createNotebook() {}
 
     open(entryPath: string): Promise<JupyterSession> {
         const entry = useWikiStore().getEntryById(entryPath);
@@ -147,16 +162,20 @@ class JupyterConnector {
         }
 
         const nbName = entry!.meta.alternative_content;
-        const splId = entry!.id.split('/')
+        const splId = entry!.id.split("/");
         splId[splId.length - 1] = nbName;
-        const nbPath = this.settings.sharedFolder.shared + splId.join('/')
+        const nbPath = this.settings.sharedFolder.shared + splId.join("/");
 
-        return new Promise(resolve => resolve(new JupyterSession(this, nbPath)));
+        return new Promise((resolve) =>
+            resolve(new JupyterSession(this, nbPath)),
+        );
     }
 
     close(notebookPath: string | null = null) {
         if (notebookPath === null) {
-            for (const [notebookPath, session] of Object.entries(this.sessions)) {
+            for (const [notebookPath, session] of Object.entries(
+                this.sessions,
+            )) {
                 this.close(notebookPath);
             }
         } else {
@@ -170,7 +189,7 @@ class JupyterConnector {
             if (Object.keys(this.sessions).length === 0) {
                 this.isOpened = false;
                 const that = this;
-                removeEventListener('beforeunload', that.unloadHandler);
+                removeEventListener("beforeunload", that.unloadHandler);
             }
         }
     }
@@ -185,7 +204,8 @@ class RemoteJupyterConnector extends JupyterConnector {
         }
         const headers = this._getHeaders();
 
-        const uniqueNotebookPath = generateHash(entryPath).toString() + ".ipynb";
+        const uniqueNotebookPath =
+            generateHash(entryPath).toString() + ".ipynb";
 
         const url = this._getApiUrl(uniqueNotebookPath);
         const webUrl = `${this.settings.baseUrl}/notebooks/${uniqueNotebookPath}`;
@@ -205,9 +225,13 @@ class RemoteJupyterConnector extends JupyterConnector {
 
             let action = JupyterSetupAction.Ask;
 
-            if (entry !== null && 'jupyter_last_modified' in entry.meta) {
-                const remoteLastModified = DateTime.fromJSDate(new Date(existingFile.last_modified));
-                const localLastModified = DateTime.fromISO(entry.meta.jupyter_last_modified);
+            if (entry !== null && "jupyter_last_modified" in entry.meta) {
+                const remoteLastModified = DateTime.fromJSDate(
+                    new Date(existingFile.last_modified),
+                );
+                const localLastModified = DateTime.fromISO(
+                    entry.meta.jupyter_last_modified,
+                );
 
                 if (remoteLastModified > localLastModified) {
                     action = JupyterSetupAction.OverwriteLocal;
@@ -222,9 +246,10 @@ class RemoteJupyterConnector extends JupyterConnector {
                         route: "/jupyter/modal",
                         data: { action: 0 },
                         closeCallback: () => {
-                            const data = dialogStore.getDialogData("/jupyter/modal")
+                            const data =
+                                dialogStore.getDialogData("/jupyter/modal");
                             resolve(data.action);
-                        }
+                        },
                     });
                 });
             }
@@ -233,7 +258,12 @@ class RemoteJupyterConnector extends JupyterConnector {
                 case JupyterSetupAction.Cancel:
                     throw new UserCancelledOverwriteError();
                 case JupyterSetupAction.OverwriteRemote:
-                    await this.overwriteRemoteNotebook(url, uniqueNotebookPath, headers, entryPath);
+                    await this.overwriteRemoteNotebook(
+                        url,
+                        uniqueNotebookPath,
+                        headers,
+                        entryPath,
+                    );
                     console.log("Selected overwrite remote option");
                     break;
                 case JupyterSetupAction.OverwriteLocal:
@@ -241,11 +271,16 @@ class RemoteJupyterConnector extends JupyterConnector {
                     console.log("Selected overwrite loacl option");
                     break;
                 case JupyterSetupAction.OpenNotebook:
-                    window.open(webUrl, '_blank');
+                    window.open(webUrl, "_blank");
                     throw "Notebook should have opened, continue from there";
             }
         } else {
-            await this.overwriteRemoteNotebook(url, uniqueNotebookPath, headers, entryPath);
+            await this.overwriteRemoteNotebook(
+                url,
+                uniqueNotebookPath,
+                headers,
+                entryPath,
+            );
         }
 
         this.isOpened = true;
@@ -258,49 +293,74 @@ class RemoteJupyterConnector extends JupyterConnector {
 
         if (Object.keys(this.sessions).length === 1) {
             const that = this;
-            addEventListener('beforeunload', that.unloadHandler);
+            addEventListener("beforeunload", that.unloadHandler);
         }
 
         return session;
     }
 
     async syncRemoteToLocal(session: JupyterSession, entry: any) {
-        this.overwriteLocalNotebook(this._getApiUrl(session.notebookPath), this._getHeaders(), entry.id);
+        this.overwriteLocalNotebook(
+            this._getApiUrl(session.notebookPath),
+            this._getHeaders(),
+            entry.id,
+        );
     }
 
-    async overwriteLocalNotebook(url: string, headers: RawAxiosRequestHeaders, entryPath: string) {
+    async overwriteLocalNotebook(
+        url: string,
+        headers: RawAxiosRequestHeaders,
+        entryPath: string,
+    ) {
         const entry = useWikiStore().getEntryById(entryPath);
 
         if (entry === null) {
             throw "Unable to determine entry by path " + entryPath;
         }
 
-        const content = await (axios.get(url, { headers: headers }));
+        const content = await axios.get(url, { headers: headers });
 
-        if ('last_modified' in content.data) {
-            const lastModified = DateTime.fromJSDate(new Date(content.data.last_modified));
-            entry.meta['jupyter_last_modified'] = lastModified.toISO();
+        if ("last_modified" in content.data) {
+            const lastModified = DateTime.fromJSDate(
+                new Date(content.data.last_modified),
+            );
+            entry.meta["jupyter_last_modified"] = lastModified.toISO();
         }
 
-        const request = buildRequest("/api/admin/entry/update-alternative-content", {
-            entry: entryPath,
-            meta: entry.meta,
-            alternative_content_raw: JSON.stringify(content.data.content),
-        }, 'POST');
+        const request = buildRequest(
+            "/api/admin/entry/update-alternative-content",
+            {
+                entry: entryPath,
+                meta: entry.meta,
+                alternative_content_raw: JSON.stringify(content.data.content),
+            },
+            "POST",
+        );
 
         await send(request);
     }
 
-    async overwriteRemoteNotebook(url: string, uniqueNotebookPath: string, headers: RawAxiosRequestHeaders, entryPath: string) {
-        const request = buildRequest('/api/entry/load-jupyter-notebook', { p: entryPath });
+    async overwriteRemoteNotebook(
+        url: string,
+        uniqueNotebookPath: string,
+        headers: RawAxiosRequestHeaders,
+        entryPath: string,
+    ) {
+        const request = buildRequest("/api/entry/load-jupyter-notebook", {
+            p: entryPath,
+        });
         const content = await send(request);
 
-        await axios.put(url, {
-            content: content.data,
-            format: 'json',
-            path: uniqueNotebookPath,
-            type: 'notebook',
-        }, { headers: headers });
+        await axios.put(
+            url,
+            {
+                content: content.data,
+                format: "json",
+                path: uniqueNotebookPath,
+                type: "notebook",
+            },
+            { headers: headers },
+        );
     }
 
     unloadHandler(event: Event) {
@@ -316,33 +376,32 @@ class RemoteJupyterConnector extends JupyterConnector {
     _getHeaders(): RawAxiosRequestHeaders {
         if (this.settings.authToken !== null) {
             return {
-                Authorization: 'token ' + this.settings.authToken,
-            }
+                Authorization: "token " + this.settings.authToken,
+            };
         } else {
             return {};
         }
     }
 }
 
-
-const createConnector = function(settings: JupyterConnectorSettings) {
+const createConnector = function (settings: JupyterConnectorSettings) {
     if (settings.sharedFolder === null) {
         return new RemoteJupyterConnector(settings);
     } else {
         return new JupyterConnector(settings);
     }
-}
+};
 
-class UserCancelledOverwriteError extends Error { }
+class UserCancelledOverwriteError extends Error {}
 
 interface JupyterConnectionState {
-    availableConnections: Record<string, JupyterConnectorSettings>,
-    configuredConnections: Record<string, string>,
-    default: string | null,
-    isLoaded: boolean,
+    availableConnections: Record<string, JupyterConnectorSettings>;
+    configuredConnections: Record<string, string>;
+    default: string | null;
+    isLoaded: boolean;
 }
 
-const storeWrapper = function() {
+const storeWrapper = function () {
     const store = useJupyterConnectionsStore();
 
     if (!store.isLoaded) {
@@ -351,9 +410,9 @@ const storeWrapper = function() {
     }
 
     return store;
-}
+};
 
-const useJupyterConnectionsStore = defineStore('jupyterConnections', {
+const useJupyterConnectionsStore = defineStore("jupyterConnections", {
     state: (): JupyterConnectionState => ({
         availableConnections: {},
         configuredConnections: {},
@@ -362,16 +421,15 @@ const useJupyterConnectionsStore = defineStore('jupyterConnections', {
     }),
     actions: {
         loadConnections() {
-            const stored = localStorage.getItem('jupyter_connections_v1');
+            const stored = localStorage.getItem("jupyter_connections_v1");
 
             if (stored !== null) {
                 const obj = JSON.parse(stored);
-                if ('availableConnections' in obj)
+                if ("availableConnections" in obj)
                     this.availableConnections = obj.availableConnections;
-                if ('configuredConnections' in obj)
+                if ("configuredConnections" in obj)
                     this.configuredConnections = obj.configuredConnections;
-                if ('default' in obj)
-                    this.default = obj['default'];
+                if ("default" in obj) this.default = obj["default"];
             }
 
             this.cleanupConnections();
@@ -379,19 +437,25 @@ const useJupyterConnectionsStore = defineStore('jupyterConnections', {
             this.isLoaded = true;
         },
         writeConnections() {
-            localStorage.setItem('jupyter_connections_v1', JSON.stringify({
-                availableConnections: this.availableConnections,
-                configuredConnections: this.configuredConnections,
-                defaut: this.default,
-            }));
+            localStorage.setItem(
+                "jupyter_connections_v1",
+                JSON.stringify({
+                    availableConnections: this.availableConnections,
+                    configuredConnections: this.configuredConnections,
+                    defaut: this.default,
+                }),
+            );
         },
         getDefaultConnection(): JupyterConnectorSettings {
-            if (this.default === null || !(this.default in this.availableConnections)) {
+            if (
+                this.default === null ||
+                !(this.default in this.availableConnections)
+            ) {
                 return {
                     baseUrl: "http://localhost:8888",
                     sharedFolder: {
-                        local: '/',
-                        shared: '/',
+                        local: "/",
+                        shared: "/",
                     },
                     authToken: null,
                 };
@@ -410,7 +474,10 @@ const useJupyterConnectionsStore = defineStore('jupyterConnections', {
 
             this.writeConnections();
         },
-        updateConfiguration(old: JupyterConnectorSettings, updated: JupyterConnectorSettings) {
+        updateConfiguration(
+            old: JupyterConnectorSettings,
+            updated: JupyterConnectorSettings,
+        ) {
             const newKey = this.getConnectionKey(updated);
 
             this.availableConnections[newKey] = updated;
@@ -418,20 +485,32 @@ const useJupyterConnectionsStore = defineStore('jupyterConnections', {
 
             this.writeConnections();
         },
-        getConnectionForEntry(entryId: string): JupyterConnectorSettings | null {
+        getConnectionForEntry(
+            entryId: string,
+        ): JupyterConnectorSettings | null {
             if (!Object.keys(this.configuredConnections).includes(entryId)) {
                 return null;
             } else {
                 const connectionKey = this.configuredConnections[entryId];
 
-                if (!Object.keys(this.availableConnections).includes(connectionKey)) {
-                    throw "Unable to find Connection Configuration for entry " + entryId;
+                if (
+                    !Object.keys(this.availableConnections).includes(
+                        connectionKey,
+                    )
+                ) {
+                    throw (
+                        "Unable to find Connection Configuration for entry " +
+                        entryId
+                    );
                 } else {
                     return this.availableConnections[connectionKey];
                 }
             }
         },
-        setConnectionForEntry(entryId: string, config: JupyterConnectorSettings) {
+        setConnectionForEntry(
+            entryId: string,
+            config: JupyterConnectorSettings,
+        ) {
             const connectionKey = this.getConnectionKey(config);
 
             if (!(connectionKey in this.availableConnections)) {
@@ -446,8 +525,15 @@ const useJupyterConnectionsStore = defineStore('jupyterConnections', {
         },
         cleanupConnections() {
             const connectionsToRemove = [];
-            for (const [connectionKey, config] of Object.entries(this.availableConnections)) {
-                if (!Object.values(this.configuredConnections).includes(connectionKey) && connectionKey !== this.default) {
+            for (const [connectionKey, config] of Object.entries(
+                this.availableConnections,
+            )) {
+                if (
+                    !Object.values(this.configuredConnections).includes(
+                        connectionKey,
+                    ) &&
+                    connectionKey !== this.default
+                ) {
                     connectionsToRemove.push(connectionKey);
                 }
             }
@@ -460,13 +546,23 @@ const useJupyterConnectionsStore = defineStore('jupyterConnections', {
             let key = config.baseUrl;
 
             if (config.sharedFolder !== null) {
-                key += config.sharedFolder.local + "_" + config.sharedFolder.shared;
+                key +=
+                    config.sharedFolder.local +
+                    "_" +
+                    config.sharedFolder.shared;
             }
 
             return generateHash(key).toString();
         },
-    }
+    },
 });
 
-export { JupyterConnector, RemoteJupyterConnector, JupyterSession, UserCancelledOverwriteError, type JupyterConnectorSettings, createConnector, storeWrapper as useJupyterConnectionsStore }
-
+export {
+    JupyterConnector,
+    RemoteJupyterConnector,
+    JupyterSession,
+    UserCancelledOverwriteError,
+    type JupyterConnectorSettings,
+    createConnector,
+    storeWrapper as useJupyterConnectionsStore,
+};

@@ -9,7 +9,8 @@ body {
     font-family: var(--font-family-body);
 }
 
-pre, code {
+pre,
+code {
     font-family: var(--font-family-code);
     font-weight: 100;
     font-size: 0.8rem;
@@ -27,16 +28,31 @@ h1 {
     font-size: 2.5rem;
 }
 
-h1, h2, h3, h4, h5, h6, .el-dialog__header {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.el-dialog__header {
     font-family: var(--font-family-headings);
     font-weight: 500;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     border-bottom: none;
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin-top: 2rem;
     margin-bottom: 0.75rem;
 
@@ -61,27 +77,27 @@ blockquote {
 
 @font-face {
     font-family: "JetBrains-Mono Regular";
-    src: url('@/style/fonts/JetBrainsMono-Regular.woff2');
+    src: url("@/style/fonts/JetBrainsMono-Regular.woff2");
 }
 
 @font-face {
     font-family: "JetBrains-Mono Bold";
-    src: url('@/style/fonts/JetBrainsMono-Bold.woff2');
+    src: url("@/style/fonts/JetBrainsMono-Bold.woff2");
 }
 
 @font-face {
     font-family: "JetBrains-Mono Light";
-    src: url('@/style/fonts/JetBrainsMono-Light.woff2');
+    src: url("@/style/fonts/JetBrainsMono-Light.woff2");
 }
 
 @font-face {
     font-family: "Roboto";
-    src: url('@/style/fonts/Roboto-Regular.ttf');
+    src: url("@/style/fonts/Roboto-Regular.ttf");
 }
 
 @font-face {
     font-family: "Roboto Bold";
-    src: url('@/style/fonts/Roboto-Bold.ttf');
+    src: url("@/style/fonts/Roboto-Bold.ttf");
 }
 
 /*@font-face {

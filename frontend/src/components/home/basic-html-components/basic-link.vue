@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed} from "vue";
+import { computed } from "vue";
 import InternalLink from "@/components/home/basic-html-components/internal-link.vue";
 
 const props = defineProps({
@@ -30,7 +30,7 @@ const isInternalLink = computed(() => {
 });
 
 const isHashLink = computed(() => {
-    return href.value.startsWith('#');
+    return href.value.startsWith("#");
 });
 
 const href = computed(() => {
