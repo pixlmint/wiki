@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, reactive, onMounted } from "vue";
+import { reactive, onMounted } from "vue";
 import Prism from "prismjs";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-markup-templating";
@@ -17,6 +17,9 @@ import "prismjs/components/prism-css";
 import "prismjs/components/prism-sql";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-armasm";
+
+import "prism-themes/themes/prism-vs.css";
+import "prism-themes/themes/prism-atom-dark.css";
 
 const props = defineProps({
     content: {
@@ -65,18 +68,16 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-::root {
+:root {
     --pw-code-bg: rgba(238, 221, 251, 0.2);
 }
 
 html.light {
     --pw-code-bg: rgba(238, 221, 251, 0.2);
-    @nested-import 'prism-themes/themes/prism-vs';
 }
 
 html.dark {
     --pw-code-bg: rgba(67, 58, 102, 0.25);
-    @nested-import 'prism-themes/themes/prism-atom-dark';
 }
 
 pre,

@@ -6,6 +6,9 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
+import prefixer from "postcss-prefix-selector";
+import autoprefixer from "autoprefixer";
+
 export default defineConfig(({ command }) => ({
     base: command === "build" ? "/dist/" : "/",
 
@@ -33,5 +36,21 @@ export default defineConfig(({ command }) => ({
     build: {
         outDir: "../backend/dist",
         emptyOutDir: true,
+    },
+
+    css: {
+        postcss: {
+            plugins: [
+                prefixer({
+                    prefix: "html.light",
+                    includeFiles: [/prism-vs\.css$/],
+                }),
+                prefixer({
+                    prefix: "html.dark",
+                    includeFiles: [/prism-atom-dark\.css$/],
+                }),
+                autoprefixer(),
+            ],
+        },
     },
 }));
