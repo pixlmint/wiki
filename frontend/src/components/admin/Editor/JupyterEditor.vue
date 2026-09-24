@@ -16,7 +16,7 @@ import {
     useJupyterConnectionsStore,
 } from "@/helpers/jupyter";
 import { useDialogStore } from "pixlcms-wrapper";
-import { JupyterSetupAction } from "@/helpers/jupyter";
+import { JupyterSetupAction } from "@/contracts/Jupyter";
 
 const wikiStore = useWikiStore();
 

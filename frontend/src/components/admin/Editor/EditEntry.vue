@@ -29,13 +29,14 @@ import { useUserSettings } from "@/stores/user-settings";
 import CurrentFileDiffModal from "@/components/admin/Editor/CurrentFileDiffModal.vue";
 import { useDialogStore } from "pixlcms-wrapper";
 import { DateTime } from "luxon";
+import PwMdEditor from "@/components/pw/md-editor.vue";
 
 // TODO: use lastChanged to detect which version of the content is newer
 
 let saveTimeout: number | null = null;
 
 export default defineComponent({
-    components: { CurrentFileDiffModal },
+    components: { CurrentFileDiffModal, PwMdEditor },
     data: function () {
         return {
             mainStore: useMainStore(),

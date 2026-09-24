@@ -6,7 +6,7 @@
         :show-close="false"
         :route="route"
     >
-        <!--<d3-canvas @save="save" :width="width" :height="height"></d3-canvas>-->
+        <!-- <d3-canvas @save="save" :width="width" :height="height"></d3-canvas> -->
         <ExcalidrawWrapper
             v-if="isReady"
             :data="drawingData"

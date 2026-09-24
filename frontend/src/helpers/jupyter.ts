@@ -4,19 +4,9 @@ import { buildRequest, EntryMeta, send, useDialogStore } from "pixlcms-wrapper";
 import { useWikiStore } from "../stores/wiki";
 import { WikiEntry } from "../contracts/WikiBase";
 import { defineStore } from "pinia";
+import { JupyterSetupAction } from "@/contracts/Jupyter";
 
 const MAXIMUM_CONSCECUTIVE_CONNECTION_FAILURES = 15;
-
-export enum JupyterSetupAction {
-    Cancel,
-    CreateNew,
-    Ask,
-    OverwriteLocal,
-    OverwriteRemote,
-    OpenNotebook,
-    UpdateConfiguration,
-    FixConnectorConfiguration,
-}
 
 const generateHash = (string) => {
     let hash = 0;

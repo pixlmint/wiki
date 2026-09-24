@@ -21,72 +21,65 @@
     </template>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, defineAsyncComponent } from "vue";
 import { useWikiStore } from "@/stores/wiki";
 import { useAuthStore } from "pixlcms-wrapper";
 import PDFContent from "@/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/components/home/basic-html-components/BasicHtmlEntry.vue";
-import TableView from "@/components/home/TableView.vue";
-import JupyterContent from "@/components/home/basic-html-components/jupter-content.vue";
+const TableView = defineAsyncComponent(
+    () => import("@/components/home/TableView.vue"),
+);
+const JupyterContent = defineAsyncComponent(
+    () => import("@/components/home/basic-html-components/jupter-content.vue"),
+);
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
 
-export default defineComponent({
-    name: "WikiEntry",
-    data: () => {
-        return {
-            wikiStore: useWikiStore(),
-            authStore: useAuthStore(),
-        };
-    },
-    components: {
-        PDFContent,
-        BasicHtmlEntry,
-        TableView,
-        JupyterContent,
-    },
-    computed: {
-        content() {
-            window.setTimeout(() => {
-                MathJax.typeset();
-            }, 50);
-            return this.wikiStore.safeCurrentEntry.content;
-        },
-        isPdfContent() {
-            if (!("renderer" in this.wikiStore.safeCurrentEntry.meta)) {
-                return false;
-            }
-            return "pdf" === this.wikiStore.safeCurrentEntry.meta.renderer;
-        },
-        isJupyterNotebook() {
-            if (!("renderer" in this.wikiStore.safeCurrentEntry.meta)) {
-                return false;
-            }
-            return "ipynb" === this.wikiStore.safeCurrentEntry.meta.renderer;
-        },
-        isBoard() {
-            return "board" === this.wikiStore.safeCurrentEntry.meta.kind;
-        },
-        isTable() {
-            const content = this.wikiStore.safeCurrentEntry;
-            const html = document.createElement("html");
-            html.innerHTML = content.content;
-            const body = html.children[1];
+const wikiStore = useWikiStore();
+const authStore = useAuthStore();
 
-            return (
-                body.childNodes.length === 1 &&
-                body.childNodes[0].nodeName === "TABLE"
-            );
-        },
-        entryId() {
-            return this.wikiStore.safeCurrentEntry.id;
-        },
-        pdfPath() {
-            const base = "/api/entry/load-pdf?";
-            const data = { p: this.entryId, pixltoken: this.authStore.token };
-            return base + queryFormatter(data);
-        },
-    },
+const content = computed(() => {
+    window.setTimeout(() => {
+        MathJax.typeset();
+    }, 50);
+    return wikiStore.safeCurrentEntry.content;
+});
+
+const isPdfContent = computed(() => {
+    if (!("renderer" in wikiStore.safeCurrentEntry.meta)) {
+        return false;
+    }
+    return "pdf" === wikiStore.safeCurrentEntry.meta.renderer;
+});
+
+const isJupyterNotebook = computed(() => {
+    if (!("renderer" in wikiStore.safeCurrentEntry.meta)) {
+        return false;
+    }
+    return "ipynb" === wikiStore.safeCurrentEntry.meta.renderer;
+});
+
+const isTable = computed(() => {
+    const content = wikiStore.safeCurrentEntry;
+    const html = document.createElement("html");
+    html.innerHTML = content.content;
+    const body = html.children[1];
+
+    return (
+        body.childNodes.length === 1 && body.childNodes[0].nodeName === "TABLE"
+    );
+});
+
+const isBoard = computed(() => {
+    return "board" === wikiStore.safeCurrentEntry.meta.kind;
+});
+
+const entryId = computed(() => wikiStore.safeCurrentEntry.id);
+
+const pdfPath = computed(() => {
+    const base = "/api/entry/load-pdf?";
+    const data = { p: entryId, pixltoken: authStore.token };
+    return base + queryFormatter(data);
 });
 </script>
 

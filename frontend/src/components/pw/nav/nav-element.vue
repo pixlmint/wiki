@@ -130,6 +130,7 @@ import { useWikiStore } from "@/stores/wiki";
 import { ElMessageBox } from "element-plus";
 import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
 import { useMainStore } from "@/stores/main";
+import { JupyterSetupAction } from "@/contracts/Jupyter";
 import { navigate } from "@/helpers/navigator";
 import PwNavEntryTitle from "@/components/pw/nav/nav-entry-title.vue";
 import JupyterIcon from "@/icon/jupyter.svg";
@@ -301,7 +302,6 @@ const addSubfolder = function () {
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { JupyterSetupAction } from "@/helpers/jupyter";
 
 export default defineComponent({
     name: "PWNavElement",

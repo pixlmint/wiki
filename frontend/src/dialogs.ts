@@ -1,32 +1,25 @@
-import LoginModal, { route as loginRoute } from "@/components/auth/Login.vue";
-import CreateAdmin, {
-    route as createAdminRoute,
-} from "@/components/auth/CreateAdmin.vue";
-import UserSettings, {
-    route as settingsRoute,
-} from "@/components/global-modals/user-settings.vue";
-import ChangePassword, {
-    route as changePasswordRoute,
-} from "@/components/auth/ChangePassword.vue";
-import RequestNewPassword, {
-    route as requestNewPasswordRoute,
-} from "@/components/auth/RequestNewPassword.vue";
-import RestorePassword, {
-    route as restorePasswordRoute,
-} from "@/components/auth/RestorePassword.vue";
-import NewPdf, {
-    route as newPdfRoute,
-} from "@/components/global-modals/new-pdf.vue";
-import TableEditorModal, {
-    route as tableEditorRoute,
-} from "@/components/admin/Editor/tables/TableEditorModal.vue";
+import LoginModal from "@/components/auth/Login.vue";
+import CreateAdmin from "@/components/auth/CreateAdmin.vue";
+import ChangePassword from "@/components/auth/ChangePassword.vue";
+import RequestNewPassword from "@/components/auth/RequestNewPassword.vue";
+import RestorePassword from "@/components/auth/RestorePassword.vue";
 import MediaModal, {
     route as mediaRoute,
 } from "@/components/admin/Editor/media/MediaModal.vue";
-import JupyterSetupModal, {
-    route as jupyterSetupRoute,
-} from "@/components/jupyter/jupyter-setup-modal.vue";
 import { defineDialogs } from "pixlcms-wrapper";
+import { defineAsyncComponent } from "vue";
+import NewPdf from "./components/global-modals/new-pdf.vue";
+import Settings from "./components/global-modals/user-settings.vue";
+
+export const loginRoute = "/auth/login";
+export const createAdminRoute = "/auth/create-admin";
+export const settingsRoute = "/settings";
+export const changePasswordRoute = "/auth/change-password";
+export const requestNewPasswordRoute = "/auth/request-new-password";
+export const restorePasswordRoute = "/auth/restore-password";
+export const newPdfRoute = "/nav/new-alternative-content";
+export const tableEditorRoute = "/table-editor";
+export const jupyterSetupRoute = "/jupyter/modal";
 
 export const dialogs = defineDialogs([
     {
@@ -39,7 +32,7 @@ export const dialogs = defineDialogs([
     },
     {
         route: settingsRoute,
-        component: UserSettings,
+        component: Settings,
     },
     {
         route: changePasswordRoute,
@@ -59,7 +52,10 @@ export const dialogs = defineDialogs([
     },
     {
         route: tableEditorRoute,
-        component: TableEditorModal,
+        component: defineAsyncComponent(
+            () =>
+                import("@/components/admin/Editor/tables/TableEditorModal.vue"),
+        ),
     },
     {
         route: mediaRoute,
@@ -67,6 +63,8 @@ export const dialogs = defineDialogs([
     },
     {
         route: jupyterSetupRoute,
-        component: JupyterSetupModal,
+        component: defineAsyncComponent(
+            () => import("@/components/jupyter/jupyter-setup-modal.vue"),
+        ),
     },
 ]);

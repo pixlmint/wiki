@@ -67,13 +67,13 @@
 import { useDialogStore } from "pixlcms-wrapper";
 import {
     JupyterConnectorSettings,
-    JupyterSetupAction,
     useJupyterConnectionsStore,
 } from "@/helpers/jupyter";
 import { computed, onMounted, reactive, ref } from "vue";
 import { AlternativeContentForm } from "@/helpers/alternativeContentHelper";
 import JupyterSetup from "./jupyter-setup.vue";
 import AlternativeContentUploadForm from "@/components/forms/alternative-content-upload-form.vue";
+import { JupyterSetupAction } from "@/contracts/Jupyter";
 
 const action = ref(JupyterSetupAction.OpenNotebook);
 

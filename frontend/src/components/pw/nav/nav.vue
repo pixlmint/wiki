@@ -98,6 +98,7 @@ import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
 import { isMobile } from "@/helpers/mobile-detector";
 import { ElMessageBox } from "element-plus";
 import { navigate } from "@/helpers/navigator";
+import { loginRoute, settingsRoute } from "@/dialogs";
 
 const findListElement = (target: any): any => {
     if (target.nodeName === "LI") {
@@ -147,7 +148,7 @@ const closeSubmenu = function (menuId: string) {
 };
 
 const settings = function () {
-    dialogStore.showDialog("/settings");
+    dialogStore.showDialog(settingsRoute);
 };
 const addSubFolder = function () {
     ElMessageBox.prompt("New Subfolder", "Add Subfolder", {
@@ -202,7 +203,7 @@ const navClickListener = function (event: Event) {
     navigate(id);
 };
 const login = function () {
-    dialogStore.showDialog("/auth/login");
+    dialogStore.showDialog(loginRoute);
 };
 const findElementWithTagName = function (
     element: HTMLElement,
