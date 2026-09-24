@@ -15,7 +15,6 @@
         "@fortawesome/free-brands-svg-icons": "^7.1.0",
         "@fortawesome/free-solid-svg-icons": "^7.1.0",
         "@fortawesome/vue-fontawesome": "^3.0.5",
-        "@tato30/vue-pdf": "^1.10.0",
         "@toast-ui/editor": "^3.2.2",
         "axios": "^1.13.0",
         "bootstrap": "^5.3.3",
