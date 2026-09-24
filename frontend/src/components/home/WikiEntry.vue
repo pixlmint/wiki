@@ -3,7 +3,12 @@
         <PDFContent :pdfPath="pdfPath"></PDFContent>
     </template>
     <template v-else-if="isBoard">
-        <BoardView :board-id="entryId" />
+        <pw-view-page :full-width-page="true">
+            <template #content>
+                A kanban board should be showing here, but those are broken and
+                no longer supported.
+            </template>
+        </pw-view-page>
     </template>
     <template v-else-if="isTable">
         <TableView></TableView>
@@ -22,7 +27,6 @@ import { useWikiStore } from "@/stores/wiki";
 import { useAuthStore } from "pixlcms-wrapper";
 import PDFContent from "@/components/home/PDFContent.vue";
 import BasicHtmlEntry from "@/components/home/basic-html-components/BasicHtmlEntry.vue";
-import BoardView from "@/components/home/BoardView.vue";
 import TableView from "@/components/home/TableView.vue";
 import JupyterContent from "@/components/home/basic-html-components/jupter-content.vue";
 import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
@@ -37,7 +41,6 @@ export default defineComponent({
     },
     components: {
         PDFContent,
-        BoardView,
         BasicHtmlEntry,
         TableView,
         JupyterContent,

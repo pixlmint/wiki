@@ -17,12 +17,6 @@ import RestorePassword, {
 import NewPdf, {
     route as newPdfRoute,
 } from "@/components/global-modals/new-pdf.vue";
-import BoardSettings, {
-    route as boardSettingsRoute,
-} from "@/components/kanban/board-settings.vue";
-import CardModal, {
-    route as cardModalRoute,
-} from "@/components/kanban/card-modal.vue";
 import TableEditorModal, {
     route as tableEditorRoute,
 } from "@/components/admin/Editor/tables/TableEditorModal.vue";
@@ -62,14 +56,6 @@ export const dialogs = defineDialogs([
     {
         route: newPdfRoute,
         component: NewPdf,
-    },
-    {
-        route: boardSettingsRoute,
-        component: BoardSettings,
-    },
-    {
-        route: cardModalRoute,
-        component: CardModal,
     },
     {
         route: tableEditorRoute,

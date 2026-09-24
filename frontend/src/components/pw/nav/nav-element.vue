@@ -44,13 +44,6 @@
                                 ><pm-icon icon="folder-plus"></pm-icon>Add
                                 Subfolder</el-dropdown-item
                             >
-                            <el-dropdown-item @click="addBoard"
-                                ><pm-icon
-                                    package="brands"
-                                    icon="trello"
-                                ></pm-icon
-                                >Add Board</el-dropdown-item
-                            >
                             <el-dropdown-item @click="switchSecurity">
                                 <pm-icon v-if="isPublic" icon="lock"></pm-icon>
                                 <pm-icon v-else icon="unlock"></pm-icon>
@@ -137,7 +130,6 @@ import { useWikiStore } from "@/stores/wiki";
 import { ElMessageBox } from "element-plus";
 import { useAuthStore, useDialogStore } from "pixlcms-wrapper";
 import { useMainStore } from "@/stores/main";
-import { useBoardStore } from "@/stores/board";
 import { navigate } from "@/helpers/navigator";
 import PwNavEntryTitle from "@/components/pw/nav/nav-entry-title.vue";
 import JupyterIcon from "@/icon/jupyter.svg";
@@ -158,7 +150,6 @@ type NavElement = {
 const wikiStore = useWikiStore();
 const token = useAuthStore().getToken;
 const dialogStore = useDialogStore();
-const boardStore = useBoardStore();
 const authStore = useAuthStore();
 
 const data = reactive({
@@ -266,17 +257,6 @@ const addPage = function () {
         cancelButtonText: "Cancel",
     }).then((name) => {
         wikiStore.addEntry(element.id, name.value).then(() => {
-            wikiStore.loadNav();
-        });
-    });
-};
-
-const addBoard = function () {
-    ElMessageBox.prompt("New Board", "Add Board", {
-        confirmButtonText: "Ok",
-        cancelButtonText: "Cancel",
-    }).then((name) => {
-        boardStore.createBoard(element.id, name.value).then(() => {
             wikiStore.loadNav();
         });
     });
