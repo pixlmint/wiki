@@ -1,0 +1,137 @@
+@use "element-plus/dist/index.css";
+@use "element-plus/theme-chalk/dark/css-vars.css";
+@use "theme";
+@use "variables";
+@use "fonts";
+@use "responsive";
+@use "buttons";
+@use "bootstrap/dist/css/bootstrap-utilities.css";
+
+html,
+body {
+    overflow-x: hidden;
+    width: 100vw;
+}
+
+* {
+    transition: all 0.1s ease;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    // background-color: var(--el-bg-secondary);
+    color: var(--el-text-color);
+}
+
+.el-switch {
+    --el-switch-on-color: var(--wiki-accent-color) !important;
+}
+
+.el-sub-menu .el-icon {
+    margin-right: 1px !important;
+}
+
+a {
+    color: var(--wiki-accent-color);
+}
+
+li p {
+    margin: 0;
+}
+
+.main-content {
+    li {
+        margin: 0.25rem 0;
+        line-height: 1.25rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+.danger {
+    color: var(--el-color-danger) !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.article-head {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
+.title-editor {
+    @extend h1;
+    outline: none;
+    border: none;
+}
+
+label {
+    display: block;
+}
+
+.mt-1 {
+    margin-top: 1px;
+}
+
+.form-row {
+    margin-bottom: 1rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+}
+
+p {
+    line-height: 1.6;
+    margin: 22px 0;
+    letter-spacing: 0.2px;
+}
+
+.el-dropdown-menu__item svg + span,
+.el-button svg + span,
+.el-button svg + #text {
+    margin-left: 4px;
+}
+
+// table {
+//     min-width: 100%;
+//     border-collapse: collapse;
+//     border-spacing: 0;
+//     border: 1px solid var(--el-border-color);
+//
+//     thead {
+//         th {
+//             font-weight: bold;
+//             background-color: var(--el-text-color-primary);
+//             color: var(--el-bg-secondary);
+//             border-bottom: 2px solid var(--el-border-color);
+//             padding: 5px;
+//         }
+//     }
+//
+//     tbody {
+//         tr:nth-child(odd) td {
+//             background-color: var(--el-bg-secondary);
+//         }
+//
+//         td {
+//             padding: 0.8rem 0 0.8rem 5px;
+//             border-bottom: 1px solid var(--el-border-color);
+//         }
+//     }
+// }
