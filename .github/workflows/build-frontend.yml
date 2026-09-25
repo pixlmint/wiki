@@ -1,4 +1,4 @@
-name: Attempt buildign the frontend
+name: Run frontend tests
 
 on:
   push:
@@ -15,4 +15,4 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - run: npm run test

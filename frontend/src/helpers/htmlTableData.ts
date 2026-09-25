@@ -1,18 +1,12 @@
 function countColumns(table: HTMLTableElement): number {
-    if (
-        table.tBodies.length === 0 ||
-        table.tBodies[0].rows.length === 0 ||
-        table.tBodies[0].rows[0].cells.length === 0
-    ) {
-        return 0;
-    } else {
-        return table.tBodies[0].rows[0].cells.length;
-    }
+    const firstRow =
+        table.tBodies[0]?.querySelectorAll<HTMLTableRowElement>("tr")[0];
+    return firstRow ? firstRow.cells.length : 0;
 }
 
 export class Table {
     thead: Array<string>;
-    data: Array<Object>;
+    data: Array<Record<string, any>>;
 
     constructor() {
         this.thead = [];
@@ -35,6 +29,8 @@ export class Table {
             deleteCount = this.length() - start;
         }
 
+        this.data.splice(start, deleteCount);
+
         return this;
     }
 
@@ -51,7 +47,7 @@ export class Table {
         const self = this;
 
         this.data = this.data.map((row) => {
-            const ret = {};
+            const ret: Record<string, any> = {};
             for (const th of self.thead) {
                 if (row[th]) {
                     ret[th] = row[th];
@@ -64,13 +60,17 @@ export class Table {
     }
 }
 
-export const readTable = function (htmlString: string): Table {
+export function readTable(htmlString: string): Table {
     const el = document.createElement("html");
     el.innerHTML = htmlString;
     const html = el.getElementsByTagName("table")[0];
     const table = new Table();
-    if (html.tHead !== null && html.tHead.rows.length > 0) {
-        for (const cell of html.tHead.rows[0].cells) {
+
+    const headRow =
+        html.tHead?.querySelectorAll<HTMLTableRowElement>("tr")[0] ?? null;
+
+    if (headRow !== null) {
+        for (const cell of headRow.cells) {
             table.thead.push(cell.innerText);
         }
     } else {
@@ -80,8 +80,8 @@ export const readTable = function (htmlString: string): Table {
     }
 
     for (const tBody of html.tBodies) {
-        for (const row of tBody.rows) {
-            const newRow = {};
+        for (const row of tBody.querySelectorAll<HTMLTableRowElement>("tr")) {
+            const newRow: Record<string, string> = {};
             let cellIndex = 0;
             for (const cell of row.cells) {
                 newRow[table.thead[cellIndex]] = cell.innerText;
@@ -92,4 +92,4 @@ export const readTable = function (htmlString: string): Table {
     }
 
     return table;
-};
+}
