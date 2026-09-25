@@ -9,3 +9,4 @@ backend/dist/*
 backend/media/*
 .secret
 var
+frontend/coverage/*

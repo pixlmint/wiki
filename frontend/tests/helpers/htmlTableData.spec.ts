@@ -25,7 +25,7 @@ it("parses empty table", () => {
     expect(table.length()).toBe(0);
 });
 
-it("correctly splices rows", () => {
+it("correctly splices rows with start and end given", () => {
     const tableHtml = `<table><thead><tr><th>hello</th><th>world</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>`;
     const table = readTable(tableHtml);
 
@@ -35,11 +35,31 @@ it("correctly splices rows", () => {
     expect(table.length()).toBe(0);
 });
 
-it("correctly splices columns", () => {
+it("correctly splices rows with start", () => {
+    const tableHtml = `<table><thead><tr><th>hello</th><th>world</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>`;
+    const table = readTable(tableHtml);
+
+    table.spliceRows(0);
+
+    expect(table.width()).toBe(2);
+    expect(table.length()).toBe(0);
+});
+
+it("correctly splices columns with start and end given", () => {
     const tableHtml = `<table><thead><tr><th>hello</th><th>world</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>`;
     const table = readTable(tableHtml);
 
     table.spliceColumns(0, 1);
+
+    expect(table.width()).toBe(1);
+    expect(table.length()).toBe(1);
+});
+
+it("correctly splices columns with start given", () => {
+    const tableHtml = `<table><thead><tr><th>hello</th><th>world</th></tr></thead><tbody><tr><td></td><td></td></tr></tbody></table>`;
+    const table = readTable(tableHtml);
+
+    table.spliceColumns(1);
 
     expect(table.width()).toBe(1);
     expect(table.length()).toBe(1);
