@@ -66,7 +66,7 @@
 import { computed, ref } from "vue";
 import { useWikiStore } from "@/stores/wiki";
 import { useAuthStore, useDialogStore, useMediaStore } from "pixlcms-wrapper";
-import { queryFormatter } from "@/helpers/queryFormatter";
+import { queryFormatter } from "pixlcms-wrapper/src/helpers/utils";
 import { navigate } from "@/helpers/navigator";
 // import DrawModal from "@/components/admin/Editor/DrawModal.vue";
 
