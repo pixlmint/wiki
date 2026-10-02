@@ -25,15 +25,10 @@
 
 <script lang="ts" setup>
 import { computed, defineComponent, onMounted, reactive } from "vue";
-// @ts-ignore
 import { useWikiStore } from "@/stores/wiki";
-// @ts-ignore
 import { marked } from "marked";
-// @ts-ignore
 import Table from "./Table.vue";
-// @ts-ignore
 import TableSelector from "./TableSelector.vue";
-// @ts-ignore
 import TableCreator from "./TableCreator.vue";
 import { useDialogStore } from "pixlcms-wrapper";
 
