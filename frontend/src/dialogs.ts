@@ -21,7 +21,7 @@ export const newPdfRoute = "/nav/new-alternative-content";
 export const tableEditorRoute = "/table-editor";
 export const jupyterSetupRoute = "/jupyter/modal";
 
-export const dialogs = defineDialogs([
+const dialogDefinitions = [
     {
         route: loginRoute,
         component: LoginModal,
@@ -67,4 +67,16 @@ export const dialogs = defineDialogs([
             () => import("@/components/jupyter/jupyter-setup-modal.vue"),
         ),
     },
-]);
+];
+
+export const dialogs = defineDialogs(dialogDefinitions);
+
+export function isDialogRoute(route: string) {
+    for (const dialogDefinition of dialogDefinitions) {
+        if (dialogDefinition.route === route) {
+            return true;
+        }
+    }
+
+    return false;
+}

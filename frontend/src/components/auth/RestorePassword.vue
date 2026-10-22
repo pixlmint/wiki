@@ -50,10 +50,10 @@ export default defineComponent({
                     username: this.username,
                     password1: this.password1,
                     password2: this.password2,
-                    token: urlParams.get("token") as string,
+                    resetToken: urlParams.get("token") as string,
                 })
                 .then(() => {
-                    // useRouter().push('/');
+                    location.href = "/";
                 });
         },
     },

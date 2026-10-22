@@ -27,7 +27,7 @@ import { useWikiStore } from "@/stores/wiki";
 import { useUserSettings } from "@/stores/user-settings";
 import { AxiosResponse } from "axios";
 import { ElNotification } from "element-plus";
-import { dialogs as createDialogs } from "@/dialogs";
+import { dialogs as createDialogs, isDialogRoute } from "@/dialogs";
 const Debug = defineAsyncComponent(
     () => import("@/components/debug/debug.vue"),
 );
@@ -86,6 +86,10 @@ const loadMainContent = () => {
     if (match !== null && match.length > 0) {
         mainContentLoaded.value = true;
         isEditing.value = true;
+        return;
+    } else if (isDialogRoute(path)) {
+        isEditing.value = false;
+        dialogStore.showDialog(path);
         return;
     } else {
         isEditing.value = false;
