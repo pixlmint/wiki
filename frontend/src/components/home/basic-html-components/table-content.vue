@@ -12,13 +12,12 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-// @ts-ignore
-import { readTable, Table } from "@/helpers/htmlTableData";
+import { Table } from "@/helpers/htmlTableData";
 const props = defineProps(["table"]);
 
 const table = ref<Table | null>(null);
 
-onMounted(() => {
-    table.value = readTable(props.table);
-});
+// onMounted(() => {
+//     table.value = readTable(props.table);
+// });
 </script>

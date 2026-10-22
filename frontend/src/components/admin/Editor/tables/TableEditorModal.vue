@@ -31,20 +31,14 @@ import Table from "./Table.vue";
 import TableSelector from "./TableSelector.vue";
 import TableCreator from "./TableCreator.vue";
 import { useDialogStore } from "pixlcms-wrapper";
-
-interface MdTable {
-    original: string;
-    parsed: string;
-    hash: number;
-    updated?: string;
-}
+import { MdTable } from "@/contracts/Table";
 
 const wikiStore = useWikiStore();
 const dialogStore = useDialogStore();
 
 type DataType = {
     editingTable: null | MdTable;
-    availableTables: Array<MdTable>;
+    availableTables: MdTable[];
     showTableCreator: boolean;
 };
 
@@ -90,7 +84,7 @@ const generateTableHash = function (table: string) {
     return hash;
 };
 
-const extractTables = function (): Array<MdTable> {
+const extractTables = function (): MdTable[] {
     const md = wikiStore.safeCurrentEntry.raw_content;
     const tableRegex = /(?:^\|[^\n]+\|\r?\n)+/gm;
 
@@ -105,18 +99,18 @@ const extractTables = function (): Array<MdTable> {
     });
 };
 
-const handleSave = function (updated: string, hash: number) {
+const handleSave = function ({ md, hash }: { md: string; hash: number }) {
     let spotFound = false;
     if (hash === 0) {
         spotFound = true;
-        wikiStore.safeCurrentEntry.raw_content += "\n" + updated;
+        wikiStore.safeCurrentEntry.raw_content += "\n" + md;
     } else {
         for (const table of data.availableTables) {
             if (table.hash === hash) {
                 const newContent =
                     wikiStore.safeCurrentEntry.raw_content.replace(
                         table.original,
-                        updated,
+                        md,
                     );
                 wikiStore.safeCurrentEntry.raw_content = newContent;
                 spotFound = true;

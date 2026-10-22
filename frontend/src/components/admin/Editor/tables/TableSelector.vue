@@ -26,16 +26,18 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue";
-import { readTable } from "@/helpers/htmlTableData";
+import { htmlTableToTableData } from "@/helpers/htmlTableData";
+import { MdTable, TableData } from "@/contracts/Table";
 
-const props = defineProps(["tables"]);
+const props = defineProps<{ tables: MdTable[] }>();
+
 const emit = defineEmits(["select"]);
 
 const MAX_ROWS = 3;
 const MAX_CELLS = 3;
 
 const data = reactive({
-    littleTables: {},
+    littleTables: {} as Record<number, TableData>,
 });
 
 function selectTable(hash: any) {
@@ -44,8 +46,8 @@ function selectTable(hash: any) {
 
 onMounted(() => {
     for (const table of props.tables) {
-        const tableData = readTable(table.parsed);
-        if (tableData.length() > MAX_ROWS) {
+        const tableData = htmlTableToTableData(table.parsed);
+        if (tableData.data.length > MAX_ROWS) {
             tableData.spliceRows(MAX_ROWS);
         }
         if (tableData.width() > MAX_CELLS) {

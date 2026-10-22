@@ -22,5 +22,10 @@
   "devDependencies": {
     "lint-staged": "^17.5.1",
     "prettier": "^3.9.9"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "core-js@3.50.0": true,
+    "vue-demi@0.14.10": true
   }
 }
