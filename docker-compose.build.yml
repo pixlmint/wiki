@@ -8,7 +8,7 @@ services:
       args:
         UID: 99
         GID: 100
-    image: christiangroeber/wiki
+    image: pixlmint/wiki
     container_name: wiki_build
     volumes:
       - data:/var/www/html/data
