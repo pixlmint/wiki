@@ -5,7 +5,7 @@ ARG GID=100
 
 RUN apt update && apt install -y mediainfo cron ffmpeg python3 openssh-server vim nano poppler-utils
 
-COPY ./ /var/www/html
+COPY backend/ /var/www/html
 WORKDIR /var/www/html
 
 RUN composer install
@@ -13,7 +13,7 @@ RUN composer install
 RUN groupadd -o -g ${GID} wiki_group
 RUN useradd -m -N -u ${UID} -g ${GID} wiki
 
-RUN cp docker/apache2.conf /etc/apache2/apache2.conf
+COPY docker/apache2.conf /etc/apache2/apache2.conf
 
 RUN chown -R wiki:wiki_group .
 

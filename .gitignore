@@ -4,8 +4,9 @@ vendor
 /.vscode
 content
 users.json
-data/*
-dist/*
-media/*
+backend/data/*
+backend/dist/*
+backend/media/*
 .secret
 var
+frontend/coverage/*
